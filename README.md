@@ -1,2 +1,3 @@
-# sunniesnow
-A web rhythm game
+# Sunniesnow
+
+A web rhythm game.
