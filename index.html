@@ -3,4 +3,441 @@ layout: default
 title: Sunniesnow
 ---
 
-<p>Under development.</p>
+<script src="https://fastly.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://pixijs.download/release/pixi.js"></script>
+<script type="module">import mime from "https://cdn.skypack.dev/mime/lite"; window.mime = mime;</script>
+
+<script>window.Sunniesnow = {};</script>
+<script src="js/Config.js"></script>
+<script src="js/Utils.js"></script>
+<script src="js/Audio.js"></script>
+<script src="js/Loader.js"></script>
+<script src="js/Game.js"></script>
+
+<script src="js/ui/UiComponent.js"></script>
+<script src="js/ui/Background.js"></script>
+<script src="js/ui/TopCenterHud.js"></script>
+<script src="js/ui/TopLeftHud.js"></script>
+<script src="js/ui/TopRightHud.js"></script>
+<script src="js/ui/DebugHud.js"></script>
+<script src="js/ui/ProgressBar.js"></script>
+
+<script src="js/ui-event/UiEventsBoard.js"></script>
+<script src="js/ui-event/UiEvent.js"></script>
+<script src="js/ui-event/UiNote.js"></script>
+<script src="js/ui-event/UiTap.js"></script>
+<script src="js/ui-event/UiFlick.js"></script>
+<script src="js/ui-event/UiHold.js"></script>
+<script src="js/ui-event/UiDrag.js"></script>
+
+<script src="js/fx/FxBoard.js"></script>
+<script src="js/fx/FxNote.js"></script>
+<script src="js/fx/FxTap.js"></script>
+<script src="js/fx/FxFlick.js"></script>
+<script src="js/fx/FxHold.js"></script>
+<script src="js/fx/FxDrag.js"></script>
+
+<script src="js/level/Level.js"></script>
+<script src="js/level/LevelNote.js"></script>
+<script src="js/level/LevelTap.js"></script>
+<script src="js/level/LevelFlick.js"></script>
+<script src="js/level/LevelHold.js"></script>
+<script src="js/level/LevelDrag.js"></script>
+
+<script src="js/chart/Chart.js"></script>
+<script src="js/chart/Event.js"></script>
+<script src="js/chart/Note.js"></script>
+<script src="js/chart/Placeholder.js"></script>
+<script src="js/chart/Tap.js"></script>
+<script src="js/chart/Flick.js"></script>
+<script src="js/chart/Hold.js"></script>
+<script src="js/chart/Drag.js"></script>
+
+<script src="js/tip-point/TipPointBase.js"></script>
+<script src="js/tip-point/TipPoint.js"></script>
+<script src="js/tip-point/TipPointsBoard.js"></script>
+
+<script src="js/scene/Scene.js"></script>
+<script src="js/scene/SceneGame.js"></script>
+
+<fieldset>
+	<legend>Level file</legend>
+
+	<div>
+		<input type="radio" id="level-file-online-radio" name="level-file" value="online">
+		<label for="level-file-online-radio">Online:</label>
+		<input type="text" id="level-file-online" placeholder="SunniesnowSample.ssc">
+	</div>
+
+	<div>
+		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload" checked>
+		<label for="level-file-upload-radio">Upload:</label>
+		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.loadChart(this.files[0])">
+	</div>
+</fieldset>
+
+<p>
+	Music:
+	<select id="music-select" disabled></select>
+	Chart:
+	<select id="chart-select" disabled></select>
+</p>
+
+<details>
+	<summary>Judgement settings</summary>
+
+	<fieldset>
+		<legend>Judgement time windows</legend>
+
+		<div>
+			<input type="radio" id="judgement-windows-strict" name="judgement-windows" value="strict">
+			<label for="judgement-windows-strict">Strict</label>
+		</div>
+
+		<div>
+			<input type="radio" id="judgement-windows-medium" name="judgement-windows" value="medium">
+			<label for="judgement-windows-medium">Medium</label>
+		</div>
+
+		<div>
+			<input type="radio" id="judgement-windows-loose" name="judgement-windows" value="loose" checked>
+			<label for="judgement-windows-loose">Loose</label>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Note hit size</legend>
+		
+		<div>
+			<input type="number" id="note-hit-size" value="3" min="0.1" step="0.1">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Offset</legend>
+
+		<div>
+			<input type="number" id="offset" value="0" step="10">ms
+		</div>
+	</fieldset>
+</details>
+
+<details>
+	<summary>Visual settings</summary>
+	
+	<fieldset>
+		<legend>Speed</legend>
+	
+		<div>
+			<input type="number" id="speed" value="2", step="0.1">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Note size</legend>
+
+		<div>
+			<input type="number" id="note-size" value="1" step="0.1">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Background</legend>
+
+		<div>
+			<input type="radio" id="background-online-radio" name="background" value="online" checked>
+			<label for="background-online-radio">Online:</label>
+			<input type="text" id="background-online" value="default.png">
+		</div>
+
+		<div>
+			<input type="radio" id="background-from-level-radio" name="background" value="from-level">
+			<label for="background-from-level-radio">From level file:</label>
+			<select id="background-from-level"></select>
+		</div>
+
+		<div>
+			<input type="radio" id="background-upload-radio" name="background" value="upload">
+			<label for="background-upload-radio">Upload:</label>
+			<input type="file" id="background-upload" accept="image/*" onchange="Sunniesnow.Loader.loadBackground(this.files[0])">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Background settings</legend>
+
+		<div>
+			Blur:
+			<input type="range" id="background-blur" value="100" min="0" max="200" step="1">
+			<div id="background-blur-value" style="display: inline;"></div>
+		</div>
+
+		<div>
+			Brightness:
+			<input type="range" id="background-brightness" value="0.5" min="0" max="1" step="0.05">
+			<div id="background-brightness-value" style="display: inline;"></div>
+		</div>
+	</fieldset>
+	
+	<fieldset>
+		<legend>FX (note hit special effects)</legend>
+	
+		<div>
+			<input type="radio" id="fx-online-radio" name="fx" value="online" checked>
+			<label for="fx-online-radio">Online:</label>
+			<input type="text" id="fx-online" value="default.ssf">
+		</div>
+	
+		<div>
+			<input type="radio" id="fx-upload-radio" name="fx" value="upload">
+			<label for="fx-upload-radio">Upload:</label>
+			<input type="file" id="fx-upload" accept=".ssf" onchange="Sunniesnow.Loader.loadFx(this.files[0])">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Skin (note style and other UI)</legend>
+
+		<div>
+			<input type="radio" id="skin-online-radio" name="skin" value="online" checked>
+			<label for="skin-online-radio">Online:</label>
+			<input type="text" id="skin-online" value="default.sss">
+		</div>
+
+		<div>
+			<input type="radio" id="skin-upload-radio" name="skin" value="upload">
+			<label for="skin-upload-radio">Upload:</label>
+			<input type="file" id="skin-upload" accept=".sss" onchange="Sunniesnow.Loader.loadSkin(this.files[0])">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Head-up display</legend>
+
+		<div>
+			Top center:
+			<select id="hud-top-center">
+				<option value="none">None</option>
+				<option value="title">Title</option>
+				<option value="difficulty-name">Difficulty name</option>
+				<option value="difficulty">Difficulty</option>
+				<option value="difficulty-and-name">Difficulty name and difficulty</option>
+				<option value="combo" selected>Combo</option>
+				<option value="score">Score</option>
+				<option value="accuracy">Accuracy</option>
+			</select>
+		</div>
+
+		<div>
+			Top left:
+			<select id="hud-top-left">
+				<option value="none">None</option>
+				<option value="title" selected>Title</option>
+				<option value="difficulty-name">Difficulty name</option>
+				<option value="difficulty">Difficulty</option>
+				<option value="difficulty-and-name">Difficulty name and difficulty</option>
+				<option value="combo">Combo</option>
+				<option value="score">Score</option>
+				<option value="accuracy">Accuracy</option>
+			</select>
+		</div>
+
+		<div>
+			Top right:
+			<select id="hud-top-right">
+				<option value="none">None</option>
+				<option value="title">Title</option>
+				<option value="difficulty-name">Difficulty name</option>
+				<option value="difficulty">Difficulty</option>
+				<option value="difficulty-and-name">Difficulty name and difficulty</option>
+				<option value="combo">Combo</option>
+				<option value="score" selected>Score</option>
+				<option value="accuracy">Accuracy</option>
+			</select>
+		</div>
+	</fieldset>
+</details>
+
+<details>
+	<summary>Audio settings</summary>
+
+	<fieldset>
+		<legend>SE (note hit sound effects)</legend>
+
+		<div>
+			<input type="radio" id="se-online-radio" name="se" value="online" checked>
+			<label for="se-online-radio">Online:</label>
+			<input type="text" id="se-online" value="default.sse">
+		</div>
+
+		<div>
+			<input type="radio" id="se-upload-radio" name="se" value="upload">
+			<label for="se-upload-radio">Upload:</label>
+			<input type="file" id="se-upload" accept=".sse" onchange="Sunniesnow.Loader.loadSe(this.files[0])">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Volume</legend>
+
+		<div>
+			SE:
+			<input type="range" id="volume-se" min="0" max="2" step="0.1" value="1">
+			<div id="volume-se-value" style="display: inline;"></div>
+		</div>
+
+		<div>
+			Music:
+			<input type="range" id="volume-music" min="0" max="2" step="0.1" value="1">
+			<div id="volume-music-value" style="display: inline;"></div>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Delay</legend>
+
+		<div>
+			<input type="number" id="delay" value="0" step="10">ms
+		</div>
+	</fieldset>
+</details>
+
+<details>
+	<summary>Game settings</summary>
+	
+	<fieldset>
+		<legend>Autoplay</legend>
+
+		<div>
+			<input type="checkbox" id="autoplay">
+			<label for="autoplay">Autoplay</label>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Speed (of music)</legend>
+
+		<div>
+			<input type="number" id="game-speed" min="0.1" step="0.1" value="1">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Start and end</legend>
+
+		<div>
+			Start:
+			<input type="number" id="start" min="0">s
+		</div>
+
+		<div>
+			End:
+			<input type="number" id="end" min="0">s
+		</div>
+	</fieldset>
+</details>
+
+<details>
+	<summary>System settings</summary>
+
+	<fieldset>
+		<legend>Resolution</legend>
+
+		<div>
+			Width:
+			<input type="number" id="width" min="1" value="1920">
+		</div>
+
+		<div>
+			Height:
+			<input type="number" id="height" min="1" value="1080">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Fullscreen</legend>
+
+		<div>
+			<input type="checkbox" id="fullscreen" checked>
+			<label for="fullscreen">Fullscreen</label>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Backend</legend>
+
+		<div>
+			<input type="radio" id="backend-webgl-radio" name="backend" value="webgl" checked>
+			<label for="backend-webgl-radio">WebGL</label>
+		</div>
+
+		<div>
+			<input type="radio" id="backend-canvas-radio" name="backend" value="canvas">
+			<label for="backend-canvas-radio">Canvas</label>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Debug</legend>
+
+		<div>
+			<input type="checkbox" id="debug">
+			<label for="debug">Enable debug mode</label>
+		</div>
+	</fieldset>
+</details>
+
+<button type="button" id="start-button" onclick="Sunniesnow.Game.run()">Start</button>
+
+<div id="warnings" style="color: orange;"></div>
+
+<div id="errors" style="color: red;"></div>
+
+<canvas id="main-canvas"></canvas>
+
+<p>
+	Sunniesnow
+	<br>
+	Last update: {{ "now" | date: "%FT%T%z" }}
+	<br>
+	License: <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GPL v3.0</a>
+	<br>
+	Author: UlyssesZhan &lt;<a href="mailto:ulysseszhan@gmail.com">ulysseszhan@gmail.com</a>&gt;
+</p>
+
+<script>
+	function associateRadio(radioId, inputId) {
+		const radio = document.getElementById(radioId);
+		const radios = document.getElementsByName(radio.name);
+		const input = document.getElementById(inputId);
+		const listener = () => input.disabled = !radio.checked;
+		radio.addEventListener('change', listener);
+		for (const otherRadio of radios) {
+			otherRadio.addEventListener('change', listener);
+		}
+		listener();
+	}
+	associateRadio('level-file-online-radio', 'level-file-online');
+	associateRadio('level-file-upload-radio', 'level-file-upload');
+	associateRadio('background-online-radio', 'background-online');
+	associateRadio('background-from-level-radio', 'background-from-level');
+	associateRadio('background-upload-radio', 'background-upload');
+	associateRadio('skin-online-radio', 'skin-online');
+	associateRadio('skin-upload-radio', 'skin-upload');
+	associateRadio('fx-online-radio', 'fx-online');
+	associateRadio('fx-upload-radio', 'fx-upload');
+	associateRadio('se-online-radio', 'se-online');
+	associateRadio('se-upload-radio', 'se-upload');
+
+	function associateRange(rangeId, valueId) {
+		const range = document.getElementById(rangeId);
+		const value = document.getElementById(valueId);
+		const listener = () => value.innerText = range.value;
+		range.addEventListener('input', listener);
+		listener();
+	}
+	associateRange('volume-se', 'volume-se-value');
+	associateRange('volume-music', 'volume-music-value');
+	associateRange('background-blur', 'background-blur-value');
+	associateRange('background-brightness', 'background-brightness-value');
+</script>
