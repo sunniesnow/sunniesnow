@@ -56,6 +56,10 @@ Sunniesnow.Utils = {
 	polarToCartesian(rho, phi) {
 		return [rho * Math.cos(phi), rho * Math.sin(phi)];
 	},
+
+	cartesianToPolar(x, y) {
+		return [this.hypot(x, y), Math.atan2(y, x)];
+	},
 	
 	between(x, a, b) {
 		return a <= x && x <= b || b <= x && x <= a;
@@ -64,7 +68,7 @@ Sunniesnow.Utils = {
 	drawDashedLine(graphics, x0, y0, x1, y1, dashLength, gapLength) {
 		const dx = x1 - x0;
 		const dy = y1 - y0;
-		const length = Math.sqrt(dx*dx + dy*dy);
+		const length = this.hypot(dx, dy);
 		const dashDx = dashLength * dx / length;
 		const dashDy = dashLength * dy / length;
 		const gapDx = gapLength * dx / length;
@@ -80,5 +84,70 @@ Sunniesnow.Utils = {
 			y += gapDy;
 		}
 		graphics.finishPoly();
+	},
+
+	minmax(...numbers) {
+		return [Math.min(...numbers), Math.max(...numbers)];
+	},
+
+	pageToCanvasCoordinates(pageX, pageY, canvas) {
+		let totalOffsetX = 0;
+		let totalOffsetY = 0;
+		for (let e = canvas; e; e = e.offsetParent) {
+			totalOffsetX += e.offsetLeft;
+			totalOffsetY += e.offsetTop;
+		}
+		const scale = Math.max(
+			canvas.width / canvas.offsetWidth,
+			canvas.height / canvas.offsetHeight
+		);
+		return [
+			(pageX - totalOffsetX - canvas.offsetWidth/2) * scale + canvas.width/2,
+			(pageY - totalOffsetY - canvas.offsetHeight/2) * scale + canvas.height/2
+		];
+	},
+
+	distance(x0, y0, x1, y1) {
+		return this.hypot(x1 - x0, y1 - y0);
+	},
+
+	hypot(x, y) {
+		return Math.sqrt(x*x + y*y);
+	},
+
+	quo(a, b) {
+		if (b === 0) {
+			return NaN;
+		}
+		const r = Math.floor(a / b);
+		return [r, a - r * b];
+	},
+
+	maxJudgement(...judgements) {
+		for (const j of ['perfect', 'good', 'bad', 'miss']) {
+			if (judgements.some(judgement => judgement === j)) {
+				return j;
+			}
+		}
+		return null;
+	},
+
+	minJudgement(...judgements) {
+		for (const j of ['miss', 'bad', 'good', 'perfect']) {
+			if (judgements.some(judgement => judgement === j)) {
+				return j;
+			}
+		}
+		return null;
+	},
+
+	randColor(min, max) {
+		let result = 0;
+		for (let i = 0; i < 3; i++) {
+			result |= Math.floor(Math.random() * ((max & 0xff) - (min & 0xff) + 1)) + (min & 0xff) << i*8;
+			min >>= 8;
+			max >>= 8;
+		}
+		return result;
 	}
 };

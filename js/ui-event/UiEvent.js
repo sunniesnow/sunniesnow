@@ -49,48 +49,43 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 		}
 	}
 
-	updateState(relativeTime) {
-		const releaseRelativeTime = this.releaseRelativeTime();
-		switch (this.state) {
-			case 'ready':
-				if (relativeTime >= -this.constructor.FADING_IN_DURATION - this.activeDuration) {
-					this.visible = true;
-					this.state = 'fadingIn';
-				}
-			case 'fadingIn':
-				if (relativeTime >= -this.activeDuration) {
-					this.state = 'active';
-				}
-			case 'active':
-				if (this.levelNote) {
-					if (this.levelNote.hitRelativeTime !== null) {
-						this.state = 'holding';
+	getStateByRelativeTime(relativeTime) {
+		if (this.levelNote) {
+			if (this.levelNote.hitRelativeTime !== null) {
+				if (this.levelNote.releaseRelativeTime !== null) {
+					if (relativeTime >= this.levelNote.releaseRelativeTime + this.constructor.FADING_OUT_DURATION) {
+						return 'finished';
+					} else {
+						return 'fadingOut';
 					}
+				} else if (this.levelNote.event.duration > 0) {
+					return 'holding';
 				} else {
-					if (relativeTime >= this.event.time) {
-						this.state = 'holding';
-					}
+					return 'active';
 				}
-			case 'holding':
-				if (releaseRelativeTime !== null && relativeTime >= releaseRelativeTime) {
-					this.state = 'fadingOut';
-				}
-			case 'fadingOut':
-				if (releaseRelativeTime !== null && relativeTime - releaseRelativeTime >= this.constructor.FADING_OUT_DURATION) {
-					this.visible = false;
-					this.state = 'finished';
-				}
+			}
+		} else {
+			const releaseRelativeTime = (this.event.duration || 0) / Sunniesnow.game.settings.gameSpeed;
+			if (relativeTime >= releaseRelativeTime + this.constructor.FADING_OUT_DURATION) {
+				return 'finished';
+			} else if (relativeTime >= releaseRelativeTime) {
+				return 'fadingOut';
+			} else if (relativeTime >= 0) {
+				return 'holding';
+			}
+		}
+		if (relativeTime >= -this.activeDuration) {
+			return 'active';
+		} else if (relativeTime >= -this.constructor.FADING_IN_DURATION - this.activeDuration) {
+			return 'fadingIn';
+		} else {
+			return 'ready';
 		}
 	}
 
-	releaseRelativeTime() {
-		if (this.levelNote) {
-			return this.levelNote.releaseRelativeTime;
-		} else if ('duration' in this.event) {
-			return this.event.time + this.event.duration;
-		} else {
-			return null;
-		}
+	updateState(relativeTime) {
+		this.state = this.getStateByRelativeTime(relativeTime);
+		this.visible = this.state !== 'ready' && this.state !== 'finished';
 	}
 
 	// Time is zero at the start of the fade-in,

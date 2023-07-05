@@ -1,10 +1,11 @@
 Sunniesnow.UiEventsBoard = class UiEventsBoard extends PIXI.Container {
 
-	constructor(events, fxBoard) {
+	constructor(events, fxBoard, debugBoard) {
 		super();
 		this.unappearedEvents = events.slice();
 		this.uiEvents = [];
 		this.fxBoard = fxBoard;
+		this.debugBoard = debugBoard;
 	}
 
 	update(time) {
@@ -16,7 +17,7 @@ Sunniesnow.UiEventsBoard = class UiEventsBoard extends PIXI.Container {
 				break;
 			}
 			this.unappearedEvents.shift();
-			const uiEvent = new event.constructor.UI_CLASS(event, this.fxBoard);
+			const uiEvent = new event.constructor.UI_CLASS(event, this.fxBoard, this.debugBoard);
 			this.addChild(uiEvent);
 			this.uiEvents.push(uiEvent);
 		}

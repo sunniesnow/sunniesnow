@@ -60,12 +60,12 @@ Sunniesnow.Audio = class Audio {
 		time ||= 0;
 		this.removeNodes();
 		this.createNodes();
+		this.startTime = this.constructor.context.currentTime - time / this.playbackRate;
 		if (time >= 0) {
 			this.sourceNode.start(0, time);
 		} else {
-			this.sourceNode.start(-time / this.playbackRate, 0);
+			this.sourceNode.start(this.startTime, 0);
 		}
-		this.startTime = this.constructor.context.currentTime - time / this.playbackRate;
 		this.constructor.playingAudios.push(this);
 		const timeToStop = this.startTime + this.duration / this.playbackRate - this.constructor.context.currentTime
 		this.stopTimer = setTimeout(() => {

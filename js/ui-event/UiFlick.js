@@ -74,6 +74,10 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	}
 
 	updateFadingOut(time) {
+		if (this.levelNote.judgement === 'miss' || this.levelNote.judgement === 'bad') {
+			this.visible = false;
+			return;
+		}
 		const distance = this.constructor.radius * 2;
 		const progress = time / this.constructor.FADING_OUT_DURATION;
 		this.noteBody.visible = false;

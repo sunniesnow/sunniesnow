@@ -108,6 +108,10 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 
 	updateFadingOut(time) {
+		if (this.levelNote.judgement === 'miss') {
+			this.visible = false;
+			return;
+		}
 		this.halo.visible = false;
 		const progress = time / this.constructor.FADING_OUT_DURATION;
 		this.note.scale.set(1.2 + (1-(1-progress)**2) * 0.3);

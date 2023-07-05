@@ -13,4 +13,5 @@ Sunniesnow.Note = class Note extends Sunniesnow.Event {
 		const activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
 		return this.time - activeDuration - this.constructor.UI_CLASS.FADING_IN_DURATION;
 	}
+
 };

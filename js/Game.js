@@ -12,12 +12,24 @@ Sunniesnow.Game = class Game {
 	start() {
 		Sunniesnow.Loader.readSettings(this);
 		Sunniesnow.Audio.initialize();
+		this.initCanvas();
+		this.initButtons();
 		this.initUiEvents();
 		this.initFx();
 		this.initTipPoint();
 		this.initPixiApp();
 		this.chart = new Sunniesnow.Chart(Sunniesnow.Loader.loaded.chart.charts[this.settings.chartSelect]);
 		this.scene = new Sunniesnow.SceneGame();
+	}
+
+	initCanvas() {
+		this.canvas = document.getElementById('main-canvas');
+		this.canvas.addEventListener('contextmenu', e => e.preventDefault());
+	}
+
+	initButtons() {
+		Sunniesnow.Button.initialize();
+		Sunniesnow.ButtonPause.initialize();
 	}
 
 	initUiEvents() {
@@ -45,7 +57,7 @@ Sunniesnow.Game = class Game {
 		this.app = new PIXI.Application({
 			width: this.settings.width,
 			height: this.settings.height,
-			view: document.getElementById('main-canvas'),
+			view: this.canvas,
 			forceCanvas: this.settings.backend == 'canvas',
 			backgroundColor: 'black',
 			antialias: true
@@ -88,6 +100,9 @@ Sunniesnow.Game = class Game {
 	}
 
 	terminate() {
+		if (this.scene) {
+			this.scene.terminate();
+		}
 		this.setFullscreen(false);
 		Sunniesnow.Audio.stopAll();
 		this.app.stop();

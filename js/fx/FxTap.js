@@ -7,7 +7,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 
 	static createSparkLine() {
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.radius / 20, 0xffff00);
+		graphics.lineStyle(this.radius / 20, 0xffffff);
 		graphics.moveTo(0, 0);
 		graphics.lineTo(this.radius * 2, 0);
 		graphics.finishPoly();
@@ -16,32 +16,35 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 
 	static createExplosionContourArc() {
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.radius / 10, 0xffff00);
+		graphics.lineStyle(this.radius / 10, 0xffffff);
 		graphics.arc(0, 0, this.radius * 1.5, -Math.PI / 6, Math.PI / 6);
 		graphics.finishPoly();
 		return graphics.geometry;
 	}
 
-	populatePerfect() {
+	populateSparks(count, minColor, maxColor) {
 		this.sparks = [];
-		for (let i = 0; i < 20; i++) {
+		for (let i = 0; i < count; i++) {
 			const spark = new PIXI.Graphics(this.constructor.sparkLine);
 			spark.transform.rotation = Math.random() * Math.PI * 2;
-			spark.tint = [Math.random()/4 + 3/4, Math.random()/3 + 2/3, 0]
+			spark.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
 			this.addChild(spark);
 			this.sparks.push(spark);
 		}
+	}
+
+	populateContours(count, minColor, maxColor) {
 		this.contours = [];
-		for (let i = 0; i < 3; i++) {
+		for (let i = 0; i < count; i++) {
 			const contour = new PIXI.Graphics(this.constructor.explosionContourArc);
 			contour.transform.rotation = Math.random() * Math.PI * 2;
-			contour.tint = [Math.random()/4 + 3/4, Math.random()/2 + 1/2, 0]
+			contour.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
 			this.addChild(contour);
 			this.contours.push(contour);
 		}
 	}
 
-	updatePerfect(delta) {
+	updateSparks(delta) {
 		this.sparks.forEach((spark) => {
 			const [vx, vy] = Sunniesnow.Utils.polarToCartesian(this.constructor.radius / 2, spark.transform.rotation);
 			spark.x += delta * vx;
@@ -51,10 +54,43 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 				this.state = 'finished';
 			}
 		});
+	}
+
+	updateContours(delta) {
 		this.contours.forEach((contour) => {
 			contour.scale.x += delta * 0.2;
 			contour.scale.y += delta * 0.2;
 			contour.alpha -= delta * 0.1;
 		});
+	}
+
+	populatePerfect() {
+		this.populateSparks(20, 0xbfaa00, 0xffff00);
+		this.populateContours(3, 0xbfaa00, 0xff7f00);
+	}
+
+	updatePerfect(delta) {
+		this.updateSparks(delta);
+		this.updateContours(delta);
+	}
+
+	populateGood() {
+		this.populateSparks(15, 0x0f0fff, 0xafafff);
+		this.populateContours(3, 0x0f0fff, 0xafafff);
+	}
+
+	updateGood(delta) {
+		this.updateSparks(delta);
+		this.updateContours(delta);
+	}
+
+	populateBad() {
+		this.populateSparks(15, 0x000000, 0x001000);
+		this.populateContours(2, 0x000000, 0x001000);
+	}
+
+	updateBad(delta) {
+		this.updateSparks(delta);
+		this.updateContours(delta);
 	}
 };

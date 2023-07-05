@@ -2,17 +2,18 @@ Sunniesnow.DebugHud = class DebugHud extends Sunniesnow.UiComponent {
 
 	populate() {
 		super.populate();
-		this.y = Sunniesnow.game.settings.height;
 		this.populateText();
 	}
 
 	populateText() {
 		this.text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 60,
-			fill: 'white',
+			fill: '#ff00ff',
 			fontFamily: 'Arial',
 		});
+		this.text.alpha = 0.7;
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0, 1);
+		this.text.y = Sunniesnow.game.settings.height;
 		this.addChild(this.text);
 	}
 
@@ -20,4 +21,5 @@ Sunniesnow.DebugHud = class DebugHud extends Sunniesnow.UiComponent {
 		super.update(delta);
 		this.text.text = Sunniesnow.Utils.stringify(data);
 	}
+
 };

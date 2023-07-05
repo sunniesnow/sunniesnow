@@ -3,12 +3,13 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiEvent {
 	static FADING_IN_DURATION = 0.25;
 	static FADING_OUT_DURATION = 0;
 
-	constructor(event, fxBoard) {
+	constructor(event, fxBoard, debugBoard) {
 		super(event);
 		this.levelNote = event.levelNote;
 		this.activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
 		[this.x, this.y] = Sunniesnow.Config.chartMapping(event.x, event.y);
 		this.fxBoard = fxBoard;
+		this.debugBoard = debugBoard;
 	}
 
 	updateState(relativeTime) {
@@ -16,6 +17,18 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiEvent {
 		super.updateState(relativeTime);
 		if (this.lastState !== this.state && (this.lastState === 'active' || this.lastState === 'holding')) {
 			this.fxBoard.addFx(this);
+			if (this.lastState === 'active' && !Sunniesnow.game.settings.autoplay && Sunniesnow.game.settings.debug) {
+				this.debugBoard.createEarlyLateText(this);
+			}
+		}
+		if (Sunniesnow.game.settings.debug) {
+			const judgementWindows = Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows];
+			const earlyBad = judgementWindows[this.levelNote.type].bad[0];
+			if (!this.touchAreaCreated && relativeTime >= earlyBad) {
+				this.debugBoard.createTouchArea(this);
+				this.touchAreaCreated = true;
+			}
 		}
 	}
+
 };
