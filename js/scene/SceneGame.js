@@ -7,9 +7,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		if (Sunniesnow.game.settings.debug) {
 			this.createDebugUi();
 		}
-		this.populateUi();
-		this.populateButtons();
-		this.populateBoards();
+		this.populateUiAndBoards();
 		if (Sunniesnow.game.settings.debug) {
 			this.populateDebugUi();
 		}
@@ -21,35 +19,18 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.debugBoard = new Sunniesnow.DebugBoard();
 	}
 
-	populateUi() {
-		this.background = new Sunniesnow.Background();
-		this.topLeftHud = new Sunniesnow.TopLeftHud();
-		this.topRightHud = new Sunniesnow.TopRightHud();
-		this.topCenterHud = new Sunniesnow.TopCenterHud();
-		this.progressBar = new Sunniesnow.ProgressBar();
-		this.addChild(this.background);
-		this.addChild(this.topLeftHud);
-		this.addChild(this.topRightHud);
-		this.addChild(this.topCenterHud);
-		this.addChild(this.progressBar);
-	}
-
-	populateButtons() {
-		this.pauseButton = new Sunniesnow.ButtonPause(() => this.switchPausing());
-		this.addChild(this.pauseButton);
-	}
-
-	populateBoards() {
-		this.uiBgPatternBoard = new Sunniesnow.UiBgPatternBoard(Sunniesnow.game.chart.events);
-		this.fxBoard = new Sunniesnow.FxBoard();
-		this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard(Sunniesnow.game.chart.events);
-		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(Sunniesnow.game.chart.events, this.fxBoard, this.debugBoard);
-		this.tipPointsBoard = new Sunniesnow.TipPointsBoard(Sunniesnow.game.chart.events);
-		this.addChild(this.uiBgPatternBoard);
-		this.addChild(this.fxBoard);
-		this.addChild(this.uiBgNotesBoard);
-		this.addChild(this.uiNotesBoard);
-		this.addChild(this.tipPointsBoard);
+	populateUiAndBoards() {
+		this.addChild(this.background = new Sunniesnow.Background());
+		this.addChild(this.progressBar = new Sunniesnow.ProgressBar());
+		this.addChild(this.uiBgPatternBoard = new Sunniesnow.UiBgPatternBoard(Sunniesnow.game.chart.events));
+		this.addChild(this.topLeftHud = new Sunniesnow.TopLeftHud());
+		this.addChild(this.topRightHud = new Sunniesnow.TopRightHud());
+		this.addChild(this.topCenterHud = new Sunniesnow.TopCenterHud());
+		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause(() => this.switchPausing()));
+		this.addChild(this.fxBoard = new Sunniesnow.FxBoard());
+		this.addChild(this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard(Sunniesnow.game.chart.events));
+		this.addChild(this.uiNotesBoard = new Sunniesnow.UiNotesBoard(Sunniesnow.game.chart.events, this.fxBoard, this.debugBoard));
+		this.addChild(this.tipPointsBoard = new Sunniesnow.TipPointsBoard(Sunniesnow.game.chart.events));
 	}
 
 	populateDebugUi() {

@@ -12,7 +12,7 @@ Sunniesnow.UiGrid = class UiGrid extends Sunniesnow.UiBgPattern {
 		const halfWidth = rightMost * unit;
 		const halfHeight = upMost * unit;
 		const margin = unit / 10;
-		graphics.beginFill(0x000000, 0.4);
+		graphics.beginFill(0x000000, 0.2);
 		graphics.drawRect(-halfWidth, -halfHeight, halfWidth * 2, halfHeight * 2);
 		graphics.endFill();
 		graphics.lineStyle(unit / 50, 0xffffef);

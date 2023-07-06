@@ -19,7 +19,6 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 	
 	populate() {
-		super.populate();
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
 		this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
 		this.text = this.createText();
@@ -44,14 +43,12 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 
 	updateFadingIn(progress) {
-		super.updateFadingIn(progress);
 		this.note.scale.set(progress);
 		this.circle.scale.set(1 - (progress-1)**2);
 		this.circle.alpha = progress / 3;
 	}
 
 	updateActive(progress) {
-		super.updateActive(progress);
 		this.note.scale.set(1);
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
 		if (progress <= 1) {
@@ -64,7 +61,6 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 
 	updateHolding(progress) {
-		super.updateHolding(progress);
 		this.circle.visible = false;
 		this.rotateHaloMask(progress);
 		this.swellBounce(progress);

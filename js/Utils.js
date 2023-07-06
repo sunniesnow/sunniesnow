@@ -146,10 +146,11 @@ Sunniesnow.Utils = {
 		return null;
 	},
 
+	// min and max must be specified as integers in the form 0xRRGGBB
 	randColor(min, max) {
 		let result = 0;
 		for (let i = 0; i < 3; i++) {
-			result |= Math.floor(Math.random() * ((max & 0xff) - (min & 0xff) + 1)) + (min & 0xff) << i*8;
+			result |= Math.floor(Math.random() * ((max&0xff) - (min&0xff) + 1)) + (min&0xff) << i*8;
 			min >>= 8;
 			max >>= 8;
 		}
