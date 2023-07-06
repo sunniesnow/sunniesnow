@@ -1,8 +1,8 @@
-Sunniesnow.UiEventsBoard = class UiEventsBoard extends PIXI.Container {
+Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 
 	constructor(events, fxBoard, debugBoard) {
 		super();
-		this.unappearedEvents = events.slice();
+		this.unappearedEvents = events.filter(event => event instanceof Sunniesnow.Note);
 		this.uiEvents = [];
 		this.fxBoard = fxBoard;
 		this.debugBoard = debugBoard;

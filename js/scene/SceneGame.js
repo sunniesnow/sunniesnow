@@ -40,11 +40,15 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	populateBoards() {
+		this.uiBgPatternBoard = new Sunniesnow.UiBgPatternBoard(Sunniesnow.game.chart.events);
 		this.fxBoard = new Sunniesnow.FxBoard();
-		this.uiEventsBoard = new Sunniesnow.UiEventsBoard(Sunniesnow.game.chart.events, this.fxBoard, this.debugBoard);
+		this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard(Sunniesnow.game.chart.events);
+		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(Sunniesnow.game.chart.events, this.fxBoard, this.debugBoard);
 		this.tipPointsBoard = new Sunniesnow.TipPointsBoard(Sunniesnow.game.chart.events);
+		this.addChild(this.uiBgPatternBoard);
 		this.addChild(this.fxBoard);
-		this.addChild(this.uiEventsBoard);
+		this.addChild(this.uiBgNotesBoard);
+		this.addChild(this.uiNotesBoard);
 		this.addChild(this.tipPointsBoard);
 	}
 
@@ -71,10 +75,8 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.updateTouches();
 		if (this.started && !this.pausing) {
 			this.currentTime = this.music.currentTime();
-			Sunniesnow.game.level.update(this.currentTime)
-			this.uiEventsBoard.update(this.currentTime);
-			this.fxBoard.update(delta);
-			this.tipPointsBoard.update(this.currentTime);
+			Sunniesnow.game.level.update(this.currentTime);
+			this.updateBoards(delta);
 		}
 		if (Sunniesnow.game.settings.debug) {
 			this.debugHud.update(delta, {
@@ -90,6 +92,14 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.onTouch();
 		}
 		this.needUpdateTouches = true;
+	}
+
+	updateBoards(delta) {
+		this.uiBgPatternBoard.update(this.currentTime);
+		this.uiBgNotesBoard.update(this.currentTime);
+		this.uiNotesBoard.update(this.currentTime);
+		this.fxBoard.update(delta);
+		this.tipPointsBoard.update(this.currentTime);
 	}
 
 	terminate() {
@@ -189,17 +199,12 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	addListeners() {
 		this.blurListener = event => {
-			if (!Sunniesnow.game.settings.autoplay) {
-				this.touches = [];
-				this.keys = {};
-				this.mouseButtons = 0;
-			}
+			this.touches = [];
+			this.keys = {};
+			this.mouseButtons = 0;
 			this.pause();
 		};
 		window.addEventListener('blur', this.blurListener);
-		if (Sunniesnow.game.settings.autoplay) {
-			return;
-		}
 		this.touches = [];
 		this.touchListener = event => {
 			event.preventDefault();
@@ -260,9 +265,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	removeListeners() {
 		window.removeEventListener('blur', this.blurListener);
-		if (Sunniesnow.game.settings.autoplay) {
-			return;
-		}
 		Sunniesnow.game.canvas.removeEventListener('touchstart', this.touchStartListener);
 		Sunniesnow.game.canvas.removeEventListener('touchmove', this.touchListener);
 		Sunniesnow.game.canvas.removeEventListener('touchend', this.touchListener);

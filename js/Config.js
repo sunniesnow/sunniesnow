@@ -9,7 +9,7 @@ Sunniesnow.Config = {
 
 	// unit: pixels
 	noteRadius() {
-		return this.radius * this.scale();
+		return this.radius * this.scale() * Sunniesnow.game.settings.noteSize;
 	},
 
 	// calculate the note active time from the note speed specified by gamer

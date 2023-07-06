@@ -39,6 +39,15 @@ Sunniesnow.Game = class Game {
 		Sunniesnow.UiHold.initialize();
 		Sunniesnow.UiFlick.initialize();
 		Sunniesnow.UiDrag.initialize();
+		Sunniesnow.UiBgNote.initialize();
+		Sunniesnow.UiBgPattern.initialize();
+		Sunniesnow.UiBigText.initialize();
+		Sunniesnow.UiGrid.initialize();
+		Sunniesnow.UiHexagon.initialize();
+		Sunniesnow.UiCheckerboard.initialize();
+		Sunniesnow.UiDiamondGrid.initialize();
+		Sunniesnow.UiPentagon.initialize();
+		Sunniesnow.UiTurntable.initialize();
 	}
 
 	initFx() {

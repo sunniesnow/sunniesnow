@@ -79,7 +79,7 @@ Sunniesnow.Level = class Level {
 		while (this.unhitNotes.length > 0) {
 			const note = this.unhitNotes[0];
 			if (time >= note.time) {
-				note.hit(null, 0);
+				note.hit(null, note.time);
 			} else {
 				break;
 			}
@@ -110,7 +110,7 @@ Sunniesnow.Level = class Level {
 				break;
 			}
 			if (note.autoFinishesHolding() || Sunniesnow.game.settings.autoplay) {
-				note.release((note.endTime - note.time) / Sunniesnow.game.settings.gameSpeed);
+				note.release(note.endTime);
 			} else {
 				i++;
 			}
@@ -140,7 +140,7 @@ Sunniesnow.Level = class Level {
 			}
 			const note = this.touches[id].note;
 			if (note) {
-				note.release(time - note.time);
+				note.release(time);
 			}
 			delete this.touches[id];
 		}
@@ -151,12 +151,12 @@ Sunniesnow.Level = class Level {
 	newTouch(id, time, x, y) {
 		const touch = this.touches[id] = {id: id, history: [{time, x, y}]};
 		for (let i = 0; i < this.unhitNotes.length;) {
-			const note = this.unhitNotes[i];
+			let note = this.unhitNotes[i];
 			if (time < note.time + this.earliestEarlyBad) {
 				break;
 			}
 			if (time >= note.time + this.judgementWindows[note.type].bad[0]) {
-				note.hit(touch, time - note.time);
+				note = this.tryHitNote(note, touch, time);
 				if (note.onlyOnePerTouch()) {
 					break;
 				} else {
@@ -166,6 +166,33 @@ Sunniesnow.Level = class Level {
 				i++;
 			}
 		}
+	}
+
+	// What if a touch can potentially hit different simultaneous notes at this position?
+	// Pick the one that is the nearest!
+	// However, we should avoid hitting drags as possible.
+	// The function hits the most appropriate note and returns the actually hit note.
+	tryHitNote(note, touch, time) {
+		const {x, y} = touch.history[0];
+		const events = note.event.simultaneousEvents;
+		// Should we replace Euclidean distance with L-infinity distance?
+		let distance = Sunniesnow.Utils.distance(x, y, note.event.x, note.event.y);
+		for (let i = 0; i < events.length; i++) {
+			const event = events[i];
+			const newNote = event.levelNote;
+			if (!newNote || newNote.hitRelativeTime !== null) {
+				continue;
+			}
+			const newDistance = Sunniesnow.Utils.distance(x, y, event.x, event.y);
+			let condition = (!note.onlyOnePerTouch() || newDistance < distance) && newNote.onlyOnePerTouch();
+			condition ||= !note.onlyOnePerTouch() && !newNote.onlyOnePerTouch() && newDistance < distance;
+			if (condition && newNote.isTappableAt(x, y)) {
+				note = newNote;
+				distance = newDistance;
+			}
+		}
+		note.hit(touch, time);
+		return note;
 	}
 
 	onNewJudgement(note) {
@@ -201,7 +228,7 @@ Sunniesnow.Level = class Level {
 				const touch = this.touches[id];
 				const {time, x, y} = touch.history[touch.history.length - 1];
 				if (note.isTappableAt(x, y)) {
-					note.hit(touch, time - note.time);
+					note.hit(touch, time);
 				}
 			}
 		}
@@ -217,7 +244,7 @@ Sunniesnow.Level = class Level {
 				const touch = this.touches[id];
 				const {time, x, y} = touch.history[touch.history.length - 1];
 				if (note.isTappableAt(x, y)) {
-					note.refreshJudgement(time - note.time);
+					note.refreshJudgement(time);
 				}
 			}
 		}

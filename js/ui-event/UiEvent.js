@@ -32,7 +32,7 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 				// do nothing
 				break;
 			case 'fadingIn':
-				this.updateFadingIn(relativeTime + this.activeDuration + this.constructor.FADING_IN_DURATION);
+				this.updateFadingIn((relativeTime + this.activeDuration) / this.constructor.FADING_IN_DURATION + 1);
 				break;
 			case 'active':
 				this.updateActive(relativeTime / this.activeDuration + 1);
@@ -41,7 +41,8 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 				this.updateHolding(relativeTime / (this.event.duration / Sunniesnow.game.settings.gameSpeed));
 				break;
 			case 'fadingOut':
-				this.updateFadingOut(relativeTime - this.levelNote.releaseRelativeTime);
+				const releaseRelativeTime = this.levelNote ? this.levelNote.releaseRelativeTime : (this.event.duration || 0) / Sunniesnow.game.settings.gameSpeed;
+				this.updateFadingOut((relativeTime - releaseRelativeTime) / this.constructor.FADING_OUT_DURATION);
 				break;
 			case 'finished':
 				// do nothing
@@ -58,7 +59,7 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 					} else {
 						return 'fadingOut';
 					}
-				} else if (this.levelNote.event.duration > 0) {
+				} else if (this.event.duration > 0) {
 					return 'holding';
 				} else {
 					return 'active';
@@ -88,9 +89,9 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 		this.visible = this.state !== 'ready' && this.state !== 'finished';
 	}
 
-	// Time is zero at the start of the fade-in,
-	// and never exceeds FADING_IN_DURATION.
-	updateFadingIn(time) {
+	// Progress is zero at the start of the fade-in,
+	// and never exceeds 1.
+	updateFadingIn(progress) {
 	}
 
 	// Progress is zero at the start of the active time,
@@ -107,8 +108,8 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 	}
 
 	// Time is zero at the start of the fade-out,
-	// and never exceeds FADING_OUT_DURATION.
-	updateFadingOut(time) {
+	// and never exceeds 1.
+	updateFadingOut(progress) {
 	}
 
 };

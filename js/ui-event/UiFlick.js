@@ -30,17 +30,12 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	}
 
 	populate() {
+		super.populate();
 		this.noteBody = new PIXI.Graphics(Sunniesnow.UiFlick.geometry);
 		this.circle = new PIXI.Graphics(Sunniesnow.UiFlick.circleGeometry);
 		this.arrow = new PIXI.Graphics(Sunniesnow.UiFlick.arrowGeometry);
 		this.arrow.transform.rotation = -this.event.angle;
-		this.text = new PIXI.Text(this.event.text, {
-			fontSize: this.constructor.radius, // TODO
-			fill: 'white',
-			align: 'center',
-			fontFamily: 'Arial'
-		});
-		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
+		this.text = this.createText();
 		this.addChild(this.circle);
 		this.note = new PIXI.Container();
 		this.note.addChild(this.noteBody);
@@ -49,17 +44,18 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.addChild(this.note);
 	}
 
-	updateFadingIn(time) {
-		const progress = time / this.constructor.FADING_IN_DURATION;
+	updateFadingIn(progress) {
+		super.updateFadingIn(progress);
 		this.note.scale.set(progress);
 		this.circle.scale.set(1 - (progress - 1) ** 2);
 		this.circle.alpha = progress / 3;
 		this.arrow.alpha = progress;
-		const relativeTime = -this.activeDuration - this.constructor.FADING_IN_DURATION + time;
+		const relativeTime = -this.activeDuration - this.constructor.FADING_IN_DURATION*(1-progress);
 		this.arrow.scale.set(1 + 0.05*Math.cos(relativeTime * 2));
 	}
 
 	updateActive(progress) {
+		super.updateActive(progress);
 		this.note.scale.set(1);
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
 		if (progress <= 1) {
@@ -73,13 +69,13 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.arrow.scale.set(1 + 0.05*Math.cos(relativeTime * 5));
 	}
 
-	updateFadingOut(time) {
+	updateFadingOut(progress) {
+		super.updateFadingOut(progress);
 		if (this.levelNote.judgement === 'miss' || this.levelNote.judgement === 'bad') {
 			this.visible = false;
 			return;
 		}
 		const distance = this.constructor.radius * 2;
-		const progress = time / this.constructor.FADING_OUT_DURATION;
 		this.noteBody.visible = false;
 		this.text.visible = false;
 		this.circle.visible = false;

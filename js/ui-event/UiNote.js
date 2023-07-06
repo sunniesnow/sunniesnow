@@ -1,4 +1,4 @@
-Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiEvent {
+Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 
 	static FADING_IN_DURATION = 0.25;
 	static FADING_OUT_DURATION = 0;
@@ -6,8 +6,6 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiEvent {
 	constructor(event, fxBoard, debugBoard) {
 		super(event);
 		this.levelNote = event.levelNote;
-		this.activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
-		[this.x, this.y] = Sunniesnow.Config.chartMapping(event.x, event.y);
 		this.fxBoard = fxBoard;
 		this.debugBoard = debugBoard;
 	}

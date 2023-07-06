@@ -30,20 +30,22 @@ Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
 	}
 
 	populate() {
+		super.populate();
 		this.note = new PIXI.Graphics(this.constructor.geometry);
 		this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
 		this.addChild(this.circle);
 		this.addChild(this.note);
 	}
 
-	updateFadingIn(time) {
-		const progress = time / this.constructor.FADING_IN_DURATION;
+	updateFadingIn(progress) {
+		super.updateFadingIn(progress);
 		this.note.scale.set(progress);
 		this.circle.scale.set(1 - (progress-1)**2);
 		this.circle.alpha = progress / 3;
 	}
 
 	updateActive(progress) {
+		super.updateActive(progress);
 		this.note.scale.set(1);
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
 		if (progress <= 1) {

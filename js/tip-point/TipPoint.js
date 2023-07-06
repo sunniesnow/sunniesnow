@@ -1,6 +1,8 @@
 Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 
-	static FADING_IN_DURATION = 0.5;
+	static TRAIL_DURATION = 0.5;
+	static ZOOMING_IN_DURATION = 0.3;
+	static ZOOMING_OUT_DURATION = 0.3;
 
 	static TRAIL_VERTEX_SHADER = `
 attribute vec2 aVertexPosition;
@@ -55,15 +57,13 @@ void main() {
 		);
 	}
 
-	constructor(events) {
-		super(events);
+	populate() {
 		this.createTrail();
 		this.createTipPoint();
 	}
 
 	createTipPoint() {
 		this.tipPoint = new PIXI.Graphics(this.constructor.tipPointGeometry);
-		this.tipPoint.visible = false;
 		this.addChild(this.tipPoint);
 	}
 
@@ -75,27 +75,37 @@ void main() {
 		this.trailIndices = this.trailGeometry.getIndex();
 		this.trail = new PIXI.Mesh(this.trailGeometry, this.constructor.trailShader);
 		this.trail.blendMode = PIXI.BLEND_MODES.ADD;
-		this.trail.visible = false;
 		this.addChild(this.trail);
 	}
 
-	update(time) {
+	updateZoomingIn(time) {
+		super.updateZoomingIn(time);
 		const sinceStart = (time - this.startTime) / Sunniesnow.game.settings.gameSpeed;
-		if (sinceStart < 0 || time >= this.endTime) {
-			this.tipPoint.visible = false;
-			this.trail.visible = false;
-			return;
-		}
-		this.trail.visible = true;
-		this.tipPoint.visible = true;
-		if (sinceStart < this.constructor.FADING_IN_DURATION) {
-			this.tipPoint.scale.set(sinceStart / this.constructor.FADING_IN_DURATION);
-			this.updateTrail(this.getCheckpointsBetween(this.startTime, time));
-		} else {
-			this.tipPoint.scale.set(1);
-			this.updateTrail(this.getCheckpointsBetween(time - this.constructor.FADING_IN_DURATION, time));
-		}
+		this.tipPoint.scale.set(sinceStart / this.constructor.ZOOMING_IN_DURATION);
+		this.updateTrail(time);
 		this.updateTipPoint(time);
+	}
+
+	updateZoomingOut(time) {
+		super.updateZoomingOut(time);
+		const sinceEnd = (time - this.endTime) / Sunniesnow.game.settings.gameSpeed;
+		this.tipPoint.scale.set(1 - sinceEnd / this.constructor.ZOOMING_OUT_DURATION);
+		this.updateTrail(time);
+		this.updateTipPoint(time);
+	}
+
+	updateHolding(time) {
+		super.updateHolding(time);
+		this.tipPoint.scale.set(1);
+		this.updateTrail(time);
+		this.updateTipPoint(time);
+	}
+
+	updateTrail(time) {
+		this.drawTrailThrough(this.getCheckpointsBetween(
+			Math.max(this.startTime, time - this.constructor.TRAIL_DURATION),
+			Math.min(this.endTime, time)
+		));
 	}
 
 	updateTipPoint(time) {
@@ -169,7 +179,7 @@ void main() {
 		return checkpoints;
 	}
 
-	updateTrail(checkpoints) {
+	drawTrailThrough(checkpoints) {
 		const startTime = checkpoints[0].time;
 		const endTime = checkpoints[checkpoints.length - 1].time;
 		if (this.lastNodesCount != checkpoints.length) {
@@ -229,7 +239,9 @@ void main() {
 			let y1 = checkpoints[i].y + perpY;
 			let x2 = checkpoints[i].x - perpX;
 			let y2 = checkpoints[i].y - perpY;
-			if (this.clockwiseness(xp, yp, x, y, x1, y1) !== this.clockwiseness(xp, yp, x, y, lastX1, lastY1)) {
+			const c1 = Sunniesnow.Utils.clockwiseness(xp, yp, x, y, x1, y1);
+			const c2 = Sunniesnow.Utils.clockwiseness(xp, yp, x, y, lastX1, lastY1);
+			if (c1 !== c2) {
 				let t = x1;
 				x1 = x2;
 				x2 = t;
@@ -246,8 +258,4 @@ void main() {
 		vertices[1] = vertices[3] = checkpoints[0].y;
 		this.trailVertices.update();
 	}
-
-	clockwiseness(x1, y1, x2, y2, x3, y3) {
-		return Math.sign((y2-y1)*(x3-x2) - (y3-y2)*(x2-x1));
-	}
-}
+};

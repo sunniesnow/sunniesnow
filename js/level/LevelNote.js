@@ -31,7 +31,8 @@ Sunniesnow.LevelNote = class LevelNote {
 		return Math.abs(this.event.x - x) < r && Math.abs(this.event.y - y) < r;
 	}
 
-	hit(hitData, relativeTime) {
+	hit(hitData, time) {
+		const relativeTime = (time - this.time) / Sunniesnow.game.settings.gameSpeed;
 		if (this.holding) {
 			return;
 		}
@@ -63,7 +64,8 @@ Sunniesnow.LevelNote = class LevelNote {
 		}
 	}
 
-	release(relativeTime) {
+	release(time) {
+		const relativeTime = (time - this.time) / Sunniesnow.game.settings.gameSpeed;
 		if (!this.holding) {
 			return;
 		}

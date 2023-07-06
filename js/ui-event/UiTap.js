@@ -26,6 +26,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 	}
 
 	populate() {
+		super.populate();
 		this.connectedPos = this.getConnectedPos();
 		if (this.hasConnectedTap()) {
 			this.note = new PIXI.Graphics(Sunniesnow.UiTap.doubleGeometry);
@@ -38,13 +39,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 			this.note = new PIXI.Graphics(Sunniesnow.UiTap.geometry);
 			this.circle = new PIXI.Graphics(Sunniesnow.UiTap.circleGeometry);
 		}
-		this.text = new PIXI.Text(this.event.text, {
-			fontSize: this.constructor.radius, // TODO: adapt for longer texts
-			fill: 'white',
-			align: 'center',
-			fontFamily: 'Arial'
-		});
-		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
+		this.text = this.createText();
 		this.addChild(this.circle);
 		this.note.addChild(this.text);
 		this.addChild(this.note);
@@ -73,14 +68,14 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		return null;
 	}
 
-	updateFadingIn(time) {
-		const progress = time / this.constructor.FADING_IN_DURATION;
+	updateFadingIn(progress) {
+		super.updateFadingIn(progress);
 		this.note.scale.set(progress);
 		this.circle.scale.set(1 - (progress-1)**2);
 		this.circle.alpha = progress / 3;
 		if (this.connectedPos) {
 			this.doubleLine.clear();
-			this.doubleLine.lineStyle(this.constructor.radius / 8, 0xf9f9e9);
+			this.doubleLine.lineStyle(this.constructor.radius / 12, 0xf9f9e9);
 			Sunniesnow.Utils.drawDashedLine(
 				this.doubleLine,
 				(1-progress) * this.connectedPos[0] / 2,
@@ -94,6 +89,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 	}
 
 	updateActive(progress) {
+		super.updateActive(progress);
 		this.note.scale.set(1);
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
 		if (progress <= 1) {

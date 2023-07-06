@@ -83,7 +83,7 @@ Sunniesnow.Utils = {
 			x += gapDx;
 			y += gapDy;
 		}
-		graphics.finishPoly();
+		return graphics.finishPoly();
 	},
 
 	minmax(...numbers) {
@@ -109,6 +109,11 @@ Sunniesnow.Utils = {
 
 	distance(x0, y0, x1, y1) {
 		return this.hypot(x1 - x0, y1 - y0);
+	},
+
+	// The L-infinity distance
+	lInfDistance(x0, y0, x1, y1) {
+		return Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0));
 	},
 
 	hypot(x, y) {
@@ -149,5 +154,24 @@ Sunniesnow.Utils = {
 			max >>= 8;
 		}
 		return result;
+	},
+
+	drawRegularPolygon(graphics, x, y, radius, sides, rotation) {
+		sides = Math.max(sides || 0, 3);
+		rotation ||= 0;
+		const delta = Math.PI*2 / sides;
+		const polygon = [];
+		for (let i = 0; i < sides; i++) {
+			const angle = i * delta + rotation;
+			polygon.push(
+				x + radius * Math.cos(angle),
+				y + radius * Math.sin(angle)
+			);
+		}
+		return graphics.drawPolygon(polygon);
+	},
+
+	clockwiseness(x1, y1, x2, y2, x3, y3) {
+		return Math.sign((y2 - y1) * (x3 - x2) - (y3 - y2) * (x2 - x1));
 	}
 };

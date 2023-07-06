@@ -19,15 +19,10 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 	
 	populate() {
+		super.populate();
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
 		this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
-		this.text = new PIXI.Text(this.event.text, {
-			fontSize: this.constructor.radius, // TODO
-			fill: 'white',
-			align: 'center',
-			fontFamily: 'Arial'
-		});
-		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
+		this.text = this.createText();
 		this.addChild(this.circle);
 		this.note = new PIXI.Container();
 		this.createHalo();
@@ -48,14 +43,15 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 		this.note.addChild(this.haloMask);
 	}
 
-	updateFadingIn(time) {
-		const progress = time / this.constructor.FADING_IN_DURATION;
+	updateFadingIn(progress) {
+		super.updateFadingIn(progress);
 		this.note.scale.set(progress);
 		this.circle.scale.set(1 - (progress-1)**2);
 		this.circle.alpha = progress / 3;
 	}
 
 	updateActive(progress) {
+		super.updateActive(progress);
 		this.note.scale.set(1);
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
 		if (progress <= 1) {
@@ -68,6 +64,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 
 	updateHolding(progress) {
+		super.updateHolding(progress);
 		this.circle.visible = false;
 		this.rotateHaloMask(progress);
 		this.swellBounce(progress);
@@ -107,13 +104,13 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 		this.note.scale.set(1.1 - Math.cos(phase) * 0.1);
 	}
 
-	updateFadingOut(time) {
+	updateFadingOut(progress) {
+		super.updateFadingOut(progress);
 		if (this.levelNote.judgement === 'miss') {
 			this.visible = false;
 			return;
 		}
 		this.halo.visible = false;
-		const progress = time / this.constructor.FADING_OUT_DURATION;
 		this.note.scale.set(1.2 + (1-(1-progress)**2) * 0.3);
 		this.note.alpha = 1 - progress;
 	}
