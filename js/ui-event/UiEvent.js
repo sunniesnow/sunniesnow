@@ -5,7 +5,7 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 
 	// Load assets in this method to avoid loading assets during game.
 	// To be overridden in subclasses.
-	static initialize() {
+	static async load() {
 	}
 
 	constructor(event) {

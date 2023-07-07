@@ -1,5 +1,5 @@
 Sunniesnow.FxFlick = class FxFlick extends Sunniesnow.FxNote {
-	static initialize() {
+	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.sparkLine = this.createSparkLine();
 		this.explosionContourArc = this.createExplosionContourArc();

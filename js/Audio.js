@@ -1,5 +1,5 @@
 Sunniesnow.Audio = class Audio {
-	static initialize() {
+	static async load() {
 		this.context = new AudioContext();
 		this.playingAudios = [];
 	}

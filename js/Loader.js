@@ -210,7 +210,6 @@ Sunniesnow.Loader = {
 			width: this.readValue('width'),
 			height: this.readValue('height'),
 			fullscreen: this.readCheckbox('fullscreen'),
-			backend: this.readRadio('backend'),
 			debug: this.readCheckbox('debug'),
 		}
 	},

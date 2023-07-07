@@ -1,6 +1,6 @@
 Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	static FADING_OUT_DURATION = 1/3;
-	static initialize() {
+	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.circleRadius = this.radius * 4;
 		this.circleGeometry = Sunniesnow.UiTap.createCircleGeometry.call(this, 0xeefefe);

@@ -1,6 +1,6 @@
 Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 
-	static initialize() {
+	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.circleRadius = this.radius * 4;
 		this.circleGeometry = this.createCircleGeometry(0xeefefe);

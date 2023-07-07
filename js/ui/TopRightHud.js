@@ -1,11 +1,10 @@
 Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
-	populate() {
-		this.populateBackground();
-		this.populateText();
-		this.populateDifficultyName();
+
+	static async load() {
+		this.backgroundGeometry = this.createBackgroundGeometry();
 	}
 
-	populateBackground() {
+	static createBackgroundGeometry() {
 		const unit = Sunniesnow.game.settings.width / 60;
 		const path1 = [
 			20 * unit, 2 * unit,
@@ -27,18 +26,30 @@ Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 		]
 		Sunniesnow.Utils.mirrorPath(path1);
 		Sunniesnow.Utils.mirrorPath(path2);
-		this.background = new PIXI.Graphics();
-		this.background.beginFill('black', 0.5);
-		this.background.drawPolygon(path2);
-		this.background.endFill();
-		this.background.lineStyle(unit / 6, 'white', 1, 1);
+		const graphics = new PIXI.Graphics();
+		graphics.beginFill('black', 0.5);
+		graphics.drawPolygon(path2);
+		graphics.endFill();
+		graphics.lineStyle(unit / 6, 'white', 1, 1);
 		for (let i = 0; i < path1.length; i += 2) {
 			if (i === 0) {
-				this.background.moveTo(path1[i], path1[i + 1]);
+				graphics.moveTo(path1[i], path1[i + 1]);
 			} else {
-				this.background.lineTo(path1[i], path1[i + 1]);
+				graphics.lineTo(path1[i], path1[i + 1]);
 			}
 		}
+		graphics.finishPoly();
+		return graphics.geometry;
+	}
+
+	populate() {
+		this.populateBackground();
+		this.populateText();
+		this.populateDifficultyName();
+	}
+
+	populateBackground() {
+		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
 		this.addChild(this.background);
 	}
 

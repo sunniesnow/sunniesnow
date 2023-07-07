@@ -18,7 +18,7 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 		this.populate();
 	}
 
-	static initialize() {
+	static async load() {
 	}
 
 	populate() {

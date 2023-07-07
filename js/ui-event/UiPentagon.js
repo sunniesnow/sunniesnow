@@ -1,5 +1,5 @@
 Sunniesnow.UiPentagon = class UiPentagon extends Sunniesnow.UiBgPattern {
-	static initialize() {
+	static async load() {
 		this.geometry = this.createGeometry();
 	}
 

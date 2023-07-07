@@ -1,90 +1,8 @@
 ---
 layout: default
 title: Sunniesnow
+head: head.html
 ---
-
-<script src="https://fastly.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-<script src="https://pixijs.download/release/pixi.js"></script>
-<script type="module">import mime from "https://cdn.skypack.dev/mime/lite"; window.mime = mime;</script>
-
-<script>window.Sunniesnow = {};</script>
-<script src="js/Config.js"></script>
-<script src="js/Utils.js"></script>
-<script src="js/Audio.js"></script>
-<script src="js/Loader.js"></script>
-<script src="js/Game.js"></script>
-
-<script src="js/ui/UiComponent.js"></script>
-<script src="js/ui/Background.js"></script>
-<script src="js/ui/TopCenterHud.js"></script>
-<script src="js/ui/TopLeftHud.js"></script>
-<script src="js/ui/TopRightHud.js"></script>
-<script src="js/ui/ProgressBar.js"></script>
-
-<script src="js/ui-debug/DebugHud.js"></script>
-<script src="js/ui-debug/DebugBoard.js"></script>
-
-<script src="js/button/Button.js"></script>
-<script src="js/button/ButtonPause.js"></script>
-
-<script src="js/ui-event/UiNotesBoard.js"></script>
-<script src="js/ui-event/UiBgNotesBoard.js"></script>
-<script src="js/ui-event/UiBgPatternBoard.js"></script>
-<script src="js/ui-event/UiEvent.js"></script>
-<script src="js/ui-event/UiNoteBase.js"></script>
-<script src="js/ui-event/UiNote.js"></script>
-<script src="js/ui-event/UiTap.js"></script>
-<script src="js/ui-event/UiFlick.js"></script>
-<script src="js/ui-event/UiHold.js"></script>
-<script src="js/ui-event/UiDrag.js"></script>
-<script src="js/ui-event/UiBgNote.js"></script>
-<script src="js/ui-event/UiBgPattern.js"></script>
-<script src="js/ui-event/UiBigText.js"></script>
-<script src="js/ui-event/UiGrid.js"></script>
-<script src="js/ui-event/UiHexagon.js"></script>
-<script src="js/ui-event/UiCheckerboard.js"></script>
-<script src="js/ui-event/UiDiamondGrid.js"></script>
-<script src="js/ui-event/UiPentagon.js"></script>
-<script src="js/ui-event/UiTurntable.js"></script>
-
-<script src="js/fx/FxBoard.js"></script>
-<script src="js/fx/FxNote.js"></script>
-<script src="js/fx/FxTap.js"></script>
-<script src="js/fx/FxFlick.js"></script>
-<script src="js/fx/FxHold.js"></script>
-<script src="js/fx/FxDrag.js"></script>
-
-<script src="js/level/Level.js"></script>
-<script src="js/level/LevelNote.js"></script>
-<script src="js/level/LevelTap.js"></script>
-<script src="js/level/LevelFlick.js"></script>
-<script src="js/level/LevelHold.js"></script>
-<script src="js/level/LevelDrag.js"></script>
-
-<script src="js/chart/Chart.js"></script>
-<script src="js/chart/Event.js"></script>
-<script src="js/chart/Note.js"></script>
-<script src="js/chart/Placeholder.js"></script>
-<script src="js/chart/Tap.js"></script>
-<script src="js/chart/Flick.js"></script>
-<script src="js/chart/Hold.js"></script>
-<script src="js/chart/Drag.js"></script>
-<script src="js/chart/BgNote.js"></script>
-<script src="js/chart/BgPattern.js"></script>
-<script src="js/chart/BigText.js"></script>
-<script src="js/chart/Grid.js"></script>
-<script src="js/chart/Hexagon.js"></script>
-<script src="js/chart/Checkerboard.js"></script>
-<script src="js/chart/DiamondGrid.js"></script>
-<script src="js/chart/Pentagon.js"></script>
-<script src="js/chart/Turntable.js"></script>
-
-<script src="js/tip-point/TipPointBase.js"></script>
-<script src="js/tip-point/TipPoint.js"></script>
-<script src="js/tip-point/TipPointsBoard.js"></script>
-
-<script src="js/scene/Scene.js"></script>
-<script src="js/scene/SceneGame.js"></script>
 
 <fieldset>
 	<legend>Level file</legend>
@@ -102,12 +20,12 @@ title: Sunniesnow
 	</div>
 </fieldset>
 
-<p>
+<div>
 	Music:
 	<select id="music-select" disabled></select>
 	Chart:
 	<select id="chart-select" disabled></select>
-</p>
+</div>
 
 <details>
 	<summary>Judgement settings</summary>
@@ -390,20 +308,6 @@ title: Sunniesnow
 	</fieldset>
 
 	<fieldset>
-		<legend>Backend</legend>
-
-		<div>
-			<input type="radio" id="backend-webgl-radio" name="backend" value="webgl" checked>
-			<label for="backend-webgl-radio">WebGL</label>
-		</div>
-
-		<div>
-			<input type="radio" id="backend-canvas-radio" name="backend" value="canvas">
-			<label for="backend-canvas-radio">Canvas</label>
-		</div>
-	</fieldset>
-
-	<fieldset>
 		<legend>Debug</legend>
 
 		<div>
@@ -415,21 +319,19 @@ title: Sunniesnow
 
 <button type="button" id="start-button" onclick="Sunniesnow.Game.run()">Start</button>
 
+<div id="loading-progress"></div>
 <div id="warnings" style="color: orange;"></div>
-
 <div id="errors" style="color: red;"></div>
 
 <canvas id="main-canvas"></canvas>
 
-<p>
-	Sunniesnow
-	<br>
-	Last update: {{ "now" | date: "%FT%T%z" }}
-	<br>
-	License: <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GPL v3.0</a>
-	<br>
+<div>
+	Sunniesnow<br>
+	Last update: {{ "now" | date: "%FT%T%z" }}<br>
+	Source codes: <a href="https://github.com/sunniesnow/sunniesnow" target="_blank">GitHub</a><br>
+	License: <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GPL v3.0</a><br>
 	Author: UlyssesZhan &lt;<a href="mailto:ulysseszhan@gmail.com">ulysseszhan@gmail.com</a>&gt;
-</p>
+</div>
 
 <script>
 	function associateRadio(radioId, inputId) {

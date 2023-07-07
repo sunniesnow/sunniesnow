@@ -26,7 +26,7 @@ void main() {
 }
 `;
 
-	static initialize() {
+	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius() / 3;
 		this.tipPointGeometry = this.createTipPointGeometry();
 		this.trailShader = this.createTrailShader();

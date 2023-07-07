@@ -1,5 +1,5 @@
 Sunniesnow.ButtonPause = class ButtonPause extends Sunniesnow.Button {
-	static initialize() {
+	static async load() {
 		this.geometry = this.createGeometry();
 	}
 

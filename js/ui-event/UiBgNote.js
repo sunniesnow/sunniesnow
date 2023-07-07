@@ -1,7 +1,7 @@
 Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 	static FADING_OUT_DURATION = 0.25;
 
-	static initialize() {
+	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.geometry = this.createGeometry();
 	}

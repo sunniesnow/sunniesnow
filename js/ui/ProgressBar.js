@@ -1,26 +1,41 @@
 Sunniesnow.ProgressBar = class ProgressBar extends Sunniesnow.UiComponent {
 
+	static async load() {
+		this.barHeight = Sunniesnow.game.settings.width / 200;
+		this.backgroundGeometry = this.createBackgroundGeometry();
+		this.barGeometry = this.createBarGeometry();
+	}
+
+	static createBackgroundGeometry() {
+		const graphics = new PIXI.Graphics();
+		graphics.beginFill(0xffffff, 0.5);
+		graphics.drawRect(0, 0, Sunniesnow.game.settings.width, this.barHeight);
+		graphics.endFill();
+		return graphics.geometry;
+	}
+
+	static createBarGeometry() {
+		const graphics = new PIXI.Graphics();
+		graphics.beginFill(0xc3efec);
+		graphics.drawRect(0, 0, Sunniesnow.game.settings.width, this.barHeight);
+		graphics.endFill();
+		return graphics.geometry;
+	}
+
 	populate() {
 		super.populate();
-		this.barHeight = Sunniesnow.game.settings.width / 200;
 		this.y = Sunniesnow.game.settings.height - this.barHeight;
 		this.populateBackground();
 		this.populateBar();
 	}
 
 	populateBackground() {
-		this.background = new PIXI.Graphics();
-		this.background.beginFill(0xffffff, 0.5);
-		this.background.drawRect(0, 0, Sunniesnow.game.settings.width, this.barHeight);
-		this.background.endFill();
+		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
 		this.addChild(this.background);
 	}
 
 	populateBar() {
-		this.bar = new PIXI.Graphics();
-		this.bar.beginFill(0xc3efec);
-		this.bar.drawRect(0, 0, Sunniesnow.game.settings.width, this.barHeight);
-		this.bar.endFill();
+		this.bar = new PIXI.Graphics(this.constructor.barGeometry);
 		this.bar.x = -Sunniesnow.game.settings.width;
 		this.addChild(this.bar);
 	}

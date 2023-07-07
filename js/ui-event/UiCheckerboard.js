@@ -1,5 +1,5 @@
 Sunniesnow.UiCheckerboard = class UiCheckerboard extends Sunniesnow.UiBgPattern {
-	static initialize() {
+	static async load() {
 		this.geometry = this.createGeometry();
 	}
 

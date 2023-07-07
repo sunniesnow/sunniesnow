@@ -1,5 +1,5 @@
 Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
-	static initialize() {
+	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius() * 2/3;
 		this.circleRadius = this.radius * 6;
 		this.circleGeometry = this.createCircleGeometry();

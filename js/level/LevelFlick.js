@@ -40,13 +40,8 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 			return;
 		}
 		const history = this.assignedHit.history;
-		const distance = Sunniesnow.Utils.distance(
-			history[0].x, history[0].y,
-			history[history.length - 1].x, history[history.length - 1].y
-		);
 		const timeElapsed = history[history.length - 1].time - history[0].time;
 		if (timeElapsed > this.thresholdFlickDuration()) { // too slow
-			console.log('too slow', timeElapsed, history);
 			this.badFlick = true;
 			this.release(this.hitRelativeTime + this.thresholdFlickDuration());
 			return;
@@ -58,7 +53,6 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		if (rho >= this.maxFlickDistance()) {
 			const angle = Sunniesnow.Utils.quo(phi - this.event.angle + Math.PI, Math.PI*2)[1] - Math.PI;
 			if (!Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
-				console.log('wrong direction', angle, history);
 				this.badFlick = true;
 			}
 			this.release(history[history.length - 1].time - this.time);
@@ -76,7 +70,6 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 				history[history.length - 1].x, history[history.length - 1].y
 			);
 			if (distance < this.minFlickDistance()) { // not enough distance
-				console.log('not enough distance', distance, history);
 				this.badFlick = true;
 			}
 		}

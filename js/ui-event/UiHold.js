@@ -1,7 +1,7 @@
 Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 
 	static FADING_OUT_DURATION = 1/3;
-	static initialize() {
+	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.haloRadius = this.radius * 1.5;
 		this.circleRadius = this.radius * 4;

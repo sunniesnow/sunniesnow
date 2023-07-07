@@ -6,60 +6,96 @@ Sunniesnow.Game = class Game {
 		}
 		Sunniesnow.game = new this();
 		Sunniesnow.game.start();
-		Sunniesnow.game.app.ticker.add(Sunniesnow.game.update.bind(Sunniesnow.game));
+		Sunniesnow.game.app.ticker.add(Sunniesnow.game.mainTicker.bind(Sunniesnow.game));
 	}
 
 	start() {
 		Sunniesnow.Loader.readSettings(this);
-		Sunniesnow.Audio.initialize();
 		this.initCanvas();
-		this.initButtons();
-		this.initUiEvents();
-		this.initFx();
-		this.initTipPoint();
+		this.loadClasses();
 		this.initPixiApp();
 		this.chart = new Sunniesnow.Chart(Sunniesnow.Loader.loaded.chart.charts[this.settings.chartSelect]);
 		this.scene = new Sunniesnow.SceneGame();
 	}
 
+	mainTicker(delta) {
+		if (this.loadingComplete) {
+			this.update(delta);
+		} else {
+			this.updateLoading(delta);
+		}
+	}
+
 	initCanvas() {
 		this.canvas = document.getElementById('main-canvas');
-		this.canvas.addEventListener('contextmenu', e => e.preventDefault());
+		this.canvas.addEventListener('contextmenu', event => {
+			if (!this.canvas.canHaveContextMenu) {
+				e.preventDefault();
+			}
+		});
+		this.canvas.canHaveContextMenu = false;
 	}
 
-	initButtons() {
-		Sunniesnow.Button.initialize();
-		Sunniesnow.ButtonPause.initialize();
+	loadClasses() {
+		this.loadingProgress = 0;
+		this.targetLoadingProgress = 0;
+		this.loadCore();
+		this.loadUiComponents();
+		this.loadButtons();
+		this.loadUiEvents();
+		this.loadFx();
+		this.loadTipPoint();
 	}
 
-	initUiEvents() {
-		Sunniesnow.UiEvent.initialize();
-		Sunniesnow.UiNote.initialize();
-		Sunniesnow.UiTap.initialize();
-		Sunniesnow.UiHold.initialize();
-		Sunniesnow.UiFlick.initialize();
-		Sunniesnow.UiDrag.initialize();
-		Sunniesnow.UiBgNote.initialize();
-		Sunniesnow.UiBgPattern.initialize();
-		Sunniesnow.UiBigText.initialize();
-		Sunniesnow.UiGrid.initialize();
-		Sunniesnow.UiHexagon.initialize();
-		Sunniesnow.UiCheckerboard.initialize();
-		Sunniesnow.UiDiamondGrid.initialize();
-		Sunniesnow.UiPentagon.initialize();
-		Sunniesnow.UiTurntable.initialize();
+	loadCore() {
+		this.loadClass('Audio');
 	}
 
-	initFx() {
-		Sunniesnow.FxNote.initialize();
-		Sunniesnow.FxTap.initialize();
-		Sunniesnow.FxHold.initialize();
-		Sunniesnow.FxFlick.initialize();
-		Sunniesnow.FxDrag.initialize();
+	loadButtons() {
+		this.loadClass('ButtonPause');
 	}
 
-	initTipPoint() {
-		Sunniesnow.TipPoint.initialize();
+	loadUiComponents() {
+		this.loadClass('Background');
+		this.loadClass('ProgressBar');
+		this.loadClass('TopCenterHud');
+		this.loadClass('TopLeftHud');
+		this.loadClass('TopRightHud');
+	}
+
+	loadUiEvents() {
+		this.loadClass('UiNote');
+		this.loadClass('UiTap');
+		this.loadClass('UiHold');
+		this.loadClass('UiFlick');
+		this.loadClass('UiDrag');
+		this.loadClass('UiBgNote');
+		this.loadClass('UiBigText');
+		this.loadClass('UiGrid');
+		this.loadClass('UiHexagon');
+		this.loadClass('UiCheckerboard');
+		this.loadClass('UiDiamondGrid');
+		this.loadClass('UiPentagon');
+		this.loadClass('UiTurntable');
+	}
+
+	loadFx() {
+		this.loadClass('FxTap');
+		this.loadClass('FxHold');
+		this.loadClass('FxFlick');
+		this.loadClass('FxDrag');
+	}
+
+	loadTipPoint() {
+		this.loadClass('TipPoint');
+	}
+
+	loadClass(name) {
+		Sunniesnow[name].load().then(
+			value => this.loadingProgress++,
+			reason => Sunniesnow.Utils.error(`Failed to load Sunniesnow.${name}: ${reason}`)
+		);
+		this.targetLoadingProgress++;
 	}
 
 	initPixiApp() {
@@ -67,7 +103,6 @@ Sunniesnow.Game = class Game {
 			width: this.settings.width,
 			height: this.settings.height,
 			view: this.canvas,
-			forceCanvas: this.settings.backend == 'canvas',
 			backgroundColor: 'black',
 			antialias: true
 		});
@@ -79,6 +114,16 @@ Sunniesnow.Game = class Game {
 	setFullscreen(fullscreen) {
 		this.shouldFullscreen = fullscreen;
 		this.needsHandleFullscreen = true;
+	}
+
+	updateLoading(delta) {
+		const element = document.getElementById('loading-progress');
+		if (this.loadingProgress >= this.targetLoadingProgress) {
+			element.style.display = 'none';
+			this.loadingComplete = true;
+		} else {
+			element.innerHTML = `Loading: ${this.loadingProgress}/${this.targetLoadingProgress}`;
+		}
 	}
 
 	update(delta) {

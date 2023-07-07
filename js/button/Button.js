@@ -1,5 +1,5 @@
 Sunniesnow.Button = class Button extends PIXI.Container {
-	static initialize() {
+	static async load() {
 	}
 	
 	constructor(onTrigger) {

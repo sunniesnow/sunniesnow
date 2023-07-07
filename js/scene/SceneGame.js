@@ -103,6 +103,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.currentTime = this.music.currentTime();
 		this.music.stop();
 		this.pausing = true;
+		Sunniesnow.game.canvas.canHaveContextMenu = true;
 	}
 
 	resume() {
@@ -111,6 +112,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 		this.music.play(this.currentTime - Sunniesnow.Config.resumePreperationTime);
 		this.pausing = false;
+		Sunniesnow.game.canvas.canHaveContextMenu = false;
 	}
 
 	updateUiComponents(delta) {

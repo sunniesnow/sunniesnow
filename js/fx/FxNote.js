@@ -1,6 +1,6 @@
 Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 
-	static initialize() {
+	static async load() {
 	}
 
 	constructor(uiNote) {
