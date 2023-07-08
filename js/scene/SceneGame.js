@@ -1,68 +1,48 @@
 Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	start() {
 		super.start();
-		this.started = false; // set to true when the music starts playing
-		Sunniesnow.game.level = new Sunniesnow.Level();
+		this.clearTouches();
 		this.addListeners();
-		if (Sunniesnow.game.settings.debug) {
-			this.createDebugUi();
-		}
 		this.populateUiAndBoards();
-		if (Sunniesnow.game.settings.debug) {
-			this.populateDebugUi();
-		}
-		this.loadMusic();
-	}
-
-	createDebugUi() {
-		this.debugHud = new Sunniesnow.DebugHud();
-		this.debugBoard = new Sunniesnow.DebugBoard();
+		Sunniesnow.Music.playFromBeginning();
 	}
 
 	populateUiAndBoards() {
+		if (Sunniesnow.game.settings.debug) {
+			this.debugHud = new Sunniesnow.DebugHud();
+			this.debugBoard = new Sunniesnow.DebugBoard();
+		}
 		this.addChild(this.background = new Sunniesnow.Background());
 		this.addChild(this.progressBar = new Sunniesnow.ProgressBar());
-		this.addChild(this.uiBgPatternBoard = new Sunniesnow.UiBgPatternBoard(Sunniesnow.game.chart.events));
+		this.addChild(this.uiBgPatternBoard = new Sunniesnow.UiBgPatternBoard());
 		this.addChild(this.topLeftHud = new Sunniesnow.TopLeftHud());
 		this.addChild(this.topRightHud = new Sunniesnow.TopRightHud());
 		this.addChild(this.topCenterHud = new Sunniesnow.TopCenterHud());
 		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause(() => this.switchPausing()));
 		this.addChild(this.fxBoard = new Sunniesnow.FxBoard());
-		this.addChild(this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard(Sunniesnow.game.chart.events));
-		this.addChild(this.uiNotesBoard = new Sunniesnow.UiNotesBoard(Sunniesnow.game.chart.events, this.fxBoard, this.debugBoard));
-		this.addChild(this.tipPointsBoard = new Sunniesnow.TipPointsBoard(Sunniesnow.game.chart.events));
-	}
-
-	populateDebugUi() {
-		this.addChild(this.debugHud);
-		this.addChild(this.debugBoard);
-	}
-
-	loadMusic() {
-		const buffer = Sunniesnow.Loader.loaded.chart.music[Sunniesnow.game.settings.musicSelect];
-		this.music = new Sunniesnow.Audio(buffer);
-		this.music.playbackRate = Sunniesnow.game.settings.gameSpeed;
-		this.music.addLoadListener(() => {
-			const start = Math.min(0, Sunniesnow.game.chart.events[0].appearTime());
-			const preperation = Sunniesnow.Config.preperationTime * Sunniesnow.game.settings.gameSpeed;
-			this.music.play(start - preperation - Sunniesnow.game.settings.delay/1000);
-			this.started = true;
-		});
+		this.addChild(this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard());
+		this.addChild(this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.debugBoard));
+		this.addChild(this.tipPointsBoard = new Sunniesnow.TipPointsBoard());
+		this.addChild(this.pauseBoard = new Sunniesnow.PauseBoard(this));
+		if (Sunniesnow.game.settings.debug) {
+			this.addChild(this.debugHud);
+			this.addChild(this.debugBoard);
+		}
 	}
 
 	update(delta) {
 		super.update(delta);
+		Sunniesnow.Music.update();
 		this.updateUiComponents(delta);
 		this.updateTouches();
-		if (this.started && !this.pausing) {
-			this.currentTime = this.music.currentTime();
-			Sunniesnow.game.level.update(this.currentTime);
+		if (!Sunniesnow.Music.pausing) {
+			Sunniesnow.game.level.update();
 			this.updateBoards(delta);
 		}
 		if (Sunniesnow.game.settings.debug) {
 			this.debugHud.update(delta, {
 				FPS: Sunniesnow.game.app.ticker.FPS,
-				Time: this.currentTime
+				Time: Sunniesnow.Music.currentTime
 			});
 			this.debugBoard.update(delta);
 		}
@@ -76,11 +56,11 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	updateBoards(delta) {
-		this.uiBgPatternBoard.update(this.currentTime);
-		this.uiBgNotesBoard.update(this.currentTime);
-		this.uiNotesBoard.update(this.currentTime);
+		this.uiBgPatternBoard.update(delta);
+		this.uiBgNotesBoard.update(delta);
+		this.uiNotesBoard.update(delta);
 		this.fxBoard.update(delta);
-		this.tipPointsBoard.update(this.currentTime);
+		this.tipPointsBoard.update(delta);
 	}
 
 	terminate() {
@@ -89,7 +69,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	switchPausing() {
-		if (this.pausing) {
+		if (Sunniesnow.Music.pausing) {
 			this.resume();
 		} else {
 			this.pause();
@@ -97,29 +77,37 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	pause() {
-		if (!this.started || this.pausing) {
+		if (!Sunniesnow.Music.pause()) {
 			return;
 		}
-		this.currentTime = this.music.currentTime();
-		this.music.stop();
-		this.pausing = true;
+		this.pauseBoard.visible = true;
 		Sunniesnow.game.canvas.canHaveContextMenu = true;
 	}
 
 	resume() {
-		if (!this.started || !this.pausing) {
+		if (!Sunniesnow.Music.resume()) {
 			return;
 		}
-		this.music.play(this.currentTime - Sunniesnow.Config.resumePreperationTime);
-		this.pausing = false;
+		this.pauseBoard.visible = false;
 		Sunniesnow.game.canvas.canHaveContextMenu = false;
+	}
+
+	retry() {
+		Sunniesnow.game.level = new Sunniesnow.Level();
+		this.uiBgPatternBoard.clear();
+		this.uiBgNotesBoard.clear();
+		this.uiNotesBoard.clear();
+		this.tipPointsBoard.clear();
+		this.fxBoard.clear();
+		Sunniesnow.Music.playFromBeginning();
+		this.pauseBoard.visible = false;
 	}
 
 	updateUiComponents(delta) {
 		this.topLeftHud.update(delta, this.getUiText('hudTopLeft'));
 		this.topRightHud.update(delta, this.getUiText('hudTopRight'));
 		this.topCenterHud.update(delta, this.getUiText('hudTopCenter'));
-		this.progressBar.update(delta, this.currentTime / this.music.duration);
+		this.progressBar.update(delta, Sunniesnow.Music.progress);
 	}
 
 	getUiText(ui) {
@@ -144,7 +132,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	onTouch() {
-		if (!this.started || this.pausing || Sunniesnow.game.settings.autoplay) {
+		if (Sunniesnow.Music.pausing || Sunniesnow.game.settings.autoplay) {
 			return;
 		}
 		const touches = [];
@@ -172,45 +160,57 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 				pageY: this.mouseY || 0
 			});
 		}
-		this.currentTime = this.music.currentTime();
-		Sunniesnow.game.level.onTouch(touches, this.currentTime);
+		Sunniesnow.game.level.onTouch(touches);
 		if (Sunniesnow.game.settings.debug) {
 			this.debugBoard.updateTouches(touches);
 		}
 		this.needUpdateTouches = false;
 	}
 
-	addListeners() {
-		this.blurListener = event => {
-			this.touches = [];
-			this.keys = {};
-			this.mouseButtons = 0;
-			this.pause();
-		};
-		window.addEventListener('blur', this.blurListener);
+	clearTouches() {
 		this.touches = [];
-		this.touchListener = event => {
-			event.preventDefault();
-			this.touches = event.touches;
-			this.onTouch();
-		};
+		this.keys = {};
+		this.mouseButtons = 0;
+		this.maskedTouches = [];
+		this.maskedMouseButtons = 0;
+	}
+
+	addTouchListeners() {
 		this.touchStartListener = event => {
 			event.preventDefault();
-			if (this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+			if (this.pauseBoard.triggerIfContainsPage(event.pageX, event.pageY) || this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+				this.maskedTouches = event.changedTouches;
 				return;
 			}
-			this.touches = event.touches;
+			this.touches = event.touches.filter(touch => !this.maskedTouches.includes(touch));
+			this.onTouch();
+		};
+		this.touchMoveListener = event => {
+			event.preventDefault();
+			this.touches = event.touches.filter(touch => !this.maskedTouches.includes(touch));
+			this.onTouch();
+		};
+		this.touchEndListener = event => {
+			event.preventDefault();
+			for (let i = 0; i < this.maskedTouches.length;) {
+				if (event.changedTouches.includes(this.maskedTouches[i])) {
+					this.maskedTouches.splice(i, 1);
+				} else {
+					i++;
+				}
+			}
+			this.touches = event.touches.filter(touch => !this.maskedTouches.includes(touch));
 			this.onTouch();
 		};
 		Sunniesnow.game.canvas.addEventListener('touchstart', this.touchStartListener);
-		Sunniesnow.game.canvas.addEventListener('touchmove', this.touchListener);
-		Sunniesnow.game.canvas.addEventListener('touchend', this.touchListener);
+		Sunniesnow.game.canvas.addEventListener('touchmove', this.touchMoveListener);
+		Sunniesnow.game.canvas.addEventListener('touchend', this.touchEndListener);
+	}
 
-		this.keys = {};
+	addKeyListeners() {
 		this.keydownListener = event => {
-			if (event.key === 'Escape') {
-				event.preventDefault();
-				this.pause();
+			if (event.key === '`') {
+				this.switchPausing();
 				return;
 			}
 			this.keys[event.keyCode] = true;
@@ -222,28 +222,53 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		};
 		window.addEventListener('keydown', this.keydownListener);
 		window.addEventListener('keyup', this.keyupListener);
+	}
 
-		this.mouseButtons = 0;
-		this.mouseListener = event => {
-			event.preventDefault();
-			this.mouseX = event.pageX;
-			this.mouseY = event.pageY;
-			this.mouseButtons = event.buttons;
-			this.onTouch();
-		};
+	addMouseListeners() {
 		this.mouseDownListener = event => {
 			event.preventDefault();
-			if (this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+			if (this.pauseBoard.triggerIfContainsPage(event.pageX, event.pageY) || this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+				this.maskedMouseButtons |= 1 << event.button;
 				return;
 			}
 			this.mouseX = event.pageX;
 			this.mouseY = event.pageY;
-			this.mouseButtons = event.buttons;
+			this.mouseButtons = event.buttons & ~this.maskedMouseButtons;
 			this.onTouch();
 		};
-		Sunniesnow.game.canvas.addEventListener('mousemove', this.mouseListener);
+		this.mouseMoveListener = event => {
+			event.preventDefault();
+			this.mouseX = event.pageX;
+			this.mouseY = event.pageY;
+			this.mouseButtons = event.buttons & ~this.maskedMouseButtons;;
+			this.onTouch();
+		};
+		this.mouseUpListener = event => {
+			event.preventDefault();
+			this.maskedMouseButtons &= ~(1 << event.button);
+			this.mouseX = event.pageX;
+			this.mouseY = event.pageY;
+			this.mouseButtons = event.buttons & ~this.maskedMouseButtons;;
+			this.onTouch();
+		};
+		Sunniesnow.game.canvas.addEventListener('mousemove', this.mouseMoveListener);
 		Sunniesnow.game.canvas.addEventListener('mousedown', this.mouseDownListener);
-		Sunniesnow.game.canvas.addEventListener('mouseup', this.mouseListener);
+		Sunniesnow.game.canvas.addEventListener('mouseup', this.mouseUpListener);
+	}
+
+	addBlurListeners() {
+		this.blurListener = event => {
+			this.clearTouches();
+			this.pause();
+		};
+		window.addEventListener('blur', this.blurListener);
+	}
+
+	addListeners() {
+		this.addBlurListeners();
+		this.addTouchListeners();
+		this.addKeyListeners();
+		this.addMouseListeners();
 	}
 
 	removeListeners() {

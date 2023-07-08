@@ -20,4 +20,9 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 			this.hitRelativeTime = relativeTime;
 		}
 	}
+
+	determineJudgement() {
+		this.judgement = this.getJudgementByRelativeTime(this.hitRelativeTime);
+	}
+
 };

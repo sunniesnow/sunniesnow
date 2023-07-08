@@ -24,7 +24,7 @@ Sunniesnow.ProgressBar = class ProgressBar extends Sunniesnow.UiComponent {
 
 	populate() {
 		super.populate();
-		this.y = Sunniesnow.game.settings.height - this.barHeight;
+		this.y = Sunniesnow.game.settings.height - this.constructor.barHeight;
 		this.populateBackground();
 		this.populateBar();
 	}
@@ -41,7 +41,7 @@ Sunniesnow.ProgressBar = class ProgressBar extends Sunniesnow.UiComponent {
 	}
 
 	update(delta, data) {
-		super.update(delta);
-		this.bar.x = Sunniesnow.game.settings.width * Math.min(0, data - 1);
+		super.update(delta, data);
+		this.bar.x = Sunniesnow.game.settings.width * (data-1);
 	}
 };

@@ -32,7 +32,6 @@ Sunniesnow.Level = class Level {
 				this.unhitNotes.push(new event.constructor.LEVEL_CLASS(event));
 			}
 		}
-		this.unhitNotes.sort((a, b) => a.time - b.time);
 		this.holdingNotes = [];
 	}
 
@@ -67,7 +66,8 @@ Sunniesnow.Level = class Level {
 		return this.perfect + this.good / 2 + this.bad / 10;
 	}
 
-	update(time) {
+	update() {
+		const time = Sunniesnow.Music.currentTime;
 		if (Sunniesnow.game.settings.autoplay) {
 			this.updateAutoPlay(time);
 		} else {
@@ -94,7 +94,7 @@ Sunniesnow.Level = class Level {
 				break;
 			}
 			const lateBad = this.judgementWindows[note.type].bad[1];
-			if (time >= note.time + lateBad) {
+			if (time > note.time + lateBad) {
 				note.miss(lateBad);
 			} else {
 				i++;
@@ -117,7 +117,8 @@ Sunniesnow.Level = class Level {
 		}
 	}
 
-	onTouch(touchList, time) {
+	onTouch(touchList) {
+		const time = Sunniesnow.Music.currentTime;
 		const updated = {};
 		for (let i = 0; i < touchList.length; i++) {
 			const touch = touchList[i];
@@ -155,9 +156,10 @@ Sunniesnow.Level = class Level {
 			if (time < note.time + this.earliestEarlyBad) {
 				break;
 			}
-			if (time >= note.time + this.judgementWindows[note.type].bad[0]) {
+			const [earlyBad, lateBad] = this.judgementWindows[note.type].bad;
+			if (Sunniesnow.Utils.between(time, note.time + earlyBad, note.time + lateBad)) {
 				note = this.tryHitNote(note, touch, time);
-				if (note.onlyOnePerTouch()) {
+				if (note && note.onlyOnePerTouch()) {
 					break;
 				} else {
 					i++;
@@ -191,8 +193,12 @@ Sunniesnow.Level = class Level {
 				distance = newDistance;
 			}
 		}
-		note.hit(touch, time);
-		return note;
+		if (note.isTappableAt(x, y)) {
+			note.hit(touch, time);
+			return note;
+		} else {
+			return null;
+		}
 	}
 
 	onNewJudgement(note) {

@@ -1,16 +1,25 @@
 Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
-	constructor(events) {
+	constructor() {
 		super();
-		this.events = events.filter(event => event.tipPoint !== null && event.tipPoint !== undefined);
-		this.events.sort((a, b) => a.time - b.time);
-		this.tipPoints = {};
+		this.clear();
+	}
+
+	clear() {
+		this.events = Sunniesnow.game.chart.events.filter(event => event.tipPoint !== null && event.tipPoint !== undefined);
+		this.tipPoints ||= {};
+		for (const id in this.tipPoints) {
+			const tipPoint = this.tipPoints[id];
+			tipPoint.destroy({ children: true });
+			this.removeChild(tipPoint);
+			delete this.tipPoints[id];
+		}
 	}
 
 	addNewTipPoints(time) {
 		if (this.events.length === 0) {
 			return;
 		}
-		const preperation = Sunniesnow.Config.preperationTime * Sunniesnow.game.settings.gameSpeed;
+		const preperation = Sunniesnow.Config.uiPreperationTime * Sunniesnow.game.settings.gameSpeed;
 		if (time < this.events[0].time - preperation) {
 			return;
 		}
@@ -29,7 +38,8 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 		this.addNewTipPoints(time);
 	}
 
-	update(time) {
+	update(delta) {
+		const time = Sunniesnow.Music.currentTime;
 		this.addNewTipPoints(time);
 		for (const id in this.tipPoints) {
 			const tipPoint = this.tipPoints[id];

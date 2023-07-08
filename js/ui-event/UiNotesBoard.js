@@ -1,15 +1,26 @@
 Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 
-	constructor(events, fxBoard, debugBoard) {
+	constructor(fxBoard, debugBoard) {
 		super();
-		this.unappearedEvents = events.filter(event => event instanceof Sunniesnow.Note);
-		this.uiEvents = [];
+		this.clear();
 		this.fxBoard = fxBoard;
 		this.debugBoard = debugBoard;
 	}
 
-	update(time) {
-		const preperation = Sunniesnow.Config.preperationTime * Sunniesnow.game.settings.gameSpeed;
+	clear() {
+		this.unappearedEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.Note);
+		this.unappearedEvents.sort((a, b) => a.appearTime() - b.appearTime());
+		this.uiEvents ||= [];
+		while (this.uiEvents.length > 0) {
+			const uiEvent = this.uiEvents.shift();
+			uiEvent.destroy({ children: true });
+			this.removeChild(uiEvent);
+		}
+	}
+
+	update(delta) {
+		const time = Sunniesnow.Music.currentTime;
+		const preperation = Sunniesnow.Config.uiPreperationTime * Sunniesnow.game.settings.gameSpeed;
 		while (this.unappearedEvents.length > 0) {
 			const event = this.unappearedEvents[0];
 			const shouldStartTime = event.appearTime() - preperation;

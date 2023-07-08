@@ -3,6 +3,21 @@
 A web rhythm game.
 [Play the game online.](https://sunniesnow.github.io/game)
 
+## Serve the game locally
+
+*Note: if you play the game in this way, you still need internet access.*
+
+[Install Ruby](https://www.ruby-lang.org/en/documentation/installation), and then run
+
+```shell
+git clone --recursive https://github.com/sunniesnow/sunniesnow.github.io.git
+cd sunniesnow.github.io
+bundle install # and resolve all errors if there are any
+bundle exec jekyll serve
+```
+
+Now, visit http://localhost:4000/game/ to see the game.
+
 ## License notice
 
 Sunniesnow is licensed under

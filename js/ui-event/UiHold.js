@@ -67,6 +67,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 
 	rotateHaloMask(progress) {
+		progress = Sunniesnow.Utils.clamp(progress, 0, 1);
 		const r = this.constructor.haloRadius;
 		const corners = [0, -r];
 		if (progress < 7/8) {

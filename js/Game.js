@@ -14,7 +14,7 @@ Sunniesnow.Game = class Game {
 		this.initCanvas();
 		this.loadClasses();
 		this.initPixiApp();
-		this.chart = new Sunniesnow.Chart(Sunniesnow.Loader.loaded.chart.charts[this.settings.chartSelect]);
+		this.initLevel();
 		this.scene = new Sunniesnow.SceneGame();
 	}
 
@@ -30,29 +30,41 @@ Sunniesnow.Game = class Game {
 		this.canvas = document.getElementById('main-canvas');
 		this.canvas.addEventListener('contextmenu', event => {
 			if (!this.canvas.canHaveContextMenu) {
-				e.preventDefault();
+				event.preventDefault();
 			}
 		});
+		this.canvas.addEventListener('fullscreenchange', event => {
+			this.shouldFullscreen = !!document.fullscreenElement;
+		})
 		this.canvas.canHaveContextMenu = false;
 	}
 
 	loadClasses() {
 		this.loadingProgress = 0;
 		this.targetLoadingProgress = 0;
-		this.loadCore();
+		this.loadAudio();
 		this.loadUiComponents();
+		this.loadUiPause();
 		this.loadButtons();
 		this.loadUiEvents();
 		this.loadFx();
 		this.loadTipPoint();
 	}
 
-	loadCore() {
+	loadAudio() {
 		this.loadClass('Audio');
+		this.loadClass('Music');
 	}
 
 	loadButtons() {
 		this.loadClass('ButtonPause');
+	}
+
+	loadUiPause() {
+		this.loadClass('PauseBackground');
+		this.loadClass('ButtonResume');
+		this.loadClass('ButtonRetry');
+		this.loadClass('ButtonFullscreen');
 	}
 
 	loadUiComponents() {
@@ -111,9 +123,18 @@ Sunniesnow.Game = class Game {
 		}
 	}
 
+	initLevel() {
+		this.chart = new Sunniesnow.Chart(Sunniesnow.Loader.loaded.chart.charts[this.settings.chartSelect]);
+		Sunniesnow.game.level = new Sunniesnow.Level();
+	}
+
 	setFullscreen(fullscreen) {
 		this.shouldFullscreen = fullscreen;
 		this.needsHandleFullscreen = true;
+	}
+
+	toggleFullscreen() {
+		this.setFullscreen(!this.shouldFullscreen);
 	}
 
 	updateLoading(delta) {

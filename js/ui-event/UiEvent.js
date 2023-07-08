@@ -56,8 +56,10 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 				if (this.levelNote.releaseRelativeTime !== null) {
 					if (relativeTime >= this.levelNote.releaseRelativeTime + this.constructor.FADING_OUT_DURATION) {
 						return 'finished';
-					} else {
+					} else if (relativeTime >= this.levelNote.releaseRelativeTime) {
 						return 'fadingOut';
+					} else {
+						return 'finished';
 					}
 				} else if (this.event.duration > 0) {
 					return 'holding';

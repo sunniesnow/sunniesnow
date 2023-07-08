@@ -4,6 +4,14 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		this.presentFx = [];
 	}
 
+	clear() {
+		while (this.presentFx.length > 0) {
+			const fx = this.presentFx.shift();
+			fx.destroy({children: true});
+			this.removeChild(fx);
+		}
+	}
+
 	update(delta) {
 		this.presentFx.forEach((fx) => {
 			fx.update(delta);

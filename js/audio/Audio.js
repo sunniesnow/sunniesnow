@@ -19,6 +19,7 @@ Sunniesnow.Audio = class Audio {
 	
 	constructor(arrayBuffer) {
 		this.loadListeners = [];
+		this.finishListeners = [];
 		this.playbackRate = Sunniesnow.game.settings.gameSpeed;
 		// See https://github.com/WebAudio/web-audio-api/issues/1175#issuecomment-320502059.
 		// Otherwise, we cannot start the game again after the first time.
@@ -34,8 +35,18 @@ Sunniesnow.Audio = class Audio {
 		this.loadListeners.push(listener);
 	}
 
+	addFinishListener(listener) {
+		this.finishListeners.push(listener);
+	}
+
 	onLoad() {
 		for (const listener of this.loadListeners) {
+			listener();
+		}
+	}
+
+	onFinish() {
+		for (const listener of this.finishListeners) {
 			listener();
 		}
 	}
@@ -70,6 +81,7 @@ Sunniesnow.Audio = class Audio {
 		const timeToStop = this.startTime + this.duration / this.playbackRate - this.constructor.context.currentTime
 		this.stopTimer = setTimeout(() => {
 			this.stop();
+			this.onFinish();
 			this.stopTimer = null;
 		}, timeToStop * 1000);
 	}
