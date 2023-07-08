@@ -4,6 +4,7 @@ Sunniesnow.Music = {
 			const buffer = Sunniesnow.Loader.loaded.chart.music[Sunniesnow.game.settings.musicSelect];
 			this.music = new Sunniesnow.Audio(buffer)
 			this.music.playbackRate = Sunniesnow.game.settings.gameSpeed;
+			this.music.volume = Sunniesnow.game.settings.volumeMusic;
 			this.music.addLoadListener(() => resolve());
 			this.music.addFinishListener(() => this.finished = true);
 		});

@@ -22,7 +22,7 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 	}
 
 	determineJudgement() {
-		this.judgement = this.getJudgementByRelativeTime(this.hitRelativeTime);
+		this.judgement = this.highestJudgement;
 	}
 
 };

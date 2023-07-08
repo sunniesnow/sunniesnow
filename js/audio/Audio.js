@@ -20,7 +20,8 @@ Sunniesnow.Audio = class Audio {
 	constructor(arrayBuffer) {
 		this.loadListeners = [];
 		this.finishListeners = [];
-		this.playbackRate = Sunniesnow.game.settings.gameSpeed;
+		this.playbackRate = 1;
+		this.volume = 1;
 		// See https://github.com/WebAudio/web-audio-api/issues/1175#issuecomment-320502059.
 		// Otherwise, we cannot start the game again after the first time.
 		arrayBuffer = arrayBuffer.slice();
@@ -56,15 +57,21 @@ Sunniesnow.Audio = class Audio {
 		this.sourceNode = context.createBufferSource();
 		this.sourceNode.buffer = this.buffer;
 		this.sourceNode.playbackRate.setValueAtTime(this.playbackRate, context.currentTime);
-		this.sourceNode.connect(context.destination);
+		this.gainNode = context.createGain();
+		this.gainNode.gain.setValueAtTime(this.volume, context.currentTime);
+		this.sourceNode.connect(this.gainNode);
+		this.gainNode.connect(context.destination);
 	}
 
 	removeNodes() {
-		if (this.sourceNode) {
-			this.sourceNode.stop();
-			this.sourceNode.disconnect();
-			this.sourceNode = null;
+		if (!this.sourceNode) {
+			return;
 		}
+		this.sourceNode.stop();
+		this.sourceNode.disconnect();
+		this.sourceNode = null;
+		this.gainNode.disconnect();
+		this.gainNode = null;
 	}
 
 	play(time) {
