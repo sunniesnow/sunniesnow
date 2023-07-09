@@ -5,9 +5,7 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		this.badFlick = false;
 	}
 
-	autoFinishesHolding() {
-		return false;
-	}
+	static AUTO_FINISHES_HOLDING = false
 
 	determineJudgement() {
 		if (this.badFlick) {

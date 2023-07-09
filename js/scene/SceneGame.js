@@ -1,10 +1,9 @@
 Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	start() {
 		super.start();
-		this.clearTouches();
 		this.addListeners();
 		this.populateUiAndBoards();
-		Sunniesnow.Music.playFromBeginning();
+		this.populateAudio();
 	}
 
 	populateUiAndBoards() {
@@ -30,14 +29,24 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 	}
 
+	populateAudio() {
+		if (Sunniesnow.game.settings.seWithMusic) {
+			this.seWithMusic = new Sunniesnow.SeWithMusic();
+		}
+		Sunniesnow.Music.playFromBeginning();
+	}
+
 	update(delta) {
 		super.update(delta);
-		Sunniesnow.Music.update();
+		this.updateAudio();
 		this.updateUiComponents(delta);
 		this.updateTouches();
 		if (!Sunniesnow.Music.pausing) {
 			Sunniesnow.game.level.update();
 			this.updateBoards(delta);
+			if (Sunniesnow.game.level.finished) {
+				Sunniesnow.game.scene = new Sunniesnow.SceneResult();
+			}
 		}
 		if (Sunniesnow.game.settings.debug) {
 			this.debugHud.update(delta, {
@@ -47,12 +56,16 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.debugBoard.update(delta);
 		}
 	}
+
+	updateAudio() {
+		Sunniesnow.Music.update();
+		if (Sunniesnow.game.settings.seWithMusic) {
+			this.seWithMusic.update();
+		}
+	}
 	
 	updateTouches() {
-		if (this.needUpdateTouches) {
-			this.onTouch();
-		}
-		this.needUpdateTouches = true;
+		Sunniesnow.TouchManager.update();
 	}
 
 	updateBoards(delta) {
@@ -99,6 +112,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.uiNotesBoard.clear();
 		this.tipPointsBoard.clear();
 		this.fxBoard.clear();
+		if (Sunniesnow.game.settings.seWithMusic) {
+			this.seWithMusic.clear();
+		}
 		Sunniesnow.Music.playFromBeginning();
 		this.pauseBoard.visible = false;
 	}
@@ -131,50 +147,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 	}
 
-	onTouch() {
-		if (Sunniesnow.Music.pausing || Sunniesnow.game.settings.autoplay) {
-			return;
-		}
-		const touches = [];
-		for (let i = 0; i < this.touches.length; i++) {
-			touches.push({
-				identifier: `touch${this.touches[i].identifier}`,
-				pageX: this.touches[i].pageX,
-				pageY: this.touches[i].pageY
-			});
-		}
-		for (const key in this.keys) {
-			touches.push({
-				identifier: `key${key}`,
-				pageX: this.mouseX || 0,
-				pageY: this.mouseY || 0
-			});
-		}
-		for (let buttons = this.mouseButtons, i = 0; buttons > 0; buttons >>= 1, i++) {
-			if (!(buttons & 1)) {
-				continue;
-			}
-			touches.push({
-				identifier: `mouse${i}`,
-				pageX: this.mouseX || 0,
-				pageY: this.mouseY || 0
-			});
-		}
-		Sunniesnow.game.level.onTouch(touches);
-		if (Sunniesnow.game.settings.debug) {
-			this.debugBoard.updateTouches(touches);
-		}
-		this.needUpdateTouches = false;
-	}
-
-	clearTouches() {
-		this.touches = [];
-		this.keys = {};
-		this.mouseButtons = 0;
-		this.maskedTouches = [];
-		this.maskedMouseButtons = 0;
-	}
-
 	addTouchListeners() {
 		this.touchStartListener = event => {
 			event.preventDefault();
@@ -182,13 +154,11 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 				this.maskedTouches = event.changedTouches;
 				return;
 			}
-			this.touches = event.touches.filter(touch => !this.maskedTouches.includes(touch));
-			this.onTouch();
+			Sunniesnow.TouchManager.touchStart(event);
 		};
 		this.touchMoveListener = event => {
 			event.preventDefault();
-			this.touches = event.touches.filter(touch => !this.maskedTouches.includes(touch));
-			this.onTouch();
+			Sunniesnow.TouchManager.touchMove(event);
 		};
 		this.touchEndListener = event => {
 			event.preventDefault();
@@ -199,8 +169,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 					i++;
 				}
 			}
-			this.touches = event.touches.filter(touch => !this.maskedTouches.includes(touch));
-			this.onTouch();
+			Sunniesnow.TouchManager.touchEnd(event);
 		};
 		Sunniesnow.game.canvas.addEventListener('touchstart', this.touchStartListener);
 		Sunniesnow.game.canvas.addEventListener('touchmove', this.touchMoveListener);
@@ -209,16 +178,18 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	addKeyListeners() {
 		this.keydownListener = event => {
+			if (!/^F\d+$/.test(event.key)) {
+				event.preventDefault();
+			}
 			if (event.key === '`') {
 				this.switchPausing();
 				return;
 			}
-			this.keys[event.keyCode] = true;
-			this.onTouch();
+			Sunniesnow.TouchManager.keyDown(event);
 		};
 		this.keyupListener = event => {
-			delete this.keys[event.keyCode];
-			this.onTouch();
+			event.preventDefault();
+			Sunniesnow.TouchManager.keyUp(event);
 		};
 		window.addEventListener('keydown', this.keydownListener);
 		window.addEventListener('keyup', this.keyupListener);
@@ -228,28 +199,17 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.mouseDownListener = event => {
 			event.preventDefault();
 			if (this.pauseBoard.triggerIfContainsPage(event.pageX, event.pageY) || this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
-				this.maskedMouseButtons |= 1 << event.button;
 				return;
 			}
-			this.mouseX = event.pageX;
-			this.mouseY = event.pageY;
-			this.mouseButtons = event.buttons & ~this.maskedMouseButtons;
-			this.onTouch();
+			Sunniesnow.TouchManager.mouseDown(event);
 		};
 		this.mouseMoveListener = event => {
 			event.preventDefault();
-			this.mouseX = event.pageX;
-			this.mouseY = event.pageY;
-			this.mouseButtons = event.buttons & ~this.maskedMouseButtons;;
-			this.onTouch();
+			Sunniesnow.TouchManager.mouseMove(event);
 		};
 		this.mouseUpListener = event => {
 			event.preventDefault();
-			this.maskedMouseButtons &= ~(1 << event.button);
-			this.mouseX = event.pageX;
-			this.mouseY = event.pageY;
-			this.mouseButtons = event.buttons & ~this.maskedMouseButtons;;
-			this.onTouch();
+			Sunniesnow.TouchManager.mouseUp(event);
 		};
 		Sunniesnow.game.canvas.addEventListener('mousemove', this.mouseMoveListener);
 		Sunniesnow.game.canvas.addEventListener('mousedown', this.mouseDownListener);
@@ -258,7 +218,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	addBlurListeners() {
 		this.blurListener = event => {
-			this.clearTouches();
+			Sunniesnow.TouchManager.clear();
 			this.pause();
 		};
 		window.addEventListener('blur', this.blurListener);

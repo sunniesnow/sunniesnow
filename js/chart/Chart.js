@@ -35,7 +35,9 @@ Sunniesnow.Chart = class Chart {
 		this.events = [];
 		for (const eventData of this.data.events) {
 			const {type, time, properties} = this.readEventMeta(eventData);
-			this.events.push(Sunniesnow.Event.newFromType(type, time, properties));
+			const event = Sunniesnow.Event.newFromType(type, time, properties);
+			event.id = this.events.length;
+			this.events.push(event);
 		}
 		this.events.sort((a, b) => a.time - b.time);
 		for (let i = 0; i < this.events.length - 1; i++) {

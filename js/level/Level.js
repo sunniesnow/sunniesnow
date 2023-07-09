@@ -4,9 +4,7 @@ Sunniesnow.Level = class Level {
 		this.initializeNoteStores();
 		this.notesCount = this.unhitNotes.length;
 		this.initializePlayInfo();
-		if (!Sunniesnow.game.settings.autoplay) {
-			this.initializeManualPlay();
-		}
+		this.addTouchListeners();
 	}
 
 	initializeAuxiliaryQuantities() {
@@ -57,10 +55,21 @@ Sunniesnow.Level = class Level {
 		this.apFcIndicator = 'ap'; // possible values: 'ap', 'fc', ''
 	}
 
-	initializeManualPlay() {
-		this.touches = {};
-		this.needUpdateTouches = true;
-		this.lastTouchList = [];
+	addTouchListeners() {
+		Sunniesnow.TouchManager.addStartListener(this.touchStartListener = this.touchStart.bind(this));
+		Sunniesnow.TouchManager.addMoveListener(this.touchMoveListener = this.touchMove.bind(this));
+		Sunniesnow.TouchManager.addEndListener(this.touchEndListener = this.touchEnd.bind(this));
+	}
+
+	finish() {
+		this.finished = true;
+		this.removeTouchListeners();
+	}
+
+	removeTouchListeners() {
+		Sunniesnow.TouchManager.removeStartListener(this.touchStartListener);
+		Sunniesnow.TouchManager.removeMoveListener(this.touchMoveListener);
+		Sunniesnow.TouchManager.removeEndListener(this.touchEndListener);
 	}
 
 	score() {
@@ -120,48 +129,43 @@ Sunniesnow.Level = class Level {
 			if (time < note.endTime) {
 				break;
 			}
-			if (note.autoFinishesHolding() || Sunniesnow.game.settings.autoplay) {
+			if (note.constructor.AUTO_FINISHES_HOLDING || Sunniesnow.game.settings.autoplay) {
 				note.release(note.endTime);
 			} else {
 				i++;
 			}
 		}
+		if (this.unhitNotes.length === 0 && this.holdingNotes.length === 0) {
+			this.finish();
+		}
 	}
 
-	onTouch(touchList) {
-		const time = Sunniesnow.Music.currentTime;
-		const updated = {};
-		for (let i = 0; i < touchList.length; i++) {
-			const touch = touchList[i];
-			const id = touch.identifier;
-			const [x, y] = Sunniesnow.Config.pageMapping(touch.pageX, touch.pageY);
-			if (this.touches[id]) {
-				this.touches[id].history.push({time, x, y});
-				const note = this.touches[id].note;
-				if (note && note.holding) {
-					note.updateHolding();
-				}
-			} else {
-				this.newTouch(id, time, x, y);
-			}
-			updated[id] = true;
+	touchEnd(touch) {
+		if (Sunniesnow.Music.pausing) {
+			return;
 		}
-		for (const id in this.touches) {
-			if (updated[id]) {
-				continue;
-			}
-			const note = this.touches[id].note;
-			if (note) {
-				note.release(time);
-			}
-			delete this.touches[id];
+		const note = touch.note;
+		if (note) {
+			note.release(touch.end().time);
 		}
-		this.scanDrags(time);
-		this.lastTouchList = touchList;
 	}
 
-	newTouch(id, time, x, y) {
-		const touch = this.touches[id] = {id: id, history: [{time, x, y}]};
+	touchMove(touch) {
+		if (Sunniesnow.Music.pausing) {
+			return;
+		}
+		const note = touch.note;
+		if (note && note.holding) {
+			note.updateHolding();
+		}
+		this.scanDrags(touch);
+	}
+
+	touchStart(touch) {
+		if (Sunniesnow.Music.pausing) {
+			return;
+		}
+		const time = touch.start().time;
 		for (let i = 0; i < this.unhitNotes.length;) {
 			let note = this.unhitNotes[i];
 			if (time < note.time + this.earliestEarlyBad) {
@@ -169,8 +173,7 @@ Sunniesnow.Level = class Level {
 			}
 			if (Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows[note.type].bad)) {
 				note = this.tryHitNote(note, touch, time);
-				console.log(note);
-				if (note && note.onlyOnePerTouch()) {
+				if (note && note.constructor.ONLY_ONE_PER_TOUCH) {
 					break;
 				} else {
 					i++;
@@ -186,7 +189,7 @@ Sunniesnow.Level = class Level {
 	// However, we should avoid hitting drags as possible.
 	// The function hits the most appropriate note and returns the actually hit note.
 	tryHitNote(note, touch, time) {
-		const {x, y} = touch.history[0];
+		const {x, y} = touch.start();
 		const events = note.event.simultaneousEvents;
 		// Should we replace Euclidean distance with L-infinity distance?
 		let distance = Sunniesnow.Utils.distance(x, y, note.event.x, note.event.y);
@@ -197,8 +200,8 @@ Sunniesnow.Level = class Level {
 				continue;
 			}
 			const newDistance = Sunniesnow.Utils.distance(x, y, event.x, event.y);
-			let condition = (!note.onlyOnePerTouch() || newDistance < distance) && newNote.onlyOnePerTouch();
-			condition ||= !note.onlyOnePerTouch() && !newNote.onlyOnePerTouch() && newDistance < distance;
+			let condition = (!note.constructor.ONLY_ONE_PER_TOUCH || newDistance < distance) && newNote.constructor.ONLY_ONE_PER_TOUCH;
+			condition ||= !note.constructor.ONLY_ONE_PER_TOUCH && !newNote.constructor.ONLY_ONE_PER_TOUCH && newDistance < distance;
 			if (condition && newNote.isTappableAt(x, y)) {
 				note = newNote;
 				distance = newDistance;
@@ -232,7 +235,8 @@ Sunniesnow.Level = class Level {
 		this[note.judgement]++;
 	}
 
-	scanDrags(time) {
+	scanDrags(touch) {
+		const {time, x, y} = touch.end();
 		for (let i = 0; i < this.unhitNotes.length; i++) {
 			const note = this.unhitNotes[i];
 			if (note.type !== 'drag') {
@@ -241,12 +245,8 @@ Sunniesnow.Level = class Level {
 			if (time < note.time + this.judgementWindows.drag.bad[0]) {
 				break;
 			}
-			for (const id in this.touches) {
-				const touch = this.touches[id];
-				const {time, x, y} = touch.history[touch.history.length - 1];
-				if (note.isTappableAt(x, y)) {
-					note.hit(touch, time);
-				}
+			if (note.isTappableAt(x, y)) {
+				note.hit(touch, time);
 			}
 		}
 		for (let i = 0; i < this.holdingNotes.length; i++) {
@@ -257,12 +257,8 @@ Sunniesnow.Level = class Level {
 			if (time < note.endTime + this.judgementWindows.drag.bad[0]) {
 				break;
 			}
-			for (const id in this.touches) {
-				const touch = this.touches[id];
-				const {time, x, y} = touch.history[touch.history.length - 1];
-				if (note.isTappableAt(x, y)) {
-					note.refreshJudgement(time);
-				}
+			if (note.isTappableAt(x, y)) {
+				note.refreshJudgement(time);
 			}
 		}
 	}

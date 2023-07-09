@@ -44,4 +44,8 @@ Sunniesnow.Event = class Event {
 	appearTime() {
 		return this.time - this.constructor.UI_CLASS.FADING_IN_DURATION;
 	}
+
+	endTime() {
+		return this.time + (this.duration || 0);
+	}
 };

@@ -1,15 +1,27 @@
 Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
-
 	constructor() {
 		super();
 		this.populate();
+		this.addTouchListeners();
 	}
 
 	populate() {
 		this.createTouchGeometry();
 		this.earlyLateTexts = [];
 		this.createTouchAreaGeometry();
+	}
+
+	addTouchListeners() {
+		Sunniesnow.TouchManager.addStartListener(this.touchStartListener = this.touchStart.bind(this))
+		Sunniesnow.TouchManager.addMoveListener(this.touchMoveListener = this.touchMove.bind(this));
+		Sunniesnow.TouchManager.addEndListener(this.touchEndListener = this.touchEnd.bind(this));
+	}
+
+	removeTouchListeners() {
+		Sunniesnow.TouchManager.removeStartListener(this.touchStartListener);
+		Sunniesnow.TouchManager.removeMoveListener(this.touchMoveListener);
+		Sunniesnow.TouchManager.removeEndListener(this.touchEndListener);
 	}
 
 	createTouchGeometry() {
@@ -36,45 +48,39 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		this.updateTouchAreas(delta);
 	}
 
-	updateTouches(touches) {
-		for (let i = 0; i < touches.length; i++) {
-			const touchEvent = touches[i];
-			const id = touchEvent.identifier;
-			let touch = this.touches[id];
-			if (!touch) {
-				touch = this.touches[id] = new PIXI.Graphics(this.touchGeometry);
-				const text = touch.text = new PIXI.Text('', {
-					fontSize: 20,
-					fill: '#ff00ff',
-					fontFamily: 'Arial',
-				});
-				text.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
-				touch.addChild(text);
-				touch.alpha = 0.4;
-				this.addChild(touch);
-			}
-			touch.justUpdated = true;
-			[touch.x, touch.y] = Sunniesnow.Utils.pageToCanvasCoordinates(touchEvent.pageX, touchEvent.pageY, Sunniesnow.game.canvas);
-			const [chartX, chartY] = Sunniesnow.Config.pageMapping(touchEvent.pageX, touchEvent.pageY);
-			touch.text.text = `${id}(${chartX.toFixed(1)},${chartY.toFixed(1)})`;
-			if (touch.x + touch.width > Sunniesnow.game.settings.width) {
-				touch.text.anchor.x = 1;
-				touch.text.x = -10;
-			} else {
-				touch.text.anchor.x = 0;
-				touch.text.x = 10;
-			}
+	touchStart(touch) {
+		const id = touch.id;
+		const touchUi = this.touches[id] = new PIXI.Graphics(this.touchGeometry);
+		const text = touchUi.text = new PIXI.Text('', {
+			fontSize: 20,
+			fill: '#ff00ff',
+			fontFamily: 'Arial',
+		});
+		text.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
+		touchUi.addChild(text);
+		touchUi.alpha = 0.4;
+		this.addChild(touchUi);
+	}
+
+	touchMove(touch) {
+		const touchUi = this.touches[touch.id];
+		const {x, y} = touch.end();
+		[touchUi.x, touchUi.y] = Sunniesnow.Config.chartMapping(x, y);
+		touchUi.text.text = `${touch.id}(x:${x.toFixed(1)},y:${y.toFixed(1)})`;
+		if (touchUi.x + touchUi.width > Sunniesnow.game.settings.width) {
+			touchUi.text.anchor.x = 1;
+			touchUi.text.x = -10;
+		} else {
+			touchUi.text.anchor.x = 0;
+			touchUi.text.x = 10;
 		}
-		for (const id in this.touches) {
-			const touch = this.touches[id];
-			if (touch.justUpdated) {
-				touch.justUpdated = false;
-			} else {
-				touch.destroy({ children: true });
-				this.removeChild(touch);
-				delete this.touches[id];
-			}
-		}
+	}
+
+	touchEnd(touch) {
+		const touchUi = this.touches[touch.id];
+		touchUi.destroy({ children: true });
+		this.removeChild(touchUi);
+		delete this.touches[touch.id];
 	}
 
 	createEarlyLateText(uiNote) {

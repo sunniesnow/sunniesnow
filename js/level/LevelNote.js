@@ -15,15 +15,11 @@ Sunniesnow.LevelNote = class LevelNote {
 
 	// Does the note automatically release itself when time >= this.endTime?
 	// It is only false for flicks.
-	autoFinishesHolding() {
-		return true;
-	}
+	static AUTO_FINISHES_HOLDING = true;
 
 	// Can a finger only hit one of this note?
 	// It is only false for drags.
-	onlyOnePerTouch() {
-		return true;
-	}
+	static ONLY_ONE_PER_TOUCH = true;
 
 	// x, y are in chart coordinates
 	isTappableAt(x, y) {
@@ -32,12 +28,15 @@ Sunniesnow.LevelNote = class LevelNote {
 	}
 
 	hit(hitData, time) {
+		if (!Sunniesnow.game.settings.seWithMusic) {
+			this.event.hitSe();
+		}
 		const relativeTime = (time - this.time) / Sunniesnow.game.settings.gameSpeed;
 		if (this.holding) {
 			return;
 		}
 		this.assignedHit = hitData;
-		if (hitData && this.onlyOnePerTouch()) {
+		if (hitData && this.constructor.ONLY_ONE_PER_TOUCH) {
 			hitData.note = this;
 		}
 		this.hitRelativeTime = relativeTime;
@@ -65,6 +64,9 @@ Sunniesnow.LevelNote = class LevelNote {
 	}
 
 	release(time) {
+		if (!Sunniesnow.game.settings.seWithMusic) {
+			this.event.releaseSe();
+		}
 		const relativeTime = (time - this.time) / Sunniesnow.game.settings.gameSpeed;
 		if (!this.holding) {
 			return;

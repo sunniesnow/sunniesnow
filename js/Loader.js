@@ -198,6 +198,7 @@ Sunniesnow.Loader = {
 			seUpload: this.readFile('se-upload'),
 			volumeSe: this.readValue('volume-se'),
 			volumeMusic: this.readValue('volume-music'),
+			seWithMusic: this.readCheckbox('se-with-music'),
 			delay: this.readValue('delay'),
 
 			// game settings

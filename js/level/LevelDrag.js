@@ -2,12 +2,10 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 
 	constructor(event) {
 		super(event);
-		this.highestJudgement = 'miss';
+		this.highestJudgement = Sunniesnow.game.settings.autoplay ? 'perfect' : 'miss';
 	}
 
-	onlyOnePerTouch() {
-		return false;
-	}
+	static ONLY_ONE_PER_TOUCH = false
 
 	refreshJudgement(time) {
 		const relativeTime = (time - this.time) / Sunniesnow.game.settings.gameSpeed;

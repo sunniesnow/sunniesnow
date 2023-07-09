@@ -17,33 +17,27 @@ Sunniesnow.Audio = class Audio {
 		}
 	}
 	
-	constructor(arrayBuffer) {
-		this.loadListeners = [];
-		this.finishListeners = [];
-		this.playbackRate = 1;
-		this.volume = 1;
-		// See https://github.com/WebAudio/web-audio-api/issues/1175#issuecomment-320502059.
+	static async fromArrayBuffer(arrayBuffer, volume = 1, playbackRate = 1) {
+		// About the slice() call: see https://github.com/WebAudio/web-audio-api/issues/1175#issuecomment-320502059.
 		// Otherwise, we cannot start the game again after the first time.
-		arrayBuffer = arrayBuffer.slice();
-		this.constructor.context.decodeAudioData(arrayBuffer, buffer => {
-			this.buffer = buffer;
-			this.duration = buffer.duration;
-			this.onLoad();
-		});
+		const audioBuffer = await this.context.decodeAudioData(arrayBuffer.slice());
+		return new this(audioBuffer, volume, playbackRate);
 	}
 
-	addLoadListener(listener) {
-		this.loadListeners.push(listener);
+	static async fromUrl(url, volume = 1, playbackRate = 1) {
+		return await this.fromArrayBuffer(await fetch(url).then(response => response.arrayBuffer()), volume, playbackRate);
+	}
+
+	constructor(audioBuffer, volume = 1, playbackRate = 1) {
+		this.finishListeners = [];
+		this.playbackRate = playbackRate;
+		this.volume = volume;
+		this.buffer = audioBuffer;
+		this.duration = audioBuffer.duration;
 	}
 
 	addFinishListener(listener) {
 		this.finishListeners.push(listener);
-	}
-
-	onLoad() {
-		for (const listener of this.loadListeners) {
-			listener();
-		}
 	}
 
 	onFinish() {
@@ -54,13 +48,14 @@ Sunniesnow.Audio = class Audio {
 
 	createNodes() {
 		const context = this.constructor.context;
-		this.sourceNode = context.createBufferSource();
-		this.sourceNode.buffer = this.buffer;
-		this.sourceNode.playbackRate.setValueAtTime(this.playbackRate, context.currentTime);
-		this.gainNode = context.createGain();
-		this.gainNode.gain.setValueAtTime(this.volume, context.currentTime);
-		this.sourceNode.connect(this.gainNode);
-		this.gainNode.connect(context.destination);
+		const sourceNode = context.createBufferSource();
+		sourceNode.buffer = this.buffer;
+		sourceNode.playbackRate.setValueAtTime(this.playbackRate, context.currentTime);
+		const gainNode = context.createGain();
+		gainNode.gain.setValueAtTime(this.volume, context.currentTime);
+		sourceNode.connect(gainNode);
+		gainNode.connect(context.destination);
+		return [sourceNode, gainNode]
 	}
 
 	removeNodes() {
@@ -77,8 +72,12 @@ Sunniesnow.Audio = class Audio {
 	play(time) {
 		time ||= 0;
 		this.removeNodes();
-		this.createNodes();
 		this.startTime = this.constructor.context.currentTime - time / this.playbackRate;
+		if (time >= this.duration) {
+			this.onFinish();
+			return;
+		}
+		[this.sourceNode, this.gainNode] = this.createNodes();
 		if (time >= 0) {
 			this.sourceNode.start(0, time);
 		} else {
@@ -93,6 +92,22 @@ Sunniesnow.Audio = class Audio {
 		}, timeToStop * 1000);
 	}
 
+	// Provides an alternative way of playing the audio than play().
+	// Different calls of this method does not interfere with each other.
+	// Returns a function that can be called to stop the audio.
+	spawn(when) {
+		when = Math.max(when || 0, 0);
+		const [sourceNode, gainNode] = this.createNodes();
+		sourceNode.start(this.constructor.context.currentTime + when);
+		const stop = () => {
+			sourceNode.stop();
+			sourceNode.disconnect();
+			gainNode.disconnect();
+		};
+		setTimeout(stop, when + this.duration * 1000);
+		return stop;
+	}
+
 	stop() {
 		this.removeNodes();
 		this.constructor.removePlayingAudio(this);
@@ -103,6 +118,11 @@ Sunniesnow.Audio = class Audio {
 	}
 
 	currentTime() {
-		return (this.constructor.context.currentTime - this.startTime + Sunniesnow.game.settings.delay / 1000) * this.playbackRate;
+		return (this.constructor.context.currentTime - this.startTime) * this.playbackRate;
+	}
+
+	static systematicDelay() {
+		// Seems that it is better not to consider the systematic delay.
+		return 0; // this.context.baseLatency + this.context.outputLatency;
 	}
 };

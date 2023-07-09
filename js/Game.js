@@ -54,6 +54,10 @@ Sunniesnow.Game = class Game {
 	loadAudio() {
 		this.loadClass('Audio');
 		this.loadClass('Music');
+		this.loadClass('SeTap');
+		this.loadClass('SeHold');
+		this.loadClass('SeFlick');
+		this.loadClass('SeDrag');
 	}
 
 	loadButtons() {
@@ -143,6 +147,7 @@ Sunniesnow.Game = class Game {
 			element.style.display = 'none';
 			this.loadingComplete = true;
 		} else {
+			element.style.display = '';
 			element.innerHTML = `Loading: ${this.loadingProgress}/${this.targetLoadingProgress}`;
 		}
 	}

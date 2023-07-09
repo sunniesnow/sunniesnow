@@ -42,6 +42,6 @@ Sunniesnow.ProgressBar = class ProgressBar extends Sunniesnow.UiComponent {
 
 	update(delta, data) {
 		super.update(delta, data);
-		this.bar.x = Sunniesnow.game.settings.width * (data-1);
+		this.bar.x = Sunniesnow.game.settings.width * Sunniesnow.Utils.clamp(data-1, -1, 0);
 	}
 };
