@@ -40,12 +40,12 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		super.update(delta);
 		this.updateAudio();
 		this.updateUiComponents(delta);
-		this.updateTouches();
+		Sunniesnow.TouchManager.update();
 		if (!Sunniesnow.Music.pausing) {
 			Sunniesnow.game.level.update();
 			this.updateBoards(delta);
 			if (Sunniesnow.game.level.finished) {
-				Sunniesnow.game.scene = new Sunniesnow.SceneResult();
+				this.gotoResult();
 			}
 		}
 		if (Sunniesnow.game.settings.debug) {
@@ -57,6 +57,18 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 	}
 
+	gotoResult() {
+		Sunniesnow.game.scene = new Sunniesnow.SceneResult([
+			this.background,
+			this.progressBar,
+			this.uiBgPatternBoard,
+			this.fxBoard,
+			this.uiBgNotesBoard,
+			this.uiNotesBoard,
+			this.tipPointsBoard,
+		]);
+	}
+
 	updateAudio() {
 		Sunniesnow.Music.update();
 		if (Sunniesnow.game.settings.seWithMusic) {
@@ -64,10 +76,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 	}
 	
-	updateTouches() {
-		Sunniesnow.TouchManager.update();
-	}
-
 	updateBoards(delta) {
 		this.uiBgPatternBoard.update(delta);
 		this.uiBgNotesBoard.update(delta);
@@ -78,6 +86,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	terminate() {
 		super.terminate();
+		Sunniesnow.TouchManager.clear();
 		this.removeListeners();
 	}
 
@@ -120,10 +129,11 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	updateUiComponents(delta) {
+		this.background.update(delta);
 		this.topLeftHud.update(delta, this.getUiText('hudTopLeft'));
 		this.topRightHud.update(delta, this.getUiText('hudTopRight'));
 		this.topCenterHud.update(delta, this.getUiText('hudTopCenter'));
-		this.progressBar.update(delta, Sunniesnow.Music.progress);
+		this.progressBar.update(delta);
 	}
 
 	getUiText(ui) {

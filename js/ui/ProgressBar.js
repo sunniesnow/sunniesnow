@@ -40,8 +40,8 @@ Sunniesnow.ProgressBar = class ProgressBar extends Sunniesnow.UiComponent {
 		this.addChild(this.bar);
 	}
 
-	update(delta, data) {
-		super.update(delta, data);
-		this.bar.x = Sunniesnow.game.settings.width * Sunniesnow.Utils.clamp(data-1, -1, 0);
+	update(delta) {
+		super.update(delta);
+		this.bar.x = Sunniesnow.game.settings.width * Sunniesnow.Utils.clamp(Sunniesnow.Music.progress-1, -1, 0);
 	}
 };
