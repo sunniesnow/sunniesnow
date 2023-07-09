@@ -178,7 +178,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	addKeyListeners() {
 		this.keydownListener = event => {
-			if (!/^F\d+$/.test(event.key)) {
+			if (!/^F\d+$/.test(event.key) && this.focus) {
 				event.preventDefault();
 			}
 			if (event.key === '`') {
@@ -188,7 +188,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			Sunniesnow.TouchManager.keyDown(event);
 		};
 		this.keyupListener = event => {
-			event.preventDefault();
+			if (!/^F\d+$/.test(event.key) && this.focus) {
+				event.preventDefault();
+			}
 			Sunniesnow.TouchManager.keyUp(event);
 		};
 		window.addEventListener('keydown', this.keydownListener);
@@ -216,23 +218,30 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		Sunniesnow.game.canvas.addEventListener('mouseup', this.mouseUpListener);
 	}
 
-	addBlurListeners() {
-		this.blurListener = event => {
+	addFocusListeners() {
+		this.focus = true;
+		this.focusOutListener = event => {
 			Sunniesnow.TouchManager.clear();
 			this.pause();
+			this.focus = false;
 		};
-		window.addEventListener('blur', this.blurListener);
+		this.focusInListener = event => {
+			this.focus = true;
+		};
+		Sunniesnow.game.canvas.addEventListener('focusout', this.focusOutListener);
+		Sunniesnow.game.canvas.addEventListener('focusin', this.focusInListener);
 	}
 
 	addListeners() {
-		this.addBlurListeners();
+		this.addFocusListeners();
 		this.addTouchListeners();
 		this.addKeyListeners();
 		this.addMouseListeners();
 	}
 
 	removeListeners() {
-		window.removeEventListener('blur', this.blurListener);
+		Sunniesnow.game.canvas.removeEventListener('focusout', this.focusOutListener);
+		Sunniesnow.game.canvas.removeEventListener('focusin', this.focusInListener);
 		Sunniesnow.game.canvas.removeEventListener('touchstart', this.touchStartListener);
 		Sunniesnow.game.canvas.removeEventListener('touchmove', this.touchListener);
 		Sunniesnow.game.canvas.removeEventListener('touchend', this.touchListener);

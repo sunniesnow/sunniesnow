@@ -80,7 +80,7 @@ void main() {
 
 	updateZoomingIn(time) {
 		super.updateZoomingIn(time);
-		const sinceStart = (time - this.startTime) / Sunniesnow.game.settings.gameSpeed;
+		const sinceStart = time - this.startTime;
 		this.tipPoint.scale.set(sinceStart / this.constructor.ZOOMING_IN_DURATION);
 		this.updateTrail(time);
 		this.updateTipPoint(time);
@@ -88,7 +88,7 @@ void main() {
 
 	updateZoomingOut(time) {
 		super.updateZoomingOut(time);
-		const sinceEnd = (time - this.endTime) / Sunniesnow.game.settings.gameSpeed;
+		const sinceEnd = time - this.endTime;
 		this.tipPoint.scale.set(1 - sinceEnd / this.constructor.ZOOMING_OUT_DURATION);
 		this.updateTrail(time);
 		this.updateTipPoint(time);

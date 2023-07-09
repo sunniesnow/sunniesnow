@@ -18,9 +18,8 @@ Sunniesnow.Music = {
 
 	playFromBeginning() {
 		const start = Math.min(0, Sunniesnow.game.chart.events[0].appearTime());
-		const preperation = Sunniesnow.Config.preperationTime * Sunniesnow.game.settings.gameSpeed;
 		this.finished = false;
-		this.play(start - preperation);
+		this.play(start - Sunniesnow.Config.preperationTime);
 	},
 
 	update() {
@@ -57,10 +56,10 @@ Sunniesnow.Music = {
 	},
 
 	delay() {
-		return (Sunniesnow.game.settings.delay / 1000 + Sunniesnow.Audio.systematicDelay()) * Sunniesnow.game.settings.gameSpeed;
+		return Sunniesnow.game.settings.delay + Sunniesnow.Audio.systematicDelay();
 	},
 
 	convertTimeStamp(timeStamp) {
-		return (timeStamp - this.lastResumeTimeStamp) / 1000 * Sunniesnow.game.settings.gameSpeed + this.lastResumeTime;
+		return (timeStamp - this.lastResumeTimeStamp) / 1000 + this.lastResumeTime;
 	}
 };

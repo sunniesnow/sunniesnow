@@ -18,10 +18,9 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 
 	update(delta) {
 		const time = Sunniesnow.Music.currentTime;
-		const preperation = Sunniesnow.Config.uiPreperationTime * Sunniesnow.game.settings.gameSpeed;
 		while (this.unappearedEvents.length > 0) {
 			const event = this.unappearedEvents[0];
-			const shouldStartTime = event.appearTime() - preperation;
+			const shouldStartTime = event.appearTime() - Sunniesnow.Config.uiPreperationTime;
 			if (time < shouldStartTime) {
 				break;
 			}
@@ -29,8 +28,7 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 			this.uiEvents.push(new event.constructor.UI_CLASS(event));
 		}
 		for (const uiEvent of this.uiEvents) {
-			const relativeTime = (time - uiEvent.event.time) / Sunniesnow.game.settings.gameSpeed;
-			uiEvent.update(relativeTime);
+			uiEvent.update(time - uiEvent.event.time);
 			if (uiEvent.state === 'finished') {
 				uiEvent.destroy({ children: true });
 				this.removeChild(uiEvent);

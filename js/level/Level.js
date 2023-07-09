@@ -9,7 +9,6 @@ Sunniesnow.Level = class Level {
 
 	initializeAuxiliaryQuantities() {
 		this.judgementWindows = Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows];
-		this.scaleJudgementWindowsByGameSpeed(this.judgementWindows);
 		[this.earliestLateBad, this.latestLateBad] = Sunniesnow.Utils.minmax(
 			this.judgementWindows.tap.bad[1],
 			this.judgementWindows.drag.bad[1],
@@ -22,16 +21,6 @@ Sunniesnow.Level = class Level {
 			this.judgementWindows.flick.bad[0],
 			this.judgementWindows.hold.bad[0]
 		);
-	}
-
-	scaleJudgementWindowsByGameSpeed(object) {
-		for (const key in object) {
-			if (object[key] instanceof Number) {
-				object[key] *= Sunniesnow.game.settings.gameSpeed;
-			} else {
-				this.scaleJudgementWindowsByGameSpeed(object[key]);
-			}
-		}
 	}
 
 	initializeNoteStores() {

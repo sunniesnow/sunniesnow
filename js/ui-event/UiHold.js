@@ -96,7 +96,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 
 	swellBounce(progress) {
-		const periodsCount = Math.floor(this.event.duration / Sunniesnow.game.settings.gameSpeed / 0.33);
+		const periodsCount = Math.floor(this.event.duration / 0.33);
 		const phase = progress * (periodsCount+1/2) * Math.PI*2;
 		this.note.scale.set(1.1 - Math.cos(phase) * 0.1);
 	}

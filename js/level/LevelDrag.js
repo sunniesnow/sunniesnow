@@ -8,7 +8,7 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 	static ONLY_ONE_PER_TOUCH = false
 
 	refreshJudgement(time) {
-		const relativeTime = (time - this.time) / Sunniesnow.game.settings.gameSpeed;
+		const relativeTime = time - this.time;
 		const newHighest = Sunniesnow.Utils.maxJudgement(
 			this.highestJudgement,
 			this.getJudgementByRelativeTime(relativeTime)

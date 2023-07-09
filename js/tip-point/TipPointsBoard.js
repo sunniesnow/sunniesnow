@@ -19,8 +19,7 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 		if (this.events.length === 0) {
 			return;
 		}
-		const preperation = Sunniesnow.Config.uiPreperationTime * Sunniesnow.game.settings.gameSpeed;
-		if (time < this.events[0].time - preperation) {
+		if (time < this.events[0].time - Sunniesnow.Config.uiPreperationTime) {
 			return;
 		}
 		const events = [this.events.shift()];

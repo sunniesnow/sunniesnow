@@ -38,10 +38,10 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 				this.updateActive(relativeTime / this.activeDuration + 1);
 				break;
 			case 'holding':
-				this.updateHolding(relativeTime / (this.event.duration / Sunniesnow.game.settings.gameSpeed));
+				this.updateHolding(relativeTime / this.event.duration);
 				break;
 			case 'fadingOut':
-				const releaseRelativeTime = this.levelNote ? this.levelNote.releaseRelativeTime : (this.event.duration || 0) / Sunniesnow.game.settings.gameSpeed;
+				const releaseRelativeTime = this.levelNote ? this.levelNote.releaseRelativeTime : this.event.duration || 0;
 				this.updateFadingOut((relativeTime - releaseRelativeTime) / this.constructor.FADING_OUT_DURATION);
 				break;
 			case 'finished':
@@ -68,7 +68,7 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 				}
 			}
 		} else {
-			const releaseRelativeTime = (this.event.duration || 0) / Sunniesnow.game.settings.gameSpeed;
+			const releaseRelativeTime = this.event.duration || 0;
 			if (relativeTime >= releaseRelativeTime + this.constructor.FADING_OUT_DURATION) {
 				return 'finished';
 			} else if (relativeTime >= releaseRelativeTime) {

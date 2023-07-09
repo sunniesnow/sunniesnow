@@ -14,15 +14,14 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 
 	update() {
 		const time = Sunniesnow.Music.currentTime - Sunniesnow.Music.delay();
-		const preperation = Sunniesnow.Config.uiPreperationTime * Sunniesnow.game.settings.gameSpeed;
 		while (this.unhitEvents.length > 0) {
 			const event = this.unhitEvents[0];
-			if (time < event.time - preperation) {
+			if (time < event.time - Sunniesnow.Config.uiPreperationTime) {
 				break;
 			}
 			this.holdingEvents.push(this.unhitEvents.shift());
 			this.holdingEvents.sort((a, b) => a.endTime() - b.endTime());
-			event.hitSe((event.time - time) / Sunniesnow.game.settings.gameSpeed);
+			event.hitSe(event.time - time);
 		}
 		while (this.holdingEvents.length > 0) {
 			const event = this.holdingEvents[0];
@@ -30,7 +29,7 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 				break;
 			}
 			this.holdingEvents.shift();
-			event.releaseSe((event.endTime() - time) / Sunniesnow.game.settings.gameSpeed);
+			event.releaseSe(event.endTime() - time);
 		}
 	}
 };

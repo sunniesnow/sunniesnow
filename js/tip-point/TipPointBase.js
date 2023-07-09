@@ -40,8 +40,8 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 	}
 
 	updateState(time) {
-		const sinceStart = (time - this.startTime) / Sunniesnow.game.settings.gameSpeed;
-		const sinceEnd = (time - this.endTime) / Sunniesnow.game.settings.gameSpeed;
+		const sinceStart = time - this.startTime;
+		const sinceEnd = time - this.endTime;
 		if (sinceStart < 0) {
 			this.visible = false;
 			this.state = 'ready';

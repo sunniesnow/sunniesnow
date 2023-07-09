@@ -171,7 +171,7 @@ Sunniesnow.Loader = {
 			// judgement settings
 			judgementWindows: this.readRadio('judgement-windows'),
 			noteHitSize: this.readValue('note-hit-size'),
-			offset: this.readValue('offset'),
+			offset: this.readValue('offset') / 1000,
 
 			// visual settings
 			speed: this.readValue('speed'),
@@ -199,7 +199,7 @@ Sunniesnow.Loader = {
 			volumeSe: this.readValue('volume-se'),
 			volumeMusic: this.readValue('volume-music'),
 			seWithMusic: this.readCheckbox('se-with-music'),
-			delay: this.readValue('delay'),
+			delay: this.readValue('delay') / 1000,
 
 			// game settings
 			autoplay: this.readCheckbox('autoplay'),

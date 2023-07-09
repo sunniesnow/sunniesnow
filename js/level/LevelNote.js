@@ -31,7 +31,6 @@ Sunniesnow.LevelNote = class LevelNote {
 		if (!Sunniesnow.game.settings.seWithMusic) {
 			this.event.hitSe();
 		}
-		const relativeTime = (time - this.time) / Sunniesnow.game.settings.gameSpeed;
 		if (this.holding) {
 			return;
 		}
@@ -39,7 +38,7 @@ Sunniesnow.LevelNote = class LevelNote {
 		if (hitData && this.constructor.ONLY_ONE_PER_TOUCH) {
 			hitData.note = this;
 		}
-		this.hitRelativeTime = relativeTime;
+		this.hitRelativeTime = time - this.time;
 		this.holding = true;
 		Sunniesnow.game.level.holdingNotes.push(this);
 		Sunniesnow.game.level.holdingNotes.sort((a, b) => a.endTime - b.endTime);
@@ -67,12 +66,11 @@ Sunniesnow.LevelNote = class LevelNote {
 		if (!Sunniesnow.game.settings.seWithMusic) {
 			this.event.releaseSe();
 		}
-		const relativeTime = (time - this.time) / Sunniesnow.game.settings.gameSpeed;
 		if (!this.holding) {
 			return;
 		}
 		this.holding = false;
-		this.releaseRelativeTime = relativeTime;
+		this.releaseRelativeTime = time - this.time;
 		this.determineJudgement();
 		Sunniesnow.game.level.holdingNotes.splice(Sunniesnow.game.level.holdingNotes.indexOf(this), 1);
 		Sunniesnow.game.level.onNewJudgement(this);

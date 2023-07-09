@@ -33,7 +33,7 @@ Sunniesnow.Audio = class Audio {
 		this.playbackRate = playbackRate;
 		this.volume = volume;
 		this.buffer = audioBuffer;
-		this.duration = audioBuffer.duration;
+		this.duration = audioBuffer.duration / playbackRate;
 	}
 
 	addFinishListener(listener) {
@@ -72,7 +72,7 @@ Sunniesnow.Audio = class Audio {
 	play(time) {
 		time ||= 0;
 		this.removeNodes();
-		this.startTime = this.constructor.context.currentTime - time / this.playbackRate;
+		this.startTime = this.constructor.context.currentTime - time;
 		if (time >= this.duration) {
 			this.onFinish();
 			return;
@@ -84,7 +84,7 @@ Sunniesnow.Audio = class Audio {
 			this.sourceNode.start(this.startTime, 0);
 		}
 		this.constructor.playingAudios.push(this);
-		const timeToStop = this.startTime + this.duration / this.playbackRate - this.constructor.context.currentTime
+		const timeToStop = this.startTime + this.duration - this.constructor.context.currentTime
 		this.stopTimer = setTimeout(() => {
 			this.stop();
 			this.onFinish();
@@ -104,7 +104,7 @@ Sunniesnow.Audio = class Audio {
 			sourceNode.disconnect();
 			gainNode.disconnect();
 		};
-		setTimeout(stop, when + this.duration * 1000);
+		setTimeout(stop, (when + this.duration) * 1000);
 		return stop;
 	}
 
@@ -118,7 +118,7 @@ Sunniesnow.Audio = class Audio {
 	}
 
 	currentTime() {
-		return (this.constructor.context.currentTime - this.startTime) * this.playbackRate;
+		return this.constructor.context.currentTime - this.startTime;
 	}
 
 	static systematicDelay() {

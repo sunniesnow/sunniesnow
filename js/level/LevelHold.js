@@ -1,7 +1,7 @@
 Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 	determineJudgement() {
 		let judgement;
-		const ratio = this.releaseRelativeTime / (this.event.duration / Sunniesnow.game.settings.gameSpeed);
+		const ratio = this.releaseRelativeTime / this.event.duration;
 		const judgementWindows = Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows].holdEnd;
 		if (ratio >= judgementWindows.perfect) {
 			judgement = 'perfect';

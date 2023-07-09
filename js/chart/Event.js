@@ -18,7 +18,7 @@ Sunniesnow.Event = class Event {
 	}
 
 	constructor(time, properties) {
-		this.time = time;
+		this.time = time / Sunniesnow.game.settings.gameSpeed;
 		properties = Object.assign({}, properties);
 		for (const property of this.constructor.PROPERTIES.required) {
 			if (!Object.hasOwn(properties, property)) {
@@ -37,6 +37,9 @@ Sunniesnow.Event = class Event {
 		}
 		for (const property in properties) {
 			Sunniesnow.Utils.warn(`Unknown property \`${property}\` in ${this.constructor.TYPE_NAME} event`);
+		}
+		if (this.duration) {
+			this.duration /= Sunniesnow.game.settings.gameSpeed;
 		}
 		this.simultaneousEvents = [this];
 	}
