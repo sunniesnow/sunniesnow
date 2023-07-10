@@ -183,5 +183,9 @@ Sunniesnow.Utils = {
 
 	clamp(number, min, max) {
 		return Math.max(min, Math.min(number, max));
+	},
+
+	toPercentage(number) {
+		return (number * 100).toFixed(2) + '%';
 	}
 };

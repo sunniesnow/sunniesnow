@@ -84,6 +84,7 @@ Sunniesnow.Audio = class Audio {
 			this.sourceNode.start(this.startTime, 0);
 		}
 		this.constructor.playingAudios.push(this);
+		this.clearStopTimer();
 		const timeToStop = this.startTime + this.duration - this.constructor.context.currentTime
 		this.stopTimer = setTimeout(() => {
 			this.stop();
@@ -111,10 +112,15 @@ Sunniesnow.Audio = class Audio {
 	stop() {
 		this.removeNodes();
 		this.constructor.removePlayingAudio(this);
-		if (this.stopTimer) {
-			clearTimeout(this.stopTimer);
-			this.stopTimer = null;
+		this.clearStopTimer();
+	}
+
+	clearStopTimer() {
+		if (!this.stopTimer) {
+			return;
 		}
+		clearTimeout(this.stopTimer);
+		this.stopTimer = null;
 	}
 
 	currentTime() {

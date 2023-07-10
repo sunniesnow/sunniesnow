@@ -12,9 +12,9 @@ Sunniesnow.Game = class Game {
 	start() {
 		Sunniesnow.Loader.readSettings(this);
 		this.initCanvas();
+		this.initLevel();
 		this.loadClasses();
 		this.initPixiApp();
-		this.initLevel();
 		this.scene = new Sunniesnow.SceneGame();
 	}
 
@@ -36,7 +36,7 @@ Sunniesnow.Game = class Game {
 		this.canvas.addEventListener('fullscreenchange', event => {
 			this.shouldFullscreen = !!document.fullscreenElement;
 		})
-		this.canvas.canHaveContextMenu = false;
+		this.canvas.canHaveContextMenu = true;
 	}
 
 	loadClasses() {
@@ -62,6 +62,7 @@ Sunniesnow.Game = class Game {
 
 	loadButtons() {
 		this.loadClass('ButtonPause');
+		this.loadClass('ButtonResultRetry');
 	}
 
 	loadUiPause() {
@@ -77,6 +78,7 @@ Sunniesnow.Game = class Game {
 		this.loadClass('TopCenterHud');
 		this.loadClass('TopLeftHud');
 		this.loadClass('TopRightHud');
+		this.loadClass('Result');
 	}
 
 	loadUiEvents() {

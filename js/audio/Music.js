@@ -41,7 +41,8 @@ Sunniesnow.Music = {
 		if (!this.pausing) {
 			return false;
 		}
-		this.play(Math.max(this.lastResumeTime, this.currentTime - Sunniesnow.Config.resumePreperationTime));
+		const prep = Sunniesnow.game.level.finished ? 0 : Sunniesnow.Config.resumePreperationTime;
+		this.play(Math.max(this.lastResumeTime, this.currentTime - prep));
 		return true;
 	},
 

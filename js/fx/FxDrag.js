@@ -4,4 +4,4 @@ Sunniesnow.FxDrag = class FxDrag extends Sunniesnow.FxTap {
 		this.sparkLine = this.createSparkLine();
 		this.explosionContourArc = this.createExplosionContourArc();
 	}
-}
+};

@@ -33,27 +33,23 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		return Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows].flick.bad[1];
 	}
 
-	updateHolding() {
-		if (!this.assignedHit) {
+	updateHolding(time) {
+		super.updateHolding(time);
+		if (!this.touch) {
 			return;
 		}
-		const history = this.assignedHit.history;
-		const timeElapsed = history[history.length - 1].time - history[0].time;
-		if (timeElapsed > this.thresholdFlickDuration()) { // too slow
+		if (this.touch.timeElapsed() > this.thresholdFlickDuration()) { // too slow
 			this.badFlick = true;
-			this.release(this.hitRelativeTime + this.thresholdFlickDuration());
+			this.release(this.time + this.hitRelativeTime + this.thresholdFlickDuration());
 			return;
 		}
-		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(
-			history[history.length - 1].x - history[0].x,
-			history[history.length - 1].y - history[0].y
-		);
+		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
 		if (rho >= this.maxFlickDistance()) {
 			const angle = Sunniesnow.Utils.quo(phi - this.event.angle + Math.PI, Math.PI*2)[1] - Math.PI;
 			if (!Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
 				this.badFlick = true;
 			}
-			this.release(history[history.length - 1].time - this.time);
+			this.release(this.touch.end().time);
 		}
 	}
 
@@ -61,15 +57,8 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		if (!this.holding) {
 			return;
 		}
-		if (this.assignedHit) {
-			const history = this.assignedHit.history;
-			const distance = Sunniesnow.Utils.distance(
-				history[0].x, history[0].y,
-				history[history.length - 1].x, history[history.length - 1].y
-			);
-			if (distance < this.minFlickDistance()) { // not enough distance
-				this.badFlick = true;
-			}
+		if (this.touch && this.touch.totalDisplacement() < this.minFlickDistance()) { // not enough distance
+			this.badFlick = true;
 		}
 		super.release(relativeTime);
 	}

@@ -29,4 +29,4 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		this.presentFx.push(fx);
 	}
 	
-}
+};

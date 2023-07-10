@@ -4,7 +4,9 @@ Sunniesnow.Level = class Level {
 		this.initializeNoteStores();
 		this.notesCount = this.unhitNotes.length;
 		this.initializePlayInfo();
-		this.addTouchListeners();
+		if (!Sunniesnow.game.settings.autoPlay) {
+			this.addTouchListeners();
+		}
 	}
 
 	initializeAuxiliaryQuantities() {
@@ -52,7 +54,9 @@ Sunniesnow.Level = class Level {
 
 	finish() {
 		this.finished = true;
-		this.removeTouchListeners();
+		if (!Sunniesnow.game.settings.autoPlay) {
+			this.removeTouchListeners();
+		}
 	}
 
 	removeTouchListeners() {
@@ -69,6 +73,28 @@ Sunniesnow.Level = class Level {
 	accuracy() {
 		const denominator = this.perfect + this.good + this.bad + this.miss;
 		return denominator === 0 ? 1 : this.effectiveHits() / denominator;
+	}
+
+	accuracyText() {
+		return Sunniesnow.Utils.toPercentage(this.accuracy());
+	}
+
+	rank() {
+		if (this.maxCombo === this.notesCount) {
+			return 'S';
+		}
+		const score = this.score();
+		if (score >= 900000) {
+			return 'A';
+		} else if (score >= 750000) {
+			return 'B';
+		} else if (score >= 600000) {
+			return 'C';
+		} else if (score >= 500000) {
+			return 'D';
+		} else {
+			return 'E';
+		}
 	}
 
 	effectiveHits() {
@@ -94,9 +120,17 @@ Sunniesnow.Level = class Level {
 			}
 		}
 		this.updateFinishingHolds(time);
+		this.finishIfFinished();
 	}
 
 	updateManualPlay(time) {
+		this.updateMiss(time);
+		this.updateHoldingNotes(time);
+		this.updateFinishingHolds(time);
+		this.finishIfFinished();
+	}
+
+	updateMiss(time) {
 		for (let i = 0; i < this.unhitNotes.length;) {
 			const note = this.unhitNotes[i];
 			if (time < note.time + this.earliestLateBad) {
@@ -104,12 +138,15 @@ Sunniesnow.Level = class Level {
 			}
 			const lateBad = this.judgementWindows[note.type].bad[1];
 			if (time > note.time + lateBad) {
-				note.miss(lateBad);
+				note.edgeJudge('miss');
 			} else {
 				i++;
 			}
 		}
-		this.updateFinishingHolds(time);
+	}
+
+	updateHoldingNotes(time) {
+		this.holdingNotes.forEach(note => note.updateHoldingIfNeeded(time));
 	}
 
 	updateFinishingHolds(time) {
@@ -124,13 +161,16 @@ Sunniesnow.Level = class Level {
 				i++;
 			}
 		}
+	}
+
+	finishIfFinished() {
 		if (this.unhitNotes.length === 0 && this.holdingNotes.length === 0) {
 			this.finish();
 		}
 	}
 
 	touchEnd(touch) {
-		if (Sunniesnow.Music.pausing) {
+		if (Sunniesnow.Music.pausing || this.finished) {
 			return;
 		}
 		const note = touch.note;
@@ -140,18 +180,18 @@ Sunniesnow.Level = class Level {
 	}
 
 	touchMove(touch) {
-		if (Sunniesnow.Music.pausing) {
+		if (Sunniesnow.Music.pausing || this.finished) {
 			return;
 		}
 		const note = touch.note;
 		if (note && note.holding) {
-			note.updateHolding();
+			note.updateHolding(touch.end().time);
 		}
-		this.scanDrags(touch);
+		this.swipeDrags(touch);
 	}
 
 	touchStart(touch) {
-		if (Sunniesnow.Music.pausing) {
+		if (Sunniesnow.Music.pausing || this.finished) {
 			return;
 		}
 		const time = touch.start().time;
@@ -224,7 +264,7 @@ Sunniesnow.Level = class Level {
 		this[note.judgement]++;
 	}
 
-	scanDrags(touch) {
+	swipeDrags(touch) {
 		const {time, x, y} = touch.end();
 		for (let i = 0; i < this.unhitNotes.length; i++) {
 			const note = this.unhitNotes[i];
@@ -235,7 +275,7 @@ Sunniesnow.Level = class Level {
 				break;
 			}
 			if (note.isTappableAt(x, y)) {
-				note.hit(touch, time);
+				note.swipe(touch);
 			}
 		}
 		for (let i = 0; i < this.holdingNotes.length; i++) {
@@ -247,7 +287,7 @@ Sunniesnow.Level = class Level {
 				break;
 			}
 			if (note.isTappableAt(x, y)) {
-				note.refreshJudgement(time);
+				note.swipe(touch);
 			}
 		}
 	}

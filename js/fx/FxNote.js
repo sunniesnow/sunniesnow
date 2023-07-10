@@ -9,7 +9,7 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 		this.uiNote = uiNote;
 		this.x = uiNote.x;
 		this.y = uiNote.y;
-		this.judgement = uiNote.levelNote.judgement;
+		this.judgement = uiNote.levelNote.judgement || uiNote.levelNote.highestJudgement;
 		this.populate();
 	}
 
@@ -26,9 +26,6 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 				break;
 			case 'miss':
 				this.populateMiss();
-				break;
-			default:
-				this.populateNone();
 				break;
 		}
 	}
@@ -49,9 +46,6 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 				break;
 			case 'miss':
 				this.updateMiss(delta);
-				break;
-			default:
-				this.updateNone(delta);
 				break;
 		}
 	}
@@ -84,10 +78,4 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 		this.state = 'finished';
 	}
 
-	populateNone() {
-	}
-
-	updateNone(delta) {
-		this.state = 'finished';
-	}
-}
+};

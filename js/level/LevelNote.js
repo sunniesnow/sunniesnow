@@ -9,12 +9,14 @@ Sunniesnow.LevelNote = class LevelNote {
 		this.hitRelativeTime = null;
 		this.releaseRelativeTime = null;
 		this.judgement = null;
-		this.assignedHit = null; // format: {id:, note:, history: [{time:, x:, y:}, ...]}
+		this.touch = null;
 		this.holding = false;
+		this.needsToUpdateHolding = true;
 	}
 
 	// Does the note automatically release itself when time >= this.endTime?
-	// It is only false for flicks.
+	// If false, the note manages its release in its updateHolding() method.
+	// It is only false for flicks and drags.
 	static AUTO_FINISHES_HOLDING = true;
 
 	// Can a finger only hit one of this note?
@@ -27,16 +29,13 @@ Sunniesnow.LevelNote = class LevelNote {
 		return Math.abs(this.event.x - x) < r && Math.abs(this.event.y - y) < r;
 	}
 
-	hit(hitData, time) {
+	hit(touch, time) {
 		if (!Sunniesnow.game.settings.seWithMusic) {
 			this.event.hitSe();
 		}
-		if (this.holding) {
-			return;
-		}
-		this.assignedHit = hitData;
-		if (hitData && this.constructor.ONLY_ONE_PER_TOUCH) {
-			hitData.note = this;
+		this.touch = touch;
+		if (touch && this.constructor.ONLY_ONE_PER_TOUCH) {
+			touch.note = this;
 		}
 		this.hitRelativeTime = time - this.time;
 		this.holding = true;
@@ -76,15 +75,49 @@ Sunniesnow.LevelNote = class LevelNote {
 		Sunniesnow.game.level.onNewJudgement(this);
 	}
 
-	miss(relativeTime) {
-		this.hitRelativeTime = relativeTime;
-		this.releaseRelativeTime = relativeTime;
-		this.judgement = 'miss';
-		Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
+	edgeJudge(judgement) {
+		const edge = this.getEarliestLate(judgement);
+		if (this.holding) {
+			if (!Sunniesnow.game.settings.seWithMusic) {
+				this.event.hitSe();
+			}
+			this.holding = false;
+			Sunniesnow.game.level.holdingNotes.splice(Sunniesnow.game.level.holdingNotes.indexOf(this), 1);
+		} else {
+			this.hitRelativeTime = edge;
+			Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
+		}
+		if (!Sunniesnow.game.settings.seWithMusic) {
+			this.event.releaseSe();
+		}
+		this.releaseRelativeTime = edge;
+		this.judgement = judgement;
 		Sunniesnow.game.level.onNewJudgement(this);
 	}
 
-	updateHolding() {
-		// make use of this.assignedHit here in subclasses!
+	getEarliestLate(judgement) {
+		const judgementWindows = Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows][this.type];
+		switch (judgement) {
+			case 'perfect':
+				return 0;
+			case 'good':
+				return judgementWindows.perfect[1];
+			case 'bad':
+				return judgementWindows.good[1];
+			case 'miss':
+				return judgementWindows.bad[1];
+		}
+	}
+
+	updateHolding(time) {
+		this.needsToUpdateHolding = false;
+		// make use of this.touch here in subclasses!
+	}
+
+	updateHoldingIfNeeded(time) {
+		if (this.needsToUpdateHolding) {
+			this.updateHolding(time);
+		}
+		this.needsToUpdateHolding = true;
 	}
 };

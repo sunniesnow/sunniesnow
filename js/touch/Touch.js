@@ -22,6 +22,18 @@ Sunniesnow.Touch = class Touch {
 		this.move(Sunniesnow.Music.currentTime, x, y);
 	}
 
+	timeElapsed() {
+		return this.end().time - this.start().time;
+	}
+
+	totalMovement() {
+		return [this.end().x - this.start().x, this.end().y - this.start().y];
+	}
+
+	totalDisplacement() {
+		return Math.hypot(...this.totalMovement());
+	}
+
 	static key(keyCode, time, x, y) {
 		return new this(Sunniesnow.TouchManager.keyId(keyCode), 'key', time, x, y);
 	}

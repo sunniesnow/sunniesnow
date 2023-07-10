@@ -1,4 +1,10 @@
 Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
+	
+	hit(touch, time) {
+		super.hit(touch, time);
+		this.highestJudgement = this.getJudgementByRelativeTime(this.hitRelativeTime);
+	}
+
 	determineJudgement() {
 		let judgement;
 		const ratio = this.releaseRelativeTime / this.event.duration;
@@ -12,9 +18,7 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 		} else {
 			judgement = 'miss';
 		}
-		this.judgement = Sunniesnow.Utils.minJudgement(
-			this.getJudgementByRelativeTime(this.hitRelativeTime),
-			judgement
-		);
+		this.judgement = Sunniesnow.Utils.minJudgement(this.highestJudgement, judgement);
 	}
+
 };

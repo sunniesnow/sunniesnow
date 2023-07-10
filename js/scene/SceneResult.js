@@ -10,10 +10,32 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 		this.addListeners();
 		this.populateLegacyUis();
 		this.populateUiAndButtons();
+		Sunniesnow.game.canvas.canHaveContextMenu = true;
 	}
 
 	addListeners() {
-		// TODO
+		this.touchStartListener = event => {
+			event.preventDefault();
+			if (this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+				return;
+			}
+			this.retryButton.triggerIfContainsPage(event.pageX, event.pageY);
+		}
+		Sunniesnow.game.canvas.addEventListener('touchstart', this.touchStartListener);
+		this.mouseDownListener = event => {
+			event.preventDefault();
+			if (this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+				return;
+			}
+			this.retryButton.triggerIfContainsPage(event.pageX, event.pageY);
+		}
+		Sunniesnow.game.canvas.addEventListener('mousedown', this.mouseDownListener);
+		this.keyDownListener = event => {
+			if (event.key === '`') {
+				this.togglePausing();
+			}
+		}
+		window.addEventListener('keydown', this.keyDownListener);
 	}
 
 	populateLegacyUis() {
@@ -23,11 +45,12 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 	}
 
 	populateUiAndButtons() {
-		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause(() => this.switchPausing()));
+		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause(() => this.togglePausing()));
 		this.addChild(this.result = new Sunniesnow.Result());
+		this.addChild(this.retryButton = new Sunniesnow.ButtonResultRetry(() => this.gotoGame()));
 	}
 
-	switchPausing() {
+	togglePausing() {
 		if (Sunniesnow.Music.pausing) {
 			Sunniesnow.Music.resume();
 		} else {
@@ -63,6 +86,13 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 	}
 
 	removeListeners() {
-		// TODO
+		Sunniesnow.game.canvas.removeEventListener('touchstart', this.touchStartListener);
+		Sunniesnow.game.canvas.removeEventListener('mousedown', this.mouseDownListener);
+		window.removeEventListener('keydown', this.keyDownListener);
+	}
+
+	gotoGame() {
+		Sunniesnow.game.level = new Sunniesnow.Level();
+		Sunniesnow.game.scene = new Sunniesnow.SceneGame();
 	}
 };

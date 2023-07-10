@@ -1,6 +1,6 @@
 Sunniesnow.LevelTap = class LevelTap extends Sunniesnow.LevelNote {
-	hit(hitData, relativeTime) {
-		super.hit(hitData, relativeTime);
-		this.release(relativeTime);
+	hit(touch, time) {
+		super.hit(touch, time);
+		this.release(time);
 	}
 };

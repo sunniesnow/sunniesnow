@@ -4,6 +4,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.addListeners();
 		this.populateUiAndBoards();
 		this.populateAudio();
+		Sunniesnow.game.canvas.canHaveContextMenu = false;
 	}
 
 	populateUiAndBoards() {
@@ -17,7 +18,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.addChild(this.topLeftHud = new Sunniesnow.TopLeftHud());
 		this.addChild(this.topRightHud = new Sunniesnow.TopRightHud());
 		this.addChild(this.topCenterHud = new Sunniesnow.TopCenterHud());
-		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause(() => this.switchPausing()));
+		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause(() => this.togglePausing()));
 		this.addChild(this.fxBoard = new Sunniesnow.FxBoard());
 		this.addChild(this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard());
 		this.addChild(this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.debugBoard));
@@ -90,7 +91,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.removeListeners();
 	}
 
-	switchPausing() {
+	togglePausing() {
 		if (Sunniesnow.Music.pausing) {
 			this.resume();
 		} else {
@@ -115,7 +116,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	retry() {
+		Sunniesnow.game.level.finish();
 		Sunniesnow.game.level = new Sunniesnow.Level();
+		Sunniesnow.game.canvas.canHaveContextMenu = false;
 		this.uiBgPatternBoard.clear();
 		this.uiBgNotesBoard.clear();
 		this.uiNotesBoard.clear();
@@ -153,7 +156,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			case 'score':
 				return Sunniesnow.game.level.score().toString();
 			case 'accuracy':
-				return Sunniesnow.game.level.accuracy().toString();
+				return Sunniesnow.game.level.accuracyText();
 		}
 	}
 
@@ -161,7 +164,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.touchStartListener = event => {
 			event.preventDefault();
 			if (this.pauseBoard.triggerIfContainsPage(event.pageX, event.pageY) || this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
-				this.maskedTouches = event.changedTouches;
 				return;
 			}
 			Sunniesnow.TouchManager.touchStart(event);
@@ -172,13 +174,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		};
 		this.touchEndListener = event => {
 			event.preventDefault();
-			for (let i = 0; i < this.maskedTouches.length;) {
-				if (event.changedTouches.includes(this.maskedTouches[i])) {
-					this.maskedTouches.splice(i, 1);
-				} else {
-					i++;
-				}
-			}
 			Sunniesnow.TouchManager.touchEnd(event);
 		};
 		Sunniesnow.game.canvas.addEventListener('touchstart', this.touchStartListener);
@@ -186,21 +181,23 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		Sunniesnow.game.canvas.addEventListener('touchend', this.touchEndListener);
 	}
 
+	preventKeyEventIfShould(event) {
+		if (!/^F\d+$/.test(event.key) && document.activeElement.contains(Sunniesnow.game.canvas)) {
+			event.preventDefault();
+		}
+	}
+
 	addKeyListeners() {
 		this.keydownListener = event => {
-			if (!/^F\d+$/.test(event.key) && this.focus) {
-				event.preventDefault();
-			}
+			this.preventKeyEventIfShould(event);
 			if (event.key === '`') {
-				this.switchPausing();
+				this.togglePausing();
 				return;
 			}
 			Sunniesnow.TouchManager.keyDown(event);
 		};
 		this.keyupListener = event => {
-			if (!/^F\d+$/.test(event.key) && this.focus) {
-				event.preventDefault();
-			}
+			this.preventKeyEventIfShould(event);
 			Sunniesnow.TouchManager.keyUp(event);
 		};
 		window.addEventListener('keydown', this.keydownListener);
@@ -229,17 +226,11 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	addFocusListeners() {
-		this.focus = true;
-		this.focusOutListener = event => {
+		this.blurListener = event => {
 			Sunniesnow.TouchManager.clear();
 			this.pause();
-			this.focus = false;
 		};
-		this.focusInListener = event => {
-			this.focus = true;
-		};
-		Sunniesnow.game.canvas.addEventListener('focusout', this.focusOutListener);
-		Sunniesnow.game.canvas.addEventListener('focusin', this.focusInListener);
+		window.addEventListener('blur', this.blurListener);
 	}
 
 	addListeners() {
@@ -250,8 +241,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	removeListeners() {
-		Sunniesnow.game.canvas.removeEventListener('focusout', this.focusOutListener);
-		Sunniesnow.game.canvas.removeEventListener('focusin', this.focusInListener);
+		window.removeEventListener('blur', this.blurListener);
 		Sunniesnow.game.canvas.removeEventListener('touchstart', this.touchStartListener);
 		Sunniesnow.game.canvas.removeEventListener('touchmove', this.touchListener);
 		Sunniesnow.game.canvas.removeEventListener('touchend', this.touchListener);
