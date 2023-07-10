@@ -4,10 +4,10 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 	}
 
 	clear() {
-		SeTap.stop();
-		SeFlick.stop();
-		SeHold.stop();
-		SeDrag.stop();
+		Sunniesnow.SeTap.stop();
+		Sunniesnow.SeFlick.stop();
+		Sunniesnow.SeHold.stop();
+		Sunniesnow.SeDrag.stop();
 		this.unhitEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.Note);
 		this.holdingEvents = [];
 	}

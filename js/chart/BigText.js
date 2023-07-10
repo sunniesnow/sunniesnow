@@ -4,6 +4,6 @@ Sunniesnow.BigText = class BigText extends Sunniesnow.BgPattern {
 		optional: { duration: 0 }
 	}
 
-	static UI_CLASS = Sunniesnow.UiBigText
+	static UI_CLASS = 'UiBigText'
 	static TYPE_NAME = 'bigText'
 };

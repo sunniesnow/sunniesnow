@@ -4,9 +4,9 @@ Sunniesnow.Tap = class Tap extends Sunniesnow.Note {
 		optional: { tipPoint: null, text: '' }
 	}
 
-	static UI_CLASS = Sunniesnow.UiTap
-	static LEVEL_CLASS = Sunniesnow.LevelTap
-	static FX_CLASS = Sunniesnow.FxTap
-	static SE_CLASS = Sunniesnow.SeTap
+	static UI_CLASS = 'UiTap'
+	static LEVEL_CLASS = 'LevelTap'
+	static FX_CLASS = 'FxTap'
+	static SE_CLASS = 'SeTap'
 	static TYPE_NAME = 'tap'
 };

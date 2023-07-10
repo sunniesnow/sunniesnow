@@ -1,12 +1,17 @@
 Sunniesnow.Utils = {
-	warn(msg) {
+	warn(msg, e) {
 		document.getElementById('warnings').innerText += msg + '\n';
+		if (e) {
+			console.error(e);
+		}
 	},
 
-	error(msg) {
+	error(msg, e) {
 		document.getElementById('errors').innerText += msg + '\n';
 		Sunniesnow.game.terminate();
-		throw msg;
+		if (e) {
+			throw(e);
+		}
 	},
 
 	clearWarningsAndErrors() {

@@ -4,9 +4,9 @@ Sunniesnow.Drag = class Drag extends Sunniesnow.Note {
 		optional: { tipPoint: null }
 	}
 
-	static UI_CLASS = Sunniesnow.UiDrag
-	static LEVEL_CLASS = Sunniesnow.LevelDrag
-	static FX_CLASS = Sunniesnow.FxDrag
-	static SE_CLASS = Sunniesnow.SeDrag
+	static UI_CLASS = 'UiDrag'
+	static LEVEL_CLASS = 'LevelDrag'
+	static FX_CLASS = 'FxDrag'
+	static SE_CLASS = 'SeDrag'
 	static TYPE_NAME = 'drag'
 };

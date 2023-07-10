@@ -29,4 +29,8 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 		}
 	}
 
+	newFx() {
+		return new Sunniesnow[this.event.constructor.FX_CLASS](this);
+	}
+
 };

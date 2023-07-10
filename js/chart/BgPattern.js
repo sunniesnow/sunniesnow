@@ -4,6 +4,6 @@ Sunniesnow.BgPattern = class BgPattern extends Sunniesnow.Event {
 		optional: { duration: 0 }
 	}
 
-	static UI_CLASS = Sunniesnow.UiBgPattern
+	static UI_CLASS = 'UiBgPattern'
 	static TYPE_NAME = 'bgPattern'
 };

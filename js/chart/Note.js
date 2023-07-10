@@ -4,23 +4,37 @@ Sunniesnow.Note = class Note extends Sunniesnow.Event {
 		optional: { tipPoint: null }
 	}
 
-	static UI_CLASS = Sunniesnow.UiNote
-	static LEVEL_CLASS = Sunniesnow.LevelNote
-	static FX_CLASS = Sunniesnow.FxNote
-	static SE_CLASS = Sunniesnow.Se
+	static UI_CLASS = 'UiNote'
+	static LEVEL_CLASS = 'LevelNote'
+	static FX_CLASS = 'FxNote'
+	static SE_CLASS = 'Se'
 	static TYPE_NAME = 'note'
 
 	appearTime() {
 		const activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
-		return this.time - activeDuration - this.constructor.UI_CLASS.FADING_IN_DURATION;
+		return this.time - activeDuration - Sunniesnow[this.constructor.UI_CLASS].FADING_IN_DURATION;
 	}
 
 	hitSe(when) {
-		this.constructor.SE_CLASS.hit(this.id, when);
+		try {
+			Sunniesnow[this.constructor.SE_CLASS].hit(this.id, when);
+		} catch (e) {
+			Sunniesnow.Utils.warn(`Failed to play hit SE for ${this.constructor.TYPE_NAME} ${this.id}: ${e}`, e);
+		}
 	}
 
 	releaseSe(when) {
-		this.constructor.SE_CLASS.release(this.id, when);
+		try {
+			Sunniesnow[this.constructor.SE_CLASS].release(this.id, when);
+		} catch (e) {
+			Sunniesnow.Utils.warn(`Failed to play release SE for ${this.constructor.TYPE_NAME} ${this.id}: ${e}`, e);
+		}
+	}
+
+	newLevelNote() {
+		const result = new Sunniesnow[this.constructor.LEVEL_CLASS](this);
+		this.levelNote = result;
+		return result;
 	}
 
 };

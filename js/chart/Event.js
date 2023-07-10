@@ -5,12 +5,12 @@ Sunniesnow.Event = class Event {
 		optional: {}
 	}
 
-	static UI_CLASS = Sunniesnow.UiEvent
+	static UI_CLASS = 'UiEvent'
 	static TYPE_NAME = 'event'
 
 	static newFromType(type, time, properties) {
 		const eventClass = Sunniesnow[Sunniesnow.Utils.upcaseFirst(type)];
-		if (eventClass && eventClass.prototype instanceof Sunniesnow.Event) {
+		if (eventClass?.prototype instanceof Sunniesnow.Event) {
 			return new eventClass(time, properties);
 		} else {
 			Sunniesnow.Utils.error(`Unknown event type \`${type}\``);
@@ -45,10 +45,14 @@ Sunniesnow.Event = class Event {
 	}
 
 	appearTime() {
-		return this.time - this.constructor.UI_CLASS.FADING_IN_DURATION;
+		return this.time - Sunniesnow[this.constructor.UI_CLASS].FADING_IN_DURATION;
 	}
 
 	endTime() {
 		return this.time + (this.duration || 0);
+	}
+
+	newUiEvent() {
+		return new Sunniesnow[this.constructor.UI_CLASS](this, ...arguments);
 	}
 };

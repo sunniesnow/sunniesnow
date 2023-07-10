@@ -4,9 +4,9 @@ Sunniesnow.Flick = class Flick extends Sunniesnow.Note {
 		optional: {text: '', tipPoint: null}
 	}
 
-	static UI_CLASS = Sunniesnow.UiFlick
-	static LEVEL_CLASS = Sunniesnow.LevelFlick
-	static FX_CLASS = Sunniesnow.FxFlick
-	static SE_CLASS = Sunniesnow.SeFlick
+	static UI_CLASS = 'UiFlick'
+	static LEVEL_CLASS = 'LevelFlick'
+	static FX_CLASS = 'FxFlick'
+	static SE_CLASS = 'SeFlick'
 	static TYPE_NAME = 'flick'
 };

@@ -24,7 +24,7 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 				break;
 			}
 			this.unappearedEvents.shift();
-			const uiEvent = new event.constructor.UI_CLASS(event);
+			const uiEvent = event.newUiEvent();
 			this.addChild(uiEvent);
 			this.uiEvents.push(uiEvent);
 		}

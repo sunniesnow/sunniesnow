@@ -2,7 +2,6 @@ Sunniesnow.LevelNote = class LevelNote {
 
 	constructor(event) {
 		this.event = event;
-		event.levelNote = this;
 		this.type = event.constructor.TYPE_NAME;
 		this.time = event.time;
 		this.endTime = event.time + (event.duration || 0);
@@ -79,16 +78,13 @@ Sunniesnow.LevelNote = class LevelNote {
 		const edge = this.getEarliestLate(judgement);
 		if (this.holding) {
 			if (!Sunniesnow.game.settings.seWithMusic) {
-				this.event.hitSe();
+				this.event.releaseSe();
 			}
 			this.holding = false;
 			Sunniesnow.game.level.holdingNotes.splice(Sunniesnow.game.level.holdingNotes.indexOf(this), 1);
 		} else {
 			this.hitRelativeTime = edge;
 			Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
-		}
-		if (!Sunniesnow.game.settings.seWithMusic) {
-			this.event.releaseSe();
 		}
 		this.releaseRelativeTime = edge;
 		this.judgement = judgement;

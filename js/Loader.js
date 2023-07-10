@@ -19,34 +19,13 @@ Sunniesnow.Loader = {
 
 		// URL string
 		background: null,
-
-		skin: {
-			// keys: filename
-			// values: string
-			js: {},
-
-			// keys: filename
-			// values: URL strings
-			images: {}
-		},
-
-		fx: {
-			// keys: filename
-			// values: string
-			js: {},
-
-			// keys: filename
-			// values: URL strings
-			images: {}
-		},
-
-		// keys: filename
-		// values: ArrayBuffer
-		se: {}
 	},
 	
 	loadChart(file) {
 		this.clearChart();
+		if (!file) {
+			return;
+		}
 		JSZip.loadAsync(file).then(zip => {
 			zip.forEach((filename, file) => {
 				const type = mime.getType(filename);
@@ -78,54 +57,15 @@ Sunniesnow.Loader = {
 	},
 
 	loadSkin(file) {
-		this.clearSkin();
-		JSZip.loadAsync(file).then(zip => {
-			zip.forEach((filename, file) => {
-				const type = mime.getType(filename);
-				if (type.startsWith('image/')) {
-					file.async('blob').then(blob => this.loaded.skin.images[filename] = URL.createObjectURL(blob));
-				} else if (type.endsWith('javascript')) {
-					file.async('string').then(string => this.loaded.skin.js[filename] = string);
-				}
-			});
-		});
-	},
-
-	clearSkin() {
-		this.loaded.skin.js = {};
-		this.loaded.skin.images = {};
+		Sunniesnow.Plugin.load('skin', file);
 	},
 
 	loadFx(file) {
-		this.clearFx();
-		JSZip.loadAsync(file).then(zip => {
-			zip.forEach((filename, file) => {
-				const type = mime.getType(filename);
-				if (type.startsWith('image/')) {
-					file.async('blob').then(blob => this.loaded.fx.images[filename] = URL.createObjectURL(blob));
-				} else if (type.endsWith('javascript')) {
-					file.async('string').then(string => this.loaded.fx.js[filename] = string);
-				}
-			});
-		});
-	},
-
-	clearFx() {
-		this.loaded.fx.js = {};
-		this.loaded.fx.images = {};
+		Sunniesnow.Plugin.load('fx', file);
 	},
 
 	loadSe(file) {
-		this.clearSe();
-		JSZip.loadAsync(file).then(zip => {
-			zip.forEach((filename, file) => {
-				file.async('arraybuffer').then(buffer => this.loaded.se[filename] = buffer);
-			});
-		});
-	},
-
-	clearSe() {
-		this.loaded.se = {};
+		Sunniesnow.Plugin.load('se', file);
 	},
 
 	fillSelect(elementId, filename) {
@@ -234,5 +174,135 @@ Sunniesnow.Loader = {
 
 	readFile(id) {
 		return document.getElementById(id).files[0];
+	},
+
+	loadModules() {
+		this.loadingModulesComplete = false;
+		this.loadingModulesProgress = 0;
+		this.targetLoadingModulesProgress = 0;
+		this.loadAudio();
+		this.loadUiComponents();
+		this.loadUiPause();
+		this.loadButtons();
+		this.loadUiEvents();
+		this.loadFx();
+		this.loadTipPoint();
+	},
+
+	loadAudio() {
+		this.loadModule('Audio');
+		this.loadModule('Music');
+		this.loadModule('SeTap');
+		this.loadModule('SeHold');
+		this.loadModule('SeFlick');
+		this.loadModule('SeDrag');
+	},
+
+	loadButtons() {
+		this.loadModule('ButtonPause');
+		this.loadModule('ButtonResultRetry');
+	},
+
+	loadUiPause() {
+		this.loadModule('PauseBackground');
+		this.loadModule('ButtonResume');
+		this.loadModule('ButtonRetry');
+		this.loadModule('ButtonFullscreen');
+	},
+
+	loadUiComponents() {
+		this.loadModule('Background');
+		this.loadModule('ProgressBar');
+		this.loadModule('TopCenterHud');
+		this.loadModule('TopLeftHud');
+		this.loadModule('TopRightHud');
+		this.loadModule('Result');
+	},
+
+	loadUiEvents() {
+		this.loadModule('UiNote');
+		this.loadModule('UiTap');
+		this.loadModule('UiHold');
+		this.loadModule('UiFlick');
+		this.loadModule('UiDrag');
+		this.loadModule('UiBgNote');
+		this.loadModule('UiBigText');
+		this.loadModule('UiGrid');
+		this.loadModule('UiHexagon');
+		this.loadModule('UiCheckerboard');
+		this.loadModule('UiDiamondGrid');
+		this.loadModule('UiPentagon');
+		this.loadModule('UiTurntable');
+	},
+
+	loadFx() {
+		this.loadModule('FxTap');
+		this.loadModule('FxHold');
+		this.loadModule('FxFlick');
+		this.loadModule('FxDrag');
+	},
+
+	loadTipPoint() {
+		this.loadModule('TipPoint');
+	},
+
+	loadModule(name) {
+		Sunniesnow[name].load().then(
+			() => this.loadingModulesProgress++,
+			reason => Sunniesnow.Utils.error(`Failed to load Sunniesnow.${name}: ${reason}`, reason)
+		);
+		this.targetLoadingModulesProgress++;
+	},
+
+	updateLoadingModules() {
+		const element = document.getElementById('loading-progress');
+		if (this.loadingModulesProgress >= this.targetLoadingModulesProgress) {
+			element.style.display = 'none';
+			this.loadingModulesComplete = true;
+			this.loadingComplete = true;
+		} else {
+			element.style.display = '';
+			element.innerHTML = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}`;
+		}
+	},
+
+	loadPlugins() {
+		this.loadingPluginsProgress = 0;
+		this.targetLoadingPluginsProgress = 0;
+		this.loadingPluginsComplete = false;
+		for (const id in Sunniesnow.Plugin.plugins) {
+			this.targetLoadingPluginsProgress++;
+			Sunniesnow.Plugin.plugins[id].loadAndApply().then(
+				() => this.loadingPluginsProgress++,
+				reason => Sunniesnow.Utils.warn(`Failed to load plugin ${id}: ${reason}`, reason)
+			);
+		}
+	},
+
+	updateLoadingPlugins() {
+		const element = document.getElementById('loading-progress');
+		if (this.loadingPluginsProgress >= this.targetLoadingPluginsProgress) {
+			element.style.display = 'none';
+			this.loadingPluginsComplete = true;
+			this.loadModules();
+		} else {
+			element.style.display = '';
+			element.innerHTML = `Loading plugins: ${this.loadingPluginsProgress}/${this.targetLoadingPluginsProgress}`;
+		}
+	},
+
+	load() {
+		this.loadingComplete = false;
+		this.loadPlugins();
+		// loadModules() will be called in updateLoadingPlugins().
+	},
+
+	updateLoading() {
+		if (this.loadingPluginsComplete) {
+			this.updateLoadingModules();
+		} else {
+			this.updateLoadingPlugins();
+		}
 	}
+
 };

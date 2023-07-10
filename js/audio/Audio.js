@@ -5,6 +5,10 @@ Sunniesnow.Audio = class Audio {
 	}
 
 	static stopAll() {
+		// put this guard here because sometimes this method gets called before load()
+		if (!this.playingAudios) {
+			return;
+		}
 		for (const audio of this.playingAudios) {
 			audio.stop();
 		}

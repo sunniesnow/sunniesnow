@@ -29,7 +29,7 @@ Sunniesnow.Level = class Level {
 		this.unhitNotes = [];
 		for (const event of Sunniesnow.game.chart.events) {
 			if (event instanceof Sunniesnow.Note) {
-				this.unhitNotes.push(new event.constructor.LEVEL_CLASS(event));
+				this.unhitNotes.push(event.newLevelNote());
 			}
 		}
 		this.holdingNotes = [];
@@ -184,7 +184,7 @@ Sunniesnow.Level = class Level {
 			return;
 		}
 		const note = touch.note;
-		if (note && note.holding) {
+		if (note?.holding) {
 			note.updateHolding(touch.end().time);
 		}
 		this.swipeDrags(touch);
@@ -202,7 +202,7 @@ Sunniesnow.Level = class Level {
 			}
 			if (Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows[note.type].bad)) {
 				note = this.tryHitNote(note, touch, time);
-				if (note && note.constructor.ONLY_ONE_PER_TOUCH) {
+				if (note?.constructor?.ONLY_ONE_PER_TOUCH) {
 					break;
 				} else {
 					i++;

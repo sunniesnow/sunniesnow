@@ -24,7 +24,7 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 	}
 
 	addFx(uiNote) {
-		const fx = new uiNote.event.constructor.FX_CLASS(uiNote);
+		const fx = uiNote.newFx();
 		this.addChild(fx);
 		this.presentFx.push(fx);
 	}

@@ -25,7 +25,7 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 				break;
 			}
 			this.unappearedEvents.shift();
-			this.uiEvents.push(new event.constructor.UI_CLASS(event));
+			this.uiEvents.push(event.newUiEvent());
 		}
 		for (const uiEvent of this.uiEvents) {
 			uiEvent.update(time - uiEvent.event.time);
