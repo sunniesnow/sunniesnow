@@ -144,5 +144,7 @@ Sunniesnow.Config = {
 	sePrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9zZS8='),
 	skinPrefx: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9za2luLw=='),
 	fxPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9meC8='),
-	pluginPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9wbHVnaW4v')
+	pluginPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9wbHVnaW4v'),
+
+	objectUrlTimeout: 1,
 };

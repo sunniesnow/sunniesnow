@@ -35,10 +35,11 @@ Sunniesnow.Utils = {
 	},
 
 	url(prefix, text, suffix = '') {
-		if (!Sunniesnow.Utils.isValidUrl(text)) {
-			text = prefix + text;
+		if (Sunniesnow.Utils.isValidUrl(text)) {
+			return text;
+		} else {
+			return prefix + (text.endsWith(suffix) ? text : text + suffix);
 		}
-		return text.endsWith(suffix) ? text : text + suffix;
 	},
 
 	downcaseFirst(string) {

@@ -57,7 +57,8 @@ Sunniesnow.Loader = {
 				this.loaded.chart.music[filename] = await zipObject.async('arraybuffer');
 			} else if (type.startsWith('image/')) {
 				this.fillBackgroundSelect(filename);
-				this.loaded.chart.backgrounds[filename] = await zipObject.async('blob');
+				const blob = new Blob([await zipObject.async('blob')], {type});
+				this.loaded.chart.backgrounds[filename] = blob;
 			} else if (type.endsWith('json')) {
 				this.fillChartSelect(filename);
 				this.loaded.chart.charts[filename] = JSON.parse(await zipObject.async('string'));
@@ -85,11 +86,11 @@ Sunniesnow.Loader = {
 				);
 			case 'from-level':
 				let url = URL.createObjectURL(this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel]);
-				setTimeout(() => URL.revokeObjectURL(url), 1000);
+				setTimeout(() => URL.revokeObjectURL(url), Sunniesnow.Config.objectUrlTimeout*1000);
 				return url;
 			case 'upload':
 				url = URL.createObjectURL(Sunniesnow.game.settings.backgroundUpload);
-				setTimeout(() => URL.revokeObjectURL(url), 1000);
+				setTimeout(() => URL.revokeObjectURL(url), Sunniesnow.Config.objectUrlTimeout*1000);
 				return url;
 		}
 	},

@@ -10,7 +10,7 @@ head: head.html
 	<div>
 		<input type="radio" id="level-file-online-radio" name="level-file" value="online" checked>
 		<label for="level-file-online-radio">Online:</label>
-		<input type="text" id="level-file-online" placeholder="SunniesnowSample">
+		<input type="text" id="level-file-online" placeholder="sunniesnow-sample">
 		<button type="button" id="level-file-online-button" onclick="Sunniesnow.Loader.loadChart();">Load</button>
 	</div>
 
@@ -92,7 +92,7 @@ head: head.html
 		<div>
 			<input type="radio" id="background-online-radio" name="background" value="online" checked>
 			<label for="background-online-radio">Online:</label>
-			<input type="text" id="background-online" value="default.png">
+			<input type="text" id="background-online" value="default.svg">
 		</div>
 
 		<div>
@@ -369,6 +369,7 @@ head: head.html
 </div>
 
 <script>
+(() => {
 	function associateRadio(radioId, inputId) {
 		const radio = document.getElementById(radioId);
 		const radios = document.getElementsByName(radio.name);
@@ -404,4 +405,5 @@ head: head.html
 	associateRange('volume-music', 'volume-music-value');
 	associateRange('background-blur', 'background-blur-value');
 	associateRange('background-brightness', 'background-brightness-value');
+})();
 </script>
