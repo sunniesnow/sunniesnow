@@ -11,7 +11,8 @@ Sunniesnow.Preprocess = {
 	},
 
 	readUrlParams() {
-		// TODO
+		const params = new URLSearchParams(location.search);
+		// TODO: instant-start
 	}
 };
 

@@ -12,6 +12,9 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 	populate() {
 		super.populate();
 		this.background = new PIXI.Sprite(this.constructor.texture);
+		this.background.anchor.set(0.5);
+		this.background.x = Sunniesnow.game.settings.width / 2;
+		this.background.y = Sunniesnow.game.settings.height / 2;
 		const scale = Math.max(
 			Sunniesnow.game.settings.width / this.background.width,
 			Sunniesnow.game.settings.height / this.background.height
