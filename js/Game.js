@@ -10,10 +10,8 @@ Sunniesnow.Game = class Game {
 	}
 
 	start() {
-		Sunniesnow.Loader.readSettings(this);
-		this.initCanvas();
-		this.initLevel();
 		Sunniesnow.Loader.load();
+		this.initCanvas();
 		this.initPixiApp();
 		this.scene = new Sunniesnow.SceneGame();
 	}

@@ -2,21 +2,10 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 
 	static async load() {
 		try {
-			this.texture = await PIXI.Texture.fromURL(this.getUrl());
+			this.texture = await PIXI.Texture.fromURL(Sunniesnow.Loader.backgroundUrl());
 		} catch (err) {
 			this.texture = PIXI.Texture.WHITE;
-			Sunniesnow.Utils.warn('Failed to load background');
-		}
-	}
-
-	static getUrl() {
-		switch (Sunniesnow.game.settings.background) {
-			case 'online':
-				return Sunniesnow.game.settings.backgroundOnline;
-			case 'from-level':
-				return Sunniesnow.Loader.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel];
-			case 'upload':
-				return Sunniesnow.Loader.loaded.background;
+			Sunniesnow.Utils.warn('Failed to load background', err);
 		}
 	}
 

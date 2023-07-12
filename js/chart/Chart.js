@@ -5,7 +5,7 @@ Sunniesnow.Chart = class Chart {
 		artist: '',
 		charter: '',
 		difficultyName: 'Unknown',
-		difficultyColor: 'white',
+		difficultyColor: '#7f7f7f',
 		difficulty: ''
 	}
 

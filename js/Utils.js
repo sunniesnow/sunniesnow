@@ -1,16 +1,22 @@
 Sunniesnow.Utils = {
 	warn(msg, e) {
 		document.getElementById('warnings').innerText += msg + '\n';
+		console.warn(msg);
 		if (e) {
-			console.error(e);
+			console.warn(e);
+		} else {
+			console.warn(new Error(msg));
 		}
 	},
 
 	error(msg, e) {
 		document.getElementById('errors').innerText += msg + '\n';
+		console.error(msg);
 		Sunniesnow.game.terminate();
 		if (e) {
 			throw(e);
+		} else {
+			throw(new Error(msg));
 		}
 	},
 
@@ -28,12 +34,11 @@ Sunniesnow.Utils = {
 		return true;
 	},
 
-	url(prefix, text) {
-		if (Sunniesnow.Utils.isValidUrl(text)) {
-			return text;
-		} else {
-			return prefix + text;
+	url(prefix, text, suffix = '') {
+		if (!Sunniesnow.Utils.isValidUrl(text)) {
+			text = prefix + text;
 		}
+		return text.endsWith(suffix) ? text : text + suffix;
 	},
 
 	downcaseFirst(string) {

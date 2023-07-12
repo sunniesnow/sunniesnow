@@ -8,15 +8,16 @@ head: head.html
 	<legend>Level file</legend>
 
 	<div>
-		<input type="radio" id="level-file-online-radio" name="level-file" value="online">
+		<input type="radio" id="level-file-online-radio" name="level-file" value="online" checked>
 		<label for="level-file-online-radio">Online:</label>
-		<input type="text" id="level-file-online" placeholder="SunniesnowSample.ssc">
+		<input type="text" id="level-file-online" placeholder="SunniesnowSample">
+		<button type="button" id="level-file-online-button" onclick="Sunniesnow.Loader.loadChart();">Load</button>
 	</div>
 
 	<div>
-		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload" checked>
+		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload">
 		<label for="level-file-upload-radio">Upload:</label>
-		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.loadChart(this.files[0])">
+		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.loadChart();">
 	</div>
 </fieldset>
 
@@ -103,7 +104,7 @@ head: head.html
 		<div>
 			<input type="radio" id="background-upload-radio" name="background" value="upload">
 			<label for="background-upload-radio">Upload:</label>
-			<input type="file" id="background-upload" accept="image/*" onchange="Sunniesnow.Loader.loadBackground(this.files[0])">
+			<input type="file" id="background-upload" accept="image/*">
 		</div>
 	</fieldset>
 
@@ -125,17 +126,22 @@ head: head.html
 	
 	<fieldset>
 		<legend>FX (note hit special effects)</legend>
+
+		<div>
+			<input type="radio" id="fx-default-radio" name="fx" value="default" checked>
+			<label for="fx-default-radio">None</label>
+		</div>
 	
 		<div>
-			<input type="radio" id="fx-online-radio" name="fx" value="online" checked>
+			<input type="radio" id="fx-online-radio" name="fx" value="online">
 			<label for="fx-online-radio">Online:</label>
-			<input type="text" id="fx-online" value="default.ssf">
+			<input type="text" id="fx-online" placeholder="empty">
 		</div>
 	
 		<div>
 			<input type="radio" id="fx-upload-radio" name="fx" value="upload">
 			<label for="fx-upload-radio">Upload:</label>
-			<input type="file" id="fx-upload" accept=".ssp" onchange="Sunniesnow.Loader.loadFx(this.files[0])">
+			<input type="file" id="fx-upload" accept=".ssp">
 		</div>
 	</fieldset>
 
@@ -143,15 +149,20 @@ head: head.html
 		<legend>Skin (note style and other UI)</legend>
 
 		<div>
-			<input type="radio" id="skin-online-radio" name="skin" value="online" checked>
+			<input type="radio" id="skin-default-radio" name="skin" value="default" checked>
+			<label for="skin-default-radio">Default</label>
+		</div>
+
+		<div>
+			<input type="radio" id="skin-online-radio" name="skin" value="online">
 			<label for="skin-online-radio">Online:</label>
-			<input type="text" id="skin-online" value="default.sss">
+			<input type="text" id="skin-online" placeholder="empty">
 		</div>
 
 		<div>
 			<input type="radio" id="skin-upload-radio" name="skin" value="upload">
 			<label for="skin-upload-radio">Upload:</label>
-			<input type="file" id="skin-upload" accept=".ssp" onchange="Sunniesnow.Loader.loadSkin(this.files[0])">
+			<input type="file" id="skin-upload" accept=".ssp">
 		</div>
 	</fieldset>
 
@@ -209,15 +220,20 @@ head: head.html
 		<legend>SE (note hit sound effects)</legend>
 
 		<div>
-			<input type="radio" id="se-online-radio" name="se" value="online" checked>
+			<input type="radio" id="se-default-radio" name="se" value="default" checked>
+			<label for="se-default-radio">Default</label>
+		</div>
+
+		<div>
+			<input type="radio" id="se-online-radio" name="se" value="online">
 			<label for="se-online-radio">Online:</label>
-			<input type="text" id="se-online" value="default.sse">
+			<input type="text" id="se-online" placeholder="empty">
 		</div>
 
 		<div>
 			<input type="radio" id="se-upload-radio" name="se" value="upload">
 			<label for="se-upload-radio">Upload:</label>
-			<input type="file" id="se-upload" accept=".ssp" onchange="Sunniesnow.Loader.loadSe(this.files[0])">
+			<input type="file" id="se-upload" accept=".ssp">
 		</div>
 	</fieldset>
 
@@ -317,6 +333,16 @@ head: head.html
 	</fieldset>
 
 	<fieldset>
+		<legend>Plugins</legend>
+
+		<div id="plugin-list"></div>
+
+		<div>
+			<button type="button" id="plugin-add-button" onclick="Sunniesnow.Plugin.addDomElement()">Add</button>
+		</div>
+	</fieldset>
+
+	<fieldset>
 		<legend>Debug</legend>
 
 		<div>
@@ -355,6 +381,7 @@ head: head.html
 		listener();
 	}
 	associateRadio('level-file-online-radio', 'level-file-online');
+	associateRadio('level-file-online-radio', 'level-file-online-button');
 	associateRadio('level-file-upload-radio', 'level-file-upload');
 	associateRadio('background-online-radio', 'background-online');
 	associateRadio('background-from-level-radio', 'background-from-level');

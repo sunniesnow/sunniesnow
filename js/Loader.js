@@ -13,7 +13,7 @@ Sunniesnow.Loader = {
 
 			// background image files contained in the .ssc file.
 			// keys: filename
-			// values: URL strings
+			// values: Blob
 			backgrounds: {}
 		},
 
@@ -21,26 +21,50 @@ Sunniesnow.Loader = {
 		background: null,
 	},
 	
-	loadChart(file) {
+	async loadChart() {
 		this.clearChart();
+		let file;
+		if (this.readRadio('level-file') === 'online') {
+			this.chartOnline = this.readValue('level-file-online');
+			const url = Sunniesnow.Utils.url(Sunniesnow.Config.chartPrefix, this.chartOnline, '.ssc');
+			try {
+				file = await (await fetch(url)).blob();
+			} catch (e) {
+				Sunniesnow.Utils.error(`Failed to load chart: ${e}`, e);
+			}
+		} else {
+			file = this.readFile('level-file-upload');
+		}
 		if (!file) {
+			Sunniesnow.Utils.warn('No chart to load');
 			return;
 		}
-		JSZip.loadAsync(file).then(zip => {
-			zip.forEach((filename, file) => {
-				const type = mime.getType(filename);
-				if (type.startsWith('audio/')) {
-					this.fillMusicSelect(filename);
-					file.async('arraybuffer').then(buffer => this.loaded.chart.music[filename] = buffer);
-				} else if (type.startsWith('image/')) {
-					this.fillBackgroundSelect(filename);
-					file.async('blob').then(blob => this.loaded.chart.backgrounds[filename] = URL.createObjectURL(blob));
-				} else if (type.endsWith('json')) {
-					this.fillChartSelect(filename);
-					file.async('string').then(string => this.loaded.chart.charts[filename] = JSON.parse(string));
-				}
-			});
-		})
+		let zip;
+		try {
+			zip = await JSZip.loadAsync(file);
+		} catch (e) {
+			Sunniesnow.Utils.warn('Failed to load chart: cannot read as zip', e);
+			return;
+		}
+		for (const filename in zip.files) {
+			const zipObject = zip.files[filename];
+			if (zipObject.dir) {
+				continue;
+			}
+			const type = mime.getType(filename);
+			if (type.startsWith('audio/')) {
+				this.fillMusicSelect(filename);
+				this.loaded.chart.music[filename] = await zipObject.async('arraybuffer');
+			} else if (type.startsWith('image/')) {
+				this.fillBackgroundSelect(filename);
+				this.loaded.chart.backgrounds[filename] = await zipObject.async('blob');
+			} else if (type.endsWith('json')) {
+				this.fillChartSelect(filename);
+				this.loaded.chart.charts[filename] = JSON.parse(await zipObject.async('string'));
+			} else {
+				Sunniesnow.Utils.warn(`Cannot determine type of ${filename}`)
+			}
+		}
 	},
 	
 	clearChart() {
@@ -52,20 +76,101 @@ Sunniesnow.Loader = {
 		this.clearSelect('background-from-level');
 	},
 
-	loadBackground(file) {
-		this.loaded.background = URL.createObjectURL(file);
+	backgroundUrl() {
+		switch (Sunniesnow.game.settings.background) {
+			case 'online':
+				return Sunniesnow.Utils.url(
+					Sunniesnow.Config.backgroundPrefix,
+					Sunniesnow.game.settings.backgroundOnline
+				);
+			case 'from-level':
+				let url = URL.createObjectURL(this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel]);
+				setTimeout(() => URL.revokeObjectURL(url), 1000);
+				return url;
+			case 'upload':
+				url = URL.createObjectURL(Sunniesnow.game.settings.backgroundUpload);
+				setTimeout(() => URL.revokeObjectURL(url), 1000);
+				return url;
+		}
 	},
 
-	loadSkin(file) {
-		Sunniesnow.Plugin.load('skin', file);
+	async skinBlob() {
+		switch (Sunniesnow.game.settings.skin) {
+			case 'default':
+				return null;
+			case 'online':
+				const response = await fetch(Sunniesnow.Utils.url(
+					Sunniesnow.Config.skinPrefix,
+					Sunniesnow.game.settings.skinOnline,
+					'.ssp'
+				));
+				return await response.blob();
+			case 'upload':
+				return Sunniesnow.game.settings.skinUpload;
+		}
 	},
 
-	loadFx(file) {
-		Sunniesnow.Plugin.load('fx', file);
+	async fxBlob() {
+		switch (Sunniesnow.game.settings.fx) {
+			case 'default':
+				return null;
+			case 'online':
+				const response = await fetch(Sunniesnow.Utils.url(
+					Sunniesnow.Config.fxPrefix,
+					Sunniesnow.game.settings.fxOnline,
+					'.ssp'
+				));
+				return await response.blob();
+			case 'upload':
+				return Sunniesnow.game.settings.fxUpload;
+		}
 	},
 
-	loadSe(file) {
-		Sunniesnow.Plugin.load('se', file);
+	async seBlob() {
+		switch (Sunniesnow.game.settings.se) {
+			case 'default':
+				return null;
+			case 'online':
+				const response = await fetch(Sunniesnow.Utils.url(
+					Sunniesnow.Config.sePrefix,
+					Sunniesnow.game.settings.seOnline,
+					'.ssp'
+				));
+				return await response.blob();
+			case 'upload':
+				return Sunniesnow.game.settings.seUpload;
+		}
+	},
+	
+	async pluginBlob(n) {
+		switch (Sunniesnow.game.settings.plugin[n]) {
+			case 'online':
+				const response = await fetch(Sunniesnow.Utils.url(
+					Sunniesnow.Config.pluginPrefix,
+					Sunniesnow.game.settings.pluginOnline[n],
+					'.ssp'
+				));
+				return await response.blob();
+			case 'upload':
+				return Sunniesnow.game.settings.pluginUpload[n];
+		}
+	},
+
+	readPluginSettings() {
+		const plugin = Sunniesnow.game.settings.plugin = {};
+		const pluginOnline = Sunniesnow.game.settings.pluginOnline = {};
+		const pluginUpload = Sunniesnow.game.settings.pluginUpload = {};
+		if (!Sunniesnow.Plugin.additionalTotal) {
+			return;
+		}
+		for (let i = 0; i < Sunniesnow.Plugin.additionalTotal; i++) {
+			if (!document.getElementById(`plugin-${i}`)) {
+				continue;
+			}
+			plugin[i] = this.readRadio(`plugin-${i}`);
+			pluginOnline[i] = this.readValue(`plugin-${i}-online`);
+			pluginUpload[i] = this.readFile(`plugin-${i}-upload`);
+		}
 	},
 
 	fillSelect(elementId, filename) {
@@ -99,8 +204,8 @@ Sunniesnow.Loader = {
 		this.fillSelect('background-from-level', filename);
 	},
 
-	readSettings(game) {
-		game.settings = {
+	readSettings() {
+		Sunniesnow.game.settings = {
 			levelFile: this.readRadio('level-file'),
 			levelFileOnline: this.readValue('level-file-online'),
 			levelFileUpload: this.readFile('level-file-upload'),
@@ -153,6 +258,7 @@ Sunniesnow.Loader = {
 			fullscreen: this.readCheckbox('fullscreen'),
 			debug: this.readCheckbox('debug'),
 		}
+		this.readPluginSettings();
 	},
 
 	readCheckbox(id) {
@@ -270,9 +376,9 @@ Sunniesnow.Loader = {
 		this.loadingPluginsProgress = 0;
 		this.targetLoadingPluginsProgress = 0;
 		this.loadingPluginsComplete = false;
-		for (const id in Sunniesnow.Plugin.plugins) {
+		for (const id of ['skin', 'fx', 'se', ...Object.keys(Sunniesnow.game.settings.plugin)]) {
 			this.targetLoadingPluginsProgress++;
-			Sunniesnow.Plugin.plugins[id].loadAndApply().then(
+			Sunniesnow.Plugin.loadPlugin(id).then(
 				() => this.loadingPluginsProgress++,
 				reason => Sunniesnow.Utils.warn(`Failed to load plugin ${id}: ${reason}`, reason)
 			);
@@ -291,17 +397,38 @@ Sunniesnow.Loader = {
 		}
 	},
 
+	updateLoadingChart() {
+		const element = document.getElementById('loading-progress');
+		element.style.display = '';
+		element.innerHTML = 'Loading chart';
+	},
+
 	load() {
+		this.readSettings();
 		this.loadingComplete = false;
-		this.loadPlugins();
+		if (Sunniesnow.game.settings.levelFile === 'online' && this.chartOnline !== Sunniesnow.game.settings.levelFileOnline) {
+			this.loadChart().then(() => {
+				Sunniesnow.game.settings.musicSelect = Object.keys(this.loaded.chart.music)[0];
+				Sunniesnow.game.settings.chartSelect = Object.keys(this.loaded.chart.charts)[0];
+				Sunniesnow.game.initLevel();
+				this.loadingChartComplete = true;
+				this.loadPlugins();
+			}, reason => Sunniesnow.Utils.error(`Failed to load chart: ${reason}`, reason));
+		} else {
+			Sunniesnow.game.initLevel();
+			this.loadingChartComplete = true;
+			this.loadPlugins();
+		}
 		// loadModules() will be called in updateLoadingPlugins().
 	},
 
 	updateLoading() {
 		if (this.loadingPluginsComplete) {
 			this.updateLoadingModules();
-		} else {
+		} else if (this.loadingChartComplete) {
 			this.updateLoadingPlugins();
+		} else {
+			this.updateLoadingChart();
 		}
 	}
 
