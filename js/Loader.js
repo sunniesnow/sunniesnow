@@ -1,6 +1,14 @@
 Sunniesnow.Loader = {
 	loaded: {
 		chart: {
+
+			// 'online' or 'upload'
+			source: null,
+
+			// online: the string filled in level-file-online
+			// upload: the file object
+			sourceContents: null,
+
 			// chart files in JSON contained in the loaded .ssc file.
 			// keys: filename
 			// values: JSON object
@@ -22,26 +30,38 @@ Sunniesnow.Loader = {
 	},
 
 	// The uploads that reads user input instead of local storage.
+	// We maintain this because we cannot write file to <input type="file">.
 	// keys: elementId; values: boolean
 	manual: {},
 	
 	async loadChart() {
-		this.clearChart();
 		let file;
-		if (this.readRadio('level-file') === 'online') {
-			this.chartOnline = this.readValue('level-file-online');
-			const url = Sunniesnow.Utils.url(Sunniesnow.Config.chartPrefix, this.chartOnline, '.ssc');
-			try {
-				file = await (await fetch(url)).blob();
-			} catch (e) {
-				Sunniesnow.Utils.error(`Failed to load chart: ${e}`, e);
-			}
-		} else {
-			if (this.manual.levelFileUpload) {
-				file = this.readFile('level-file-upload')
-			} else if (this.saved.levelFileUpload) {
-				file = await Sunniesnow.Utils.base64ToBlob(this.saved.levelFileUpload);
-			}
+		let sourceContents;
+		switch (this.readRadio('level-file')) {
+			case 'online':
+				sourceContents = this.readValue('level-file-online');
+				if (this.loaded.chart.source === 'online' && this.loaded.chart.sourceContents === sourceContents) {
+					return;
+				}
+				this.clearChart();
+				this.loaded.chart.source = 'online';
+				this.loaded.chart.sourceContents = sourceContents;
+				const url = Sunniesnow.Utils.url(Sunniesnow.Config.chartPrefix, sourceContents, '.ssc');
+				try {
+					file = await (await fetch(url)).blob();
+				} catch (e) {
+					Sunniesnow.Utils.error(`Failed to load chart: ${e}`, e);
+				}
+				break;
+			case 'upload':
+				sourceContents = this.manual.levelFileUpload ? this.readFile('level-file-upload') : this.saved?.levelFileUpload;
+				if (this.loaded.chart.source === 'upload' && this.loaded.chart.sourceContents === sourceContents) {
+					return;
+				}
+				this.clearChart();
+				this.loaded.chart.source = 'upload';
+				file = this.loaded.chart.sourceContents = sourceContents;
+				break;
 		}
 		if (!file) {
 			Sunniesnow.Utils.warn('No chart to load');
@@ -179,7 +199,11 @@ Sunniesnow.Loader = {
 			}
 			plugin[i] = this.readRadio(`plugin-${i}`);
 			pluginOnline[i] = this.readValue(`plugin-${i}-online`);
-			pluginUpload[i] = this.readFile(`plugin-${i}-upload`);
+			if (!this.manual[`pluginUpload${i}`] && this.saved?.pluginUpload?.[i]) {
+				pluginUpload[i] = this.saved.pluginUpload[i];
+			} else {
+				pluginUpload[i] = this.readFile(`plugin-${i}-upload`);
+			}
 		}
 	},
 
@@ -277,58 +301,72 @@ Sunniesnow.Loader = {
 		if (!this.saved) {
 			return;
 		}
-		this.writeRadio('level-file', this.saved.levelFile);
-		this.writeValue('level-file-online', this.saved.levelFileOnline);
+		for (const key in ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
+			if (this.saved[key]) {
+				this.saved[key] = await Sunniesnow.Utils.base64ToBlob(this.saved[key]);
+			}
+		}
+		for (const key in this.saved.plugin) {
+			if (this.saved.pluginUpload[key]) {
+				this.saved.pluginUpload[key] = await Sunniesnow.Utils.base64ToBlob(this.saved.pluginUpload[key]);
+			}
+		}
+		await this.writeSettings(this.saved);
+	},
+
+	async writeSettings(settings) {
+		this.writeRadio('level-file', settings.levelFile);
+		this.writeValue('level-file-online', settings.levelFileOnline);
 
 		await this.loadChart();
 
-		this.writeValue('music-select', this.saved.musicSelect);
-		this.writeValue('chart-select', this.saved.chartSelect);
+		this.writeValue('music-select', settings.musicSelect);
+		this.writeValue('chart-select', settings.chartSelect);
 
-		this.writeRadio('judgement-windows', this.saved.judgementWindows);
-		this.writeValue('note-hit-size', this.saved.noteHitSize);
-		this.writeValue('offset', this.saved.offset * 1000);
+		this.writeRadio('judgement-windows', settings.judgementWindows);
+		this.writeValue('note-hit-size', settings.noteHitSize);
+		this.writeValue('offset', settings.offset * 1000);
 
-		this.writeValue('speed', this.saved.speed);
-		this.writeValue('note-size', this.saved.noteSize);
-		this.writeRadio('background', this.saved.background);
-		this.writeValue('background-online', this.saved.backgroundOnline);
-		this.writeValue('background-from-level', this.saved.backgroundFromLevel);
-		this.writeValue('background-blur', this.saved.backgroundBlur);
-		this.writeValue('background-brightness', this.saved.backgroundBrightness);
-		this.writeRadio('skin', this.saved.skin);
-		this.writeValue('skin-online', this.saved.skinOnline);
-		this.writeRadio('fx', this.saved.fx);
-		this.writeValue('fx-online', this.saved.fxOnline);
-		this.writeValue('hud-top-center', this.saved.hudTopCenter);
-		this.writeValue('hud-top-left', this.saved.hudTopLeft);
-		this.writeValue('hud-top-right', this.saved.hudTopRight);
+		this.writeValue('speed', settings.speed);
+		this.writeValue('note-size', settings.noteSize);
+		this.writeRadio('background', settings.background);
+		this.writeValue('background-online', settings.backgroundOnline);
+		this.writeValue('background-from-level', settings.backgroundFromLevel);
+		this.writeValue('background-blur', settings.backgroundBlur);
+		this.writeValue('background-brightness', settings.backgroundBrightness);
+		this.writeRadio('skin', settings.skin);
+		this.writeValue('skin-online', settings.skinOnline);
+		this.writeRadio('fx', settings.fx);
+		this.writeValue('fx-online', settings.fxOnline);
+		this.writeValue('hud-top-center', settings.hudTopCenter);
+		this.writeValue('hud-top-left', settings.hudTopLeft);
+		this.writeValue('hud-top-right', settings.hudTopRight);
 
-		this.writeRadio('se', this.saved.se);
-		this.writeValue('se-online', this.saved.seOnline);
-		this.writeValue('volume-se', this.saved.volumeSe);
-		this.writeValue('volume-music', this.saved.volumeMusic);
-		this.writeCheckbox('se-with-music', this.saved.seWithMusic);
-		this.writeValue('delay', this.saved.delay * 1000);
+		this.writeRadio('se', settings.se);
+		this.writeValue('se-online', settings.seOnline);
+		this.writeValue('volume-se', settings.volumeSe);
+		this.writeValue('volume-music', settings.volumeMusic);
+		this.writeCheckbox('se-with-music', settings.seWithMusic);
+		this.writeValue('delay', settings.delay * 1000);
 
-		this.writeCheckbox('autoplay', this.saved.autoplay);
-		this.writeValue('game-speed', this.saved.gameSpeed);
-		this.writeValue('start', this.saved.start);
-		this.writeValue('end', this.saved.end);
+		this.writeCheckbox('autoplay', settings.autoplay);
+		this.writeValue('game-speed', settings.gameSpeed);
+		this.writeValue('start', settings.start);
+		this.writeValue('end', settings.end);
 
-		this.writeValue('width', this.saved.width);
-		this.writeValue('height', this.saved.height);
-		this.writeCheckbox('fullscreen', this.saved.fullscreen);
-		this.writeCheckbox('debug', this.saved.debug);
+		this.writeValue('width', settings.width);
+		this.writeValue('height', settings.height);
+		this.writeCheckbox('fullscreen', settings.fullscreen);
+		this.writeCheckbox('debug', settings.debug);
 
-		this.writeSavedPluginSettings();
+		this.writePluginSettings(settings);
 	},
 
-	writeSavedPluginSettings() {
-		for (const key in this.saved.plugin) {
+	writePluginSettings(settings) {
+		for (const key in settings.plugin) {
 			Sunniesnow.Plugin.addDomElement(key);
-			this.writeRadio(`plugin-${key}`, this.saved.plugin[key]);
-			this.writeValue(`plugin-${key}-online`, this.saved.pluginOnline[key]);
+			this.writeRadio(`plugin-${key}`, settings.plugin[key]);
+			this.writeValue(`plugin-${key}-online`, settings.pluginOnline[key]);
 		}
 	},
 
@@ -338,12 +376,12 @@ Sunniesnow.Loader = {
 		}
 		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
 			if (!this.manual[key] && this.saved[key]) {
-				Sunniesnow.game.settings[key] = Sunniesnow.Utils.base64ToBlobSync(this.saved[key]);
+				Sunniesnow.game.settings[key] = this.saved[key];
 			}
 		}
 		for (const key in this.saved.plugin) {
 			if (!this.manual[`pluginUpload${key}`] && this.saved.pluginUpload[key]) {
-				Sunniesnow.game.settings.pluginUpload[key] = Sunniesnow.Utils.base64ToBlobSync(this.saved.pluginUpload[key]);
+				Sunniesnow.game.settings.pluginUpload[key] = this.saved.pluginUpload[key];
 			}
 		}
 	},
@@ -382,7 +420,8 @@ Sunniesnow.Loader = {
 	},
 
 	readValue(id) {
-		return document.getElementById(id).value;
+		const element = document.getElementById(id);
+		return element.type === 'number' ? Number(element.value) : element.value;
 	},
 
 	readFile(id) {
@@ -390,10 +429,15 @@ Sunniesnow.Loader = {
 	},
 
 	writeCheckbox(id, value) {
-		document.getElementById(id).checked = value;
+		if (value !== undefined) {
+			document.getElementById(id).checked = value === true || value === 'true';
+		}
 	},
 
 	writeRadio(name, value) {
+		if (value === undefined) {
+			return;
+		}
 		const radios = document.getElementsByName(name);
 		for (const radio of radios) {
 			if (radio.value === value) {
@@ -404,7 +448,9 @@ Sunniesnow.Loader = {
 	},
 
 	writeValue(id, value) {
-		document.getElementById(id).value = value;
+		if (value !== undefined && !(typeof value === 'number' && isNaN(value))) {
+			document.getElementById(id).value = value;
+		}
 	},
 
 	loadModules() {
@@ -531,7 +577,7 @@ Sunniesnow.Loader = {
 	load() {
 		this.readSettings();
 		this.loadingComplete = false;
-		if (Sunniesnow.game.settings.levelFile === 'online' && this.chartOnline !== Sunniesnow.game.settings.levelFileOnline) {
+		if (Sunniesnow.game.settings.levelFile === 'online' && this.loaded.chart.sourceContents !== Sunniesnow.game.settings.levelFileOnline) {
 			this.loadChart().then(() => {
 				Sunniesnow.game.settings.musicSelect = Object.keys(this.loaded.chart.music)[0];
 				Sunniesnow.game.settings.chartSelect = Object.keys(this.loaded.chart.charts)[0];

@@ -1,7 +1,7 @@
 Sunniesnow.Preprocess = {
-	run() {
+	async run() {
 		this.setDeviceDependentDefaults();
-		Sunniesnow.Loader.writeSavedSettings();
+		await Sunniesnow.Loader.writeSavedSettings();
 		this.readUrlParams();
 	},
 
@@ -12,8 +12,11 @@ Sunniesnow.Preprocess = {
 	},
 
 	readUrlParams() {
-		const params = new URLSearchParams(location.search);
-		// TODO: instant-start
+		const params = Sunniesnow.Utils.urlSearchParamsObject();
+		Sunniesnow.Loader.writeSettings(params);
+		if (Object.hasOwn(params, 'instantStart')) {
+			Sunniesnow.Game.run();
+		}
 	}
 };
 

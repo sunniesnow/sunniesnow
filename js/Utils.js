@@ -233,5 +233,23 @@ Sunniesnow.Utils = {
 
 	camelToSlug(string) {
 		return string.replace(/[A-Z\d]/g, c => '-' + c.toLowerCase());
+	},
+
+	urlSearchParamsObject(searchString) {
+		const params = new URLSearchParams(searchString || location.search);
+		const result = {};
+		for (const [key, value] of params) {
+			const k = this.slugToCamel(key);
+			if (Object.hasOwn(result, k)) {
+				if (Array.isArray(result[k])) {
+					result[k].push(value);
+				} else {
+					result[k] = [result[k], value];
+				}
+			} else {
+				result[k] = value;
+			}
+		}
+		return result;
 	}
 };
