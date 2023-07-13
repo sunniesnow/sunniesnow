@@ -16,10 +16,14 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 	addListeners() {
 		this.touchStartListener = event => {
 			event.preventDefault();
-			if (this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
-				return;
+			for (const touch of event.changedTouches) {
+				if (this.pauseButton.triggerIfContainsPage(touch.pageX, touch.pageY)) {
+					return;
+				}
+				if (this.retryButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+					return;
+				}
 			}
-			this.retryButton.triggerIfContainsPage(event.pageX, event.pageY);
 		}
 		Sunniesnow.game.canvas.addEventListener('touchstart', this.touchStartListener);
 		this.mouseDownListener = event => {

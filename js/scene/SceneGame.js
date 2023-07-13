@@ -163,8 +163,13 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	addTouchListeners() {
 		this.touchStartListener = event => {
 			event.preventDefault();
-			if (this.pauseBoard.triggerIfContainsPage(event.pageX, event.pageY) || this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
-				return;
+			for (const touch of event.changedTouches) {
+				if (this.pauseBoard.triggerIfContainsPage(touch.pageX, touch.pageY)) {
+					return;
+				}
+				if (this.pauseButton.triggerIfContainsPage(touch.pageX, touch.pageY)) {
+					return;
+				}
 			}
 			Sunniesnow.TouchManager.touchStart(event);
 		};
@@ -207,7 +212,10 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	addMouseListeners() {
 		this.mouseDownListener = event => {
 			event.preventDefault();
-			if (this.pauseBoard.triggerIfContainsPage(event.pageX, event.pageY) || this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+			if (this.pauseBoard.triggerIfContainsPage(event.pageX, event.pageY)) {
+				return;
+			}
+			if (this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
 				return;
 			}
 			Sunniesnow.TouchManager.mouseDown(event);

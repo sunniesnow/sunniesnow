@@ -17,7 +17,7 @@ head: head.html
 	<div>
 		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload">
 		<label for="level-file-upload-radio">Upload:</label>
-		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.loadChart();">
+		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.markManual(this); Sunniesnow.Loader.loadChart();">
 	</div>
 </fieldset>
 
@@ -104,7 +104,7 @@ head: head.html
 		<div>
 			<input type="radio" id="background-upload-radio" name="background" value="upload">
 			<label for="background-upload-radio">Upload:</label>
-			<input type="file" id="background-upload" accept="image/*">
+			<input type="file" id="background-upload" accept="image/*" onchange="Sunniesnow.Loader.markManual(this);">
 		</div>
 	</fieldset>
 
@@ -141,7 +141,7 @@ head: head.html
 		<div>
 			<input type="radio" id="fx-upload-radio" name="fx" value="upload">
 			<label for="fx-upload-radio">Upload:</label>
-			<input type="file" id="fx-upload" accept=".ssp">
+			<input type="file" id="fx-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
 		</div>
 	</fieldset>
 
@@ -162,7 +162,7 @@ head: head.html
 		<div>
 			<input type="radio" id="skin-upload-radio" name="skin" value="upload">
 			<label for="skin-upload-radio">Upload:</label>
-			<input type="file" id="skin-upload" accept=".ssp">
+			<input type="file" id="skin-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
 		</div>
 	</fieldset>
 
@@ -233,7 +233,7 @@ head: head.html
 		<div>
 			<input type="radio" id="se-upload-radio" name="se" value="upload">
 			<label for="se-upload-radio">Upload:</label>
-			<input type="file" id="se-upload" accept=".ssp">
+			<input type="file" id="se-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
 		</div>
 	</fieldset>
 
@@ -370,6 +370,12 @@ head: head.html
 
 <script>
 (() => {
+	document.getElementById('level-file-online').addEventListener('keydown', event => {
+		if (event.key === 'Enter') {
+			document.getElementById('level-file-online-button').click();
+		}
+	});
+
 	function associateRadio(radioId, inputId) {
 		const radio = document.getElementById(radioId);
 		const radios = document.getElementsByName(radio.name);

@@ -20,6 +20,10 @@ Sunniesnow.Loader = {
 		// URL string
 		background: null,
 	},
+
+	// The uploads that reads user input instead of local storage.
+	// keys: elementId; values: boolean
+	manual: {},
 	
 	async loadChart() {
 		this.clearChart();
@@ -33,7 +37,11 @@ Sunniesnow.Loader = {
 				Sunniesnow.Utils.error(`Failed to load chart: ${e}`, e);
 			}
 		} else {
-			file = this.readFile('level-file-upload');
+			if (this.manual.levelFileUpload) {
+				file = this.readFile('level-file-upload')
+			} else if (this.saved.levelFileUpload) {
+				file = await Sunniesnow.Utils.base64ToBlob(this.saved.levelFileUpload);
+			}
 		}
 		if (!file) {
 			Sunniesnow.Utils.warn('No chart to load');
@@ -59,6 +67,7 @@ Sunniesnow.Loader = {
 				this.fillBackgroundSelect(filename);
 				const blob = new Blob([await zipObject.async('blob')], {type});
 				this.loaded.chart.backgrounds[filename] = blob;
+				this.writeRadio('background', 'from-level');
 			} else if (type.endsWith('json')) {
 				this.fillChartSelect(filename);
 				this.loaded.chart.charts[filename] = JSON.parse(await zipObject.async('string'));
@@ -85,13 +94,13 @@ Sunniesnow.Loader = {
 					Sunniesnow.game.settings.backgroundOnline
 				);
 			case 'from-level':
-				let url = URL.createObjectURL(this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel]);
-				setTimeout(() => URL.revokeObjectURL(url), Sunniesnow.Config.objectUrlTimeout*1000);
-				return url;
+				const url1 = URL.createObjectURL(this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel]);
+				setTimeout(() => URL.revokeObjectURL(url1), Sunniesnow.Config.objectUrlTimeout*1000);
+				return url1;
 			case 'upload':
-				url = URL.createObjectURL(Sunniesnow.game.settings.backgroundUpload);
-				setTimeout(() => URL.revokeObjectURL(url), Sunniesnow.Config.objectUrlTimeout*1000);
-				return url;
+				const url2 = URL.createObjectURL(Sunniesnow.game.settings.backgroundUpload);
+				setTimeout(() => URL.revokeObjectURL(url2), Sunniesnow.Config.objectUrlTimeout*1000);
+				return url2;
 		}
 	},
 
@@ -260,6 +269,103 @@ Sunniesnow.Loader = {
 			debug: this.readCheckbox('debug'),
 		}
 		this.readPluginSettings();
+		this.readUploadSettings();
+	},
+
+	async writeSavedSettings() {
+		this.saved = JSON.parse(localStorage.getItem('settings'));
+		if (!this.saved) {
+			return;
+		}
+		this.writeRadio('level-file', this.saved.levelFile);
+		this.writeValue('level-file-online', this.saved.levelFileOnline);
+
+		await this.loadChart();
+
+		this.writeValue('music-select', this.saved.musicSelect);
+		this.writeValue('chart-select', this.saved.chartSelect);
+
+		this.writeRadio('judgement-windows', this.saved.judgementWindows);
+		this.writeValue('note-hit-size', this.saved.noteHitSize);
+		this.writeValue('offset', this.saved.offset * 1000);
+
+		this.writeValue('speed', this.saved.speed);
+		this.writeValue('note-size', this.saved.noteSize);
+		this.writeRadio('background', this.saved.background);
+		this.writeValue('background-online', this.saved.backgroundOnline);
+		this.writeValue('background-from-level', this.saved.backgroundFromLevel);
+		this.writeValue('background-blur', this.saved.backgroundBlur);
+		this.writeValue('background-brightness', this.saved.backgroundBrightness);
+		this.writeRadio('skin', this.saved.skin);
+		this.writeValue('skin-online', this.saved.skinOnline);
+		this.writeRadio('fx', this.saved.fx);
+		this.writeValue('fx-online', this.saved.fxOnline);
+		this.writeValue('hud-top-center', this.saved.hudTopCenter);
+		this.writeValue('hud-top-left', this.saved.hudTopLeft);
+		this.writeValue('hud-top-right', this.saved.hudTopRight);
+
+		this.writeRadio('se', this.saved.se);
+		this.writeValue('se-online', this.saved.seOnline);
+		this.writeValue('volume-se', this.saved.volumeSe);
+		this.writeValue('volume-music', this.saved.volumeMusic);
+		this.writeCheckbox('se-with-music', this.saved.seWithMusic);
+		this.writeValue('delay', this.saved.delay * 1000);
+
+		this.writeCheckbox('autoplay', this.saved.autoplay);
+		this.writeValue('game-speed', this.saved.gameSpeed);
+		this.writeValue('start', this.saved.start);
+		this.writeValue('end', this.saved.end);
+
+		this.writeValue('width', this.saved.width);
+		this.writeValue('height', this.saved.height);
+		this.writeCheckbox('fullscreen', this.saved.fullscreen);
+		this.writeCheckbox('debug', this.saved.debug);
+
+		this.writeSavedPluginSettings();
+	},
+
+	writeSavedPluginSettings() {
+		for (const key in this.saved.plugin) {
+			Sunniesnow.Plugin.addDomElement(key);
+			this.writeRadio(`plugin-${key}`, this.saved.plugin[key]);
+			this.writeValue(`plugin-${key}-online`, this.saved.pluginOnline[key]);
+		}
+	},
+
+	readUploadSettings() {
+		if (!this.saved) {
+			return;
+		}
+		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
+			if (!this.manual[key] && this.saved[key]) {
+				Sunniesnow.game.settings[key] = Sunniesnow.Utils.base64ToBlobSync(this.saved[key]);
+			}
+		}
+		for (const key in this.saved.plugin) {
+			if (!this.manual[`pluginUpload${key}`] && this.saved.pluginUpload[key]) {
+				Sunniesnow.game.settings.pluginUpload[key] = Sunniesnow.Utils.base64ToBlobSync(this.saved.pluginUpload[key]);
+			}
+		}
+	},
+
+	async saveSettings() {
+		this.saved = Object.assign({}, Sunniesnow.game.settings);
+		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
+			if (this.saved[key]) {
+				console.log('saving', key);
+				this.saved[key] = await Sunniesnow.Utils.blobToBase64(this.saved[key]);
+			}
+		}
+		for (const key in this.saved.plugin) {
+			if (this.saved.pluginUpload[key]) {
+				this.saved.pluginUpload[key] = await Sunniesnow.Utils.blobToBase64(this.saved.pluginUpload[key]);
+			}
+		}
+		localStorage.setItem('settings', JSON.stringify(this.saved));
+	},
+
+	markManual(element) {
+		this.manual[Sunniesnow.Utils.slugToCamel(element.id)] = true;
 	},
 
 	readCheckbox(id) {
@@ -281,6 +387,24 @@ Sunniesnow.Loader = {
 
 	readFile(id) {
 		return document.getElementById(id).files[0];
+	},
+
+	writeCheckbox(id, value) {
+		document.getElementById(id).checked = value;
+	},
+
+	writeRadio(name, value) {
+		const radios = document.getElementsByName(name);
+		for (const radio of radios) {
+			if (radio.value === value) {
+				radio.checked = true;
+				return;
+			}
+		}
+	},
+
+	writeValue(id, value) {
+		document.getElementById(id).value = value;
 	},
 
 	loadModules() {
@@ -411,16 +535,22 @@ Sunniesnow.Loader = {
 			this.loadChart().then(() => {
 				Sunniesnow.game.settings.musicSelect = Object.keys(this.loaded.chart.music)[0];
 				Sunniesnow.game.settings.chartSelect = Object.keys(this.loaded.chart.charts)[0];
+				this.saveSettings();
 				Sunniesnow.game.initLevel();
 				this.loadingChartComplete = true;
 				this.loadPlugins();
 			}, reason => Sunniesnow.Utils.error(`Failed to load chart: ${reason}`, reason));
 		} else {
+			this.saveSettings();
 			Sunniesnow.game.initLevel();
 			this.loadingChartComplete = true;
 			this.loadPlugins();
 		}
 		// loadModules() will be called in updateLoadingPlugins().
+	},
+
+	clearLocalStorage() {
+		localStorage.removeItem('settings');
 	},
 
 	updateLoading() {

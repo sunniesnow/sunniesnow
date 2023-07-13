@@ -87,7 +87,7 @@ Sunniesnow.Plugin = class Plugin {
 				<div>
 					<input type="radio" id="plugin-${n}-upload-radio" name="plugin-${n}">
 					<label for="plugin-${n}-upload-radio">Upload:</label>
-					<input type="file" id="plugin-${n}-upload" accept=".ssp">
+					<input type="file" id="plugin-${n}-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
 				</div>
 
 				<div>
@@ -104,6 +104,12 @@ Sunniesnow.Plugin = class Plugin {
 		const listElement = document.getElementById('plugin-list');
 		listElement.innerHTML += this.html(this.additionalTotal);
 		this.additionalTotal++;
+	}
+
+	static addDomElement(n) {
+		const listElement = document.getElementById('plugin-list');
+		listElement.innerHTML += this.html(n);
+		this.additionalTotal = Math.max(this.additionalTotal || 0, n) + 1;
 	}
 
 	static deleteDomElement(n) {

@@ -1,6 +1,7 @@
 Sunniesnow.Preprocess = {
 	run() {
 		this.setDeviceDependentDefaults();
+		Sunniesnow.Loader.writeSavedSettings();
 		this.readUrlParams();
 	},
 

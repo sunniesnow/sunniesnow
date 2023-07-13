@@ -198,5 +198,40 @@ Sunniesnow.Utils = {
 
 	toPercentage(number) {
 		return (number * 100).toFixed(2) + '%';
+	},
+
+	async blobToBase64(blob) {
+		const reader = new FileReader();
+		reader.readAsDataURL(blob);
+		return new Promise((resolve, reject) => reader.addEventListener(
+			'loadend',
+			e => resolve(reader.result)
+		));
+	},
+
+	blobToBase64Sync(blob) {
+		return new FileReaderSync().readAsDataURL(blob);
+	},
+
+	async base64ToBlob(base64) {
+		return await (await fetch(base64)).blob();
+	},
+
+	base64ToBlobSync(base64) {
+		const type = base64.substring('data:'.length, base64.indexOf(';'));
+		const bytesString = atob(base64.substring(base64.indexOf(',') + 1));
+		const bytes = new Uint8Array(bytesString.length);
+		for (let i = 0; i < bytesString.length; i++) {
+			bytes[i] = bytesString.charCodeAt(i);
+		}
+		return new Blob([bytes], {type});
+	},
+
+	slugToCamel(string) {
+		return string.replace(/-([a-z\d])/g, (_, c) => c.toUpperCase());
+	},
+
+	camelToSlug(string) {
+		return string.replace(/[A-Z\d]/g, c => '-' + c.toLowerCase());
 	}
 };
