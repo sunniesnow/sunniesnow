@@ -23,7 +23,10 @@ Sunniesnow.LevelNote = class LevelNote {
 	static ONLY_ONE_PER_TOUCH = true;
 
 	// x, y are in chart coordinates
-	isTappableAt(x, y) {
+	isTappableAt(touch, x, y) {
+		if (touch.wholeScreen) {
+			return true;
+		}
 		const r = Sunniesnow.Config.radius * Sunniesnow.game.settings.noteHitSize;
 		return Math.abs(this.event.x - x) < r && Math.abs(this.event.y - y) < r;
 	}

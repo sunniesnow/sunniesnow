@@ -231,12 +231,12 @@ Sunniesnow.Level = class Level {
 			const newDistance = Sunniesnow.Utils.distance(x, y, event.x, event.y);
 			let condition = (!note.constructor.ONLY_ONE_PER_TOUCH || newDistance < distance) && newNote.constructor.ONLY_ONE_PER_TOUCH;
 			condition ||= !note.constructor.ONLY_ONE_PER_TOUCH && !newNote.constructor.ONLY_ONE_PER_TOUCH && newDistance < distance;
-			if (condition && newNote.isTappableAt(x, y)) {
+			if (condition && newNote.isTappableAt(touch, x, y)) {
 				note = newNote;
 				distance = newDistance;
 			}
 		}
-		if (note.isTappableAt(x, y)) {
+		if (note.isTappableAt(touch, x, y)) {
 			note.hit(touch, time);
 			return note;
 		} else {
@@ -274,7 +274,7 @@ Sunniesnow.Level = class Level {
 			if (time < note.time + this.judgementWindows.drag.bad[0]) {
 				break;
 			}
-			if (note.isTappableAt(x, y)) {
+			if (note.isTappableAt(touch, x, y)) {
 				note.swipe(touch);
 			}
 		}
@@ -286,7 +286,7 @@ Sunniesnow.Level = class Level {
 			if (time < note.endTime + this.judgementWindows.drag.bad[0]) {
 				break;
 			}
-			if (note.isTappableAt(x, y)) {
+			if (note.isTappableAt(touch, x, y)) {
 				note.swipe(touch);
 			}
 		}

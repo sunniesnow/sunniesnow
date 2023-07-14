@@ -20,6 +20,7 @@ Sunniesnow.Game = class Game {
 		Sunniesnow.Loader.load();
 		this.initCanvas();
 		this.initPixiApp();
+		this.addWindowListeners();
 		this.scene = new Sunniesnow.SceneGame();
 	}
 
@@ -34,15 +35,29 @@ Sunniesnow.Game = class Game {
 	initCanvas() {
 		this.canvas = document.getElementById('main-canvas');
 		this.canvas.addEventListener('contextmenu', event => {
-			if (!this.canvas.canHaveContextMenu) {
+			if (!Sunniesnow.Music.pausing && !Sunniesnow.game.level.finished) {
 				event.preventDefault();
 			}
 		});
 		this.canvas.addEventListener('fullscreenchange', event => {
 			this.shouldFullscreen = !!document.fullscreenElement;
-		})
-		this.canvas.canHaveContextMenu = true;
+		});
 	}
+
+	addWindowListeners() {
+		this.blurListener = event => {
+			Sunniesnow.TouchManager.clear();
+			if (!Sunniesnow.game.level.finished) {
+				Sunniesnow.Music.pause();
+			}
+		};
+		window.addEventListener('blur', this.blurListener);
+	}
+
+	removeWindowListeners() {
+		window.removeEventListener('blur', this.blurListener);
+	}
+
 
 	initPixiApp() {
 		this.app = new PIXI.Application({
@@ -71,6 +86,11 @@ Sunniesnow.Game = class Game {
 		this.setFullscreen(!this.shouldFullscreen);
 	}
 
+	updateModules() {
+		Sunniesnow.Music.update();
+		Sunniesnow.TouchManager.update();
+	}
+
 	update(delta) {
 		if (this.scene !== this.lastScene) {
 			if (this.lastScene) {
@@ -83,6 +103,7 @@ Sunniesnow.Game = class Game {
 			}
 			this.lastScene = this.scene;
 		}
+		this.updateModules();
 		if (this.scene) {
 			this.scene.update(delta);
 		} else {
@@ -107,7 +128,8 @@ Sunniesnow.Game = class Game {
 		}
 		this.setFullscreen(false);
 		Sunniesnow.Audio.stopAll();
-		Sunniesnow.TouchManager.clearListeners();
+		Sunniesnow.TouchManager.terminate();
+		this.removeWindowListeners();
 		if (this.app) {
 			this.app.stop();
 		}

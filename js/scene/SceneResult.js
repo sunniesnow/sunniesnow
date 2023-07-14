@@ -7,39 +7,8 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 
 	start() {
 		super.start();
-		this.addListeners();
 		this.populateLegacyUis();
 		this.populateUiAndButtons();
-		Sunniesnow.game.canvas.canHaveContextMenu = true;
-	}
-
-	addListeners() {
-		this.touchStartListener = event => {
-			event.preventDefault();
-			for (const touch of event.changedTouches) {
-				if (this.pauseButton?.triggerIfContainsPage(touch.pageX, touch.pageY)) {
-					return;
-				}
-				if (this.retryButton.triggerIfContainsPage(touch.pageX, touch.pageY)) {
-					return;
-				}
-			}
-		}
-		Sunniesnow.game.canvas.addEventListener('touchstart', this.touchStartListener);
-		this.mouseDownListener = event => {
-			event.preventDefault();
-			if (this.pauseButton?.triggerIfContainsPage(event.pageX, event.pageY)) {
-				return;
-			}
-			this.retryButton.triggerIfContainsPage(event.pageX, event.pageY);
-		}
-		Sunniesnow.game.canvas.addEventListener('mousedown', this.mouseDownListener);
-		this.keyDownListener = event => {
-			if (event.key === '`') {
-				this.togglePausing();
-			}
-		}
-		window.addEventListener('keydown', this.keyDownListener);
 	}
 
 	populateLegacyUis() {
@@ -88,13 +57,8 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 
 	terminate() {
 		super.terminate();
-		this.removeListeners();
-	}
-
-	removeListeners() {
-		Sunniesnow.game.canvas.removeEventListener('touchstart', this.touchStartListener);
-		Sunniesnow.game.canvas.removeEventListener('mousedown', this.mouseDownListener);
-		window.removeEventListener('keydown', this.keyDownListener);
+		this.pauseButton?.destroy({children: true});
+		this.retryButton.destroy({children: true});
 	}
 
 	gotoGame() {

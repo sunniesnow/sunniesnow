@@ -33,6 +33,13 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		return Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows].flick.bad[1];
 	}
 
+	hit(touch, time) {
+		super.hit(touch, time);
+		if (touch.wholeScreen) {
+			this.release(time);
+		}
+	}
+
 	updateHolding(time) {
 		super.updateHolding(time);
 		if (!this.touch) {
@@ -53,13 +60,13 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		}
 	}
 
-	release(relativeTime) {
+	release(time) {
 		if (!this.holding) {
 			return;
 		}
-		if (this.touch && this.touch.totalDisplacement() < this.minFlickDistance()) { // not enough distance
+		if (this.touch && !this.touch.wholeScreen && this.touch.totalDisplacement() < this.minFlickDistance()) { // not enough distance
 			this.badFlick = true;
 		}
-		super.release(relativeTime);
+		super.release(time);
 	}
 };

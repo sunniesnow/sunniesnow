@@ -12,7 +12,7 @@ Sunniesnow.Button = class Button extends PIXI.Container {
 
 	addTouchListener(priority) {
 		this.startListener = this.onTouchStart.bind(this);
-		Sunniesnow.TouchManager.addStartListener(this.startListener);
+		Sunniesnow.TouchManager.addStartListener(this.startListener, priority);
 	}
 
 	onTouchStart(touch) {

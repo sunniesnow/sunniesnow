@@ -449,7 +449,6 @@ Sunniesnow.Loader = {
 		this.saved = Object.assign({}, Sunniesnow.game.settings);
 		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
 			if (this.saved[key]) {
-				console.log('saving', key);
 				this.saved[key] = await Sunniesnow.Utils.blobToBase64(this.saved[key]);
 			}
 		}
@@ -520,6 +519,7 @@ Sunniesnow.Loader = {
 		this.loadingModulesProgress = 0;
 		this.targetLoadingModulesProgress = 0;
 		this.loadAudio();
+		this.loadTouch();
 		this.loadUiComponents();
 		this.loadUiPause();
 		this.loadButtons();
@@ -535,6 +535,10 @@ Sunniesnow.Loader = {
 		this.loadModule('SeHold');
 		this.loadModule('SeFlick');
 		this.loadModule('SeDrag');
+	},
+
+	loadTouch() {
+		this.loadModule('TouchManager');
 	},
 
 	loadButtons() {

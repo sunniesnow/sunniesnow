@@ -221,7 +221,7 @@ Sunniesnow.TouchManager = {
 
 	addListener(listenerList, listener, priority) {
 		listenerList.unshift([priority, listener]);
-		listenerList.sort((a, b) => b[0] - a[0]);
+		listenerList.sort(([p1, l1], [p2, l2]) => p2 - p1);
 	},
 
 	removeStartListener(listener) {
@@ -244,5 +244,91 @@ Sunniesnow.TouchManager = {
 		} else {
 			return null;
 		}
+	},
+
+	addDomTouchListeners() {
+		this.touchStartListener = event => {
+			event.preventDefault();
+			this.touchStart(event);
+		}
+		this.touchMoveListener = event => {
+			event.preventDefault();
+			this.touchMove(event);
+		}
+		this.touchEndListener = event => {
+			event.preventDefault();
+			this.touchEnd(event);
+		}
+		Sunniesnow.game.canvas.addEventListener('touchstart', this.touchStartListener);
+		Sunniesnow.game.canvas.addEventListener('touchmove', this.touchMoveListener);
+		Sunniesnow.game.canvas.addEventListener('touchend', this.touchEndListener);
+	},
+
+	removeDomTouchListeners() {
+		Sunniesnow.game.canvas.removeEventListener('touchstart', this.touchStartListener);
+		Sunniesnow.game.canvas.removeEventListener('touchmove', this.touchMoveListener);
+		Sunniesnow.game.canvas.removeEventListener('touchend', this.touchEndListener);
+	},
+
+	preventKeyEventIfShould(event) {
+		if (!/^F\d+$/.test(event.key) && document.activeElement.contains(Sunniesnow.game.canvas)) {
+			event.preventDefault();
+		}
+	},
+
+	addDomKeyListeners() {
+		this.keyDownListener = event => {
+			this.preventKeyEventIfShould(event);
+			this.keyDown(event);
+		}
+		this.keyUpListener = event => {
+			this.preventKeyEventIfShould(event);
+			this.keyUp(event);
+		}
+		document.addEventListener('keydown', this.keyDownListener);
+		document.addEventListener('keyup', this.keyUpListener);
+	},
+
+	removeDomKeyListeners() {
+		document.removeEventListener('keydown', this.keyDownListener);
+		document.removeEventListener('keyup', this.keyUpListener);
+	},
+
+	addDomMouseListeners() {
+		this.mouseDownListener = event => {
+			event.preventDefault();
+			this.mouseDown(event);
+		}
+		this.mouseMoveListener = event => {
+			event.preventDefault();
+			this.mouseMove(event);
+		}
+		this.mouseUpListener = event => {
+			event.preventDefault();
+			this.mouseUp(event);
+		}
+		Sunniesnow.game.canvas.addEventListener('mousedown', this.mouseDownListener);
+		Sunniesnow.game.canvas.addEventListener('mousemove', this.mouseMoveListener);
+		Sunniesnow.game.canvas.addEventListener('mouseup', this.mouseUpListener);
+	},
+
+	removeDomMouseListeners() {
+		Sunniesnow.game.canvas.removeEventListener('mousedown', this.mouseDownListener);
+		Sunniesnow.game.canvas.removeEventListener('mousemove', this.mouseMoveListener);
+		Sunniesnow.game.canvas.removeEventListener('mouseup', this.mouseUpListener);
+	},
+
+	async load() {
+		this.addDomTouchListeners();
+		this.addDomKeyListeners();
+		this.addDomMouseListeners();
+	},
+
+	terminate() {
+		this.removeDomTouchListeners();
+		this.removeDomKeyListeners();
+		this.removeDomMouseListeners();
+		this.clearListeners();
 	}
+
 };

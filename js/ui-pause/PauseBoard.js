@@ -26,4 +26,8 @@ Sunniesnow.PauseBoard = class PauseBoard extends PIXI.Container {
 		return false;
 	}
 
+	update(delta) {
+		this.visible = Sunniesnow.Music.pausing;
+	}
+
 };
