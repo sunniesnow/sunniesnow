@@ -1,12 +1,28 @@
 Sunniesnow.Touch = class Touch {
-	constructor(id, type, time, x, y) {
+	constructor(id, type, time, pageX, pageY, options = {}) {
 		this.id = id;
 		this.type = type;
-		this.history = [{time, x, y}];
+		switch (type) {
+			case 'mouse':
+				this.wholeScreen = Sunniesnow.game.settings.mouseWholeScreen;
+				this.button = options.button;
+				break;
+			case 'key':
+				this.wholeScreen = Sunniesnow.game.settings.keyboardWholeScreen;
+				this.key = options.key;
+				break;
+			case 'touch':
+				this.wholeScreen = Sunniesnow.game.settings.touchscreenWholeScreen;
+				this.identifier = options.identifier;
+				break;
+		}
+		const [x, y] = Sunniesnow.Config.pageMapping(pageX, pageY);
+		this.history = [{time, x, y, pageX, pageY}];
 	}
 
-	move(time, x, y) {
-		this.history.push({time, x, y});
+	move(time, pageX, pageY) {
+		const [x, y] = Sunniesnow.Config.pageMapping(pageX, pageY);
+		this.history.push({time, x, y, pageX, pageY});
 	}
 
 	start() {
@@ -18,8 +34,8 @@ Sunniesnow.Touch = class Touch {
 	}
 
 	trivialMove() {
-		const {x, y} = this.end();
-		this.move(Sunniesnow.Music.currentTime, x, y);
+		const {pageX, pageY} = this.end();
+		this.move(Sunniesnow.Music.currentTime, pageX, pageY);
 	}
 
 	timeElapsed() {
@@ -34,15 +50,15 @@ Sunniesnow.Touch = class Touch {
 		return Math.hypot(...this.totalMovement());
 	}
 
-	static key(keyCode, time, x, y) {
-		return new this(Sunniesnow.TouchManager.keyId(keyCode), 'key', time, x, y);
+	static key(key, time, x, y) {
+		return new this(Sunniesnow.TouchManager.keyId(key), 'key', time, x, y, {key});
 	}
 
 	static mouseButton(button, time, x, y) {
-		return new this(Sunniesnow.TouchManager.mouseButtonId(button), 'mouse', time, x, y);
+		return new this(Sunniesnow.TouchManager.mouseButtonId(button), 'mouse', time, x, y, {button});
 	}
 
 	static domTouch(identifier, time, x, y) {
-		return new this(Sunniesnow.TouchManager.touchId(identifier), 'touch', time, x, y);
+		return new this(Sunniesnow.TouchManager.touchId(identifier), 'touch', time, x, y, {identifier});
 	}
 };

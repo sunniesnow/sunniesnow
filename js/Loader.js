@@ -33,6 +33,22 @@ Sunniesnow.Loader = {
 	// We maintain this because we cannot write file to <input type="file">.
 	// keys: elementId; values: boolean
 	manual: {},
+
+	chartLoadListeners: [],
+
+	triggerLoadChart() {
+		if (this.loadingChart) {
+			return;
+		}
+		this.loadingChart = true;
+		this.loadChart().then(() => {
+			this.loadingChart = false;
+			this.onChartLoad();
+		}, reason => {
+			this.loadingChart = false;
+			Sunniesnow.Utils.error('Failed to load chart: ' + reason, reason);
+		});
+	},
 	
 	async loadChart() {
 		let file;
@@ -95,6 +111,16 @@ Sunniesnow.Loader = {
 				Sunniesnow.Utils.warn(`Cannot determine type of ${filename}`)
 			}
 		}
+	},
+
+	onChartLoad() {
+		while (this.chartLoadListeners.length) {
+			this.chartLoadListeners.shift()();
+		}
+	},
+
+	addChartLoadListener(listener) {
+		this.chartLoadListeners.push(listener);
 	},
 	
 	clearChart() {
@@ -283,8 +309,25 @@ Sunniesnow.Loader = {
 			// game settings
 			autoplay: this.readCheckbox('autoplay'),
 			gameSpeed: this.readValue('game-speed'),
+			horizontalFlip: this.readCheckbox('horizontal-flip'),
+			verticalFlip: this.readCheckbox('vertical-flip'),
 			start: this.readValue('start'),
 			end: this.readValue('end'),
+
+			// control settings
+			enableKeyboard: this.readCheckbox('enable-keyboard'),
+			keyboardWholeScreen: this.readCheckbox('keyboard-whole-screen'),
+			excludeKeys: Sunniesnow.Utils.stringToKeyList(this.readValue('exclude-keys')),
+			pauseKeys: Sunniesnow.Utils.stringToKeyList(this.readValue('pause-keys')),
+			keyboardPause: this.readCheckbox('keyboard-pause'),
+			enableMouse: this.readCheckbox('enable-mouse'),
+			mouseWholeScreen: this.readCheckbox('mouse-whole-screen'),
+			excludeButtons: Sunniesnow.Utils.stringToButtonList(this.readValue('exclude-buttons')),
+			pauseButtons: Sunniesnow.Utils.stringToButtonList(this.readValue('pause-buttons')),
+			mousePause: this.readCheckbox('mouse-pause'),
+			enableTouchscreen: this.readCheckbox('enable-touchscreen'),
+			touchscreenWholeScreen: this.readCheckbox('touchscreen-whole-screen'),
+			touchPause: this.readCheckbox('touch-pause'),
 
 			// system settings
 			width: this.readValue('width'),
@@ -351,8 +394,24 @@ Sunniesnow.Loader = {
 
 		this.writeCheckbox('autoplay', settings.autoplay);
 		this.writeValue('game-speed', settings.gameSpeed);
+		this.writeCheckbox('horizontal-flip', settings.horizontalFlip);
+		this.writeCheckbox('vertical-flip', settings.verticalFlip);
 		this.writeValue('start', settings.start);
 		this.writeValue('end', settings.end);
+
+		this.writeCheckbox('enable-keyboard', settings.enableKeyboard);
+		this.writeCheckbox('keyboard-whole-screen', settings.keyboardWholeScreen);
+		this.writeValue('exclude-keys', Sunniesnow.Utils.keyListToString(settings.excludeKeys));
+		this.writeValue('pause-keys', Sunniesnow.Utils.keyListToString(settings.pauseKeys));
+		this.writeCheckbox('keyboard-pause', settings.keyboardPause);
+		this.writeCheckbox('enable-mouse', settings.enableMouse);
+		this.writeCheckbox('mouse-whole-screen', settings.mouseWholeScreen);
+		this.writeValue('exclude-buttons', Sunniesnow.Utils.buttonListToString(settings.excludeButtons));
+		this.writeValue('pause-buttons', Sunniesnow.Utils.buttonListToString(settings.pauseButtons));
+		this.writeCheckbox('mouse-pause', settings.mousePause);
+		this.writeCheckbox('enable-touchscreen', settings.enableTouchscreen);
+		this.writeCheckbox('touchscreen-whole-screen', settings.touchscreenWholeScreen);
+		this.writeCheckbox('touch-pause', settings.touchPause);
 
 		this.writeValue('width', settings.width);
 		this.writeValue('height', settings.height);
@@ -441,7 +500,10 @@ Sunniesnow.Loader = {
 		const radios = document.getElementsByName(name);
 		for (const radio of radios) {
 			if (radio.value === value) {
-				radio.checked = true;
+				if (!radio.checked) {
+					radio.checked = true;
+					radio.dispatchEvent(new Event('change'));
+				}
 				return;
 			}
 		}

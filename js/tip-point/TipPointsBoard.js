@@ -9,7 +9,7 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 		this.tipPoints ||= {};
 		for (const id in this.tipPoints) {
 			const tipPoint = this.tipPoints[id];
-			tipPoint.destroy({ children: true });
+			tipPoint.destroy({children: true});
 			this.removeChild(tipPoint);
 			delete this.tipPoints[id];
 		}

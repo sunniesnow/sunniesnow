@@ -11,7 +11,7 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 		this.uiEvents ||= [];
 		while (this.uiEvents.length > 0) {
 			const uiEvent = this.uiEvents.shift();
-			uiEvent.destroy({ children: true });
+			uiEvent.destroy({children: true});
 			this.removeChild(uiEvent);
 		}
 	}
@@ -30,7 +30,7 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 		for (const uiEvent of this.uiEvents) {
 			uiEvent.update(time - uiEvent.event.time);
 			if (uiEvent.state === 'finished') {
-				uiEvent.destroy({ children: true });
+				uiEvent.destroy({children: true});
 				this.removeChild(uiEvent);
 				this.uiEvents.splice(this.uiEvents.indexOf(uiEvent), 1);
 			}
@@ -41,7 +41,7 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 			this.addChild(this.uiEvents[index]);
 			const deprecated = this.uiEvents.splice(0, index);
 			for (const uiEvent of deprecated) {
-				uiEvent.destroy({ children: true });
+				uiEvent.destroy({children: true});
 				this.removeChild(uiEvent);
 			}
 		} else if (index === 0 && this.children.indexOf(this.uiEvents[0]) === -1) {

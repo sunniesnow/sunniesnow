@@ -18,7 +18,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.addChild(this.topLeftHud = new Sunniesnow.TopLeftHud());
 		this.addChild(this.topRightHud = new Sunniesnow.TopRightHud());
 		this.addChild(this.topCenterHud = new Sunniesnow.TopCenterHud());
-		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause(() => this.togglePausing()));
+		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause());
 		this.addChild(this.fxBoard = new Sunniesnow.FxBoard());
 		this.addChild(this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard());
 		this.addChild(this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.debugBoard));
@@ -40,6 +40,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	update(delta) {
 		super.update(delta);
 		this.updateAudio();
+		this.updatePause();
 		this.updateUiComponents(delta);
 		Sunniesnow.TouchManager.update();
 		if (!Sunniesnow.Music.pausing) {
@@ -91,28 +92,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.removeListeners();
 	}
 
-	togglePausing() {
-		if (Sunniesnow.Music.pausing) {
-			this.resume();
-		} else {
-			this.pause();
-		}
-	}
-
-	pause() {
-		if (!Sunniesnow.Music.pause()) {
-			return;
-		}
-		this.pauseBoard.visible = true;
-		Sunniesnow.game.canvas.canHaveContextMenu = true;
-	}
-
-	resume() {
-		if (!Sunniesnow.Music.resume()) {
-			return;
-		}
-		this.pauseBoard.visible = false;
-		Sunniesnow.game.canvas.canHaveContextMenu = false;
+	updatePause() {
+		this.pauseBoard.visible = Sunniesnow.Music.pausing;
+		Sunniesnow.game.canvas.canHaveContextMenu = Sunniesnow.Music.pausing;
 	}
 
 	retry() {
@@ -167,9 +149,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 				if (this.pauseBoard.triggerIfContainsPage(touch.pageX, touch.pageY)) {
 					return;
 				}
-				if (this.pauseButton.triggerIfContainsPage(touch.pageX, touch.pageY)) {
-					return;
-				}
 			}
 			Sunniesnow.TouchManager.touchStart(event);
 		};
@@ -195,10 +174,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	addKeyListeners() {
 		this.keydownListener = event => {
 			this.preventKeyEventIfShould(event);
-			if (event.key === '`') {
-				this.togglePausing();
-				return;
-			}
 			Sunniesnow.TouchManager.keyDown(event);
 		};
 		this.keyupListener = event => {
@@ -212,12 +187,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	addMouseListeners() {
 		this.mouseDownListener = event => {
 			event.preventDefault();
-			if (this.pauseBoard.triggerIfContainsPage(event.pageX, event.pageY)) {
-				return;
-			}
-			if (this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
-				return;
-			}
 			Sunniesnow.TouchManager.mouseDown(event);
 		};
 		this.mouseMoveListener = event => {
@@ -236,7 +205,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	addFocusListeners() {
 		this.blurListener = event => {
 			Sunniesnow.TouchManager.clear();
-			this.pause();
+			Sunniesnow.Music.pause();
 		};
 		window.addEventListener('blur', this.blurListener);
 	}

@@ -1,4 +1,4 @@
-Sunniesnow.ButtonPause = class ButtonPause extends Sunniesnow.Button {
+Sunniesnow.ButtonPause = class ButtonPause extends Sunniesnow.ButtonPauseBase {
 	static async load() {
 		this.geometry = this.createGeometry();
 	}
@@ -18,6 +18,7 @@ Sunniesnow.ButtonPause = class ButtonPause extends Sunniesnow.Button {
 	}
 
 	populate() {
+		super.populate();
 		this.graphics = new PIXI.Graphics(this.constructor.geometry);
 		this.graphics.x = Sunniesnow.game.settings.width / 30;
 		this.graphics.y = Sunniesnow.game.settings.width / 30;

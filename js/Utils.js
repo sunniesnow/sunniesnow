@@ -12,6 +12,7 @@ Sunniesnow.Utils = {
 	error(msg, e) {
 		document.getElementById('errors').innerText += msg + '\n';
 		console.error(msg);
+		Sunniesnow.Loader.loadingComplete = true;
 		Sunniesnow.game.terminate();
 		if (e) {
 			throw(e);
@@ -251,5 +252,40 @@ Sunniesnow.Utils = {
 			}
 		}
 		return result;
+	},
+
+	stringToKeyList(string) {
+		const result = string.split(' ');
+		for (let i = 0; i < result.length; i++) {
+			if (result[i] === 'Spacebar') {
+				result[i] = ' ';
+			}
+		}
+		if (result.length === 1 && result[0] === '') {
+			result.splice(0, 1);
+		}
+		return result;
+	},
+
+	keyListToString(keyList) {
+		if (keyList === undefined) {
+			return undefined;
+		}
+		return keyList.map(key => key === ' ' ? 'Spacebar' : key).join(' ');
+	},
+
+	stringToButtonList(string) {
+		const result = string.split(' ');
+		if (result.length === 1 && result[0] === '') {
+			result.splice(0, 1);
+		}
+		return result;
+	},
+
+	buttonListToString(buttonList) {
+		if (buttonList === undefined) {
+			return undefined;
+		}
+		return buttonList.join(' ');
 	}
 };

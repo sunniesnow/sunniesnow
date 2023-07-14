@@ -10,7 +10,7 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 		this.uiEvents ||= [];
 		while (this.uiEvents.length > 0) {
 			const uiEvent = this.uiEvents.shift();
-			uiEvent.destroy({ children: true });
+			uiEvent.destroy({children: true});
 			this.removeChild(uiEvent);
 		}
 	}
@@ -31,7 +31,7 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 		for (const uiEvent of this.uiEvents) {
 			uiEvent.update(time - uiEvent.event.time);
 			if (uiEvent.state === 'finished') {
-				uiEvent.destroy({ children: true });
+				uiEvent.destroy({children: true});
 				this.removeChild(uiEvent);
 				this.uiEvents.splice(this.uiEvents.indexOf(uiEvent), 1);
 			}

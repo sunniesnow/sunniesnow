@@ -34,7 +34,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.noteBody = new PIXI.Graphics(Sunniesnow.UiFlick.geometry);
 		this.circle = new PIXI.Graphics(Sunniesnow.UiFlick.circleGeometry);
 		this.arrow = new PIXI.Graphics(Sunniesnow.UiFlick.arrowGeometry);
-		this.arrow.transform.rotation = -this.event.angle;
+		this.arrow.transform.rotation = Sunniesnow.Config.chartMappingAngle(this.event.angle);
 		this.text = this.createText();
 		this.addChild(this.circle);
 		this.note = new PIXI.Container();
@@ -83,7 +83,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.arrow.alpha = 1 - progress;
 		this.arrow.position.set(...Sunniesnow.Utils.polarToCartesian(
 			distance * (1 - (1-progress)**2),
-			-this.event.angle
+			-this.arrow.transform.rotation
 		));
 	}
 

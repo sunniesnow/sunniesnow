@@ -13,9 +13,9 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	addTouchListeners() {
-		Sunniesnow.TouchManager.addStartListener(this.touchStartListener = this.touchStart.bind(this))
-		Sunniesnow.TouchManager.addMoveListener(this.touchMoveListener = this.touchMove.bind(this));
-		Sunniesnow.TouchManager.addEndListener(this.touchEndListener = this.touchEnd.bind(this));
+		Sunniesnow.TouchManager.addStartListener(this.touchStartListener = this.touchStart.bind(this), 200)
+		Sunniesnow.TouchManager.addMoveListener(this.touchMoveListener = this.touchMove.bind(this), 200);
+		Sunniesnow.TouchManager.addEndListener(this.touchEndListener = this.touchEnd.bind(this), 200);
 	}
 
 	removeTouchListeners() {
@@ -78,7 +78,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	touchEnd(touch) {
 		const touchUi = this.touches[touch.id];
-		touchUi.destroy({ children: true });
+		touchUi.destroy({children: true});
 		this.removeChild(touchUi);
 		delete this.touches[touch.id];
 	}

@@ -292,6 +292,20 @@ head: head.html
 	</fieldset>
 
 	<fieldset>
+		<legend>Mirror</legend>
+
+		<div>
+			<input type="checkbox" id="horizontal-flip">
+			<label for="horizontal-flip">Horizontal flip</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="vertical-flip">
+			<label for="vertical-flip">Vertical flip</label>
+		</div>
+	</fieldset>
+
+	<fieldset>
 		<legend>Start and end</legend>
 
 		<div>
@@ -302,6 +316,87 @@ head: head.html
 		<div>
 			End:
 			<input type="number" id="end" min="0">s
+		</div>
+	</fieldset>
+</details>
+
+<details>
+	<summary>Control settings</summary>
+
+	<fieldset>
+		<legend>Keyboard</legend>
+
+		<div>
+			<input type="checkbox" id="enable-keyboard" checked>
+			<label for="enable-keyboard">Enable keyboard</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="keyboard-whole-screen">
+			<label for="keyboard-whole-screen">Keyboard keys have whole-screen judgement</label>
+		</div>
+
+		<div>
+			Exclude keys:
+			<input type="text" id="exclude-keys" value="Escape PrintScreen Alt Control Fn Meta F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12">
+		</div>
+
+		<div>
+			Pause keys:
+			<input type="text" id="pause-keys" value="`">
+		</div>
+
+		<div>
+			<input type="checkbox" id="keyboard-pause">
+			<label for="keyboard-pause">Keyboard can press pause button in-game</label>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Mouse</legend>
+
+		<div>
+			<input type="checkbox" id="enable-mouse" checked>
+			<label for="enable-mouse">Enable mouse buttons</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="mouse-whole-screen">
+			<label for="mouse-whole-screen">Mouse buttons have whole-screen judgement</label>
+		</div>
+
+		<div>
+			Exclude mouse buttons:
+			<input type="text" id="exclude-buttons" value="">
+		</div>
+		
+		<div>
+			Pause mouse buttons:
+			<input type="text" id="pause-buttons" value="">
+		</div>
+
+		<div>
+			<input type="checkbox" id="mouse-pause" checked>
+			<label for="mouse-pause">Mouse can click pause button in-game</label>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Touchscreen</legend>
+
+		<div>
+			<input type="checkbox" id="enable-touchscreen" checked>
+			<label for="enable-touchscreen">Enable touchscreen</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="touchscreen-whole-screen">
+			<label for="touchscreen-whole-screen">Touchscreen has whole-screen judgement</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="touch-pause" checked>
+			<label for="touch-pause">Can touch pause button in-game</label>
 		</div>
 	</fieldset>
 </details>

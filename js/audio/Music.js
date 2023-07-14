@@ -46,6 +46,14 @@ Sunniesnow.Music = {
 		return true;
 	},
 
+	togglePausing() {
+		if (this.pausing) {
+			this.resume();
+		} else {
+			this.pause();
+		}
+	},
+
 	stop() {
 		this.updateCurrentTime();
 		this.audio.stop();

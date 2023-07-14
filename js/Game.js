@@ -1,7 +1,14 @@
 Sunniesnow.Game = class Game {
 	static run() {
+		if (Sunniesnow.Loader.loadingChart) {
+			Sunniesnow.Loader.addChartLoadListener(() => this.run());
+			return;
+		}
 		Sunniesnow.Utils.clearWarningsAndErrors();
 		if (Sunniesnow.game) {
+			if (!Sunniesnow.Loader.loadingComplete) {
+				return;
+			}
 			Sunniesnow.game.terminate();
 		}
 		Sunniesnow.game = new this();
@@ -83,7 +90,10 @@ Sunniesnow.Game = class Game {
 		}
 		if (this.needsHandleFullscreen) {
 			if (this.shouldFullscreen && !document.fullscreenElement) {
-				this.app.view.requestFullscreen();
+				this.app.view.requestFullscreen().then(
+					null,
+					reason => Sunniesnow.Utils.warn('Failed to request fullscreen: ' + reason)
+				);
 			} else if (!this.shouldFullscreen && document.fullscreenElement) {
 				document.exitFullscreen();
 			}
@@ -97,6 +107,7 @@ Sunniesnow.Game = class Game {
 		}
 		this.setFullscreen(false);
 		Sunniesnow.Audio.stopAll();
+		Sunniesnow.TouchManager.clearListeners();
 		if (this.app) {
 			this.app.stop();
 		}

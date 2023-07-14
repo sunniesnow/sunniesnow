@@ -17,10 +17,10 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 		this.touchStartListener = event => {
 			event.preventDefault();
 			for (const touch of event.changedTouches) {
-				if (this.pauseButton.triggerIfContainsPage(touch.pageX, touch.pageY)) {
+				if (this.pauseButton?.triggerIfContainsPage(touch.pageX, touch.pageY)) {
 					return;
 				}
-				if (this.retryButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+				if (this.retryButton.triggerIfContainsPage(touch.pageX, touch.pageY)) {
 					return;
 				}
 			}
@@ -28,7 +28,7 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 		Sunniesnow.game.canvas.addEventListener('touchstart', this.touchStartListener);
 		this.mouseDownListener = event => {
 			event.preventDefault();
-			if (this.pauseButton.triggerIfContainsPage(event.pageX, event.pageY)) {
+			if (this.pauseButton?.triggerIfContainsPage(event.pageX, event.pageY)) {
 				return;
 			}
 			this.retryButton.triggerIfContainsPage(event.pageX, event.pageY);
@@ -79,8 +79,10 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 
 	updateUisAndButtons(delta) {
 		this.result.update(delta);
-		if (Sunniesnow.Music.finished) {
-			this.pauseButton.visible = false;
+		if (Sunniesnow.Music.finished && this.pauseButton) {
+			this.pauseButton.destroy({children: true});
+			this.removeChild(this.pauseButton);
+			this.pauseButton = null;
 		}
 	}
 

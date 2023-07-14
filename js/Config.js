@@ -38,6 +38,12 @@ Sunniesnow.Config = {
 
 	// Get coordinates on canvas by providing the coordinates in charts.
 	chartMapping(chartX, chartY) {
+		if (Sunniesnow.game.settings.horizontalFlip) {
+			chartX = -chartX;
+		}
+		if (Sunniesnow.game.settings.verticalFlip) {
+			chartY = -chartY;
+		}
 		const scale = this.scale();
 		const x = chartX * scale + Sunniesnow.game.settings.width / 2;
 		const y = -chartY * scale + Sunniesnow.game.settings.height / 2;
@@ -48,9 +54,25 @@ Sunniesnow.Config = {
 	pageMapping(pageX, pageY) {
 		const [canvasX, canvasY] = Sunniesnow.Utils.pageToCanvasCoordinates(pageX, pageY, Sunniesnow.game.canvas);
 		const scale = this.scale();
-		const chartX = (canvasX - Sunniesnow.game.settings.width / 2) / scale;
-		const chartY = -(canvasY - Sunniesnow.game.settings.height / 2) / scale;
+		let chartX = (canvasX - Sunniesnow.game.settings.width / 2) / scale;
+		let chartY = -(canvasY - Sunniesnow.game.settings.height / 2) / scale;
+		if (Sunniesnow.game.settings.horizontalFlip) {
+			chartX = -chartX;
+		}
+		if (Sunniesnow.game.settings.verticalFlip) {
+			chartY = -chartY;
+		}
 		return [chartX, chartY];
+	},
+
+	chartMappingAngle(angle) {
+		if (!Sunniesnow.game.settings.verticalFlip) {
+			angle = -angle;
+		}
+		if (Sunniesnow.game.settings.horizontalFlip) {
+			angle = Math.PI - angle;
+		}
+		return angle;
 	},
 
 	resumePreperationTime: 1,

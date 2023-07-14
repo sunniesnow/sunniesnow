@@ -1,7 +1,7 @@
 Sunniesnow.Hold = class Hold extends Sunniesnow.Note {
 	static PROPERTIES = {
 		required: ['x', 'y', 'duration'],
-		optional: { tipPoint: null, text: '' }
+		optional: {tipPoint: null, text: ''}
 	}
 
 	static UI_CLASS = 'UiHold'
