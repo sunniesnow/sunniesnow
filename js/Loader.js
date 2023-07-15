@@ -344,9 +344,11 @@ Sunniesnow.Loader = {
 		if (!this.saved) {
 			return;
 		}
-		for (const key in ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
+		const settings = Object.assign({}, this.saved);
+		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
 			if (this.saved[key]) {
 				this.saved[key] = await Sunniesnow.Utils.base64ToBlob(this.saved[key]);
+				delete settings[key];
 			}
 		}
 		for (const key in this.saved.plugin) {
@@ -354,78 +356,86 @@ Sunniesnow.Loader = {
 				this.saved.pluginUpload[key] = await Sunniesnow.Utils.base64ToBlob(this.saved.pluginUpload[key]);
 			}
 		}
-		await this.writeSettings(this.saved);
+		delete settings.pluginUpload;
+		await this.writeSettings(settings);
 	},
 
 	async writeSettings(settings) {
-		this.writeRadio('level-file', settings.levelFile);
-		this.writeValue('level-file-online', settings.levelFileOnline);
+		const d = property => {
+			const result = settings[property];
+			delete settings[property];
+			return result;
+		}
+		this.writeRadio('level-file', d('levelFile'));
+		this.writeValue('level-file-online', d('levelFileOnline'));
 
 		await this.loadChart();
 
-		this.writeValue('music-select', settings.musicSelect);
-		this.writeValue('chart-select', settings.chartSelect);
+		this.writeValue('music-select', d('musicSelect'));
+		this.writeValue('chart-select', d('chartSelect'));
 
-		this.writeRadio('judgement-windows', settings.judgementWindows);
-		this.writeValue('note-hit-size', settings.noteHitSize);
-		this.writeValue('offset', settings.offset * 1000);
+		this.writeRadio('judgement-windows', d('judgementWindows'));
+		this.writeValue('note-hit-size', d('noteHitSize'));
+		this.writeValue('offset', d('offset') * 1000);
 
-		this.writeValue('speed', settings.speed);
-		this.writeValue('note-size', settings.noteSize);
-		this.writeRadio('background', settings.background);
-		this.writeValue('background-online', settings.backgroundOnline);
-		this.writeValue('background-from-level', settings.backgroundFromLevel);
-		this.writeValue('background-blur', settings.backgroundBlur);
-		this.writeValue('background-brightness', settings.backgroundBrightness);
-		this.writeRadio('skin', settings.skin);
-		this.writeValue('skin-online', settings.skinOnline);
-		this.writeRadio('fx', settings.fx);
-		this.writeValue('fx-online', settings.fxOnline);
-		this.writeValue('hud-top-center', settings.hudTopCenter);
-		this.writeValue('hud-top-left', settings.hudTopLeft);
-		this.writeValue('hud-top-right', settings.hudTopRight);
+		this.writeValue('speed', d('speed'));
+		this.writeValue('note-size', d('noteSize'));
+		this.writeRadio('background', d('background'));
+		this.writeValue('background-online', d('backgroundOnline'));
+		this.writeValue('background-from-level', d('backgroundFromLevel'));
+		this.writeValue('background-blur', d('backgroundBlur'));
+		this.writeValue('background-brightness', d('backgroundBrightness'));
+		this.writeRadio('skin', d('skin'));
+		this.writeValue('skin-online', d('skinOnline'));
+		this.writeRadio('fx', d('fx'));
+		this.writeValue('fx-online', d('fxOnline'));
+		this.writeValue('hud-top-center', d('hudTopCenter'));
+		this.writeValue('hud-top-left', d('hudTopLeft'));
+		this.writeValue('hud-top-right', d('hudTopRight'));
 
-		this.writeRadio('se', settings.se);
-		this.writeValue('se-online', settings.seOnline);
-		this.writeValue('volume-se', settings.volumeSe);
-		this.writeValue('volume-music', settings.volumeMusic);
-		this.writeCheckbox('se-with-music', settings.seWithMusic);
-		this.writeValue('delay', settings.delay * 1000);
+		this.writeRadio('se', d('se'));
+		this.writeValue('se-online', d('seOnline'));
+		this.writeValue('volume-se', d('volumeSe'));
+		this.writeValue('volume-music', d('volumeMusic'));
+		this.writeCheckbox('se-with-music', d('seWithMusic'));
+		this.writeValue('delay', d('delay') * 1000);
 
-		this.writeCheckbox('autoplay', settings.autoplay);
-		this.writeValue('game-speed', settings.gameSpeed);
-		this.writeCheckbox('horizontal-flip', settings.horizontalFlip);
-		this.writeCheckbox('vertical-flip', settings.verticalFlip);
-		this.writeValue('start', settings.start);
-		this.writeValue('end', settings.end);
+		this.writeCheckbox('autoplay', d('autoplay'));
+		this.writeValue('game-speed', d('gameSpeed'));
+		this.writeCheckbox('horizontal-flip', d('horizontalFlip'));
+		this.writeCheckbox('vertical-flip', d('verticalFlip'));
+		this.writeValue('start', d('start'));
+		this.writeValue('end', d('end'));
 
-		this.writeCheckbox('enable-keyboard', settings.enableKeyboard);
-		this.writeCheckbox('keyboard-whole-screen', settings.keyboardWholeScreen);
-		this.writeValue('exclude-keys', Sunniesnow.Utils.keyListToString(settings.excludeKeys));
-		this.writeValue('pause-keys', Sunniesnow.Utils.keyListToString(settings.pauseKeys));
-		this.writeCheckbox('keyboard-pause', settings.keyboardPause);
-		this.writeCheckbox('enable-mouse', settings.enableMouse);
-		this.writeCheckbox('mouse-whole-screen', settings.mouseWholeScreen);
-		this.writeValue('exclude-buttons', Sunniesnow.Utils.buttonListToString(settings.excludeButtons));
-		this.writeValue('pause-buttons', Sunniesnow.Utils.buttonListToString(settings.pauseButtons));
-		this.writeCheckbox('mouse-pause', settings.mousePause);
-		this.writeCheckbox('enable-touchscreen', settings.enableTouchscreen);
-		this.writeCheckbox('touchscreen-whole-screen', settings.touchscreenWholeScreen);
-		this.writeCheckbox('touch-pause', settings.touchPause);
+		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));
+		this.writeCheckbox('keyboard-whole-screen', d('keyboardWholeScreen'));
+		this.writeValue('exclude-keys', Sunniesnow.Utils.keyListToString(d('excludeKeys')));
+		this.writeValue('pause-keys', Sunniesnow.Utils.keyListToString(d('pauseKeys')));
+		this.writeCheckbox('keyboard-pause', d('keyboardPause'));
+		this.writeCheckbox('enable-mouse', d('enableMouse'));
+		this.writeCheckbox('mouse-whole-screen', d('mouseWholeScreen'));
+		this.writeValue('exclude-buttons', Sunniesnow.Utils.buttonListToString(d('excludeButtons')));
+		this.writeValue('pause-buttons', Sunniesnow.Utils.buttonListToString(d('pauseButtons')));
+		this.writeCheckbox('mouse-pause', d('mousePause'));
+		this.writeCheckbox('enable-touchscreen', d('enableTouchscreen'));
+		this.writeCheckbox('touchscreen-whole-screen', d('touchscreenWholeScreen'));
+		this.writeCheckbox('touch-pause', d('touchPause'));
 
-		this.writeValue('width', settings.width);
-		this.writeValue('height', settings.height);
-		this.writeCheckbox('fullscreen', settings.fullscreen);
-		this.writeCheckbox('debug', settings.debug);
+		this.writeValue('width', d('width'));
+		this.writeValue('height', d('height'));
+		this.writeCheckbox('fullscreen', d('fullscreen'));
+		this.writeCheckbox('debug', d('debug'));
 
-		this.writePluginSettings(settings);
-	},
-
-	writePluginSettings(settings) {
-		for (const key in settings.plugin) {
+		const plugin = d('plugin');
+		const pluginOnline = d('pluginOnline');
+		for (const key in plugin) {
 			Sunniesnow.Plugin.addDomElement(key);
-			this.writeRadio(`plugin-${key}`, settings.plugin[key]);
-			this.writeValue(`plugin-${key}-online`, settings.pluginOnline[key]);
+			this.writeRadio(`plugin-${key}`, plugin[key]);
+			this.writeValue(`plugin-${key}-online`, pluginOnline[key]);
+		}
+
+		for (const property in settings) {
+			console.warn(`Unknown settings item ${property}`);
 		}
 	},
 
