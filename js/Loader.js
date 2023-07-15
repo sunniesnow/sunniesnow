@@ -457,17 +457,18 @@ Sunniesnow.Loader = {
 
 	async saveSettings() {
 		this.saved = Object.assign({}, Sunniesnow.game.settings);
+		const settings = Object.assign({}, this.saved);
 		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
 			if (this.saved[key]) {
-				this.saved[key] = await Sunniesnow.Utils.blobToBase64(this.saved[key]);
+				settings[key] = await Sunniesnow.Utils.blobToBase64(this.saved[key]);
 			}
 		}
 		for (const key in this.saved.plugin) {
 			if (this.saved.pluginUpload[key]) {
-				this.saved.pluginUpload[key] = await Sunniesnow.Utils.blobToBase64(this.saved.pluginUpload[key]);
+				settings.pluginUpload[key] = await Sunniesnow.Utils.blobToBase64(this.saved.pluginUpload[key]);
 			}
 		}
-		localStorage.setItem('settings', JSON.stringify(this.saved));
+		localStorage.setItem('settings', JSON.stringify(settings));
 	},
 
 	markManual(element) {

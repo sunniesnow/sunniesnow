@@ -64,7 +64,7 @@ Sunniesnow.Game = class Game {
 			width: this.settings.width,
 			height: this.settings.height,
 			view: this.canvas,
-			backgroundColor: 'black',
+			backgroundColor: document.body.style.backgroundColor || 'white',
 			antialias: true
 		});
 		if (this.settings.fullscreen) {

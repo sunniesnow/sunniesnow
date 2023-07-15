@@ -25,7 +25,7 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 		}
 		while (this.holdingEvents.length > 0) {
 			const event = this.holdingEvents[0];
-			if (time < event.endTime()) {
+			if (time < event.endTime() - Sunniesnow.Config.uiPreperationTime) {
 				break;
 			}
 			this.holdingEvents.shift();
