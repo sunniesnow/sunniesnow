@@ -3,8 +3,8 @@ Sunniesnow.LevelNote = class LevelNote {
 	constructor(event) {
 		this.event = event;
 		this.type = event.constructor.TYPE_NAME;
-		this.time = event.time;
-		this.endTime = event.time + (event.duration || 0);
+		this.time = event.time + Sunniesnow.game.settings.offset;
+		this.endTime = this.time + (event.duration || 0);
 		this.hitRelativeTime = null;
 		this.releaseRelativeTime = null;
 		this.judgement = null;
