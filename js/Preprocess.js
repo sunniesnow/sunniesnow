@@ -12,6 +12,9 @@ Sunniesnow.Preprocess = {
 		const [height, width] = Sunniesnow.Utils.minmax(screen.width, screen.height);
 		document.getElementById('width').value = width;
 		document.getElementById('height').value = height;
+		const canvas = document.getElementById('main-canvas');
+		canvas.width = width;
+		canvas.height = height;
 	},
 
 	readUrlParams() {

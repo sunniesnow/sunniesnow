@@ -1,3 +1,11 @@
+#warnings {
+	color: orange;
+}
+
+#errors {
+	color: red;
+}
+
 #main-canvas {
 	background: black;
 	max-width: 100%;

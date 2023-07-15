@@ -450,10 +450,10 @@ head: head.html
 <button type="button" id="start-button" onclick="Sunniesnow.Game.run()">Start</button>
 
 <div id="loading-progress"></div>
-<div id="warnings" style="color: orange;"></div>
-<div id="errors" style="color: red;"></div>
+<div id="warnings"></div>
+<div id="errors"></div>
 
-<canvas id="main-canvas" width="1920" height="1080" background="black"></canvas>
+<canvas id="main-canvas" width="1920" height="1080"></canvas>
 
 <div>
 	Sunniesnow<br>
@@ -476,7 +476,6 @@ head: head.html
 		const radios = document.getElementsByName(radio.name);
 		const input = document.getElementById(inputId);
 		const listener = () => input.disabled = !radio.checked;
-		radio.addEventListener('change', listener);
 		for (const otherRadio of radios) {
 			otherRadio.addEventListener('change', listener);
 		}

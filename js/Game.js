@@ -21,11 +21,13 @@ Sunniesnow.Game = class Game {
 		this.initCanvas();
 		this.initPixiApp();
 		this.addWindowListeners();
-		this.scene = new Sunniesnow.SceneGame();
 	}
 
 	mainTicker(delta) {
 		if (Sunniesnow.Loader.loadingComplete) {
+			if (!this.sceneInitialized) {
+				this.initScene();
+			}
 			this.update(delta);
 		} else {
 			Sunniesnow.Loader.updateLoading();
@@ -34,20 +36,34 @@ Sunniesnow.Game = class Game {
 
 	initCanvas() {
 		this.canvas = document.getElementById('main-canvas');
-		this.canvas.addEventListener('contextmenu', event => {
-			if (!Sunniesnow.Music.pausing && !Sunniesnow.game.level.finished) {
+		this.addCanvasListeners();
+	}
+
+	addCanvasListeners() {
+		this.canvasContextMenuListener = event => {
+			if (!Sunniesnow.Music.pausing && !this.level.finished) {
 				event.preventDefault();
 			}
-		});
-		this.canvas.addEventListener('fullscreenchange', event => {
+		};
+		this.canvasFullscreenChangeListener = event => {
 			this.shouldFullscreen = !!document.fullscreenElement;
-		});
+		};
+		this.canvas.addEventListener('contextmenu', this.canvasContextMenuListener);
+		this.canvas.addEventListener('fullscreenchange', this.canvasFullscreenChangeListener);
+	}
+
+	removeCanvasListeners() {
+		if (!this.canvasContextMenuListener) {
+			return;
+		}
+		this.canvas.removeEventListener('contextmenu', this.canvasContextMenuListener);
+		this.canvas.removeEventListener('fullscreenchange', this.canvasFullscreenChangeListener);
 	}
 
 	addWindowListeners() {
 		this.blurListener = event => {
 			Sunniesnow.TouchManager.clear();
-			if (!Sunniesnow.game.level.finished) {
+			if (!this.level.finished) {
 				Sunniesnow.Music.pause();
 			}
 		};
@@ -55,6 +71,9 @@ Sunniesnow.Game = class Game {
 	}
 
 	removeWindowListeners() {
+		if (!this.blurListener) {
+			return;
+		}
 		window.removeEventListener('blur', this.blurListener);
 	}
 
@@ -64,7 +83,7 @@ Sunniesnow.Game = class Game {
 			width: this.settings.width,
 			height: this.settings.height,
 			view: this.canvas,
-			backgroundColor: document.body.style.backgroundColor || 'white',
+			backgroundColor: 'black',
 			antialias: true
 		});
 		if (this.settings.fullscreen) {
@@ -74,7 +93,12 @@ Sunniesnow.Game = class Game {
 
 	initLevel() {
 		this.chart = new Sunniesnow.Chart(Sunniesnow.Loader.loaded.chart.charts[this.settings.chartSelect]);
-		Sunniesnow.game.level = new Sunniesnow.Level();
+		this.level = new Sunniesnow.Level();
+	}
+
+	initScene() {
+		this.scene = new Sunniesnow.SceneGame();
+		this.sceneInitialized = true;
 	}
 
 	setFullscreen(fullscreen) {
@@ -129,6 +153,7 @@ Sunniesnow.Game = class Game {
 		this.setFullscreen(false);
 		Sunniesnow.Audio.stopAll();
 		Sunniesnow.TouchManager.terminate();
+		this.removeCanvasListeners();
 		this.removeWindowListeners();
 		if (this.app) {
 			this.app.stop();

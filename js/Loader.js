@@ -103,7 +103,6 @@ Sunniesnow.Loader = {
 				this.fillBackgroundSelect(filename);
 				const blob = new Blob([await zipObject.async('blob')], {type});
 				this.loaded.chart.backgrounds[filename] = blob;
-				this.writeRadio('background', 'from-level');
 			} else if (type.endsWith('json')) {
 				this.fillChartSelect(filename);
 				this.loaded.chart.charts[filename] = JSON.parse(await zipObject.async('string'));
@@ -261,6 +260,7 @@ Sunniesnow.Loader = {
 	},
 
 	fillBackgroundSelect(filename) {
+		this.writeRadio('background', 'from-level');
 		this.fillSelect('background-from-level', filename);
 	},
 
@@ -421,8 +421,17 @@ Sunniesnow.Loader = {
 		this.writeCheckbox('touchscreen-whole-screen', d('touchscreenWholeScreen'));
 		this.writeCheckbox('touch-pause', d('touchPause'));
 
-		this.writeValue('width', d('width'));
-		this.writeValue('height', d('height'));
+		const width = d('width');
+		const height = d('height');
+		this.writeValue('width', width);
+		this.writeValue('height', height);
+		const canvas = document.getElementById('main-canvas');
+		if (width) {
+			canvas.width = width;
+		}
+		if (height) {
+			canvas.height = height;
+		}
 		this.writeCheckbox('fullscreen', d('fullscreen'));
 		this.writeCheckbox('debug', d('debug'));
 

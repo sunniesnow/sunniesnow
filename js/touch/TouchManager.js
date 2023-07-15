@@ -265,6 +265,9 @@ Sunniesnow.TouchManager = {
 	},
 
 	removeDomTouchListeners() {
+		if (!this.touchStartListener) {
+			return;
+		}
 		Sunniesnow.game.canvas.removeEventListener('touchstart', this.touchStartListener);
 		Sunniesnow.game.canvas.removeEventListener('touchmove', this.touchMoveListener);
 		Sunniesnow.game.canvas.removeEventListener('touchend', this.touchEndListener);
@@ -290,6 +293,9 @@ Sunniesnow.TouchManager = {
 	},
 
 	removeDomKeyListeners() {
+		if (!this.keyDownListener) {
+			return;
+		}
 		document.removeEventListener('keydown', this.keyDownListener);
 		document.removeEventListener('keyup', this.keyUpListener);
 	},
@@ -313,6 +319,9 @@ Sunniesnow.TouchManager = {
 	},
 
 	removeDomMouseListeners() {
+		if (!this.mouseDownListener) {
+			return;
+		}
 		Sunniesnow.game.canvas.removeEventListener('mousedown', this.mouseDownListener);
 		Sunniesnow.game.canvas.removeEventListener('mousemove', this.mouseMoveListener);
 		Sunniesnow.game.canvas.removeEventListener('mouseup', this.mouseUpListener);
