@@ -11,13 +11,13 @@ head: head.html
 		<input type="radio" id="level-file-online-radio" name="level-file" value="online" checked>
 		<label for="level-file-online-radio">Online:</label>
 		<input type="text" id="level-file-online" placeholder="sunniesnow-sample">
-		<button type="button" id="level-file-online-button" onclick="Sunniesnow.Loader.loadChart();">Load</button>
+		<button type="button" id="level-file-online-button" onclick="Sunniesnow.Loader.triggerLoadChart();">Load</button>
 	</div>
 
 	<div>
 		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload">
 		<label for="level-file-upload-radio">Upload:</label>
-		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.markManual(this); Sunniesnow.Loader.loadChart();">
+		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.markManual(this); Sunniesnow.Loader.triggerLoadChart();">
 	</div>
 </fieldset>
 
@@ -310,12 +310,12 @@ head: head.html
 
 		<div>
 			Start:
-			<input type="number" id="start" min="0">s
+			<input type="number" id="start" step="0.01" value="0">
 		</div>
 
 		<div>
 			End:
-			<input type="number" id="end" min="0">s
+			<input type="number" id="end" step="0.01" value="1">
 		</div>
 	</fieldset>
 </details>

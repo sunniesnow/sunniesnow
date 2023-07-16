@@ -108,22 +108,34 @@ void main() {
 		));
 	}
 
+	atan2(x, y) {
+		if (x === 0 && y === 0) {
+			return -Math.PI / 2; // in Lyrica, this is the zero angle
+		}
+		return Math.atan2(y, x);
+	}
+
 	updateTipPoint(time) {
+		if (this.checkpoints.length == 1) {
+			this.tipPoint.position.set(this.checkpoints[0].x, this.checkpoints[0].y);
+			this.tipPoint.rotation = Math.PI / 2;
+			return;
+		}
 		const i = this.checkpoints.findIndex(checkpoint => checkpoint.time >= time);
 		if (i == 0) {
 			this.tipPoint.position.set(this.checkpoints[0].x, this.checkpoints[0].y);
-			this.tipPoint.rotation = Math.atan2(
-				this.checkpoints[1].y - this.checkpoints[0].y,
-				this.checkpoints[1].x - this.checkpoints[0].x
+			this.tipPoint.rotation = this.atan2(
+				this.checkpoints[1].x - this.checkpoints[0].x,
+				this.checkpoints[1].y - this.checkpoints[0].y
 			);
 		} else if (i == -1) {
 			this.tipPoint.position.set(
 				this.checkpoints[this.checkpoints.length - 1].x,
 				this.checkpoints[this.checkpoints.length - 1].y
 			);
-			this.tipPoint.rotation = Math.atan2(
-				this.checkpoints[this.checkpoints.length - 1].y - this.checkpoints[this.checkpoints.length - 2].y,
-				this.checkpoints[this.checkpoints.length - 1].x - this.checkpoints[this.checkpoints.length - 2].x
+			this.tipPoint.rotation = this.atan2(
+				this.checkpoints[this.checkpoints.length - 1].x - this.checkpoints[this.checkpoints.length - 2].x,
+				this.checkpoints[this.checkpoints.length - 1].y - this.checkpoints[this.checkpoints.length - 2].y
 			);
 		} else {
 			const previousCheckpoint = this.checkpoints[i - 1];
@@ -133,9 +145,9 @@ void main() {
 				previousCheckpoint.x + (nextCheckpoint.x - previousCheckpoint.x) * progress,
 				previousCheckpoint.y + (nextCheckpoint.y - previousCheckpoint.y) * progress
 			);
-			this.tipPoint.rotation = Math.atan2(
-				nextCheckpoint.y - previousCheckpoint.y,
-				nextCheckpoint.x - previousCheckpoint.x
+			this.tipPoint.rotation = this.atan2(
+				nextCheckpoint.x - previousCheckpoint.x,
+				nextCheckpoint.y - previousCheckpoint.y
 			);
 		}
 	}

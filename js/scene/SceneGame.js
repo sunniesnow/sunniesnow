@@ -56,7 +56,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	gotoResult() {
-		Sunniesnow.game.scene = new Sunniesnow.SceneResult([
+		Sunniesnow.game.goto(new Sunniesnow.SceneResult([
 			this.background,
 			this.progressBar,
 			this.uiBgPatternBoard,
@@ -64,7 +64,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.uiBgNotesBoard,
 			this.uiNotesBoard,
 			this.tipPointsBoard,
-		]);
+		]));
 	}
 
 	updateAudio() {
@@ -89,7 +89,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	retry() {
 		Sunniesnow.game.level.finish();
-		Sunniesnow.game.level = new Sunniesnow.Level();
+		Sunniesnow.game.initLevel();
 		this.uiBgPatternBoard.clear();
 		this.uiBgNotesBoard.clear();
 		this.uiNotesBoard.clear();

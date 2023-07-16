@@ -26,6 +26,7 @@ Sunniesnow.Game = class Game {
 	mainTicker(delta) {
 		if (Sunniesnow.Loader.loadingComplete) {
 			if (!this.sceneInitialized) {
+				this.initLevel();
 				this.initScene();
 			}
 			this.update(delta);
@@ -77,7 +78,6 @@ Sunniesnow.Game = class Game {
 		window.removeEventListener('blur', this.blurListener);
 	}
 
-
 	initPixiApp() {
 		this.app = new PIXI.Application({
 			width: this.settings.width,
@@ -92,12 +92,15 @@ Sunniesnow.Game = class Game {
 	}
 
 	initLevel() {
-		this.chart = new Sunniesnow.Chart(Sunniesnow.Loader.loaded.chart.charts[this.settings.chartSelect]);
 		this.level = new Sunniesnow.Level();
 	}
 
+	goto(scene) {
+		this.scene = scene;
+	}
+
 	initScene() {
-		this.scene = new Sunniesnow.SceneGame();
+		this.goto(new Sunniesnow.SceneGame());
 		this.sceneInitialized = true;
 	}
 

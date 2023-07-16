@@ -62,7 +62,7 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 	}
 
 	gotoGame() {
-		Sunniesnow.game.level = new Sunniesnow.Level();
-		Sunniesnow.game.scene = new Sunniesnow.SceneGame();
+		Sunniesnow.game.initLevel();
+		Sunniesnow.game.goto(new Sunniesnow.SceneGame());
 	}
 };

@@ -1,6 +1,14 @@
 Sunniesnow.Preprocess = {
 
-	EXTRA_URL_PARAMS: ['instantStart', 'record'],
+	EXTRA_URL_PARAMS: {
+		instantStart(value) {
+			Sunniesnow.Game.run();
+		},
+
+		record(value) {
+			this.record = true;
+		}
+	},
 
 	async run() {
 		this.setDeviceDependentDefaults();
@@ -19,21 +27,13 @@ Sunniesnow.Preprocess = {
 
 	readUrlParams() {
 		const params = Sunniesnow.Utils.urlSearchParamsObject();
-		for (const key of this.EXTRA_URL_PARAMS) {
+		for (const key in this.EXTRA_URL_PARAMS) {
 			if (Object.hasOwn(params, key)) {
-				this[key](params[key]);
+				this.EXTRA_URL_PARAMS[key].call(this, params[key]);
 				delete params[key];
 			}
 		}
 		Sunniesnow.Loader.writeSettings(params);
-	},
-
-	instantStart(value) {
-		Sunniesnow.Game.run();
-	},
-
-	record(value) {
-		this.record = true;
 	}
 };
 

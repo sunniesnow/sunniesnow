@@ -36,7 +36,7 @@ Sunniesnow.Utils = {
 	},
 
 	url(prefix, text, suffix = '') {
-		if (Sunniesnow.Utils.isValidUrl(text)) {
+		if (this.isValidUrl(text)) {
 			return text;
 		} else {
 			return prefix + (text.endsWith(suffix) ? text : text + suffix);
@@ -287,5 +287,9 @@ Sunniesnow.Utils = {
 			return undefined;
 		}
 		return buttonList.join(' ');
+	},
+
+	inScreen(x, y) {
+		return this.between(x, 0, Sunniesnow.game.settings.width) && this.between(y, 0, Sunniesnow.game.settings.height);
 	}
 };

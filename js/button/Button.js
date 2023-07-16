@@ -40,7 +40,7 @@ Sunniesnow.Button = class Button extends PIXI.Container {
 		if (!this.worldVisible) {
 			return false;
 		}
-		if (this.hitRegion().contains(x, y)) {
+		if (Sunniesnow.Utils.inScreen(x, y) && this.hitRegion().contains(x, y)) {
 			this.onTrigger();
 			return true;
 		}

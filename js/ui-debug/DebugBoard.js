@@ -64,6 +64,9 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	touchMove(touch) {
 		const touchUi = this.touches[touch.id];
+		if (!touchUi) {
+			return;
+		}
 		const {x, y} = touch.end();
 		[touchUi.x, touchUi.y] = Sunniesnow.Config.chartMapping(x, y);
 		touchUi.text.text = `${touch.id}(x:${x.toFixed(1)},y:${y.toFixed(1)})`;
@@ -78,6 +81,9 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	touchEnd(touch) {
 		const touchUi = this.touches[touch.id];
+		if (!touchUi) {
+			return;
+		}
 		touchUi.destroy({children: true});
 		this.removeChild(touchUi);
 		delete this.touches[touch.id];

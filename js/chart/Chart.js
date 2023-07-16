@@ -10,6 +10,10 @@ Sunniesnow.Chart = class Chart {
 	}
 
 	static EVENT_FIELDS = ['time', 'type', 'properties']
+	
+	static async load() {
+		Sunniesnow.game.chart = new this(Sunniesnow.Loader.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
+	}
 
 	constructor(data) {
 		if (!data) {
@@ -33,8 +37,14 @@ Sunniesnow.Chart = class Chart {
 
 	readEvents() {
 		this.events = [];
+		const duration = Sunniesnow.Music.duration;
+		const start = Sunniesnow.game.settings.start * duration - Sunniesnow.Config.resumePreperationTime;
+		const end = Sunniesnow.game.settings.end * duration;
 		for (const eventData of this.data.events) {
 			const {type, time, properties} = this.readEventMeta(eventData);
+			if (!Sunniesnow.Utils.between(time, start, end)) {
+				continue;
+			}
 			const event = Sunniesnow.Event.newFromType(type, time, properties);
 			event.id = this.events.length;
 			this.events.push(event);

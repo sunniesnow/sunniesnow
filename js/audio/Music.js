@@ -6,6 +6,7 @@ Sunniesnow.Music = {
 			Sunniesnow.game.settings.volumeMusic,
 			Sunniesnow.game.settings.gameSpeed
 		);
+		this.duration = this.audio.duration;
 		this.audio.addFinishListener(() => this.finished = true);
 	},
 
@@ -17,7 +18,8 @@ Sunniesnow.Music = {
 	},
 
 	playFromBeginning() {
-		const start = Math.min(0, Sunniesnow.game.chart.events[0].appearTime());
+		const musicStart = Sunniesnow.game.settings.start * this.duration;
+		const start = Math.min(musicStart, Sunniesnow.game.chart.events[0].appearTime());
 		this.finished = false;
 		this.play(start - Sunniesnow.Config.preperationTime);
 	},

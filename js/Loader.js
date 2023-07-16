@@ -41,7 +41,7 @@ Sunniesnow.Loader = {
 			return;
 		}
 		this.loadingChart = true;
-		this.loadChart().then(() => {
+		return this.loadChart().then(() => {
 			this.loadingChart = false;
 			this.onChartLoad();
 		}, reason => {
@@ -361,6 +361,8 @@ Sunniesnow.Loader = {
 	},
 
 	async writeSettings(settings) {
+		this.loadingChart = true;
+
 		const d = property => {
 			const result = settings[property];
 			delete settings[property];
@@ -368,7 +370,7 @@ Sunniesnow.Loader = {
 		}
 		this.writeRadio('level-file', d('levelFile'));
 		this.writeValue('level-file-online', d('levelFileOnline'));
-
+		
 		await this.loadChart();
 
 		this.writeValue('music-select', d('musicSelect'));
@@ -446,6 +448,9 @@ Sunniesnow.Loader = {
 		for (const property in settings) {
 			console.warn(`Unknown settings item ${property}`);
 		}
+
+		this.loadingChart = false;
+		this.onChartLoad();
 	},
 
 	readUploadSettings() {
@@ -538,14 +543,21 @@ Sunniesnow.Loader = {
 		this.loadingModulesComplete = false;
 		this.loadingModulesProgress = 0;
 		this.targetLoadingModulesProgress = 0;
+		this.modulesQueue = [];
 		this.loadAudio();
 		this.loadTouch();
+		this.loadChartModule();
 		this.loadUiComponents();
 		this.loadUiPause();
 		this.loadButtons();
 		this.loadUiEvents();
 		this.loadFx();
 		this.loadTipPoint();
+		(async () => {
+			while (this.modulesQueue.length > 0) {
+				await this.modulesQueue.shift()();
+			}
+		})();
 	},
 
 	loadAudio() {
@@ -559,6 +571,10 @@ Sunniesnow.Loader = {
 
 	loadTouch() {
 		this.loadModule('TouchManager');
+	},
+
+	loadChartModule() {
+		this.loadModule('Chart');
 	},
 
 	loadButtons() {
@@ -610,10 +626,10 @@ Sunniesnow.Loader = {
 	},
 
 	loadModule(name) {
-		Sunniesnow[name].load().then(
+		this.modulesQueue.push(() => Sunniesnow[name].load().then(
 			() => this.loadingModulesProgress++,
 			reason => Sunniesnow.Utils.error(`Failed to load Sunniesnow.${name}: ${reason}`, reason)
-		);
+		));
 		this.targetLoadingModulesProgress++;
 	},
 
@@ -668,13 +684,11 @@ Sunniesnow.Loader = {
 				Sunniesnow.game.settings.musicSelect = Object.keys(this.loaded.chart.music)[0];
 				Sunniesnow.game.settings.chartSelect = Object.keys(this.loaded.chart.charts)[0];
 				this.saveSettings();
-				Sunniesnow.game.initLevel();
 				this.loadingChartComplete = true;
 				this.loadPlugins();
 			}, reason => Sunniesnow.Utils.error(`Failed to load chart: ${reason}`, reason));
 		} else {
 			this.saveSettings();
-			Sunniesnow.game.initLevel();
 			this.loadingChartComplete = true;
 			this.loadPlugins();
 		}
