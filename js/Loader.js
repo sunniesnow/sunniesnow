@@ -313,6 +313,8 @@ Sunniesnow.Loader = {
 			verticalFlip: this.readCheckbox('vertical-flip'),
 			start: this.readValue('start'),
 			end: this.readValue('end'),
+			resumePreperationTime: this.readValue('resume-preperation-time'),
+			beginningPreperationTime: this.readValue('beginning-preperation-time'),
 
 			// control settings
 			enableKeyboard: this.readCheckbox('enable-keyboard'),
@@ -408,6 +410,8 @@ Sunniesnow.Loader = {
 		this.writeCheckbox('vertical-flip', d('verticalFlip'));
 		this.writeValue('start', d('start'));
 		this.writeValue('end', d('end'));
+		this.writeValue('resume-preperation-time', d('resumePreperationTime'));
+		this.writeValue('beginning-preperation-time', d('beginningPreperationTime'));
 
 		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));
 		this.writeCheckbox('keyboard-whole-screen', d('keyboardWholeScreen'));

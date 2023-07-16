@@ -38,7 +38,7 @@ Sunniesnow.Chart = class Chart {
 	readEvents() {
 		this.events = [];
 		const duration = Sunniesnow.Music.duration;
-		const start = Sunniesnow.game.settings.start * duration - Sunniesnow.Config.resumePreperationTime;
+		const start = Sunniesnow.game.settings.start * duration - Sunniesnow.game.settings.resumePreperationTime;
 		const end = Sunniesnow.game.settings.end * duration;
 		for (const eventData of this.data.events) {
 			const {type, time, properties} = this.readEventMeta(eventData);

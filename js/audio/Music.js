@@ -21,7 +21,7 @@ Sunniesnow.Music = {
 		const musicStart = Sunniesnow.game.settings.start * this.duration;
 		const start = Math.min(musicStart, Sunniesnow.game.chart.events[0].appearTime());
 		this.finished = false;
-		this.play(start - Sunniesnow.Config.preperationTime);
+		this.play(start - Sunniesnow.game.settings.beginningPreperationTime);
 	},
 
 	update() {
@@ -43,7 +43,7 @@ Sunniesnow.Music = {
 		if (!this.pausing) {
 			return false;
 		}
-		const prep = Sunniesnow.game.level.finished ? 0 : Sunniesnow.Config.resumePreperationTime;
+		const prep = Sunniesnow.game.level.finished ? 0 : Sunniesnow.game.settings.resumePreperationTime;
 		this.play(Math.max(this.lastResumeTime, this.currentTime - prep));
 		return true;
 	},

@@ -108,17 +108,19 @@ void main() {
 		));
 	}
 
+	// in Lyrica, this is the zero angle
+	zeroAngle() {
+		return Sunniesnow.Config.chartMappingAngle(Math.PI / 2);
+	}
+
 	atan2(x, y) {
-		if (x === 0 && y === 0) {
-			return -Math.PI / 2; // in Lyrica, this is the zero angle
-		}
-		return Math.atan2(y, x);
+		return x === 0 && y === 0 ? this.zeroAngle() : Math.atan2(y, x);
 	}
 
 	updateTipPoint(time) {
 		if (this.checkpoints.length == 1) {
 			this.tipPoint.position.set(this.checkpoints[0].x, this.checkpoints[0].y);
-			this.tipPoint.rotation = Math.PI / 2;
+			this.tipPoint.rotation = this.zeroAngle();
 			return;
 		}
 		const i = this.checkpoints.findIndex(checkpoint => checkpoint.time >= time);

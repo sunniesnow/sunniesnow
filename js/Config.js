@@ -17,9 +17,6 @@ Sunniesnow.Config = {
 		return 1 / speed;
 	},
 
-	// the blank time in the start of a level, in seconds
-	preperationTime: 1,
-
 	// UI of chart events will be spawned
 	// this much time (in seconds) before it actually appears.
 	// Must be smaller than preperationTime.
@@ -74,8 +71,6 @@ Sunniesnow.Config = {
 		}
 		return angle;
 	},
-
-	resumePreperationTime: 1,
 
 	judgementWindows: {
 		loose: {
