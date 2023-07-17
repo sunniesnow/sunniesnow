@@ -893,7 +893,3 @@ the game will start immediately after the page is loaded.
 Note that if [`fullscreen`](#fullscreen) is `true`,
 it is probable that the game cannot enter fullscreen mode normally
 due to the permission checks by the browser.
-
-#### `record`
-
-**Do not use this. This is intended for headless environments.**

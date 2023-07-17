@@ -3,10 +3,6 @@ Sunniesnow.Preprocess = {
 	EXTRA_URL_PARAMS: {
 		instantStart(value) {
 			Sunniesnow.Game.run();
-		},
-
-		record(value) {
-			this.record = true;
 		}
 	},
 
