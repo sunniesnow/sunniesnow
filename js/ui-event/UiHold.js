@@ -42,13 +42,13 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 		this.note.addChild(this.haloMask);
 	}
 
-	updateFadingIn(progress) {
+	updateFadingIn(progress, relativeTime) {
 		this.note.scale.set(progress);
 		this.circle.scale.set(1 - (progress-1)**2);
 		this.circle.alpha = progress / 3;
 	}
 
-	updateActive(progress) {
+	updateActive(progress, relativeTime) {
 		this.note.scale.set(1);
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
 		if (progress <= 1) {
@@ -60,7 +60,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 		}
 	}
 
-	updateHolding(progress) {
+	updateHolding(progress, relativeTime) {
 		this.circle.visible = false;
 		this.rotateHaloMask(progress);
 		this.swellBounce(progress);
@@ -101,8 +101,8 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 		this.note.scale.set(1.1 - Math.cos(phase) * 0.1);
 	}
 
-	updateFadingOut(progress) {
-		super.updateFadingOut(progress);
+	updateFadingOut(progress, relativeTime) {
+		super.updateFadingOut(progress, relativeTime);
 		if (this.levelNote.judgement === 'miss') {
 			this.visible = false;
 			return;

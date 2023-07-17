@@ -133,6 +133,8 @@ Sunniesnow.Loader = {
 
 	backgroundUrl() {
 		switch (Sunniesnow.game.settings.background) {
+			case 'none':
+				return null;
 			case 'online':
 				return Sunniesnow.Utils.url(
 					Sunniesnow.Config.backgroundPrefix,
@@ -443,10 +445,19 @@ Sunniesnow.Loader = {
 
 		const plugin = d('plugin');
 		const pluginOnline = d('pluginOnline');
-		for (const key in plugin) {
-			Sunniesnow.Plugin.addDomElement(key);
-			this.writeRadio(`plugin-${key}`, plugin[key]);
-			this.writeValue(`plugin-${key}-online`, pluginOnline[key]);
+		if (plugin) {
+			Sunniesnow.Plugin.clearDomElements();
+			for (const key in plugin) {
+				Sunniesnow.Plugin.addDomElement(key);
+				this.writeRadio(`plugin-${key}`, plugin[key]);
+			}
+			if (pluginOnline) {
+				for (const key in plugin) {
+					this.writeValue(`plugin-${key}-online`, pluginOnline[key]);
+				}
+			}
+		} else if (pluginOnline) {
+			Sunniesnow.warn('plugin-online settings are ignored because plugin settings are not set');
 		}
 
 		for (const property in settings) {
@@ -508,7 +519,17 @@ Sunniesnow.Loader = {
 
 	readValue(id) {
 		const element = document.getElementById(id);
-		return element.type === 'number' ? Number(element.value) : element.value;
+		if (element.type !== 'number') {
+			return element.type === 'range' ? Number(element.value) : element.value;
+		}
+		const value = Number(element.value);
+		if (element.min !== '' && value < Number(element.min)) {
+			return Number(element.min);
+		}
+		if (element.max !== '' && value > Number(element.max)) {
+			return Number(element.max);
+		}
+		return value;
 	},
 
 	readFile(id) {

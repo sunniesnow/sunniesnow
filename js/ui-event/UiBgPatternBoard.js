@@ -3,6 +3,12 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 	constructor() {
 		super();
 		this.clear();
+		if (Sunniesnow.game.settings.horizontalFlip) {
+			this.scale.x = -1;
+		}
+		if (Sunniesnow.game.settings.verticalFlip) {
+			this.scale.y = -1;
+		}
 	}
 
 	clear() {

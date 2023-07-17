@@ -11,6 +11,7 @@ Sunniesnow.Preprocess = {
 	},
 
 	async run() {
+		this.associateDomElements();
 		this.setDeviceDependentDefaults();
 		await Sunniesnow.Loader.writeSavedSettings();
 		this.readUrlParams();
@@ -34,6 +35,44 @@ Sunniesnow.Preprocess = {
 			}
 		}
 		Sunniesnow.Loader.writeSettings(params);
+	},
+
+	associateRadio(radioId, inputId) {
+		const radio = document.getElementById(radioId);
+		const radios = document.getElementsByName(radio.name);
+		const input = document.getElementById(inputId);
+		const listener = () => input.disabled = !radio.checked;
+		for (const otherRadio of radios) {
+			otherRadio.addEventListener('change', listener);
+		}
+		listener();
+	},
+
+	associateRange(rangeId, valueId) {
+		const range = document.getElementById(rangeId);
+		const value = document.getElementById(valueId);
+		const listener = () => value.innerText = range.value;
+		range.addEventListener('input', listener);
+		listener();
+	},
+
+	associateDomElements() {
+		this.associateRadio('level-file-online-radio', 'level-file-online');
+		this.associateRadio('level-file-online-radio', 'level-file-online-button');
+		this.associateRadio('level-file-upload-radio', 'level-file-upload');
+		this.associateRadio('background-online-radio', 'background-online');
+		this.associateRadio('background-from-level-radio', 'background-from-level');
+		this.associateRadio('background-upload-radio', 'background-upload');
+		this.associateRadio('skin-online-radio', 'skin-online');
+		this.associateRadio('skin-upload-radio', 'skin-upload');
+		this.associateRadio('fx-online-radio', 'fx-online');
+		this.associateRadio('fx-upload-radio', 'fx-upload');
+		this.associateRadio('se-online-radio', 'se-online');
+		this.associateRadio('se-upload-radio', 'se-upload');
+		this.associateRange('volume-se', 'volume-se-value');
+		this.associateRange('volume-music', 'volume-music-value');
+		this.associateRange('background-blur', 'background-blur-value');
+		this.associateRange('background-brightness', 'background-brightness-value');
 	}
 };
 

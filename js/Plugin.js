@@ -76,39 +76,37 @@ Sunniesnow.Plugin = class Plugin {
 	}
 
 	static html(n) {
-		return `
-			<div id="plugin-${n}">
-				<div>
-					<input type="radio" id="plugin-${n}-online-radio" name="plugin-${n}" checked>
-					<label for="plugin-${n}-online-radio">Online:</label>
-					<input type="text" id="plugin-${n}-online" placeholder="empty.ssp">
-				</div>
-
-				<div>
-					<input type="radio" id="plugin-${n}-upload-radio" name="plugin-${n}">
-					<label for="plugin-${n}-upload-radio">Upload:</label>
-					<input type="file" id="plugin-${n}-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
-				</div>
-
-				<div>
-					<button type="button" onclick="Sunniesnow.Plugin.deleteDomElement(${n})">Delete</button>
-				</div>
-
-				<hr>
+		const result = document.createElement('div');
+		result.id = `plugin-${n}`;
+		result.innerHTML = `
+			<div>
+				<input type="radio" id="plugin-${n}-online-radio" name="plugin-${n}" value="online" checked>
+				<label for="plugin-${n}-online-radio">Online:</label>
+				<input type="text" id="plugin-${n}-online" placeholder="empty">
 			</div>
-		`;
-	}
 
-	static addDomElement() {
-		this.additionalTotal ||= 0;
-		const listElement = document.getElementById('plugin-list');
-		listElement.innerHTML += this.html(this.additionalTotal);
-		this.additionalTotal++;
+			<div>
+				<input type="radio" id="plugin-${n}-upload-radio" name="plugin-${n}" value="upload">
+				<label for="plugin-${n}-upload-radio">Upload:</label>
+				<input type="file" id="plugin-${n}-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
+			</div>
+
+			<div>
+				<button type="button" onclick="Sunniesnow.Plugin.deleteDomElement(${n})">Delete</button>
+			</div>
+
+			<hr>
+		`;
+		return result;
 	}
 
 	static addDomElement(n) {
-		const listElement = document.getElementById('plugin-list');
-		listElement.innerHTML += this.html(n);
+		if (n === undefined) {
+			n = this.additionalTotal ||= 0;
+		}
+		document.getElementById('plugin-list').appendChild(this.html(n));
+		Sunniesnow.Preprocess.associateRadio(`plugin-${n}-online-radio`, `plugin-${n}-online`);
+		Sunniesnow.Preprocess.associateRadio(`plugin-${n}-upload-radio`, `plugin-${n}-upload`);
 		this.additionalTotal = Math.max(this.additionalTotal || 0, n) + 1;
 	}
 
@@ -116,6 +114,14 @@ Sunniesnow.Plugin = class Plugin {
 		const listElement = document.getElementById('plugin-list');
 		const pluginElement = document.getElementById(`plugin-${n}`);
 		listElement.removeChild(pluginElement);
+	}
+
+	static clearDomElements() {
+		this.additionalTotal = 0;
+		const element = document.getElementById('plugin-list');
+		while (element.firstChild) {
+			element.removeChild(element.firstChild);
+		}
 	}
 
 	static async loadSkin() {

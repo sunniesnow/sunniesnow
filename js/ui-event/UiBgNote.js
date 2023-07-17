@@ -22,20 +22,20 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 		this.addChild(this.note);
 	}
 
-	updateFadingIn(progress) {
-		super.updateFadingIn(progress);
+	updateFadingIn(progress, relativeTime) {
+		super.updateFadingIn(progress, relativeTime);
 		this.note.alpha = progress;
 		this.note.scale.set(progress);
 	}
 
-	updateActive(progress) {
-		super.updateActive(progress);
+	updateActive(progress, relativeTime) {
+		super.updateActive(progress, relativeTime);
 		this.note.alpha = 1;
 		this.note.scale.set(1);
 	}
 
-	updateFadingOut(progress) {
-		super.updateFadingOut(progress);
+	updateFadingOut(progress, relativeTime) {
+		super.updateFadingOut(progress, relativeTime);
 		this.note.scale.set(1 + (1 - (1 - progress) ** 2) * 0.5);
 		this.note.alpha = 1 - progress;
 	}

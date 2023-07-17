@@ -37,15 +37,15 @@ Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
 		this.addChild(this.note);
 	}
 
-	updateFadingIn(progress) {
-		super.updateFadingIn(progress);
+	updateFadingIn(progress, relativeTime) {
+		super.updateFadingIn(progress, relativeTime);
 		this.note.scale.set(progress);
 		this.circle.scale.set(1 - (progress-1)**2);
 		this.circle.alpha = progress / 3;
 	}
 
-	updateActive(progress) {
-		super.updateActive(progress);
+	updateActive(progress, relativeTime) {
+		super.updateActive(progress, relativeTime);
 		this.note.scale.set(1);
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
 		if (progress <= 1) {

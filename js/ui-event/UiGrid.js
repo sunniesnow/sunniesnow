@@ -36,20 +36,20 @@ Sunniesnow.UiGrid = class UiGrid extends Sunniesnow.UiBgPattern {
 		this.addChild(this.pattern);
 	}
 
-	updateFadingIn(progress) {
-		super.updateFadingIn(progress);
+	updateFadingIn(progress, relativeTime) {
+		super.updateFadingIn(progress, relativeTime);
 		this.pattern.alpha = progress;
 		this.pattern.scale.set(progress);
 	}
 
-	updateHolding(progress) {
-		super.updateHolding(progress);
+	updateHolding(progress, relativeTime) {
+		super.updateHolding(progress, relativeTime);
 		this.pattern.alpha = 1;
 		this.pattern.scale.set(1);
 	}
 
-	updateFadingOut(progress) {
-		super.updateFadingOut(progress);
+	updateFadingOut(progress, relativeTime) {
+		super.updateFadingOut(progress, relativeTime);
 		this.pattern.alpha = 1 - progress;
 	}
 };

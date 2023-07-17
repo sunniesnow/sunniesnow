@@ -21,20 +21,20 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 		this.alpha = 0.8;
 	}
 
-	updateFadingIn(progress) {
-		super.updateFadingIn(progress);
+	updateFadingIn(progress, relativeTime) {
+		super.updateFadingIn(progress, relativeTime);
 		this.text.alpha = progress;
 		this.text.scale.set(progress);
 	}
 
-	updateHolding(progress) {
-		super.updateHolding(progress);
+	updateHolding(progress, relativeTime) {
+		super.updateHolding(progress, relativeTime);
 		this.text.alpha = 1;
 		this.text.scale.set(1);
 	}
 
-	updateFadingOut(progress) {
-		super.updateFadingOut(progress);
+	updateFadingOut(progress, relativeTime) {
+		super.updateFadingOut(progress, relativeTime);
 		this.text.alpha = 1 - progress;
 	}
 };

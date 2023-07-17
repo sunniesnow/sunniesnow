@@ -32,17 +32,17 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 				// do nothing
 				break;
 			case 'fadingIn':
-				this.updateFadingIn((relativeTime + this.activeDuration) / this.constructor.FADING_IN_DURATION + 1);
+				this.updateFadingIn((relativeTime + this.activeDuration) / this.constructor.FADING_IN_DURATION + 1, relativeTime);
 				break;
 			case 'active':
-				this.updateActive(relativeTime / this.activeDuration + 1);
+				this.updateActive(relativeTime / this.activeDuration + 1, relativeTime);
 				break;
 			case 'holding':
-				this.updateHolding(relativeTime / this.event.duration);
+				this.updateHolding(relativeTime / this.event.duration, relativeTime);
 				break;
 			case 'fadingOut':
 				const releaseRelativeTime = this.levelNote ? this.levelNote.releaseRelativeTime : this.event.duration || 0;
-				this.updateFadingOut((relativeTime - releaseRelativeTime) / this.constructor.FADING_OUT_DURATION);
+				this.updateFadingOut((relativeTime - releaseRelativeTime) / this.constructor.FADING_OUT_DURATION, relativeTime);
 				break;
 			case 'finished':
 				// do nothing
@@ -93,25 +93,25 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 
 	// Progress is zero at the start of the fade-in,
 	// and never exceeds 1.
-	updateFadingIn(progress) {
+	updateFadingIn(progress, relativeTime) {
 	}
 
 	// Progress is zero at the start of the active time,
 	// and is one when the note is supposed to be hit.
 	// It may exceed one (because the note may be hit late).
-	updateActive(progress) {
+	updateActive(progress, relativeTime) {
 	}
 
 	// Progress is zero at the start of the hold,
 	// and is one when the note is supposed to be released.
 	// Never exceeds one, but may be negative.
 	// Does not need overriding for non-hold notes.
-	updateHolding(progress) {
+	updateHolding(progress, relativeTime) {
 	}
 
 	// Time is zero at the start of the fade-out,
 	// and never exceeds 1.
-	updateFadingOut(progress) {
+	updateFadingOut(progress, relativeTime) {
 	}
 
 };
