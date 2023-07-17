@@ -321,13 +321,13 @@ Sunniesnow.Loader = {
 			// control settings
 			enableKeyboard: this.readCheckbox('enable-keyboard'),
 			keyboardWholeScreen: this.readCheckbox('keyboard-whole-screen'),
-			excludeKeys: Sunniesnow.Utils.stringToKeyList(this.readValue('exclude-keys')),
-			pauseKeys: Sunniesnow.Utils.stringToKeyList(this.readValue('pause-keys')),
+			excludeKeys: this.readKeyList('exclude-keys'),
+			pauseKeys: this.readKeyList('pause-keys'),
 			keyboardPause: this.readCheckbox('keyboard-pause'),
 			enableMouse: this.readCheckbox('enable-mouse'),
 			mouseWholeScreen: this.readCheckbox('mouse-whole-screen'),
-			excludeButtons: Sunniesnow.Utils.stringToButtonList(this.readValue('exclude-buttons')),
-			pauseButtons: Sunniesnow.Utils.stringToButtonList(this.readValue('pause-buttons')),
+			excludeButtons: this.readButtonList('exclude-buttons'),
+			pauseButtons: this.readButtonList('pause-buttons'),
 			mousePause: this.readCheckbox('mouse-pause'),
 			enableTouchscreen: this.readCheckbox('enable-touchscreen'),
 			touchscreenWholeScreen: this.readCheckbox('touchscreen-whole-screen'),
@@ -417,13 +417,13 @@ Sunniesnow.Loader = {
 
 		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));
 		this.writeCheckbox('keyboard-whole-screen', d('keyboardWholeScreen'));
-		this.writeValue('exclude-keys', Sunniesnow.Utils.keyListToString(d('excludeKeys')));
-		this.writeValue('pause-keys', Sunniesnow.Utils.keyListToString(d('pauseKeys')));
+		this.writeKeyList('exclude-keys', d('excludeKeys'));
+		this.writeKeyList('pause-keys', d('pauseKeys'));
 		this.writeCheckbox('keyboard-pause', d('keyboardPause'));
 		this.writeCheckbox('enable-mouse', d('enableMouse'));
 		this.writeCheckbox('mouse-whole-screen', d('mouseWholeScreen'));
-		this.writeValue('exclude-buttons', Sunniesnow.Utils.buttonListToString(d('excludeButtons')));
-		this.writeValue('pause-buttons', Sunniesnow.Utils.buttonListToString(d('pauseButtons')));
+		this.writeButtonList('exclude-buttons', d('excludeButtons'));
+		this.writeButtonList('pause-buttons', d('pauseButtons'));
 		this.writeCheckbox('mouse-pause', d('mousePause'));
 		this.writeCheckbox('enable-touchscreen', d('enableTouchscreen'));
 		this.writeCheckbox('touchscreen-whole-screen', d('touchscreenWholeScreen'));
@@ -532,6 +532,14 @@ Sunniesnow.Loader = {
 		return value;
 	},
 
+	readKeyList(id) {
+		return Sunniesnow.Utils.stringToKeyList(this.readValue(id));
+	},
+
+	readButtonList(id) {
+		return Sunniesnow.Utils.stringToButtonList(this.readValue(id));
+	},
+
 	readFile(id) {
 		return document.getElementById(id).files[0];
 	},
@@ -562,6 +570,20 @@ Sunniesnow.Loader = {
 		if (value !== undefined && !(typeof value === 'number' && isNaN(value))) {
 			document.getElementById(id).value = value;
 		}
+	},
+
+	writeKeyList(id, value) {
+		if (Array.isArray(value)) {
+			value = Sunniesnow.Utils.keyListToString(value);
+		}
+		this.writeValue(id, value);
+	},
+
+	writeButtonList(id, value) {
+		if (Array.isArray(value)) {
+			value = Sunniesnow.Utils.buttonListToString(value);
+		}
+		this.writeValue(id, value);
 	},
 
 	loadModules() {

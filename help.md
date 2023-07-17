@@ -822,7 +822,11 @@ This will override the saved settings from previous sessions.
 
 The parameter names are the same as the setting ids listed above.
 The parameter values are whatever values you want.
-String values are 
+String values are the
+[URL-encoded](https://en.wikipedia.org/wiki/URL_encoding){:target="_blank"}
+values of the corresponding setting values (**without** quotes).
+Numeric values are just the decimal representations of the corresponding setting values.
+Boolean values are `true` and `false`.
 
 For example, if you want to specify the judgement windows
 to be the strict judgement windows in the URL,
@@ -837,8 +841,59 @@ append the following search string to the URL of Sunniesnow:
 
 ### Special notice about some settings
 
+#### Space-separated lists
 
+For [`exclude-buttons`](#exclude-buttons) etc., the values are space-separated lists.
+In a URL encoded string, spaces are replaced with plus signs (`+`),
+so the space-separated lists are then represented as `+`-separated lists.
 
-### Other URL parameters
+For example, if you want to exclude the left, middle, and right buttons of the mouse,
+you may append the following search string to the URL of Sunniesnow:
+
+```plain
+?exclude-buttons=0+1+2
+```
+
+[Try it yourself!](.?exclude-buttons=0+1+2)
+
+#### Arrays (for plugins)
+
+To specify an array in the URL, specify a parameter multiple times.
+For example, `plugin=online&plugin=upload` makes `plugin` to have value
+`["online", "upload"]`.
+
+Then, you may use this to specify the online plugins to use.
+For example, if you want to use the plugin `sample-plugin` and the plugin `empty`,
+you may append the following search string to the URL of Sunniesnow:
+
+```plain
+?plugin=online&plugin-online=sample-plugin&plugin=online&plugin-online=empty
+```
+
+[Try it yourself!](.?plugin=online&plugin-online=sample-plugin&plugin=online&plugin-online=empty)
+
+### Other URL search parameters
+
+Besides the settings, there are some other URL search parameters.
+Some of them do not require any values to be specified.
+For example, to use [`instant-start`](#instant-start), you may append the following search string to the URL of Sunniesnow:
+
+```plain
+?instant-start
+```
+
+and that is all.
 
 #### `instant-start`
+
+This parameter does not need any value.
+When there is `instant-start` present in the URL parameters,
+the game will start immediately after the page is loaded.
+
+Note that if [`fullscreen`](#fullscreen) is `true`,
+it is probable that the game cannot enter fullscreen mode normally
+due to the permission checks by the browser.
+
+#### `record`
+
+**Do not use this. This is intended for headless environments.**
