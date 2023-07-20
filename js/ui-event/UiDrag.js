@@ -1,4 +1,7 @@
 Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
+
+	static FADING_OUT_DURATION = 0
+
 	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius() * 2/3;
 		this.circleRadius = this.radius * 6;

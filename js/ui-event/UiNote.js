@@ -1,8 +1,5 @@
 Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 
-	static FADING_IN_DURATION = 0.25;
-	static FADING_OUT_DURATION = 0;
-
 	constructor(event, fxBoard, debugBoard) {
 		super(event);
 		this.levelNote = event.levelNote;

@@ -1,6 +1,5 @@
 Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 
-	static FADING_OUT_DURATION = 1/3;
 	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.haloRadius = this.radius * 1.5;
@@ -21,7 +20,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	populate() {
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
 		this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
-		this.text = this.createText();
+		this.text = Sunniesnow.UiTap.prototype.createText.call(this);
 		this.addChild(this.circle);
 		this.note = new PIXI.Container();
 		this.createHalo();
@@ -103,12 +102,18 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
+		Sunniesnow.UiTap.prototype.updateTextFadingOut.call(this, progress);
+		progress *= 2;
+		this.halo.visible = false;
 		if (this.levelNote.judgement === 'miss') {
-			this.visible = false;
+			this.noteBody.visible = false;
 			return;
 		}
-		this.halo.visible = false;
-		this.note.scale.set(1.2 + (1-(1-progress)**2) * 0.3);
-		this.note.alpha = 1 - progress;
+		if (progress <= 1) {
+			this.noteBody.scale.set(1.2 + (1-(1-progress)**2) * 0.3);
+			this.noteBody.alpha = 1 - progress;
+		} else {
+			this.noteBody.visible = false;
+		}
 	}
 }

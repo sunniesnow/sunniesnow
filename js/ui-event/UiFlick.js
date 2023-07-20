@@ -1,5 +1,4 @@
 Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
-	static FADING_OUT_DURATION = 1/3;
 	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.circleRadius = this.radius * 4;
@@ -35,7 +34,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.circle = new PIXI.Graphics(Sunniesnow.UiFlick.circleGeometry);
 		this.arrow = new PIXI.Graphics(Sunniesnow.UiFlick.arrowGeometry);
 		this.arrow.transform.rotation = Sunniesnow.Config.chartMappingAngle(this.event.angle);
-		this.text = this.createText();
+		this.text = Sunniesnow.UiTap.prototype.createText.call(this);
 		this.addChild(this.circle);
 		this.note = new PIXI.Container();
 		this.note.addChild(this.noteBody);
@@ -69,20 +68,26 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
+		Sunniesnow.UiTap.prototype.updateTextFadingOut.call(this, progress);
+		progress *= 2;
 		if (this.levelNote.judgement === 'miss' || this.levelNote.judgement === 'bad') {
-			this.visible = false;
+			this.noteBody.visible = false;
+			this.arrow.visible = false;
 			return;
 		}
 		const distance = this.constructor.radius * 2;
 		this.noteBody.visible = false;
-		this.text.visible = false;
 		this.circle.visible = false;
 		this.arrow.scale.set(1.05);
-		this.arrow.alpha = 1 - progress;
-		this.arrow.position.set(...Sunniesnow.Utils.polarToCartesian(
-			distance * (1 - (1-progress)**2),
-			-this.arrow.transform.rotation
-		));
+		if (progress <= 1) {
+			this.arrow.alpha = 1 - progress;
+			this.arrow.position.set(...Sunniesnow.Utils.polarToCartesian(
+				distance * (1 - (1-progress)**2),
+				-this.arrow.transform.rotation
+			));
+		} else {
+			this.arrow.visible = false;
+		}
 	}
 
 };

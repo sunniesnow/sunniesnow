@@ -1,5 +1,5 @@
 Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
-	static FADING_OUT_DURATION = 0.25;
+	static FADING_OUT_DURATION = 1/4;
 
 	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
@@ -17,7 +17,7 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 	populate() {
 		super.populate();
 		this.note = new PIXI.Graphics(this.constructor.geometry);
-		this.text = this.createText();
+		this.text = Sunniesnow.UiTap.prototype.createText.call(this);
 		this.note.addChild(this.text)
 		this.addChild(this.note);
 	}

@@ -3,6 +3,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.sparkLine = this.createSparkLine();
 		this.explosionContourArc = this.createExplosionContourArc();
+		this.missHalo = this.createMissHalo();
 	}
 
 	static createSparkLine() {
@@ -19,6 +20,14 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		graphics.lineStyle(this.radius / 10, 0xffffff);
 		graphics.arc(0, 0, this.radius * 1.5, -Math.PI / 6, Math.PI / 6);
 		graphics.finishPoly();
+		return graphics.geometry;
+	}
+
+	static createMissHalo() {
+		const graphics = new PIXI.Graphics();
+		graphics.beginFill(0x000000, 0.7);
+		graphics.drawCircle(0, 0, this.radius);
+		graphics.endFill();
 		return graphics.geometry;
 	}
 
@@ -92,5 +101,19 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 	updateBad(delta) {
 		this.updateSparks(delta);
 		this.updateContours(delta);
+	}
+
+	populateMiss() {
+		this.graphics = new PIXI.Graphics(this.constructor.missHalo);
+		this.addChild(this.graphics);
+	}
+
+	updateMiss(delta) {
+		this.graphics.scale.x += delta * 0.05;
+		this.graphics.scale.y += delta * 0.05;
+		this.graphics.alpha -= delta * 0.05;
+		if (this.graphics.alpha <= 0) {
+			this.state = 'finished';
+		}
 	}
 };
