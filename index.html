@@ -17,7 +17,7 @@ head: head.html
 	<div>
 		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload">
 		<label for="level-file-upload-radio">Upload:</label>
-		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.markManual(this); Sunniesnow.Loader.triggerLoadChart();">
+		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.markManual('level-file-upload'); Sunniesnow.Loader.triggerLoadChart();">
 	</div>
 </fieldset>
 
@@ -109,7 +109,7 @@ head: head.html
 		<div>
 			<input type="radio" id="background-upload-radio" name="background" value="upload">
 			<label for="background-upload-radio">Upload:</label>
-			<input type="file" id="background-upload" accept="image/*" onchange="Sunniesnow.Loader.markManual(this);">
+			<input type="file" id="background-upload" accept="image/*" onchange="Sunniesnow.Loader.markManual('background-upload');">
 		</div>
 	</fieldset>
 
@@ -146,7 +146,7 @@ head: head.html
 		<div>
 			<input type="radio" id="fx-upload-radio" name="fx" value="upload">
 			<label for="fx-upload-radio">Upload:</label>
-			<input type="file" id="fx-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
+			<input type="file" id="fx-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual('fx-upload');">
 		</div>
 	</fieldset>
 
@@ -167,7 +167,7 @@ head: head.html
 		<div>
 			<input type="radio" id="skin-upload-radio" name="skin" value="upload">
 			<label for="skin-upload-radio">Upload:</label>
-			<input type="file" id="skin-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
+			<input type="file" id="skin-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual('skin-upload');">
 		</div>
 	</fieldset>
 
@@ -238,7 +238,7 @@ head: head.html
 		<div>
 			<input type="radio" id="se-upload-radio" name="se" value="upload">
 			<label for="se-upload-radio">Upload:</label>
-			<input type="file" id="se-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
+			<input type="file" id="se-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual('se-upload');">
 		</div>
 	</fieldset>
 
@@ -475,11 +475,19 @@ head: head.html
 
 <canvas id="main-canvas" width="1920" height="1080"></canvas>
 
+<details>
+	<summary>Level README</summary>
+	<div id="level-readme" class="readme"></div>
+</details>
+<div id="plugins-readme"></div>
+
+<hr>
+
 <div>
 	Sunniesnow<br>
 	Last update: {{ "now" | date: "%FT%T%z" }}<br>
 	Source codes: <a href="https://github.com/sunniesnow/sunniesnow" target="_blank">GitHub</a><br>
-	License: <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GPL v3.0</a><br>
+	License: <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GPL-3.0</a><br>
 	Author: UlyssesZhan &lt;<a href="mailto:ulysseszhan@gmail.com">ulysseszhan@gmail.com</a>&gt;
 </div>
 

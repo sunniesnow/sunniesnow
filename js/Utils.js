@@ -291,5 +291,13 @@ Sunniesnow.Utils = {
 
 	inScreen(x, y) {
 		return this.between(x, 0, Sunniesnow.game.settings.width) && this.between(y, 0, Sunniesnow.game.settings.height);
+	},
+
+	needsDisplayTextFile(filename) {
+		const type = mime.getType(filename);
+		if (type?.endsWith('markdown') || type?.endsWith('plain')) {
+			return true;
+		}
+		return ['README', 'LICENSE', 'NOTICE'].some(name => filename.toUpperCase().startsWith(name));
 	}
 };

@@ -96,16 +96,18 @@ Sunniesnow.Loader = {
 				continue;
 			}
 			const type = mime.getType(filename);
-			if (type.startsWith('audio/')) {
+			if (type?.startsWith('audio')) {
 				this.fillMusicSelect(filename);
 				this.loaded.chart.music[filename] = await zipObject.async('arraybuffer');
-			} else if (type.startsWith('image/')) {
+			} else if (type?.startsWith('image')) {
 				this.fillBackgroundSelect(filename);
 				const blob = new Blob([await zipObject.async('blob')], {type});
 				this.loaded.chart.backgrounds[filename] = blob;
-			} else if (type.endsWith('json')) {
+			} else if (type?.endsWith('json')) {
 				this.fillChartSelect(filename);
 				this.loaded.chart.charts[filename] = JSON.parse(await zipObject.async('string'));
+			} else if (Sunniesnow.Utils.needsDisplayTextFile(filename)) {
+				this.fillLevelReadme(filename, await zipObject.async('string'));
 			} else {
 				Sunniesnow.Utils.warn(`Cannot determine type of ${filename}`)
 			}
@@ -129,6 +131,7 @@ Sunniesnow.Loader = {
 		this.clearSelect('music-select');
 		this.clearSelect('chart-select');
 		this.clearSelect('background-from-level');
+		document.getElementById('level-readme').innerHTML = '';
 	},
 
 	backgroundUrl() {
@@ -226,7 +229,7 @@ Sunniesnow.Loader = {
 			}
 			plugin[i] = this.readRadio(`plugin-${i}`);
 			pluginOnline[i] = this.readValue(`plugin-${i}-online`);
-			if (!this.manual[`pluginUpload${i}`] && this.saved?.pluginUpload?.[i]) {
+			if (!this.manual[`plugin${i}Upload`] && this.saved?.pluginUpload?.[i]) {
 				pluginUpload[i] = this.saved.pluginUpload[i];
 			} else {
 				pluginUpload[i] = this.readFile(`plugin-${i}-upload`);
@@ -264,6 +267,25 @@ Sunniesnow.Loader = {
 	fillBackgroundSelect(filename) {
 		this.writeRadio('background', 'from-level');
 		this.fillSelect('background-from-level', filename);
+	},
+
+	fillLevelReadme(filename, text) {
+		const type = mime.getType(filename);
+		const details = document.createElement('details');
+		const summary = document.createElement('summary');
+		summary.innerText = filename;
+		details.appendChild(summary);
+		const element = document.createElement('div');
+		details.appendChild(element);
+		if (type?.endsWith('markdown')) {
+			text = marked.parse(text, {mangle: false, headerIds: false});
+			element.innerHTML = DOMPurify.sanitize(text);
+		} else {
+			const pre = document.createElement('pre');
+			pre.innerText = text;
+			element.appendChild(pre);
+		}
+		document.getElementById('level-readme').appendChild(details);
 	},
 
 	readSettings() {
@@ -500,8 +522,8 @@ Sunniesnow.Loader = {
 		localStorage.setItem('settings', JSON.stringify(settings));
 	},
 
-	markManual(element) {
-		this.manual[Sunniesnow.Utils.slugToCamel(element.id)] = true;
+	markManual(elementId) {
+		this.manual[Sunniesnow.Utils.slugToCamel(elementId)] = true;
 	},
 
 	readCheckbox(id) {

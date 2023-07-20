@@ -33,14 +33,55 @@ Sunniesnow.Plugin = class Plugin {
 			Sunniesnow.Utils.warn(`Failed to load plugin ${this.id}: cannot read as zip`, e);
 			return;
 		}
+		this.createReadmeDom();
 		for (const filename in zip.files) {
 			const zipObject = zip.files[filename];
 			if (zipObject.dir) {
 				continue;
 			}
 			this.blobs[filename] = await zipObject.async('blob');
+			if (Sunniesnow.Utils.needsDisplayTextFile(filename)) {
+				this.fillReadme(filename, await zipObject.async('text'));
+			}
 		}
 		this.onLoad();
+	}
+
+	createReadmeDom() {
+		const details = document.createElement('details');
+		details.id = `plugin-${this.id}-readme-details`
+		const summary = document.createElement('summary');
+		summary.innerText = `Plugin ${this.id} README`;
+		details.appendChild(summary);
+		const readme = document.createElement('div');
+		readme.id = `plugin-${this.id}-readme`;
+		readme.classList.add('readme');
+		details.appendChild(readme);
+		document.getElementById('plugins-readme').appendChild(details);
+	}
+
+	deleteReadmeDom() {
+		const element = document.getElementById(`plugin-${this.id}-readme-details`);
+		element.parentElement.removeChild(element);
+	}
+
+	fillReadme(filename, text) {
+		const type = mime.getType(filename);
+		const details = document.createElement('details');
+		const summary = document.createElement('summary');
+		summary.innerText = filename;
+		details.appendChild(summary);
+		const element = document.createElement('div');
+		details.appendChild(element);
+		if (type?.endsWith('markdown')) {
+			text = marked.parse(text, { mangle: false, headerIds: false });
+			element.innerHTML = DOMPurify.sanitize(text);
+		} else {
+			const pre = document.createElement('pre');
+			pre.innerText = text;
+			element.appendChild(pre);
+		}
+		document.getElementById(`plugin-${this.id}-readme`).appendChild(details);
 	}
 
 	async apply() {
@@ -88,7 +129,7 @@ Sunniesnow.Plugin = class Plugin {
 			<div>
 				<input type="radio" id="plugin-${n}-upload-radio" name="plugin-${n}" value="upload">
 				<label for="plugin-${n}-upload-radio">Upload:</label>
-				<input type="file" id="plugin-${n}-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual(this);">
+				<input type="file" id="plugin-${n}-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual('plugin-${n}-upload');">
 			</div>
 
 			<div>
