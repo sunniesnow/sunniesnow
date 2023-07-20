@@ -65,6 +65,10 @@ Sunniesnow.Preprocess = {
 		this.associateRadio('fx-upload-radio', 'fx-upload');
 		this.associateRadio('se-online-radio', 'se-online');
 		this.associateRadio('se-upload-radio', 'se-upload');
+		this.associateRadio('renderer-webgl-radio', 'antialias');
+		this.associateRadio('renderer-webgl-radio', 'power-preference-default-radio');
+		this.associateRadio('renderer-webgl-radio', 'power-preference-low-power-radio');
+		this.associateRadio('renderer-webgl-radio', 'power-preference-high-performance-radio');
 		this.associateRange('volume-se', 'volume-se-value');
 		this.associateRange('volume-music', 'volume-music-value');
 		this.associateRange('background-blur', 'background-blur-value');

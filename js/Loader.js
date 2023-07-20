@@ -359,6 +359,9 @@ Sunniesnow.Loader = {
 			width: this.readValue('width'),
 			height: this.readValue('height'),
 			fullscreen: this.readCheckbox('fullscreen'),
+			renderer: this.readRadio('renderer'),
+			antialias: this.readCheckbox('antialias'),
+			powerPreference: this.readRadio('power-preference'),
 			debug: this.readCheckbox('debug'),
 		}
 		this.readPluginSettings();
@@ -462,6 +465,9 @@ Sunniesnow.Loader = {
 		if (height) {
 			canvas.height = height;
 		}
+		this.writeRadio('renderer', d('renderer'));
+		this.writeCheckbox('antialias', d('antialias'));
+		this.writeRadio('power-preference', d('powerPreference'));
 		this.writeCheckbox('fullscreen', d('fullscreen'));
 		this.writeCheckbox('debug', d('debug'));
 
@@ -617,6 +623,7 @@ Sunniesnow.Loader = {
 		this.loadTouch();
 		this.loadChartModule();
 		this.loadUiComponents();
+		this.loadUiDebug();
 		this.loadUiPause();
 		this.loadButtons();
 		this.loadUiEvents();
@@ -644,6 +651,10 @@ Sunniesnow.Loader = {
 
 	loadChartModule() {
 		this.loadModule('Chart');
+	},
+
+	loadUiDebug() {
+		this.loadModule('DebugBoard');
 	},
 
 	loadButtons() {

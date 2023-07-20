@@ -26,10 +26,12 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		);
 		this.background.scale.x = scale;
 		this.background.scale.y = scale;
-		const blurFilter = new PIXI.BlurFilter(Sunniesnow.game.settings.backgroundBlur, 10);
-		const brightnessFilter = new PIXI.ColorMatrixFilter();
-		brightnessFilter.brightness(Sunniesnow.game.settings.backgroundBrightness);
-		this.background.filters = [blurFilter, brightnessFilter];
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			const blurFilter = new PIXI.BlurFilter(Sunniesnow.game.settings.backgroundBlur, 10);
+			this.background.filters = [blurFilter];
+		}
+		const b = Sunniesnow.game.settings.backgroundBrightness;
+		this.background.tint = [b, b, b];
 		this.addChild(this.background);
 	}
 };

@@ -10,7 +10,7 @@ head: head.html
 	<div>
 		<input type="radio" id="level-file-online-radio" name="level-file" value="online" checked>
 		<label for="level-file-online-radio">Online:</label>
-		<input type="text" id="level-file-online" placeholder="sunniesnow-sample">
+		<input type="text" id="level-file-online" autocorrect="off" autocapitalize="none" placeholder="sunniesnow-sample">
 		<button type="button" id="level-file-online-button" onclick="Sunniesnow.Loader.triggerLoadChart();">Load</button>
 	</div>
 
@@ -97,7 +97,7 @@ head: head.html
 		<div>
 			<input type="radio" id="background-online-radio" name="background" value="online" checked>
 			<label for="background-online-radio">Online:</label>
-			<input type="text" id="background-online" value="default.svg">
+			<input type="text" autocorrect="off" autocapitalize="none" id="background-online" value="default.svg">
 		</div>
 
 		<div>
@@ -140,7 +140,7 @@ head: head.html
 		<div>
 			<input type="radio" id="fx-online-radio" name="fx" value="online">
 			<label for="fx-online-radio">Online:</label>
-			<input type="text" id="fx-online" placeholder="empty">
+			<input type="text" id="fx-online" autocorrect="off" autocapitalize="none" placeholder="empty">
 		</div>
 	
 		<div>
@@ -161,7 +161,7 @@ head: head.html
 		<div>
 			<input type="radio" id="skin-online-radio" name="skin" value="online">
 			<label for="skin-online-radio">Online:</label>
-			<input type="text" id="skin-online" placeholder="empty">
+			<input type="text" id="skin-online" autocorrect="off" autocapitalize="none" placeholder="empty">
 		</div>
 
 		<div>
@@ -232,7 +232,7 @@ head: head.html
 		<div>
 			<input type="radio" id="se-online-radio" name="se" value="online">
 			<label for="se-online-radio">Online:</label>
-			<input type="text" id="se-online" placeholder="empty">
+			<input type="text" id="se-online" autocorrect="off" autocapitalize="none" placeholder="empty">
 		</div>
 
 		<div>
@@ -357,12 +357,12 @@ head: head.html
 
 		<div>
 			Exclude keys:
-			<input type="text" id="exclude-keys" value="Escape PrintScreen Alt Control Fn Meta F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12">
+			<input type="text" id="exclude-keys" autocorrect="off" autocapitalize="none" value="Escape PrintScreen Alt Control Fn Meta F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12">
 		</div>
 
 		<div>
 			Pause keys:
-			<input type="text" id="pause-keys" value="`">
+			<input type="text" id="pause-keys" autocorrect="off" autocapitalize="none" value="`">
 		</div>
 
 		<div>
@@ -386,12 +386,12 @@ head: head.html
 
 		<div>
 			Exclude mouse buttons:
-			<input type="text" id="exclude-buttons" value="">
+			<input type="text" id="exclude-buttons" autocorrect="off" autocapitalize="none" value="">
 		</div>
 		
 		<div>
 			Pause mouse buttons:
-			<input type="text" id="pause-buttons" value="">
+			<input type="text" id="pause-buttons" autocorrect="off" autocapitalize="none" value="">
 		</div>
 
 		<div>
@@ -453,6 +453,46 @@ head: head.html
 
 		<div>
 			<button type="button" id="plugin-add-button" onclick="Sunniesnow.Plugin.addDomElement()">Add</button>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Renderer</legend>
+
+		<div>
+			<input type="radio" id="renderer-canvas-radio" name="renderer" value="canvas">
+			<label for="renderer-canvas-radio">Canvas</label>
+		</div>
+		
+		<div>
+			<input type="radio" id="renderer-webgl-radio" name="renderer" value="webgl" checked>
+			<label for="renderer-webgl-radio">WebGL</label>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>WebGL options</legend>
+		
+		<div>
+			<input type="checkbox" id="antialias" checked>
+			<label for="antialias">Antialias</label>
+		</div>
+		
+		Power preference:
+		
+		<div>
+			<input type="radio" id="power-preference-default-radio" name="power-preference" value="default" checked>
+			<label for="power-preference-default-radio">Default</label>
+		</div>
+		
+		<div>
+			<input type="radio" id="power-preference-low-power-radio" name="power-preference" value="low-power">
+			<label for="power-preference-low-power-radio">Low power</label>
+		</div>
+		
+		<div>
+			<input type="radio" id="power-preference-high-performance-radio" name="power-preference" value="high-performance">
+			<label for="power-preference-high-performance-radio">High performance</label>
 		</div>
 	</fieldset>
 

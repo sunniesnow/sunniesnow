@@ -29,7 +29,9 @@ void main() {
 	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius() / 3;
 		this.tipPointGeometry = this.createTipPointGeometry();
-		this.trailShader = this.createTrailShader();
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.trailShader = this.createTrailShader();
+		}
 	}
 
 	static createTipPointGeometry() {
@@ -58,7 +60,9 @@ void main() {
 	}
 
 	populate() {
-		this.createTrail();
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.createTrail();
+		}
 		this.createTipPoint();
 	}
 
@@ -102,6 +106,9 @@ void main() {
 	}
 
 	updateTrail(time) {
+		if (Sunniesnow.game.settings.renderer !== 'webgl') {
+			return;
+		}
 		this.drawTrailThrough(this.getCheckpointsBetween(
 			Math.max(this.startTime, time - this.constructor.TRAIL_DURATION),
 			Math.min(this.endTime, time)

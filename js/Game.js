@@ -80,11 +80,20 @@ Sunniesnow.Game = class Game {
 
 	initPixiApp() {
 		this.app = new PIXI.Application({
+			hello: this.settings.debug,
 			width: this.settings.width,
 			height: this.settings.height,
 			view: this.canvas,
 			backgroundColor: 'black',
-			antialias: true
+			eventFeatures: {
+				click: false,
+				globalMove: false,
+				move: false,
+				wheel: false
+			},
+			forceCanvas: this.settings.renderer === 'canvas',
+			antialias: this.settings.antialias,
+			powerPreference: this.settings.powerPreference,
 		});
 		if (this.settings.fullscreen) {
 			this.setFullscreen(true);

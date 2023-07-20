@@ -1,15 +1,16 @@
 Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
-	constructor() {
-		super();
-		this.populate();
-		this.addTouchListeners();
+	static async load() {
+		this.touchGeometry = this.createTouchGeometry();
+		this.touchAreaGeometry = this.createTouchAreaGeometry();
 	}
 
-	populate() {
-		this.createTouchGeometry();
+	constructor() {
+		super();
+		this.touches = {};
+		this.touchAreas = [];
 		this.earlyLateTexts = [];
-		this.createTouchAreaGeometry();
+		this.addTouchListeners();
 	}
 
 	addTouchListeners() {
@@ -24,23 +25,22 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		Sunniesnow.TouchManager.removeEndListener(this.touchEndListener);
 	}
 
-	createTouchGeometry() {
+	static createTouchGeometry() {
+		this.touchRadius = Sunniesnow.game.settings.width / 180;
 		const graphics = new PIXI.Graphics();
 		graphics.beginFill(0xff00ff, 0.5);
-		graphics.drawCircle(0, 0, 10);
+		graphics.drawCircle(0, 0, this.touchRadius);
 		graphics.endFill();
-		this.touchGeometry = graphics.geometry;
-		this.touches = {};
+		return graphics.geometry;
 	}
 
-	createTouchAreaGeometry() {
+	static createTouchAreaGeometry() {
 		const radius = Sunniesnow.Config.noteRadius() * Sunniesnow.game.settings.noteHitSize;
 		const graphics = new PIXI.Graphics();
 		graphics.beginFill(0xff00ff, 0.1);
 		graphics.drawRect(-radius, -radius, radius*2, radius*2);
 		graphics.endFill();
-		this.touchAreaGeometry = graphics.geometry;
-		this.touchAreas = [];
+		return graphics.geometry;
 	}
 
 	update(delta) {
@@ -50,9 +50,9 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	touchStart(touch) {
 		const id = touch.id;
-		const touchUi = this.touches[id] = new PIXI.Graphics(this.touchGeometry);
+		const touchUi = this.touches[id] = new PIXI.Graphics(this.constructor.touchGeometry);
 		const text = touchUi.text = new PIXI.Text('', {
-			fontSize: 20,
+			fontSize: Sunniesnow.game.settings.width / 90,
 			fill: '#ff00ff',
 			fontFamily: 'Arial',
 		});
@@ -69,13 +69,13 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		}
 		const {x, y} = touch.end();
 		[touchUi.x, touchUi.y] = Sunniesnow.Config.chartMapping(x, y);
-		touchUi.text.text = `${touch.id}(x:${x.toFixed(1)},y:${y.toFixed(1)})`;
+		touchUi.text.text = `${touch.id}(${x.toFixed(1)},${y.toFixed(1)})`;
 		if (touchUi.x + touchUi.width > Sunniesnow.game.settings.width) {
 			touchUi.text.anchor.x = 1;
-			touchUi.text.x = -10;
+			touchUi.text.x = -this.constructor.touchRadius;
 		} else {
 			touchUi.text.anchor.x = 0;
-			touchUi.text.x = 10;
+			touchUi.text.x = this.constructor.touchRadius;
 		}
 	}
 
@@ -93,7 +93,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		const text = Math.round(uiNote.levelNote.hitRelativeTime * 1000).toString();
 		const earlyLateText = new PIXI.Text(text, {
 			fontFamily: 'Arial',
-			fontSize: 50,
+			fontSize: Sunniesnow.game.settings.width / 36,
 			fill: '#ff00ff',
 			align: 'center'
 		});
@@ -119,7 +119,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	createTouchArea(uiNote) {
-		const graphics = new PIXI.Graphics(this.touchAreaGeometry);
+		const graphics = new PIXI.Graphics(this.constructor.touchAreaGeometry);
 		graphics.x = uiNote.x;
 		graphics.y = uiNote.y;
 		graphics.uiNote = uiNote;

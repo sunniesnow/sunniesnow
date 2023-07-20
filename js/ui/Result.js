@@ -68,7 +68,9 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	static createRankGeometry() {
 		this.rankFrameGeometry = this.createRankFrameGeometry();
 		this.rankBackgroundGeometry = this.createRankBackgroundGeometry();
-		this.createApGeometry();
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.createApGeometry();
+		}
 	}
 
 	static createRankFrameGeometry() {
@@ -299,7 +301,7 @@ void main() {
 		this.rank = new PIXI.Container();
 		this.rankBackground = new PIXI.Graphics(this.constructor.rankBackgroundGeometry);
 		this.rank.addChild(this.rankBackground);
-		if (Sunniesnow.game.level.apFcIndicator === 'ap') {
+		if (Sunniesnow.game.level.apFcIndicator === 'ap' && Sunniesnow.game.settings.renderer === 'webgl') {
 			this.rankFrame = new PIXI.Mesh(this.constructor.apGeometry, this.constructor.apShader);
 			this.rankFrame.mask = new PIXI.Graphics(this.constructor.rankFrameGeometry);
 			this.rank.addChild(this.rankFrame);
