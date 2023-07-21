@@ -87,4 +87,6 @@ Sunniesnow.Preprocess = {
 	}
 };
 
-window.addEventListener('load', () => Sunniesnow.Preprocess.run());
+if (typeof window === 'object') {
+	window.addEventListener('load', () => Sunniesnow.Preprocess.run());
+}
