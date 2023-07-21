@@ -14,12 +14,23 @@ Sunniesnow.Preprocess = {
 	},
 
 	setDeviceDependentDefaults() {
+		this.setResolution();
+		this.setRenderer();
+	},
+
+	setResolution() {
 		const [height, width] = Sunniesnow.Utils.minmax(screen.width * devicePixelRatio, screen.height * devicePixelRatio);
-		document.getElementById('width').value = width;
-		document.getElementById('height').value = height;
+		Sunniesnow.Loader.writeValue('width', width);
+		Sunniesnow.Loader.writeValue('height', height);
 		const canvas = document.getElementById('main-canvas');
 		canvas.width = width;
 		canvas.height = height;
+	},
+
+	setRenderer() {
+		if (!Sunniesnow.Utils.supportsGl()) {
+			Sunniesnow.Loader.writeRadio('renderer', 'canvas');
+		}
 	},
 
 	readUrlParams() {

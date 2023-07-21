@@ -18,8 +18,8 @@ Sunniesnow.Game = class Game {
 
 	start() {
 		Sunniesnow.Loader.load();
-		this.initCanvas();
 		this.initPixiApp();
+		this.initCanvas();
 		this.addWindowListeners();
 	}
 
@@ -36,7 +36,8 @@ Sunniesnow.Game = class Game {
 	}
 
 	initCanvas() {
-		this.canvas = document.getElementById('main-canvas');
+		this.canvas = this.app.view;
+		this.canvas.id = 'main-canvas';
 		this.addCanvasListeners();
 	}
 
@@ -83,7 +84,6 @@ Sunniesnow.Game = class Game {
 			hello: this.settings.debug,
 			width: this.settings.width,
 			height: this.settings.height,
-			view: this.canvas,
 			backgroundColor: 'black',
 			eventFeatures: {
 				click: false,
@@ -95,6 +95,7 @@ Sunniesnow.Game = class Game {
 			antialias: this.settings.antialias,
 			powerPreference: this.settings.powerPreference,
 		});
+		document.getElementById('main-canvas').replaceWith(this.app.view);
 		if (this.settings.fullscreen) {
 			this.setFullscreen(true);
 		}

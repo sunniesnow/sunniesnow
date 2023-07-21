@@ -239,6 +239,8 @@ The background image is blurred by Gaussian blur.
 This setting is used to set the radius of the blur.
 The larger this value, the **more blurred** the background image.
 
+These settings are only useful when [`renderer`](#renderer) is set to `"webgl"`.
+
 ##### Brightness
 {:#background-brightness}
 
@@ -741,6 +743,11 @@ This setting is only useful when [`enable-touchscreen`](#enable-touchscreen) is 
 
 The default values of the following settings are dependent on your device.
 Actually, the screen resolution of your screen.
+Sometimes you may find that the default values are too large
+for the game to run smoothly
+(this is due to the poor graphical performance of the browser,
+especially on mobile devices),
+so you may want to set them to smaller values to have better experience.
 
 ##### Width
 
@@ -806,6 +813,68 @@ This setting is **only** useful when the corresponding [`plugin`](#plugin) item 
 You may upload a plugin file to use it.
 
 This setting is **only** useful when the corresponding [`plugin`](#plugin) item is `"upload"`.
+
+#### Renderer
+
+- **Setting id**: `renderer`.
+- **Possible values**: `"canvas"`, `"webgl"`.
+
+When the setting is `"canvas"`,
+Sunniesnow uses the canvas API to draw everything.
+When the setting is `"webgl"`,
+Sunniesnow uses the [WebGL](https://webgl.org){:target="_blank"} API
+to draw everything.
+
+The technical differences between the two renderers:
+
+- WebGL is a more modern API than canvas.
+It draws hardware-accelerated 2D and 3D graphics,
+whereas canvas focuses on 2D graphics.
+- Canvas loads slightly faster than WebGL,
+but WebGL draws **significantly** faster than canvas.
+- Canvas is supported by more browsers than WebGL.
+
+The actual differences that you may experience during the game:
+
+- Because some features are too expensive to be implemented using canvas,
+canvas lacks some features than WebGL.
+For example, [`background-blur`](#background-blur) is only available when WebGL is used;
+with the default skin, the trails of tip points
+and the colorful rank frame of the all-perfect rank
+are only visible when WebGL is used.
+- There would be performance differences between the two renderers.
+However, although WebGL is generally faster than canvas,
+canvas **may** be faster than WebGL
+because by using canvas some features are dropped.
+
+#### WebGL options
+
+There are some graphical settings
+that are **only** useful when [`renderer`](#renderer) is set to `"webgl"`.
+
+##### Antialias
+
+- **Setting id**: `antialias`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether antialiasing should be enabled.
+When it is `true`, antialiasing is enabled.
+When it is `false`, antialiasing is disabled.
+
+Antialiasing is a technique to make the edges of objects look smoother.
+It may lead to noticeable performance loss on some devices.
+
+##### Power preference
+
+- **Setting id**: `power-preference`.
+- **Possible values**: `"default"`, `"low-power"`, `"high-performance"`.
+
+This is a hint indicating what configuration of GPU is suitable for the WebGL context.
+Setting it to `"high-performance"` will prioritize performance over power consumption,
+and setting it to `"low-power"` will prioritize power consumption over performance.
+
+Because this is just a hint, whether it actually affects the performance
+or the power consumption is **not** certain.
 
 #### Debug
 
