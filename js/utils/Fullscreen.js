@@ -21,7 +21,7 @@ Sunniesnow.Fullscreen = {
 	enter() {
 		this.entering = true;
 		const promise = Sunniesnow.game.canvas.requestFullscreen();
-		if (typeof promise.then === 'function') {
+		if (typeof promise?.then === 'function') {
 			promise.then(
 				() => {
 					this.entering = false;
@@ -44,7 +44,7 @@ Sunniesnow.Fullscreen = {
 	quit() {
 		this.quitting = true;
 		const promise = document.exitFullscreen();
-		if (typeof promise.then === 'function') {
+		if (typeof promise?.then === 'function') {
 			promise.then(
 				() => {
 					this.quitting = false;
