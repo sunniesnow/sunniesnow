@@ -39,6 +39,9 @@ Sunniesnow.Game = class Game {
 		this.canvas = this.app.view;
 		this.canvas.id = 'main-canvas';
 		this.addCanvasListeners();
+		if (this.settings.fullscreen) {
+			Sunniesnow.Fullscreen.set(true);
+		}
 	}
 
 	addCanvasListeners() {
@@ -47,11 +50,8 @@ Sunniesnow.Game = class Game {
 				event.preventDefault();
 			}
 		};
-		this.canvasFullscreenChangeListener = event => {
-			this.shouldFullscreen = !!document.fullscreenElement;
-		};
 		this.canvas.addEventListener('contextmenu', this.canvasContextMenuListener);
-		this.canvas.addEventListener('fullscreenchange', this.canvasFullscreenChangeListener);
+		Sunniesnow.Fullscreen.addListenerToCanvas();
 	}
 
 	removeCanvasListeners() {
@@ -59,7 +59,7 @@ Sunniesnow.Game = class Game {
 			return;
 		}
 		this.canvas.removeEventListener('contextmenu', this.canvasContextMenuListener);
-		this.canvas.removeEventListener('fullscreenchange', this.canvasFullscreenChangeListener);
+		Sunniesnow.Fullscreen.removeListenerFromCanvas();
 	}
 
 	addWindowListeners() {
@@ -96,9 +96,6 @@ Sunniesnow.Game = class Game {
 			powerPreference: this.settings.powerPreference,
 		});
 		document.getElementById('main-canvas').replaceWith(this.app.view);
-		if (this.settings.fullscreen) {
-			this.setFullscreen(true);
-		}
 	}
 
 	initLevel() {
@@ -112,15 +109,6 @@ Sunniesnow.Game = class Game {
 	initScene() {
 		this.goto(new Sunniesnow.SceneGame());
 		this.sceneInitialized = true;
-	}
-
-	setFullscreen(fullscreen) {
-		this.shouldFullscreen = fullscreen;
-		this.needsHandleFullscreen = true;
-	}
-
-	toggleFullscreen() {
-		this.setFullscreen(!this.shouldFullscreen);
 	}
 
 	updateModules() {
@@ -146,24 +134,13 @@ Sunniesnow.Game = class Game {
 		} else {
 			this.terminate();
 		}
-		if (this.needsHandleFullscreen) {
-			if (this.shouldFullscreen && !document.fullscreenElement) {
-				this.app.view.requestFullscreen().then(
-					null,
-					reason => Sunniesnow.Utils.warn('Failed to request fullscreen: ' + reason)
-				);
-			} else if (!this.shouldFullscreen && document.fullscreenElement) {
-				document.exitFullscreen();
-			}
-			this.needsHandleFullscreen = false;
-		}
 	}
 
 	terminate() {
 		if (this.scene) {
 			this.scene.terminate();
 		}
-		this.setFullscreen(false);
+		Sunniesnow.Fullscreen.set(false);
 		Sunniesnow.Audio.stopAll();
 		Sunniesnow.TouchManager.terminate();
 		this.removeCanvasListeners();

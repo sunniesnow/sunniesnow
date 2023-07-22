@@ -10,7 +10,7 @@ Sunniesnow.PauseBoard = class PauseBoard extends PIXI.Container {
 		this.addChild(this.background = new Sunniesnow.PauseBackground());
 		this.addChild(this.resume = new Sunniesnow.ButtonResume(() => Sunniesnow.Music.resume()));
 		this.addChild(this.retry = new Sunniesnow.ButtonRetry(() => this.sceneGame.retry()));
-		this.addChild(this.fullscreen = new Sunniesnow.ButtonFullscreen(() => Sunniesnow.game.toggleFullscreen()));
+		this.addChild(this.fullscreen = new Sunniesnow.ButtonFullscreen(() => Sunniesnow.Fullscreen.toggle()));
 	}
 
 	triggerIfContainsPage(x, y) {
