@@ -19,6 +19,13 @@ Sunniesnow.Fullscreen = {
 	},
 
 	enter() {
+		if (typeof navigator.standalone === 'boolean' && !navigator.standalone) {
+			Sunniesnow.Utils.warn(
+				'iOS browsers have some features in fullscreen mode that are undesirable for rhythm games. Consider ' +
+				'<a href="https://support.apple.com/guide/iphone/bookmark-favorite-webpages-iph42ab2f3a7/ios#iph4f9a47bbc">adding to home screen</a>' +
+				' to work around some of them.'
+			);
+		}
 		this.entering = true;
 		const promise = Sunniesnow.game.canvas.requestFullscreen();
 		if (typeof promise?.then === 'function') {
