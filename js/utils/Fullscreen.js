@@ -20,7 +20,6 @@ Sunniesnow.Fullscreen = {
 
 	enter() {
 		this.entering = true;
-		console.error('asdf');
 		Sunniesnow.game.canvas.requestFullscreen().then(
 			() => {
 				this.entering = false;
@@ -31,7 +30,7 @@ Sunniesnow.Fullscreen = {
 			},
 			reason => {
 				this.entering = false;
-				Sunniesnow.Utils.warn('Failed to request fullscreen: ' + reason);
+				Sunniesnow.Utils.warn('Failed to request fullscreen: ' + reason, reason);
 			}
 		);
 	},
@@ -48,7 +47,7 @@ Sunniesnow.Fullscreen = {
 			},
 			reason => {
 				this.quitting = false;
-				Sunniesnow.Utils.warn('Failed to exit fullscreen: ' + reason);
+				Sunniesnow.Utils.warn('Failed to exit fullscreen: ' + reason, reason);
 			}
 		);
 	},

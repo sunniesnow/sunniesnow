@@ -2,6 +2,7 @@ Sunniesnow.Patches = {
 	apply() {
 		this.patchHasOwn();
 		this.patchFindLastIndex();
+		this.patchRequestFullscreen();
 	},
 
 	// Object.hasOwn is supported on Safari only since 15.4.
@@ -20,5 +21,18 @@ Sunniesnow.Patches = {
 			}
 			return -1;
 		}
+	},
+
+	patchRequestFullscreen() {
+		const e = Element.prototype;
+		e.requestFullscreen ||= e.webkitRequestFullscreen || e.mozRequestFullScreen || e.msRequestFullscreen;
+		e.requestFullscreen = function () {
+			return new Promise((resolve, reject) => reject(new TypeError('Fullscreen API is not supported on this browser.')));
+		};
+		const d = Document.prototype;
+		d.exitFullscreen ||= d.webkitExitFullscreen || d.mozCancelFullScreen || d.msExitFullscreen;
+		d.exitFullscreen = function () {
+			return new Promise((resolve, reject) => reject(new TypeError('Fullscreen API is not supported on this browser.')));
+		};
 	}
 };
