@@ -12,8 +12,9 @@ Sunniesnow.Utils = {
 	error(msg, e) {
 		document.getElementById('errors').innerText += msg + '\n';
 		console.error(msg);
+		Sunniesnow.Loader.loadingChart = false;
 		Sunniesnow.Loader.loadingComplete = true;
-		Sunniesnow.game.terminate();
+		Sunniesnow.game?.terminate();
 		if (e) {
 			throw(e);
 		} else {
@@ -298,12 +299,30 @@ Sunniesnow.Utils = {
 		if (type?.endsWith('markdown') || type?.endsWith('plain')) {
 			return true;
 		}
-		return ['README', 'LICENSE', 'NOTICE'].some(name => filename.toUpperCase().startsWith(name));
+		return [
+			/^READ_?ME/i,
+			/^LICEN[SC]/i,
+			/^NOTICE/i,
+			/^COPYING/i,
+			/^COPYRIGHT/i,
+			/^PATENT/i,
+			/^CHANGE_?LOG/i,
+			/^CODE_?OF_?CONDUCT/i,
+			/^ATTRIBUTION/i
+		].some(regexp => regexp.test(filename));
 	},
 
 	supportsGl() {
 		const canvas = document.createElement("canvas");
 		const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 		return gl instanceof WebGLRenderingContext;
+	},
+
+	bufToHex(buf, start = 0, end = buf.length) {
+		let result = ''
+		for (let i = start; i < end; i++) {
+			result += buf[i].toString(16).padStart(2, '0');
+		}
+		return result;
 	}
 };

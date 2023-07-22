@@ -32,6 +32,9 @@ Sunniesnow.Level = class Level {
 				this.unhitNotes.push(event.newLevelNote());
 			}
 		}
+		if (this.unhitNotes.length === 0) {
+			Sunniesnow.Utils.error('No notes in the chart');
+		}
 		this.holdingNotes = [];
 	}
 

@@ -63,11 +63,16 @@ Sunniesnow.Loader = {
 				this.loaded.chart.source = 'online';
 				this.loaded.chart.sourceContents = sourceContents;
 				const url = Sunniesnow.Utils.url(Sunniesnow.Config.chartPrefix, sourceContents, '.ssc');
+				let response;
 				try {
-					file = await (await fetch(url)).blob();
+					response = await fetch(url);
 				} catch (e) {
 					Sunniesnow.Utils.error(`Failed to load chart: ${e}`, e);
 				}
+				if (!response.ok) {
+					Sunniesnow.Utils.error(`Failed to load chart: ${response.status} ${response.statusText}`);
+				}
+				file = await response.blob();
 				break;
 			case 'upload':
 				sourceContents = this.manual.levelFileUpload ? this.readFile('level-file-upload') : this.saved?.levelFileUpload;
@@ -144,12 +149,10 @@ Sunniesnow.Loader = {
 					Sunniesnow.game.settings.backgroundOnline
 				);
 			case 'from-level':
-				const url1 = URL.createObjectURL(this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel]);
-				setTimeout(() => URL.revokeObjectURL(url1), Sunniesnow.Config.objectUrlTimeout*1000);
+				const url1 = Sunniesnow.ObjectUrl.create(this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel]);
 				return url1;
 			case 'upload':
-				const url2 = URL.createObjectURL(Sunniesnow.game.settings.backgroundUpload);
-				setTimeout(() => URL.revokeObjectURL(url2), Sunniesnow.Config.objectUrlTimeout*1000);
+				const url2 = Sunniesnow.ObjectUrl.create(Sunniesnow.game.settings.backgroundUpload);
 				return url2;
 		}
 	},

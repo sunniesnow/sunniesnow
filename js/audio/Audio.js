@@ -22,9 +22,19 @@ Sunniesnow.Audio = class Audio {
 	}
 	
 	static async fromArrayBuffer(arrayBuffer, volume = 1, playbackRate = 1) {
-		// About the slice() call: see https://github.com/WebAudio/web-audio-api/issues/1175#issuecomment-320502059.
+		// See https://github.com/WebAudio/web-audio-api/issues/1175#issuecomment-320502059.
 		// Otherwise, we cannot start the game again after the first time.
-		const audioBuffer = await this.context.decodeAudioData(arrayBuffer.slice());
+		arrayBuffer = arrayBuffer.slice();
+		let audioBuffer;
+		try {
+			audioBuffer = await this.context.decodeAudioData(arrayBuffer);
+		} catch (e) {
+			try {
+				audioBuffer = await audioDecode(arrayBuffer);
+			} catch (e) {
+				Sunniesnow.Utils.error(`Failed to decode audio data, ${e}`, e);
+			}
+		}
 		return new this(audioBuffer, volume, playbackRate);
 	}
 

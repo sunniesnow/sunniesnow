@@ -92,10 +92,9 @@ Sunniesnow.Plugin = class Plugin {
 		}
 		this.constructor.now = this;
 		const script = document.createElement('script');
-		script.src = URL.createObjectURL(blob);
+		script.src = Sunniesnow.ObjectUrl.create(blob);
 		document.body.appendChild(script);
 		await new Promise((resolve, reject) => script.addEventListener('load', event => resolve()));
-		URL.revokeObjectURL(script.src);
 		document.body.removeChild(script);
 		if (this.main) {
 			await this.main();
