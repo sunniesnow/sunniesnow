@@ -7,10 +7,15 @@ Sunniesnow.Preprocess = {
 	},
 
 	async run() {
+		this.applyPatches();
 		this.associateDomElements();
 		this.setDeviceDependentDefaults();
 		await Sunniesnow.Loader.writeSavedSettings();
 		this.readUrlParams();
+	},
+
+	applyPatches() {
+		Sunniesnow.Patches.apply();
 	},
 
 	setDeviceDependentDefaults() {

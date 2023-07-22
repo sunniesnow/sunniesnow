@@ -30,16 +30,13 @@ nor does it contain any proprietary assets from Lyrica.
 
 The open-source projects used by Sunniesnow:
 
-- [PixiJS](https://pixijs.com)
-(MIT),
-- [JSZip](https://stuk.github.io/jszip)
-(MIT or GPL-3.0),
-- [Mime](https://www.skypack.dev/view/mime)
-(MIT),
+- [PixiJS](https://pixijs.com) (MIT),
+- [JSZip](https://stuk.github.io/jszip) (MIT or GPL-3.0),
+- [Mime](https://www.skypack.dev/view/mime) (MIT),
+- [audio-decode](https://github.com/audiojs/audio-decode) (MIT),
 - [marked](https://marked.js.org) (MIT),
 - [DOMPurify](https://github.com/cure53/DOMPurify) (Apache-2.0 or MPL-2.0),
-- [wangfonts](http://code.google.com/p/wangfonts)
-(GPL-2.0).
+- [wangfonts](http://code.google.com/p/wangfonts) (GPL-2.0).
 
 Sunniesnow does not contain any files from the above projects
 but uses them by letting the client browser download needed files
