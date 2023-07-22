@@ -26,12 +26,12 @@ Sunniesnow.Patches = {
 	patchRequestFullscreen() {
 		const e = Element.prototype;
 		e.requestFullscreen ||= e.webkitRequestFullscreen || e.mozRequestFullScreen || e.msRequestFullscreen;
-		e.requestFullscreen = function () {
+		e.requestFullscreen ||= function () {
 			return new Promise((resolve, reject) => reject(new TypeError('Fullscreen API is not supported on this browser.')));
 		};
 		const d = Document.prototype;
 		d.exitFullscreen ||= d.webkitExitFullscreen || d.mozCancelFullScreen || d.msExitFullscreen;
-		d.exitFullscreen = function () {
+		d.exitFullscreen ||= function () {
 			return new Promise((resolve, reject) => reject(new TypeError('Fullscreen API is not supported on this browser.')));
 		};
 	}
