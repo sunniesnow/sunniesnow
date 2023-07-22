@@ -656,13 +656,17 @@ Sunniesnow.Loader = {
 		this.loadModule('Chart');
 	},
 
-	loadUiDebug() {
-		this.loadModule('DebugBoard');
+	loadUiComponents() {
+		this.loadModule('Background');
+		this.loadModule('ProgressBar');
+		this.loadModule('TopCenterHud');
+		this.loadModule('TopLeftHud');
+		this.loadModule('TopRightHud');
+		this.loadModule('Result');
 	},
 
-	loadButtons() {
-		this.loadModule('ButtonPause');
-		this.loadModule('ButtonResultRetry');
+	loadUiDebug() {
+		this.loadModule('DebugBoard');
 	},
 
 	loadUiPause() {
@@ -672,13 +676,9 @@ Sunniesnow.Loader = {
 		this.loadModule('ButtonFullscreen');
 	},
 
-	loadUiComponents() {
-		this.loadModule('Background');
-		this.loadModule('ProgressBar');
-		this.loadModule('TopCenterHud');
-		this.loadModule('TopLeftHud');
-		this.loadModule('TopRightHud');
-		this.loadModule('Result');
+	loadButtons() {
+		this.loadModule('ButtonPause');
+		this.loadModule('ButtonResultRetry');
 	},
 
 	loadUiEvents() {

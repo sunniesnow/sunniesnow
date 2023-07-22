@@ -20,36 +20,48 @@ Sunniesnow.Fullscreen = {
 
 	enter() {
 		this.entering = true;
-		Sunniesnow.game.canvas.requestFullscreen().then(
-			() => {
-				this.entering = false;
-				this.is = true;
-				if (!this.should) {
-					this.quit();
+		const promise = Sunniesnow.game.canvas.requestFullscreen();
+		if (typeof promise.then === 'function') {
+			promise.then(
+				() => {
+					this.entering = false;
+					this.is = true;
+					if (!this.should) {
+						this.quit();
+					}
+				},
+				reason => {
+					this.entering = false;
+					Sunniesnow.Utils.warn('Failed to request fullscreen: ' + reason, reason);
 				}
-			},
-			reason => {
-				this.entering = false;
-				Sunniesnow.Utils.warn('Failed to request fullscreen: ' + reason, reason);
-			}
-		);
+			);
+		} else {
+			this.entering = false;
+			this.is = true;
+		}
 	},
 
 	quit() {
 		this.quitting = true;
-		document.exitFullscreen().then(
-			() => {
-				this.quitting = false;
-				this.is = false;
-				if (this.should) {
-					this.enter();
+		const promise = document.exitFullscreen();
+		if (typeof promise.then === 'function') {
+			promise.then(
+				() => {
+					this.quitting = false;
+					this.is = false;
+					if (this.should) {
+						this.enter();
+					}
+				},
+				reason => {
+					this.quitting = false;
+					Sunniesnow.Utils.warn('Failed to exit fullscreen: ' + reason, reason);
 				}
-			},
-			reason => {
-				this.quitting = false;
-				Sunniesnow.Utils.warn('Failed to exit fullscreen: ' + reason, reason);
-			}
-		);
+			);
+		} else {
+			this.quitting = false;
+			this.is = false;
+		}
 	},
 
 	addListenerToCanvas() {
