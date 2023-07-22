@@ -1,6 +1,6 @@
 Sunniesnow.Utils = {
 	warn(msg, e) {
-		document.getElementById('warnings').innerText += msg + '\n';
+		document.getElementById('warnings').innerHTML += msg + '<br>';
 		console.warn(msg);
 		if (e) {
 			console.warn(e);
@@ -10,7 +10,7 @@ Sunniesnow.Utils = {
 	},
 
 	error(msg, e) {
-		document.getElementById('errors').innerText += msg + '\n';
+		document.getElementById('errors').innerHTML += msg + '<br>';
 		console.error(msg);
 		Sunniesnow.Loader.loadingChart = false;
 		Sunniesnow.Loader.loadingComplete = true;
@@ -23,8 +23,8 @@ Sunniesnow.Utils = {
 	},
 
 	clearWarningsAndErrors() {
-		document.getElementById('warnings').innerText = '';
-		document.getElementById('errors').innerText = '';
+		document.getElementById('warnings').innerHTML = '';
+		document.getElementById('errors').innerHTML = '';
 	},
 
 	isValidUrl(text) {

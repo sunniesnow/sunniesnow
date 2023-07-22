@@ -506,8 +506,9 @@ head: head.html
 	</fieldset>
 </details>
 
-<button type="button" id="start-button" onclick="Sunniesnow.Game.run()">Start</button>
-<a href="help.html" target="_blank">Help</a>
+<button type="button" id="start-button" onclick="Sunniesnow.Game.run();">Start</button>
+<button type="button" id="stop-button" onclick="Sunniesnow.game?.terminate();">Stop</button>
+<a href="help.html" target="_blank" style="float: right;">Help</a>
 
 <div id="loading-progress"></div>
 <div id="warnings"></div>

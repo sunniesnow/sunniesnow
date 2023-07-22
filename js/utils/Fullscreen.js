@@ -65,7 +65,7 @@ Sunniesnow.Fullscreen = {
 	},
 
 	addListenerToCanvas() {
-		this.canvasFullscreenChangeListener = event => this.should = !!document.fullscreenElement;
+		this.canvasFullscreenChangeListener = event => this.should = this.is = !!document.fullscreenElement;
 		Sunniesnow.game.canvas.addEventListener('fullscreenchange', this.canvasFullscreenChangeListener);
 	},
 
