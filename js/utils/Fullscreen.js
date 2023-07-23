@@ -21,12 +21,22 @@ Sunniesnow.Fullscreen = {
 	enter() {
 		if (typeof navigator.standalone === 'boolean' && !navigator.standalone) {
 			Sunniesnow.Utils.warn(
-				'iOS browsers have some features in fullscreen mode that are undesirable for rhythm games. Consider ' +
+				'Consider ' +
 				'<a href="https://support.apple.com/guide/iphone/bookmark-favorite-webpages-iph42ab2f3a7/ios#iph4f9a47bbc">adding to home screen</a>' +
-				' to work around some of them.'
+				' to have a better experience on iOS.'
 			);
 		}
 		this.entering = true;
+		if (Sunniesnow.game.settings.floatAsFullscreen) {
+			const s = Sunniesnow.game.canvas.style;
+			s.position = 'fixed';
+			s.top = '50%';
+			s.left = '50%';
+			s.transform = 'translate(-50%, -50%)';
+			this.entering = false;
+			this.is = true;
+			return;
+		}
 		const promise = Sunniesnow.game.canvas.requestFullscreen();
 		if (typeof promise?.then === 'function') {
 			promise.then(
@@ -50,6 +60,16 @@ Sunniesnow.Fullscreen = {
 
 	quit() {
 		this.quitting = true;
+		if (Sunniesnow.game.settings.floatAsFullscreen) {
+			const s = Sunniesnow.game.canvas.style;
+			s.position = 'static';
+			s.top = '';
+			s.left = '';
+			s.transform = '';
+			this.quitting = false;
+			this.is = false;
+			return;
+		}
 		const promise = document.exitFullscreen();
 		if (typeof promise?.then === 'function') {
 			promise.then(

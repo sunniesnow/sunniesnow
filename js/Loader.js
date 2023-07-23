@@ -361,7 +361,8 @@ Sunniesnow.Loader = {
 			// system settings
 			width: this.readValue('width'),
 			height: this.readValue('height'),
-			fullscreen: this.readCheckbox('fullscreen'),
+			fullscreenOnStart: this.readCheckbox('fullscreen-on-start'),
+			floatAsFullscreen: this.readCheckbox('float-as-fullscreen'),
 			renderer: this.readRadio('renderer'),
 			antialias: this.readCheckbox('antialias'),
 			powerPreference: this.readRadio('power-preference'),
@@ -471,7 +472,8 @@ Sunniesnow.Loader = {
 		this.writeRadio('renderer', d('renderer'));
 		this.writeCheckbox('antialias', d('antialias'));
 		this.writeRadio('power-preference', d('powerPreference'));
-		this.writeCheckbox('fullscreen', d('fullscreen'));
+		this.writeCheckbox('fullscreen-on-start', d('fullscreenOnStart'));
+		this.writeCheckbox('float-as-fullscreen', d('floatAsFullscreen'));
 		this.writeCheckbox('debug', d('debug'));
 
 		const plugin = d('plugin');

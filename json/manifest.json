@@ -1,0 +1,17 @@
+{
+	"name": "Sunniesnow",
+	"description": "A web rhythm game.",
+
+	"icons": [
+		{
+			"src": "https://github.com/sunniesnow/logo/releases/download/v1.0/logo.ico",
+			"type": "image/x-icon",
+			"sizes": "192x192"
+		}
+	],
+	"start_url": "https://sunniesnow.github.io/game/",
+	"display": "fullscreen",
+	"theme_color": "#ffa520",
+	"orientation": "landscape-primary",
+	"scope": "/game/"
+}

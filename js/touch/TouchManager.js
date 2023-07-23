@@ -302,29 +302,35 @@ Sunniesnow.TouchManager = {
 
 	addDomMouseListeners() {
 		this.mouseDownListener = event => {
-			event.preventDefault();
-			this.mouseDown(event);
+			if (Sunniesnow.Utils.inScreenPage(event.pageX, event.pageY, Sunniesnow.game.canvas)) {
+				event.preventDefault();
+				this.mouseDown(event);
+			}
 		}
 		this.mouseMoveListener = event => {
-			event.preventDefault();
+			if (Sunniesnow.Utils.inScreenPage(event.pageX, event.pageY, Sunniesnow.game.canvas)) {
+				event.preventDefault();
+			}
 			this.mouseMove(event);
 		}
 		this.mouseUpListener = event => {
-			event.preventDefault();
+			if (Sunniesnow.Utils.inScreenPage(event.pageX, event.pageY, Sunniesnow.game.canvas)) {
+				event.preventDefault();
+			}
 			this.mouseUp(event);
 		}
-		Sunniesnow.game.canvas.addEventListener('mousedown', this.mouseDownListener);
-		Sunniesnow.game.canvas.addEventListener('mousemove', this.mouseMoveListener);
-		Sunniesnow.game.canvas.addEventListener('mouseup', this.mouseUpListener);
+		document.addEventListener('mousedown', this.mouseDownListener);
+		document.addEventListener('mousemove', this.mouseMoveListener);
+		document.addEventListener('mouseup', this.mouseUpListener);
 	},
 
 	removeDomMouseListeners() {
 		if (!this.mouseDownListener) {
 			return;
 		}
-		Sunniesnow.game.canvas.removeEventListener('mousedown', this.mouseDownListener);
-		Sunniesnow.game.canvas.removeEventListener('mousemove', this.mouseMoveListener);
-		Sunniesnow.game.canvas.removeEventListener('mouseup', this.mouseUpListener);
+		document.removeEventListener('mousedown', this.mouseDownListener);
+		document.removeEventListener('mousemove', this.mouseMoveListener);
+		document.removeEventListener('mouseup', this.mouseUpListener);
 	},
 
 	async load() {

@@ -4,7 +4,9 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 			'HanWangShinSuMedium-Regular',
 			'url(https://fastly.jsdelivr.net/gh/dictcp/wangfonts/TrueType/wt071.ttf) format(truetype)'
 		);
-		await font.load();
+		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.BigText)) {
+			await font.load();
+		}
 		document.fonts.add(font);
 	}
 

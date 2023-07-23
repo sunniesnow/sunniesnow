@@ -26,9 +26,30 @@ Sunniesnow.Patches = {
 	patchRequestFullscreen() {
 		const e = Element.prototype;
 		e.requestFullscreen ||= e.webkitRequestFullscreen || e.mozRequestFullScreen || e.msRequestFullscreen;
+		e.requestFullscreen ||= e.webkitEnterFullscreen || e.mozEnterFullScreen || e.msEnterFullscreen;
 		e.requestFullscreen ||= function () {
 			return new Promise((resolve, reject) => reject(new TypeError('requestFullscreen() is not supported on this browser')));
 		};
+		const oldAddEventListener = e.addEventListener;
+		e.addEventListener = function (type, listener, options) {
+			oldAddEventListener.call(this, type, listener, options);
+			if (type === 'fullscreenchange') {
+				oldAddEventListener.call(this, 'webkitfullscreenchange', listener, options);
+				oldAddEventListener.call(this, 'mozfullscreenchange', listener, options);
+				oldAddEventListener.call(this, 'MSFullscreenChange', listener, options);
+				oldAddEventListener.call(this, 'webkitbeginfullscreen', listener, options);
+				oldAddEventListener.call(this, 'mozbeginfullscreen', listener, options);
+				oldAddEventListener.call(this, 'MSBeginFullscreen', listener, options);
+				oldAddEventListener.call(this, 'webkitendfullscreen', listener, options);
+				oldAddEventListener.call(this, 'mozendfullscreen', listener, options);
+				oldAddEventListener.call(this, 'MSEndFullscreen', listener, options);
+			}
+			if (type === 'fullscreenerror') {
+				oldAddEventListener.call(this, 'webkitfullscreenerror', listener, options);
+				oldAddEventListener.call(this, 'mozfullscreenerror', listener, options);
+				oldAddEventListener.call(this, 'MSFullscreenError', listener, options);
+			}
+		}
 		const d = Document.prototype;
 		d.exitFullscreen ||= d.webkitExitFullscreen || d.mozExitFullScreen || d.msExitFullscreen;
 		d.exitFullscreen ||= d.cancelFullscreen || d.webkitCancelFullScreen || d.mozCancelFullScreen || d.msCancelFullScreen;

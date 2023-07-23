@@ -33,14 +33,16 @@ Sunniesnow.Plugin = class Plugin {
 			Sunniesnow.Utils.warn(`Failed to load plugin ${this.id}: cannot read as zip`, e);
 			return;
 		}
-		this.createReadmeDom();
+		if (Sunniesnow.Utils.isBrowser()) {
+			this.createReadmeDom();
+		}
 		for (const filename in zip.files) {
 			const zipObject = zip.files[filename];
 			if (zipObject.dir) {
 				continue;
 			}
 			this.blobs[filename] = await zipObject.async('blob');
-			if (Sunniesnow.Utils.needsDisplayTextFile(filename)) {
+			if (Sunniesnow.Utils.isBrowser() && Sunniesnow.Utils.needsDisplayTextFile(filename)) {
 				this.fillReadme(filename, await zipObject.async('text'));
 			}
 		}
@@ -91,11 +93,15 @@ Sunniesnow.Plugin = class Plugin {
 			return;
 		}
 		this.constructor.now = this;
-		const script = document.createElement('script');
-		script.src = Sunniesnow.ObjectUrl.create(blob);
-		document.body.appendChild(script);
-		await new Promise((resolve, reject) => script.addEventListener('load', event => resolve()));
-		document.body.removeChild(script);
+		if (Sunniesnow.Utils.isBrowser()) {
+			const script = document.createElement('script');
+			script.src = Sunniesnow.ObjectUrl.create(blob);
+			document.body.appendChild(script);
+			await new Promise((resolve, reject) => script.addEventListener('load', event => resolve()));
+			document.body.removeChild(script);
+		} else {
+			new Function(await blob.text())();
+		}
 		if (this.main) {
 			await this.main();
 		}

@@ -765,17 +765,35 @@ This setting is used to set the height of the game canvas.
 
 #### Fullscreen
 
-- **Setting id**: `fullscreen`.
+##### Enter fullscreen on start
+{:#fullscreen-on-start}
+
+- **Setting id**: `fullscreen-on-start`.
 - **Possible values**: `true`, `false`.
 
 If it is `true`, the game will try to go to fullscreen mode when it starts.
-It may fail due to permission checks by the browser.
-For example, in Chrome, you will have to interact with the webpage before anything in the webpage can go fullscreen.
-This will make things inconvenient when using [`instant-start`](#instant-start).
-
 You can still toggle fullscreen by other means after the game has started.
 There is a button in the pause menu to let you toggle fullscreen.
-Most browsers exit fullscreen mode when you hit <kbd>Escape</kbd> or <kbd>F11</kbd>.
+
+##### Float instead of actual fullscreen
+{:#float-as-fullscreen}
+
+- **Setting id**: `float-as-fullscreen`.
+- **Possible values**: `true`, `false`.
+
+There are two ways of handling fullscreen in the browser:
+one is to use the native [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API)
+(when this setting is `false`),
+and the other is to make the position of the canvas fixed and make it cover the whole screen
+(when this setting is `true`).
+
+When using the Fullscreen API, it may fail due to permission checks by the browser.
+For example, in Chrome, you will have to interact with the webpage before anything in the webpage can go fullscreen.
+This will make things inconvenient when using [`instant-start`](#instant-start).
+Some browser environments also lack the proper support of the Fullscreen API.
+
+When using the Fullscreen API,
+you can exit fullscreen mode when you hit <kbd>Escape</kbd> or <kbd>F11</kbd> on most browsers.
 
 #### Plugins
 {:#plugin}

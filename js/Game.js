@@ -39,7 +39,7 @@ Sunniesnow.Game = class Game {
 		this.canvas = this.app.view;
 		this.canvas.id = 'main-canvas';
 		this.addCanvasListeners();
-		if (this.settings.fullscreen) {
+		if (this.settings.fullscreenOnStart) {
 			Sunniesnow.Fullscreen.set(true);
 		}
 	}

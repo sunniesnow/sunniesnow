@@ -104,19 +104,16 @@ Sunniesnow.Utils = {
 	},
 
 	pageToCanvasCoordinates(pageX, pageY, canvas) {
-		let totalOffsetX = 0;
-		let totalOffsetY = 0;
-		for (let e = canvas; e; e = e.offsetParent) {
-			totalOffsetX += e.offsetLeft;
-			totalOffsetY += e.offsetTop;
-		}
+		const rect = canvas.getBoundingClientRect();
+		rect.x += window.scrollX;
+		rect.y += window.scrollY;
 		const scale = Math.max(
 			canvas.width / canvas.offsetWidth,
 			canvas.height / canvas.offsetHeight
 		);
 		return [
-			(pageX - totalOffsetX - canvas.offsetWidth/2) * scale + canvas.width/2,
-			(pageY - totalOffsetY - canvas.offsetHeight/2) * scale + canvas.height/2
+			(pageX - rect.x - rect.width/2) * scale + canvas.width/2,
+			(pageY - rect.y - rect.height/2) * scale + canvas.height/2
 		];
 	},
 
@@ -294,6 +291,10 @@ Sunniesnow.Utils = {
 		return this.between(x, 0, Sunniesnow.game.settings.width) && this.between(y, 0, Sunniesnow.game.settings.height);
 	},
 
+	inScreenPage(x, y, canvas) {
+		return this.inScreen(...this.pageToCanvasCoordinates(x, y, canvas));
+	},
+
 	needsDisplayTextFile(filename) {
 		const type = mime.getType(filename);
 		if (type?.endsWith('markdown') || type?.endsWith('plain')) {
@@ -308,7 +309,9 @@ Sunniesnow.Utils = {
 			/^PATENT/i,
 			/^CHANGE_?LOG/i,
 			/^CODE_?OF_?CONDUCT/i,
-			/^ATTRIBUTION/i
+			/^ATTRIBUTION/i,
+			/^VERSION/i,
+			/^CONTRIBUT/i
 		].some(regexp => regexp.test(filename));
 	},
 
@@ -324,5 +327,13 @@ Sunniesnow.Utils = {
 			result += buf[i].toString(16).padStart(2, '0');
 		}
 		return result;
+	},
+
+	isBrowser() {
+		return typeof window === 'object';
+	},
+
+	isMobileSafari() {
+		return this.isBrowser() && /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
 	}
 };

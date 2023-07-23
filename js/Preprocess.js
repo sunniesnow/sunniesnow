@@ -21,6 +21,7 @@ Sunniesnow.Preprocess = {
 	setDeviceDependentDefaults() {
 		this.setResolution();
 		this.setRenderer();
+		this.setFullscreenMethod();
 	},
 
 	setResolution() {
@@ -35,6 +36,12 @@ Sunniesnow.Preprocess = {
 	setRenderer() {
 		if (!Sunniesnow.Utils.supportsGl()) {
 			Sunniesnow.Loader.writeRadio('renderer', 'canvas');
+		}
+	},
+
+	setFullscreenMethod() {
+		if (Sunniesnow.Utils.isMobileSafari()) {
+			Sunniesnow.Loader.writeCheckbox('float-as-fullscreen', true);
 		}
 	},
 
@@ -92,6 +99,6 @@ Sunniesnow.Preprocess = {
 	}
 };
 
-if (typeof window === 'object') {
+if (Sunniesnow.Utils.isBrowser()) {
 	window.addEventListener('load', () => Sunniesnow.Preprocess.run());
 }
