@@ -17,7 +17,7 @@ head: head.html
 	<div>
 		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload">
 		<label for="level-file-upload-radio">Upload:</label>
-		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Loader.markManual('level-file-upload'); Sunniesnow.Loader.triggerLoadChart();">
+		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Dom.markManual('level-file-upload'); Sunniesnow.Loader.triggerLoadChart();">
 	</div>
 </fieldset>
 
@@ -109,7 +109,7 @@ head: head.html
 		<div>
 			<input type="radio" id="background-upload-radio" name="background" value="upload">
 			<label for="background-upload-radio">Upload:</label>
-			<input type="file" id="background-upload" accept="image/*" onchange="Sunniesnow.Loader.markManual('background-upload');">
+			<input type="file" id="background-upload" accept="image/*" onchange="Sunniesnow.Dom.markManual('background-upload');">
 		</div>
 	</fieldset>
 
@@ -146,7 +146,7 @@ head: head.html
 		<div>
 			<input type="radio" id="fx-upload-radio" name="fx" value="upload">
 			<label for="fx-upload-radio">Upload:</label>
-			<input type="file" id="fx-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual('fx-upload');">
+			<input type="file" id="fx-upload" accept=".ssp" onchange="Sunniesnow.Dom.markManual('fx-upload');">
 		</div>
 	</fieldset>
 
@@ -167,7 +167,7 @@ head: head.html
 		<div>
 			<input type="radio" id="skin-upload-radio" name="skin" value="upload">
 			<label for="skin-upload-radio">Upload:</label>
-			<input type="file" id="skin-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual('skin-upload');">
+			<input type="file" id="skin-upload" accept=".ssp" onchange="Sunniesnow.Dom.markManual('skin-upload');">
 		</div>
 	</fieldset>
 
@@ -238,7 +238,7 @@ head: head.html
 		<div>
 			<input type="radio" id="se-upload-radio" name="se" value="upload">
 			<label for="se-upload-radio">Upload:</label>
-			<input type="file" id="se-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual('se-upload');">
+			<input type="file" id="se-upload" accept=".ssp" onchange="Sunniesnow.Dom.markManual('se-upload');">
 		</div>
 	</fieldset>
 
@@ -507,6 +507,52 @@ head: head.html
 		<div>
 			<input type="checkbox" id="debug">
 			<label for="debug">Enable debug mode</label>
+		</div>
+	</fieldset>
+</details>
+
+<details>
+	<summary>Operations</summary>
+
+	<fieldset>
+		<legend>Settings</legend>
+		<div>
+			Delete saved settings:
+			<button type="button" id="delete-settings" onclick="Sunniesnow.Dom.deleteSavedSettings();">Delete</button>
+		</div>
+		<div>
+			Export saved settings:
+			<button type="button" id="export-settings" onclick="Sunniesnow.Dom.exportSavedSettings();">Export</button>
+		</div>
+		<div>
+			Import saved settings:
+			<input type="file" id="import-settings" onchange="Sunniesnow.Dom.importSettings();">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Cache (service worker)</legend>
+
+		<div>
+			Delete cache of online sources:
+			<button type="button" id="delete-online-cache">Delete</button>
+		</div>
+
+		<div>
+			Delete all cache:
+			<button type="button" id="delete-all-cache">Delete</button>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Game</legend>
+
+		<div>
+			<button type="button" id="game-start" onclick="Sunniesnow.Game.run();">Start</button>
+		</div>
+
+		<div>
+			<button type="button" id="game-stop" onclick="Sunniesnow.game?.terminate();">Stop</button>
 		</div>
 	</fieldset>
 </details>
