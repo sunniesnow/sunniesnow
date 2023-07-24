@@ -52,9 +52,17 @@ Sunniesnow.Utils = {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	},
 
-	mirrorPath(path) {
+	mirrorAndReversePath(path) {
 		for (let i = 0; i < path.length; i += 2) {
 			path[i] = Sunniesnow.game.settings.width - path[i];
+		}
+		for (let i = 0; i < path.length / 2; i += 2) {
+			const x = path[i];
+			const y = path[i + 1];
+			path[i] = path[path.length - i - 2];
+			path[i + 1] = path[path.length - i - 1];
+			path[path.length - i - 2] = x;
+			path[path.length - i - 1] = y;
 		}
 	},
 
