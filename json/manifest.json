@@ -1,12 +1,15 @@
+---
+---
+
 {
 	"name": "Sunniesnow",
 	"description": "A web rhythm game.",
 
 	"icons": [
 		{
-			"src": "/favicon.ico",
-			"type": "image/x-icon",
-			"sizes": "192x192"
+			"src": "/favicon.svg",
+			"type": "image/svg+xml",
+			"sizes": "256x256"
 		}
 	],
 	"start_url": "{{ site.url }}/game/",
