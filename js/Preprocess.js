@@ -12,6 +12,7 @@ Sunniesnow.Preprocess = {
 		Sunniesnow.Dom.setDeviceDependentDefaults();
 		await Sunniesnow.Dom.writeSavedSettings();
 		this.readUrlParams();
+		await this.registerServiceWorker();
 	},
 
 	applyPatches() {
@@ -28,6 +29,18 @@ Sunniesnow.Preprocess = {
 		}
 		Sunniesnow.Dom.writeSettings(params);
 	},
+
+	async registerServiceWorker() {
+		if (!navigator.serviceWorker) {
+			Sunniesnow.Utils.warn('Service worker is not supported on this browser')
+			return;
+		}
+		try {
+			await navigator.serviceWorker.register('/game/service-worker.js', {scope: '/game/'});
+		} catch (error) {
+			Sunniesnow.Utils.warn(`Failed to register service worker: ${error}`, error);
+		}
+	}
 
 };
 

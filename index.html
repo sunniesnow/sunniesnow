@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Sunniesnow
-head: head.html
+head: _head.html
 ---
 
 <fieldset>
@@ -534,13 +534,18 @@ head: head.html
 		<legend>Cache (service worker)</legend>
 
 		<div>
-			Delete cache of online sources:
-			<button type="button" id="delete-online-cache">Delete</button>
+			Delete caches of online resources:
+			<button type="button" id="delete-online-caches" onclick="Sunniesnow.Loader.deleteOnlineCaches();">Delete</button>
+		</div>
+		
+		<div>
+			Delete caches of site resources:
+			<button type="button" id="delete-site-caches" onclick="Sunniesnow.Loader.deleteSiteCaches();">Delete</button>
 		</div>
 
 		<div>
-			Delete all cache:
-			<button type="button" id="delete-all-cache">Delete</button>
+			Delete caches of external resources:
+			<button type="button" id="delete-external-caches" onclick="Sunniesnow.Loader.deleteExternalCaches();">Delete</button>
 		</div>
 	</fieldset>
 

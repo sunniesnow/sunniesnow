@@ -4,12 +4,12 @@
 
 	"icons": [
 		{
-			"src": "https://github.com/sunniesnow/logo/releases/download/v1.0/logo.ico",
+			"src": "/favicon.ico",
 			"type": "image/x-icon",
 			"sizes": "192x192"
 		}
 	],
-	"start_url": "https://sunniesnow.github.io/game/",
+	"start_url": "{{ site.url }}/game/",
 	"display": "fullscreen",
 	"theme_color": "#ffa520",
 	"orientation": "landscape-primary",
