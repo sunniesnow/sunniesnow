@@ -1,7 +1,7 @@
 Sunniesnow.ButtonFullscreen = class ButtonFullscreen extends Sunniesnow.ButtonResume {
 	static async load() {
 		await super.load();
-		this.text = 'Fullscreen';
+		this.text = 'Fullscr';
 	}
 
 	populate() {

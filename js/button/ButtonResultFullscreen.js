@@ -1,15 +1,15 @@
-Sunniesnow.ButtonResultRetry = class ButtonResultRetry extends Sunniesnow.Button {
+Sunniesnow.ButtonResultFullscreen = class ButtonResultFullscreen extends Sunniesnow.Button {
 	static async load() {
 		this.geometry = this.createGeometry();
-		this.text = 'Retry';
+		this.text = 'Fullscr';
 	}
 
 	static createGeometry() {
 		this.radius = Sunniesnow.game.settings.width / 8;
 		const path = [
-			-this.radius, 0,
-			0, -this.radius,
-			this.radius, 0
+			this.radius, 0,
+			0, this.radius,
+			-this.radius, 0
 		]
 		const graphics = new PIXI.Graphics();
 		graphics.lineStyle(this.radius / 15, 0xfbfbff, 1, 1);
@@ -31,10 +31,10 @@ Sunniesnow.ButtonResultRetry = class ButtonResultRetry extends Sunniesnow.Button
 			align: 'center'
 		});
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
-		this.text.y = -this.constructor.radius / 2.5;
+		this.text.y = this.constructor.radius / 2.5;
 		this.addChild(this.background);
 		this.addChild(this.text);
-		this.x = Sunniesnow.game.settings.width * 1/13;
-		this.y = Sunniesnow.game.settings.height * (1 + 1/40);
+		this.x = Sunniesnow.game.settings.width * (1 - 1/13);
+		this.y = Sunniesnow.game.settings.height * -1/40;
 	}
 };

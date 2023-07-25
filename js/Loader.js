@@ -276,6 +276,7 @@ Sunniesnow.Loader = {
 	loadButtons() {
 		this.loadModule('ButtonPause');
 		this.loadModule('ButtonResultRetry');
+		this.loadModule('ButtonResultFullscreen');
 	},
 
 	loadUiEvents() {
