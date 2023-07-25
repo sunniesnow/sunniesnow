@@ -773,7 +773,8 @@ This setting is used to set the height of the game canvas.
 
 If it is `true`, the game will try to go to fullscreen mode when it starts.
 You can still toggle fullscreen by other means after the game has started.
-There is a button in the pause menu to let you toggle fullscreen.
+There is a button in the pause menu and a button in the results scene
+to let you toggle fullscreen.
 
 ##### Float instead of actual fullscreen
 {:#float-as-fullscreen}
@@ -901,6 +902,99 @@ or the power consumption is **not** certain.
 
 If it is `true`, the game will be in debug mode.
 The game will show more information on UI in debug mode.
+
+## Operations
+
+### Settings
+
+#### Delete saved settings
+{:#delete-settings}
+
+The settings that you set above are automatically saved for next page load
+when you hit the *Start* button.
+If you want to delete the saved settings,
+you can click the *Delete* button here.
+If you reload the page immediately after deleting the saved settings,
+the settings will be reset to the default values.
+
+#### Export saved settings
+{:#export-settings}
+
+You can export the saved settings to a JSON file here.
+
+#### Import saved settings
+{:#import-settings}
+
+You can import saved settings from a JSON file here.
+
+### Cache (service worker)
+
+[Service worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
+is used to make the game playable even offline.
+This is done by caching everything that needs downloading.
+
+As defined here, there are three kinds of caches:
+
+- **Caches of site resources**:
+These are resources that make up the game itself.
+- **Caches of online resources**:
+These are resources that are retrieved according to user settings,
+including online level files, online backgrounds, online skins, etc.
+- **Caches of external resources**:
+These are resources that are required by plugins,
+sucn has online image files that are required by the skins and the FXs.
+
+However, sometimes you may want to update the local files
+while you are prevented from doing that because of the cache hits.
+That is when you need to delete some of the caches.
+
+*Notice*: The caches are **immediately deleted without confirmation**
+when you hit the *Delete* buttons,
+and this **cannot be undone**.
+
+#### Delete caches of online resources
+{:#delete-online-caches}
+
+After you delete the caches of online resources,
+the game will try to retrieve the online resources from the server
+(or from whatever URLs you entered) again.
+For example, if a level file that you play online is outdated,
+you may want to delete the caches of online resources
+to make the game retrieve the level file again.
+
+#### Delete caches of site resources
+{:#delete-site-caches}
+
+After you delete the caches of site resources,
+the game will try to retrieve the site resources from the server again.
+You need to do this if the game itself is updated,
+and you want to play the new version of the game.
+
+#### Delete caches of external resources
+{:#delete-external-caches}
+
+After you delete the caches of external resources,
+the game will try to retrieve the external resources from the server again.
+
+### Game
+
+#### Start
+{:#game-start}
+
+This button is used to start the game.
+
+If you hit this button when the game is already started,
+the game will be restarted (i.e. [stopped](#game-stop) and then started).
+
+#### Stop
+{:#game-stop}
+
+This button is used to stop the game.
+After the game is stopped, it does not update its graphics anymore,
+but the graphics shown on the screen will **not** be cleared immediately.
+
+If you want to start the game again,
+you can hit [*Start*](#game-start) button again.
 
 ## URL search parameters
 
