@@ -27,13 +27,9 @@ Sunniesnow.Audio = class Audio {
 		arrayBuffer = arrayBuffer.slice();
 		let audioBuffer;
 		try {
-			audioBuffer = await this.context.decodeAudioData(arrayBuffer);
-		} catch (e) {
-			try {
-				audioBuffer = await audioDecode(arrayBuffer);
-			} catch (e) {
-				Sunniesnow.Utils.error(`Failed to decode audio data, ${e}`, e);
-			}
+			audioBuffer = await audioDecode(arrayBuffer);
+		} catch (audioDecodeError) {
+			Sunniesnow.Utils.error(`Failed to decode audio data, ${audioDecodeError}`, audioDecodeError);
 		}
 		return new this(audioBuffer, volume, playbackRate);
 	}

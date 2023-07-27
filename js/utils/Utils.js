@@ -1,6 +1,10 @@
 Sunniesnow.Utils = {
 	warn(msg, e) {
-		document.getElementById('warnings').innerHTML += msg + '<br>';
+		if (this.isBrowser()) {
+			const div = document.createElement('div');
+			div.innerHTML = msg;
+			document.getElementById('warnings').appendChild(div);
+		}
 		console.warn(msg);
 		if (e) {
 			console.warn(e);
@@ -10,7 +14,11 @@ Sunniesnow.Utils = {
 	},
 
 	error(msg, e) {
-		document.getElementById('errors').innerHTML += msg + '<br>';
+		if (this.isBrowser()) {
+			const div = document.createElement('div');
+			div.innerHTML = msg;
+			document.getElementById('errors').appendChild(div);
+		}
 		console.error(msg);
 		Sunniesnow.Loader.loadingChart = false;
 		Sunniesnow.Loader.loadingComplete = true;
@@ -343,5 +351,17 @@ Sunniesnow.Utils = {
 
 	isMobileSafari() {
 		return this.isBrowser() && /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
-	}
+	},
+
+	until(condition, interval = 100) {
+		const poll = (resolve, reject) => {
+			if (condition()) {
+				resolve();
+			} else {
+				setTimeout(() => poll(resolve), interval);
+			}
+		};
+		return new Promise(poll);
+	},
+
 };

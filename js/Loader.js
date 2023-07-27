@@ -48,9 +48,9 @@ Sunniesnow.Loader = {
 	async loadChart() {
 		let file;
 		let sourceContents;
-		switch (Sunniesnow.Dom.readRadio('level-file')) {
+		switch (Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Dom.readRadio('level-file')) {
 			case 'online':
-				sourceContents = Sunniesnow.Dom.readValue('level-file-online');
+				sourceContents = Sunniesnow.game?.settings.levelFileOnline ?? Sunniesnow.Dom.readValue('level-file-online');
 				if (this.loaded.chart.source === 'online' && this.loaded.chart.sourceContents === sourceContents) {
 					return;
 				}
@@ -70,7 +70,7 @@ Sunniesnow.Loader = {
 				file = await response.blob();
 				break;
 			case 'upload':
-				sourceContents = Sunniesnow.Dom.actualLevelFileUpload();
+				sourceContents = Sunniesnow.game?.settings.levelFileUpload ?? Sunniesnow.Dom.actualLevelFileUpload();
 				if (this.loaded.chart.source === 'upload' && this.loaded.chart.sourceContents === sourceContents) {
 					return;
 				}
@@ -97,20 +97,32 @@ Sunniesnow.Loader = {
 			}
 			const type = mime.getType(filename);
 			if (type?.startsWith('audio')) {
-				Sunniesnow.Dom.fillMusicSelect(filename);
+				if (Sunniesnow.Utils.isBrowser()) {
+					Sunniesnow.Dom.fillMusicSelect(filename);
+				}
 				this.loaded.chart.music[filename] = await zipObject.async('arraybuffer');
 			} else if (type?.startsWith('image')) {
-				Sunniesnow.Dom.fillBackgroundSelect(filename);
+				if (Sunniesnow.Utils.isBrowser()) {
+					Sunniesnow.Dom.fillBackgroundSelect(filename);
+				}
 				const blob = new Blob([await zipObject.async('blob')], {type});
 				this.loaded.chart.backgrounds[filename] = blob;
 			} else if (type?.endsWith('json')) {
-				Sunniesnow.Dom.fillChartSelect(filename);
+				if (Sunniesnow.Utils.isBrowser()) {
+					Sunniesnow.Dom.fillChartSelect(filename);
+				}
 				this.loaded.chart.charts[filename] = JSON.parse(await zipObject.async('string'));
 			} else if (Sunniesnow.Utils.needsDisplayTextFile(filename)) {
-				Sunniesnow.Dom.fillLevelReadme(filename, await zipObject.async('string'));
+				if (Sunniesnow.Utils.isBrowser()) {
+					Sunniesnow.Dom.fillLevelReadme(filename, await zipObject.async('string'));
+				}
 			} else {
 				Sunniesnow.Utils.warn(`Cannot determine type of ${filename}`)
 			}
+		}
+		if (Sunniesnow.game?.settings) {
+			Sunniesnow.game.settings.musicSelect = Object.keys(this.loaded.chart.music)[0];
+			Sunniesnow.game.settings.chartSelect = Object.keys(this.loaded.chart.charts)[0];
 		}
 	},
 
@@ -128,6 +140,9 @@ Sunniesnow.Loader = {
 		this.loaded.chart.charts = {};
 		this.loaded.chart.music = {};
 		this.loaded.chart.backgrounds = {};
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
 		Sunniesnow.Dom.clearSelect('music-select');
 		Sunniesnow.Dom.clearSelect('chart-select');
 		Sunniesnow.Dom.clearSelect('background-from-level');
@@ -315,6 +330,13 @@ Sunniesnow.Loader = {
 	},
 
 	updateLoadingModules() {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			if (this.loadingModulesProgress >= this.targetLoadingModulesProgress) {
+				this.loadingModulesComplete = true;
+				this.loadingComplete = true;
+			}
+			return;
+		}
 		const element = document.getElementById('loading-progress');
 		if (this.loadingModulesProgress >= this.targetLoadingModulesProgress) {
 			element.style.display = 'none';
@@ -340,6 +362,13 @@ Sunniesnow.Loader = {
 	},
 
 	updateLoadingPlugins() {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			if (this.loadingPluginsProgress >= this.targetLoadingPluginsProgress) {
+				this.loadingPluginsComplete = true;
+				this.loadModules();
+			}
+			return;
+		}
 		const element = document.getElementById('loading-progress');
 		if (this.loadingPluginsProgress >= this.targetLoadingPluginsProgress) {
 			element.style.display = 'none';
@@ -352,24 +381,31 @@ Sunniesnow.Loader = {
 	},
 
 	updateLoadingChart() {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
 		const element = document.getElementById('loading-progress');
 		element.style.display = '';
 		element.innerHTML = 'Loading chart';
 	},
 
 	load() {
-		Sunniesnow.Dom.readSettings();
+		if (Sunniesnow.Utils.isBrowser()) {
+			Sunniesnow.Dom.readSettings();
+		}
 		this.loadingComplete = false;
 		if (Sunniesnow.game.settings.levelFile === 'online' && this.loaded.chart.sourceContents !== Sunniesnow.game.settings.levelFileOnline) {
 			this.loadChart().then(() => {
-				Sunniesnow.game.settings.musicSelect = Object.keys(this.loaded.chart.music)[0];
-				Sunniesnow.game.settings.chartSelect = Object.keys(this.loaded.chart.charts)[0];
-				Sunniesnow.Dom.saveSettings();
+				if (Sunniesnow.Utils.isBrowser()) {
+					Sunniesnow.Dom.saveSettings();
+				}
 				this.loadingChartComplete = true;
 				this.loadPlugins();
 			}, reason => Sunniesnow.Utils.error(`Failed to load chart: ${reason}`, reason));
 		} else {
-			Sunniesnow.Dom.saveSettings();
+			if (Sunniesnow.Utils.isBrowser()) {
+				Sunniesnow.Dom.saveSettings();
+			}
 			this.loadingChartComplete = true;
 			this.loadPlugins();
 		}

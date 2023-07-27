@@ -1,13 +1,11 @@
 Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 	static async load() {
-		const font = new FontFace(
-			'HanWangShinSuMedium-Regular',
-			'url(https://fastly.jsdelivr.net/gh/dictcp/wangfonts/TrueType/wt071.ttf) format(truetype)'
-		);
-		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.BigText)) {
-			await font.load();
-		}
-		document.fonts.add(font);
+		//if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.BigText)) {
+			await PIXI.Assets.load({
+				src: 'https://fastly.jsdelivr.net/gh/dictcp/wangfonts/TrueType/wt071.ttf',
+				data: {family: 'HanWangShinSuMedium-Regular'}
+			});
+		//}
 	}
 
 	populate() {

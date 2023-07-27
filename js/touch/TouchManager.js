@@ -334,6 +334,9 @@ Sunniesnow.TouchManager = {
 	},
 
 	async load() {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
 		this.addDomTouchListeners();
 		this.addDomKeyListeners();
 		this.addDomMouseListeners();

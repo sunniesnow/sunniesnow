@@ -12,15 +12,17 @@ Sunniesnow.Game = class Game {
 			Sunniesnow.game.terminate();
 		}
 		Sunniesnow.game = new this();
+		Sunniesnow.Loader.load();
 		Sunniesnow.game.start();
 		Sunniesnow.game.app.ticker.add(Sunniesnow.game.mainTicker.bind(Sunniesnow.game));
 	}
 
 	start() {
-		Sunniesnow.Loader.load();
 		this.initPixiApp();
 		this.initCanvas();
-		this.addWindowListeners();
+		if (Sunniesnow.Utils.isBrowser()) {
+			this.addWindowListeners();
+		}
 	}
 
 	mainTicker(delta) {
@@ -38,6 +40,9 @@ Sunniesnow.Game = class Game {
 	initCanvas() {
 		this.canvas = this.app.view;
 		this.canvas.id = 'main-canvas';
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
 		this.addCanvasListeners();
 		if (this.settings.fullscreenOnStart) {
 			Sunniesnow.Fullscreen.set(true);
@@ -94,8 +99,11 @@ Sunniesnow.Game = class Game {
 			forceCanvas: this.settings.renderer === 'canvas',
 			antialias: this.settings.antialias,
 			powerPreference: this.settings.powerPreference,
+			autoStart: Sunniesnow.Utils.isBrowser()
 		});
-		document.getElementById('main-canvas').replaceWith(this.app.view);
+		if (Sunniesnow.Utils.isBrowser()) {
+			document.getElementById('main-canvas').replaceWith(this.app.view);
+		}
 	}
 
 	initLevel() {
