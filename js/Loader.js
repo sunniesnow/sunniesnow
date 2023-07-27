@@ -23,10 +23,7 @@ Sunniesnow.Loader = {
 			// keys: filename
 			// values: Blob
 			backgrounds: {}
-		},
-
-		// URL string
-		background: null,
+		}
 	},
 
 	chartLoadListeners: [],

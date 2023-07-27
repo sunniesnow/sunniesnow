@@ -3,6 +3,7 @@ Sunniesnow.Patches = {
 		this.patchHasOwn();
 		this.patchFindLastIndex();
 		this.patchRequestFullscreen();
+		Sunniesnow.PixiPatches.apply();
 	},
 
 	// Object.hasOwn is supported on Safari only since 15.4.

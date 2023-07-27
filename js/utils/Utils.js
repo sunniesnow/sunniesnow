@@ -364,4 +364,8 @@ Sunniesnow.Utils = {
 		return new Promise(poll);
 	},
 
+	isBlobUrl(url) {
+		return url.startsWith('blob:');
+	}
+
 };
