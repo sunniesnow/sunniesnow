@@ -10,6 +10,9 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 
 	hit(touch, time) {
 		super.hit(touch, time);
+		if (!touch) {
+			return;
+		}
 		this.swipe(touch);
 		this.release(time);
 	}

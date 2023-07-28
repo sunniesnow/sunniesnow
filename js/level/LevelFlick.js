@@ -35,7 +35,7 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 
 	hit(touch, time) {
 		super.hit(touch, time);
-		if (touch.wholeScreen) {
+		if (touch?.wholeScreen) {
 			this.release(time);
 		}
 	}
