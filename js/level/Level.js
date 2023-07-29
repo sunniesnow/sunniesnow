@@ -50,7 +50,6 @@ Sunniesnow.Level = class Level {
 	}
 
 	addTouchListeners() {
-		console.error(new Error())
 		Sunniesnow.TouchManager.addStartListener(this.touchStartListener = this.touchStart.bind(this));
 		Sunniesnow.TouchManager.addMoveListener(this.touchMoveListener = this.touchMove.bind(this));
 		Sunniesnow.TouchManager.addEndListener(this.touchEndListener = this.touchEnd.bind(this));
