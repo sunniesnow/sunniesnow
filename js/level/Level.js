@@ -4,7 +4,7 @@ Sunniesnow.Level = class Level {
 		this.initializeNoteStores();
 		this.notesCount = this.unhitNotes.length;
 		this.initializePlayInfo();
-		if (!Sunniesnow.game.settings.autoPlay) {
+		if (!Sunniesnow.game.settings.autoplay) {
 			this.addTouchListeners();
 		}
 	}
@@ -50,6 +50,7 @@ Sunniesnow.Level = class Level {
 	}
 
 	addTouchListeners() {
+		console.error(new Error())
 		Sunniesnow.TouchManager.addStartListener(this.touchStartListener = this.touchStart.bind(this));
 		Sunniesnow.TouchManager.addMoveListener(this.touchMoveListener = this.touchMove.bind(this));
 		Sunniesnow.TouchManager.addEndListener(this.touchEndListener = this.touchEnd.bind(this));
@@ -57,12 +58,13 @@ Sunniesnow.Level = class Level {
 
 	finish() {
 		this.finished = true;
-		if (!Sunniesnow.game.settings.autoPlay) {
-			this.removeTouchListeners();
-		}
+		this.removeTouchListeners();
 	}
 
 	removeTouchListeners() {
+		if (!this.touchStartListener) {
+			return;
+		}
 		Sunniesnow.TouchManager.removeStartListener(this.touchStartListener);
 		Sunniesnow.TouchManager.removeMoveListener(this.touchMoveListener);
 		Sunniesnow.TouchManager.removeEndListener(this.touchEndListener);
