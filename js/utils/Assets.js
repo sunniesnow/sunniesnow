@@ -19,5 +19,15 @@ Sunniesnow.Assets = {
 			fs.writeFileSync(dest, Buffer.from(data));
 			return await PIXI.Assets.load({ src: dest, data: { family } });
 		}
+	},
+
+	async audioDecode(arrayBuffer, context) {
+		const audioBuffer = await audioDecode(arrayBuffer);
+		const result = context.createBuffer(audioBuffer.numberOfChannels, audioBuffer.length, audioBuffer.sampleRate);
+		for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
+			result.copyToChannel(audioBuffer.getChannelData(i), i);
+		}
+		return result;
 	}
+
 };

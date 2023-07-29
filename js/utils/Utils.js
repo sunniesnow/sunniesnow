@@ -1,5 +1,8 @@
 Sunniesnow.Utils = {
 	warn(msg, e) {
+		if (Sunniesnow.record?.suppressWarnings) {
+			return;
+		}
 		if (this.isBrowser()) {
 			const div = document.createElement('div');
 			div.innerHTML = msg;
