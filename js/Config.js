@@ -156,12 +156,12 @@ Sunniesnow.Config = {
 		}
 	},
 
-	chartPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9jaGFydC8='),
-	backgroundPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9iYWNrZ3JvdW5kLw=='),
-	sePrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9zZS8='),
-	skinPrefx: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9za2luLw=='),
-	fxPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9meC8='),
-	pluginPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS51bHlzc2Vzemhhbi53b3JrZXJzLmRldi9wbHVnaW4v'),
+	chartPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovY2hhcnQv'),
+	backgroundPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovY2hhcnQv'),
+	sePrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovc2Uv'),
+	skinPrefx: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovc2tpbi8='),
+	fxPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovZngv'),
+	pluginPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovcGx1Z2luLw=='),
 
 	objectUrlTimeout: 1,
 };

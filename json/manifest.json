@@ -14,7 +14,7 @@
 	],
 	"start_url": "{{ site.url }}/game/",
 	"display": "fullscreen",
-	"theme_color": "#ffa520",
+	"theme_color": "{{ site.theme_color }}",
 	"orientation": "landscape-primary",
 	"scope": "/game/"
 }
