@@ -157,7 +157,7 @@ Sunniesnow.Config = {
 	},
 
 	chartPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovY2hhcnQv'),
-	backgroundPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovY2hhcnQv'),
+	backgroundPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovYmFja2dyb3VuZC8='),
 	sePrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovc2Uv'),
 	skinPrefx: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovc2tpbi8='),
 	fxPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovZngv'),

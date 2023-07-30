@@ -36,7 +36,7 @@ Sunniesnow.Loader = {
 		return this.loadChart().then(() => {
 			this.loadingChart = false;
 			this.onChartLoad();
-		}, reason => {
+		}).catch(reason => {
 			this.loadingChart = false;
 			Sunniesnow.Utils.error('Failed to load chart: ' + reason, reason);
 		});
@@ -320,7 +320,8 @@ Sunniesnow.Loader = {
 
 	loadModule(name) {
 		this.modulesQueue.push(() => Sunniesnow[name].load().then(
-			() => this.loadingModulesProgress++,
+			() => this.loadingModulesProgress++
+		).catch(
 			reason => Sunniesnow.Utils.error(`Failed to load Sunniesnow.${name}: ${reason}`, reason)
 		));
 		this.targetLoadingModulesProgress++;
@@ -352,7 +353,8 @@ Sunniesnow.Loader = {
 		for (const id of ['skin', 'fx', 'se', ...Object.keys(Sunniesnow.game.settings.plugin)]) {
 			this.targetLoadingPluginsProgress++;
 			Sunniesnow.Plugin.loadPlugin(id).then(
-				() => this.loadingPluginsProgress++,
+				() => this.loadingPluginsProgress++
+			).catch(
 				reason => Sunniesnow.Utils.warn(`Failed to load plugin ${id}: ${reason}`, reason)
 			);
 		}
@@ -398,7 +400,9 @@ Sunniesnow.Loader = {
 				}
 				this.loadingChartComplete = true;
 				this.loadPlugins();
-			}, reason => Sunniesnow.Utils.error(`Failed to load chart: ${reason}`, reason));
+			}).catch(
+				reason => Sunniesnow.Utils.error(`Failed to load chart: ${reason}`, reason)
+			);
 		} else {
 			if (Sunniesnow.Utils.isBrowser()) {
 				Sunniesnow.Dom.saveSettings();
