@@ -28,11 +28,7 @@ Sunniesnow.Fullscreen = {
 		}
 		this.entering = true;
 		if (Sunniesnow.game.settings.floatAsFullscreen) {
-			const s = Sunniesnow.game.canvas.style;
-			s.position = 'fixed';
-			s.top = '50%';
-			s.left = '50%';
-			s.transform = 'translate(-50%, -50%)';
+			Sunniesnow.game.canvas.classList.add('float-fullscreen');
 			this.entering = false;
 			this.is = true;
 			return;
@@ -61,11 +57,7 @@ Sunniesnow.Fullscreen = {
 	quit() {
 		this.quitting = true;
 		if (Sunniesnow.game.settings.floatAsFullscreen) {
-			const s = Sunniesnow.game.canvas.style;
-			s.position = 'static';
-			s.top = '';
-			s.left = '';
-			s.transform = '';
+			Sunniesnow.game.canvas.classList.remove('float-fullscreen');
 			this.quitting = false;
 			this.is = false;
 			return;
