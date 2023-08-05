@@ -1,38 +1,44 @@
 Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 
 	static async load() {
+		const tempTexture = await this.getBackgroundTexture();
+		const tempSprite = new PIXI.Sprite(tempTexture);
+		tempSprite.anchor.set(0.5);
+		const width = Sunniesnow.game.settings.width;
+		const height = Sunniesnow.game.settings.height;
+		tempSprite.scale.set(Math.max(width / tempTexture.width, height / tempTexture.height));
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			tempSprite.filters = [new PIXI.BlurFilter(Sunniesnow.game.settings.backgroundBlur, 10)];
+		}
+		const b = Sunniesnow.game.settings.backgroundBrightness;
+		tempSprite.tint = [b, b, b];
+		const wrapper = new PIXI.Container();
+		wrapper.addChild(tempSprite);
+		this.texture = Sunniesnow.game.app.renderer.generateTexture(
+			wrapper,
+			{region: new PIXI.Rectangle(-width / 2, -height / 2, width, height)}
+		);
+	}
+
+	static async getBackgroundTexture() {
 		const url = Sunniesnow.Loader.backgroundUrl();
 		if (!url) {
-			this.texture = PIXI.Texture.WHITE;
+			tempTexture = PIXI.Texture.WHITE;
 			return;
 		}
 		try {
-			this.texture = await Sunniesnow.Assets.loadTexture(url);
+			return await Sunniesnow.Assets.loadTexture(url);
 		} catch (err) {
 			console.error(err);
-			this.texture = PIXI.Texture.WHITE;
+			const result = PIXI.Texture.WHITE;
 			Sunniesnow.Utils.warn('Failed to load background', err);
+			return result;
 		}
 	}
 
 	populate() {
 		super.populate();
 		this.background = new PIXI.Sprite(this.constructor.texture);
-		this.background.anchor.set(0.5);
-		this.background.x = Sunniesnow.game.settings.width / 2;
-		this.background.y = Sunniesnow.game.settings.height / 2;
-		const scale = Math.max(
-			Sunniesnow.game.settings.width / this.background.width,
-			Sunniesnow.game.settings.height / this.background.height
-		);
-		this.background.scale.x = scale;
-		this.background.scale.y = scale;
-		if (Sunniesnow.game.settings.renderer === 'webgl') {
-			const blurFilter = new PIXI.BlurFilter(Sunniesnow.game.settings.backgroundBlur, 10);
-			this.background.filters = [blurFilter];
-		}
-		const b = Sunniesnow.game.settings.backgroundBrightness;
-		this.background.tint = [b, b, b];
 		this.addChild(this.background);
 	}
 };
