@@ -43,7 +43,6 @@ Sunniesnow.Loader = {
 	},
 	
 	async loadChart() {
-		console.log('loadChart')
 		let file;
 		let sourceContents;
 		switch (Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Dom.readRadio('level-file')) {

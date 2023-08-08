@@ -308,7 +308,6 @@ Sunniesnow.Dom = {
 	},
 
 	markManual(elementId) {
-		console.log(elementId);
 		this.manual[Sunniesnow.Utils.slugToCamel(elementId)] = true;
 	},
 
