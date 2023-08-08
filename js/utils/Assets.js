@@ -1,9 +1,11 @@
 Sunniesnow.Assets = {
 	async loadTexture(url) {
 		let result;
-		if (Sunniesnow.Utils.isBrowser()) {
-			let isSvg = Sunniesnow.ObjectUrl.types[url] === 'image/svg+xml';
-			result = await PIXI.Assets.load({src: url, loadParser: isSvg ? 'loadSVG' : undefined});
+		if (Sunniesnow.Utils.isBrowser() && Sunniesnow.ObjectUrl.urls.has(url)) {
+			result = await PIXI.Assets.load({
+				src: url,
+				loadParser: Sunniesnow.ObjectUrl.types[url] === 'image/svg+xml' ? 'loadSVG' : 'loadTextures'
+			});
 		} else {
 			result = await PIXI.Assets.load(url);
 		}

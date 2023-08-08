@@ -23,8 +23,7 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 	static async getBackgroundTexture() {
 		const url = Sunniesnow.Loader.backgroundUrl();
 		if (!url) {
-			tempTexture = PIXI.Texture.WHITE;
-			return;
+			return PIXI.Texture.WHITE;
 		}
 		try {
 			return await Sunniesnow.Assets.loadTexture(url);

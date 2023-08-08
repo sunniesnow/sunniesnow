@@ -70,11 +70,13 @@ Sunniesnow.Game = class Game {
 	addWindowListeners() {
 		this.blurListener = event => {
 			Sunniesnow.TouchManager.clear();
-			if (!this.level.finished) {
+			if (!this.level?.finished && this.sceneInitialized) {
 				Sunniesnow.Music.pause();
 			}
 		};
 		window.addEventListener('blur', this.blurListener);
+		document.addEventListener('fullscreenchange', this.blurListener);
+		document.addEventListener('visibilitychange', this.blurListener);
 	}
 
 	removeWindowListeners() {
@@ -82,6 +84,8 @@ Sunniesnow.Game = class Game {
 			return;
 		}
 		window.removeEventListener('blur', this.blurListener);
+		document.removeEventListener('fullscreenchange', this.blurListener);
+		document.removeEventListener('visibilitychange', this.blurListener);
 	}
 
 	initPixiApp() {

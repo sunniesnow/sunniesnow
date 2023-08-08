@@ -43,6 +43,7 @@ Sunniesnow.Loader = {
 	},
 	
 	async loadChart() {
+		console.log('loadChart')
 		let file;
 		let sourceContents;
 		switch (Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Dom.readRadio('level-file')) {
@@ -67,7 +68,7 @@ Sunniesnow.Loader = {
 				file = await response.blob();
 				break;
 			case 'upload':
-				sourceContents = Sunniesnow.game?.settings.levelFileUpload ?? Sunniesnow.Dom.actualLevelFileUpload();
+				sourceContents = Sunniesnow.Dom.actualLevelFileUpload();
 				if (this.loaded.chart.source === 'upload' && this.loaded.chart.sourceContents === sourceContents) {
 					return;
 				}
@@ -147,6 +148,7 @@ Sunniesnow.Loader = {
 	},
 
 	backgroundUrl() {
+		let blob;
 		switch (Sunniesnow.game.settings.background) {
 			case 'none':
 				return null;
@@ -156,12 +158,21 @@ Sunniesnow.Loader = {
 					Sunniesnow.game.settings.backgroundOnline
 				);
 			case 'from-level':
-				const url1 = Sunniesnow.ObjectUrl.create(this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel]);
-				return url1;
+				blob = this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel];
+				if (!blob) {
+					Sunniesnow.Utils.warn('No background provided');
+					return;
+				}
+				break;
 			case 'upload':
-				const url2 = Sunniesnow.ObjectUrl.create(Sunniesnow.game.settings.backgroundUpload);
-				return url2;
+				blob = Sunniesnow.game.settings.backgroundUpload;
+				if (!blob) {
+					Sunniesnow.Utils.warn('No background provided');
+					return;
+				}
+				break;
 		}
+		return Sunniesnow.ObjectUrl.create(blob);
 	},
 
 	async skinBlob() {
@@ -240,7 +251,7 @@ Sunniesnow.Loader = {
 		this.loadButtons();
 		this.loadUiEvents();
 		this.loadFx();
-		this.loadTipPoint();
+		this.loadUiNonevents();
 		(async () => {
 			while (this.modulesQueue.length > 0) {
 				await this.modulesQueue.shift()();
@@ -314,8 +325,9 @@ Sunniesnow.Loader = {
 		this.loadModule('FxDrag');
 	},
 
-	loadTipPoint() {
+	loadUiNonevents() {
 		this.loadModule('TipPoint');
+		this.loadModule('DoubleLine');
 	},
 
 	loadModule(name) {

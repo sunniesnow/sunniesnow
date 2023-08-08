@@ -89,17 +89,26 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 	updateState(relativeTime) {
 		this.state = this.getStateByRelativeTime(relativeTime);
 		this.visible = this.state !== 'ready' && this.state !== 'finished';
+		if (this.doubleLine) {
+			this.doubleLine.visible = this.visible;
+		}
 	}
 
 	// Progress is zero at the start of the fade-in,
 	// and never exceeds 1.
 	updateFadingIn(progress, relativeTime) {
+		if (this.doubleLine) {
+			this.doubleLine.updateFadingIn(progress, relativeTime);
+		}
 	}
 
 	// Progress is zero at the start of the active time,
 	// and is one when the note is supposed to be hit.
 	// It may exceed one (because the note may be hit late).
 	updateActive(progress, relativeTime) {
+		if (this.doubleLine) {
+			this.doubleLine.updateActive(progress, relativeTime);
+		}
 	}
 
 	// Progress is zero at the start of the hold,
@@ -107,11 +116,17 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 	// Never exceeds one, but may be negative.
 	// Does not need overriding for non-hold notes.
 	updateHolding(progress, relativeTime) {
+		if (this.doubleLine) {
+			this.doubleLine.updateHolding(progress, relativeTime);
+		}
 	}
 
 	// Time is zero at the start of the fade-out,
 	// and never exceeds 1.
 	updateFadingOut(progress, relativeTime) {
+		if (this.doubleLine) {
+			this.doubleLine.updateFadingOut(progress, relativeTime);
+		}
 	}
 
 };

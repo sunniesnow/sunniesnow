@@ -19,7 +19,8 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause());
 		this.addChild(this.fxBoard = new Sunniesnow.FxBoard());
 		this.addChild(this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard());
-		this.addChild(this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.debugBoard));
+		this.addChild(this.doubleLinesBoard = new Sunniesnow.DoubleLinesBoard());
+		this.addChild(this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.doubleLinesBoard, this.debugBoard));
 		this.addChild(this.tipPointsBoard = new Sunniesnow.TipPointsBoard());
 		this.addChild(this.pauseBoard = new Sunniesnow.PauseBoard(this));
 		if (Sunniesnow.game.settings.debug) {
@@ -62,6 +63,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.uiBgPatternBoard,
 			this.fxBoard,
 			this.uiBgNotesBoard,
+			this.doubleLinesBoard,
 			this.uiNotesBoard,
 			this.tipPointsBoard,
 		]));
@@ -76,6 +78,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	updateBoards(delta) {
 		this.uiBgPatternBoard.update(delta);
 		this.uiBgNotesBoard.update(delta);
+		this.doubleLinesBoard.update(delta);
 		this.uiNotesBoard.update(delta);
 		this.fxBoard.update(delta);
 		this.tipPointsBoard.update(delta);
@@ -92,6 +95,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		Sunniesnow.game.initLevel();
 		this.uiBgPatternBoard.clear();
 		this.uiBgNotesBoard.clear();
+		this.doubleLinesBoard.clear();
 		this.uiNotesBoard.clear();
 		this.tipPointsBoard.clear();
 		this.fxBoard.clear();

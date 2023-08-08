@@ -52,7 +52,7 @@ Sunniesnow.Event = class Event {
 		return this.time + (this.duration || 0);
 	}
 
-	newUiEvent() {
-		return new Sunniesnow[this.constructor.UI_CLASS](this, ...arguments);
+	newUiEvent(fxBoard, doubleLinesBoard, debugBoard) {
+		return new Sunniesnow[this.constructor.UI_CLASS](this, fxBoard, debugBoard);
 	}
 };

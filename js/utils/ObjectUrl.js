@@ -1,6 +1,6 @@
 Sunniesnow.ObjectUrl = {
 
-	urls: [],
+	urls: new Set(),
 	timeouts: {},
 	types: {},
 
@@ -12,19 +12,18 @@ Sunniesnow.ObjectUrl = {
 
 	createPersistent(blob) {
 		const url = URL.createObjectURL(blob);
-		this.urls.push(url);
+		this.urls.add(url);
 		this.types[url] = blob.type;
 		return url;
 	},
 
 	revoke(url) {
 		URL.revokeObjectURL(url);
-		const index = this.urls.indexOf(url);
-		if (index === -1) {
+		if (!this.urls.has(url)) {
 			Sunniesnow.warn(`ObjectUrl ${url} was not created by Sunniesnow.ObjectUrl`);
 			return;
 		}
-		this.urls.splice(index, 1);
+		this.urls.delete(url);
 		delete this.types[url];
 		if (this.timeouts[url]) {
 			clearTimeout(this.timeouts[url]);

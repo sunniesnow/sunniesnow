@@ -1,7 +1,5 @@
 Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 
-	FADING_OUT_DURATION = 2/3;
-
 	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.circleRadius = this.radius * 4;
@@ -29,14 +27,9 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 
 	populate() {
 		super.populate();
-		this.connectedPos = this.getConnectedPos();
 		if (this.hasConnectedTap()) {
 			this.noteBody = new PIXI.Graphics(Sunniesnow.UiTap.doubleGeometry);
 			this.circle = new PIXI.Graphics(Sunniesnow.UiTap.doubleCircleGeometry);
-			if (this.connectedPos) {
-				this.doubleLine = new PIXI.Graphics();
-				this.addChild(this.doubleLine);
-			}
 		} else {
 			this.noteBody = new PIXI.Graphics(Sunniesnow.UiTap.geometry);
 			this.circle = new PIXI.Graphics(Sunniesnow.UiTap.circleGeometry);
@@ -55,41 +48,11 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		});
 	}
 
-	getConnectedPos() {
-		let match = null;
-		for (let i = 0; i < this.event.simultaneousEvents.length; i++) {
-			const event = this.event.simultaneousEvents[i];
-			if (!(event instanceof Sunniesnow.Tap)) {
-				continue;
-			}
-			if (match === this.event) {
-				const [x, y] = Sunniesnow.Config.chartMapping(event.x, event.y);
-				const [x0, y0] = Sunniesnow.Config.chartMapping(this.event.x, this.event.y);
-				return [x - x0, y - y0];
-			}
-			match = event;
-		}
-		return null;
-	}
-
 	updateFadingIn(progress, relativeTime) {
 		super.updateFadingIn(progress, relativeTime);
 		this.note.scale.set(progress);
 		this.circle.scale.set(1 - (progress-1)**2);
 		this.circle.alpha = progress / 3;
-		if (this.connectedPos) {
-			this.doubleLine.clear();
-			this.doubleLine.lineStyle(this.constructor.radius / 12, 0xf9f9e9);
-			Sunniesnow.Utils.drawDashedLine(
-				this.doubleLine,
-				(1-progress) * this.connectedPos[0] / 2,
-				(1-progress) * this.connectedPos[1] / 2,
-				(1+progress) * this.connectedPos[0] / 2,
-				(1+progress) * this.connectedPos[1] / 2,
-				this.constructor.radius / 4,
-				this.constructor.radius / 4
-			);
-		}
 	}
 
 	updateActive(progress, relativeTime) {
@@ -110,9 +73,6 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		this.updateTextFadingOut(progress);
 		this.circle.visible = false;
 		this.noteBody.visible = false;
-		if (this.connectedPos) {
-			this.doubleLine.visible = false;
-		}
 	}
 
 	createText(maxWidth, maxSize, font) {

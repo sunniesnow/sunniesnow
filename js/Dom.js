@@ -304,10 +304,11 @@ Sunniesnow.Dom = {
 	},
 
 	actualLevelFileUpload() {
-		return this.manual.levelFileUpload ? this.readFile('level-file-upload') : this.saved?.levelFileUpload;
+		return this.manual.levelFileUpload ? this.readFile('level-file-upload') : Sunniesnow.game?.settings.levelFileUpload ?? this.saved?.levelFileUpload;
 	},
 
 	markManual(elementId) {
+		console.log(elementId);
 		this.manual[Sunniesnow.Utils.slugToCamel(elementId)] = true;
 	},
 
@@ -324,7 +325,11 @@ Sunniesnow.Dom = {
 				settings.pluginUpload[key] = await Sunniesnow.Utils.blobToBase64(this.saved.pluginUpload[key]);
 			}
 		}
-		localStorage.setItem('settings', JSON.stringify(settings));
+		try {
+			localStorage.setItem('settings', JSON.stringify(settings));
+		} catch (e) {
+			Sunniesnow.Utils.warn(`Failed to save settings: ${e.message ? e.message : e}`);
+		}
 	},
 
 	deleteSavedSettings() {

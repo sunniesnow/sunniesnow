@@ -94,6 +94,7 @@ Sunniesnow.Utils = {
 	},
 	
 	between(x, a, b) {
+		[a, b] = this.minmax(a, b);
 		return a <= x && x <= b || b <= x && x <= a;
 	},
 
@@ -101,13 +102,16 @@ Sunniesnow.Utils = {
 		const dx = x1 - x0;
 		const dy = y1 - y0;
 		const length = this.hypot(dx, dy);
+		if (length === 0) {
+			return;
+		}
 		const dashDx = dashLength * dx / length;
 		const dashDy = dashLength * dy / length;
 		const gapDx = gapLength * dx / length;
 		const gapDy = gapLength * dy / length;
 		let x = x0;
 		let y = y0;
-		while (this.between(x, x0, x1) || this.between(y, y0, y1)) {
+		while (this.between(x, x0, x1) && this.between(y, y0, y1)) {
 			graphics.moveTo(x, y);
 			x += dashDx;
 			y += dashDy;
