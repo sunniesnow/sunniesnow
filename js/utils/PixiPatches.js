@@ -3,6 +3,7 @@ Sunniesnow.PixiPatches = {
 		this.patchHasProtocol();
 		if (!Sunniesnow.Utils.isBrowser()) {
 			this.patchLoadSvg();
+			this.patchNodeLoaderParsers();
 		}
 	},
 
@@ -21,4 +22,10 @@ Sunniesnow.PixiPatches = {
 			`return (function _loadSvg() { ${old.join('\n')} });`
 		)(require('canvas').Image, PIXI.BaseImageResource, PIXI.utils.uid);
 	},
+
+	patchNodeLoaderParsers() {
+		PIXI.loadNodeTexture.name = 'loadNodeTexture';
+		PIXI.loadNodeFont.name = 'loadNodeFont';
+		PIXI.loadNodeBase64.name = 'loadNodeBase64';
+	}
 };

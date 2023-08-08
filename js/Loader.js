@@ -118,8 +118,8 @@ Sunniesnow.Loader = {
 			}
 		}
 		if (Sunniesnow.game?.settings) {
-			Sunniesnow.game.settings.musicSelect = Object.keys(this.loaded.chart.music)[0];
-			Sunniesnow.game.settings.chartSelect = Object.keys(this.loaded.chart.charts)[0];
+			Sunniesnow.game.settings.musicSelect ||= Object.keys(this.loaded.chart.music)[0];
+			Sunniesnow.game.settings.chartSelect ||= Object.keys(this.loaded.chart.charts)[0];
 		}
 	},
 

@@ -13,6 +13,13 @@ Sunniesnow.Chart = class Chart {
 	
 	static async load() {
 		Sunniesnow.game.chart = new this(Sunniesnow.Loader.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
+		Sunniesnow.Music.start = Math.min(
+			Sunniesnow.game.settings.start * Sunniesnow.Music.duration,
+			Sunniesnow.game.chart.events[0].appearTime()
+		) - Sunniesnow.game.settings.beginningPreperationTime;
+		if (!Sunniesnow.Utils.isBrowser()) {
+			Sunniesnow.Audio.loadOfflineAudioContext();
+		}
 	}
 
 	constructor(data) {
@@ -69,6 +76,11 @@ Sunniesnow.Chart = class Chart {
 			}
 		}
 		return result;
+	}
+
+	endTime() {
+		const index = this.events.findLastIndex(event => event instanceof Sunniesnow.Note);
+		return this.events[index].endTime();
 	}
 
 };

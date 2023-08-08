@@ -49,7 +49,7 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 
 	updateUisAndButtons(delta) {
 		this.result.update(delta);
-		if (Sunniesnow.Music.finished && this.pauseButton) {
+		if (Sunniesnow.Music.currentTime >= Sunniesnow.Music.duration && this.pauseButton) {
 			this.pauseButton.destroy({children: true});
 			this.removeChild(this.pauseButton);
 			this.pauseButton = null;

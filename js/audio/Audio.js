@@ -4,6 +4,15 @@ Sunniesnow.Audio = class Audio {
 		this.playingAudios = [];
 	}
 
+	static loadOfflineAudioContext() {
+		const end = Sunniesnow.game.chart.endTime() + Sunniesnow.record.resultsDuration;
+		this.context = new OfflineAudioContext(
+			this.context.destination.channelCount,
+			Math.ceil((end - Sunniesnow.Music.start) * this.context.sampleRate),
+			this.context.sampleRate
+		);
+	}
+
 	static stopAll() {
 		// put this guard here because sometimes this method gets called before load()
 		if (!this.playingAudios) {
@@ -12,6 +21,11 @@ Sunniesnow.Audio = class Audio {
 		for (const audio of this.playingAudios) {
 			audio.stop();
 		}
+	}
+
+	static getCurrentTime() {
+		// this.currentTime is set manually in the main loop
+		return (Sunniesnow.Utils.isBrowser() ? this.context : this).currentTime;
 	}
 
 	static removePlayingAudio(audio) {
@@ -58,11 +72,12 @@ Sunniesnow.Audio = class Audio {
 
 	createNodes() {
 		const context = this.constructor.context;
+		const currentTime = this.constructor.getCurrentTime();
 		const sourceNode = context.createBufferSource();
 		sourceNode.buffer = this.buffer;
-		sourceNode.playbackRate.setValueAtTime(this.playbackRate, context.currentTime);
+		sourceNode.playbackRate.setValueAtTime(this.playbackRate, currentTime);
 		const gainNode = context.createGain();
-		gainNode.gain.setValueAtTime(this.volume, context.currentTime);
+		gainNode.gain.setValueAtTime(this.volume, currentTime);
 		sourceNode.connect(gainNode);
 		gainNode.connect(context.destination);
 		return [sourceNode, gainNode]
@@ -82,7 +97,7 @@ Sunniesnow.Audio = class Audio {
 	play(time) {
 		time ||= 0;
 		this.removeNodes();
-		this.startTime = this.constructor.context.currentTime - time;
+		this.startTime = this.constructor.getCurrentTime() - time;
 		if (time >= this.duration) {
 			this.onFinish();
 			return;
@@ -94,13 +109,6 @@ Sunniesnow.Audio = class Audio {
 			this.sourceNode.start(this.startTime, 0);
 		}
 		this.constructor.playingAudios.push(this);
-		this.clearStopTimer();
-		const timeToStop = this.startTime + this.duration - this.constructor.context.currentTime
-		this.stopTimer = setTimeout(() => {
-			this.stop();
-			this.onFinish();
-			this.stopTimer = null;
-		}, timeToStop * 1000);
 	}
 
 	// Provides an alternative way of playing the audio than play().
@@ -109,32 +117,25 @@ Sunniesnow.Audio = class Audio {
 	spawn(when) {
 		when = Math.max(when || 0, 0);
 		const [sourceNode, gainNode] = this.createNodes();
-		sourceNode.start(this.constructor.context.currentTime + when);
+		sourceNode.start(this.constructor.getCurrentTime() + when);
 		const stop = () => {
 			sourceNode.stop();
 			sourceNode.disconnect();
 			gainNode.disconnect();
 		};
-		setTimeout(stop, (when + this.duration) * 1000);
+		if (Sunniesnow.Utils.isBrowser()) {
+			setTimeout(stop, (when + this.duration) * 1000);
+		}
 		return stop;
 	}
 
 	stop() {
 		this.removeNodes();
 		this.constructor.removePlayingAudio(this);
-		this.clearStopTimer();
-	}
-
-	clearStopTimer() {
-		if (!this.stopTimer) {
-			return;
-		}
-		clearTimeout(this.stopTimer);
-		this.stopTimer = null;
 	}
 
 	currentTime() {
-		return this.constructor.context.currentTime - this.startTime;
+		return this.constructor.getCurrentTime() - this.startTime;
 	}
 
 	static systematicDelay() {
