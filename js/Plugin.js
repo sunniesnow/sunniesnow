@@ -129,6 +129,7 @@ Sunniesnow.Plugin = class Plugin {
 				<input type="radio" id="plugin-${n}-online-radio" name="plugin-${n}" value="online" checked>
 				<label for="plugin-${n}-online-radio">Online:</label>
 				<input type="text" id="plugin-${n}-online" placeholder="empty">
+				<span id="plugin-${n}-downloading"></span>
 			</div>
 
 			<div>

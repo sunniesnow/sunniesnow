@@ -31,8 +31,17 @@ Sunniesnow.Dom = {
 		const option = document.createElement('option');
 		option.value = filename;
 		option.innerText = filename;
+		option.defaultSelected = select.childElementCount === 0;
 		select.appendChild(option);
 		return select;
+	},
+
+	async untilSelectsLoaded() {
+		await Promise.all([
+			Sunniesnow.Utils.untilLoaded('music-select'),
+			Sunniesnow.Utils.untilLoaded('chart-select'),
+			Sunniesnow.Utils.untilLoaded('background-from-level')
+		]);
 	},
 
 	clearSelect(elementId) {
@@ -510,5 +519,24 @@ Sunniesnow.Dom = {
 		this.associateRange('volume-music', 'volume-music-value');
 		this.associateRange('background-blur', 'background-blur-value');
 		this.associateRange('background-brightness', 'background-brightness-value');
+	},
+
+	clearDownloadingProgresses() {
+		document.getElementById('level-file-downloading').innerHTML = '';
+		document.getElementById('background-downloading').innerHTML = '';
+		document.getElementById('skin-downloading').innerHTML = '';
+		document.getElementById('fx-downloading').innerHTML = '';
+		document.getElementById('se-downloading').innerHTML = '';
+		for (const pluginId in Sunniesnow.Plugin.plugins) {
+			document.getElementById(`plugin-${pluginId}-downloading`).innerHTML = '';
+		}
+	},
+
+	addEventListeners() {
+		document.getElementById('level-file-online').addEventListener('keydown', event => {
+			if (event.key === 'Enter') {
+				document.getElementById('level-file-online-button').click();
+			}
+		});
 	}
 };

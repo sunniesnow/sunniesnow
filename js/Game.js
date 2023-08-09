@@ -25,6 +25,10 @@ Sunniesnow.Game = class Game {
 		}
 	}
 
+	clearDom() {
+		Sunniesnow.Dom.clearDownloadingProgresses();
+	}
+
 	mainTicker(delta) {
 		if (Sunniesnow.Loader.loadingComplete) {
 			if (!this.sceneInitialized) {
@@ -119,6 +123,7 @@ Sunniesnow.Game = class Game {
 	}
 
 	initScene() {
+		this.clearDom();
 		this.goto(new Sunniesnow.SceneGame());
 		this.sceneInitialized = true;
 	}

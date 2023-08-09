@@ -43,7 +43,6 @@ Sunniesnow.Loader = {
 	},
 	
 	async loadChart(force = false) {
-		console.log('loadChart')
 		let file;
 		let sourceContents;
 		switch (Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Dom.readRadio('level-file')) {
@@ -60,16 +59,11 @@ Sunniesnow.Loader = {
 				this.loaded.chart.source = 'online';
 				this.loaded.chart.sourceContents = sourceContents;
 				const url = Sunniesnow.Utils.url(Sunniesnow.Config.chartPrefix, sourceContents, '.ssc');
-				let response;
 				try {
-					response = await fetch(url);
+					file = await Sunniesnow.Utils.fetchBlobWithProgress(url, 'level-file-downloading');
 				} catch (e) {
-					Sunniesnow.Utils.error(`Failed to load chart: ${e}`, e);
+					Sunniesnow.Utils.error(`Failed to load chart: ${e.message ?? e}`, e);
 				}
-				if (!response.ok) {
-					Sunniesnow.Utils.error(`Failed to load chart: ${response.status} ${response.statusText}`);
-				}
-				file = await response.blob();
 				break;
 			case 'upload':
 				if (force) {
@@ -126,9 +120,17 @@ Sunniesnow.Loader = {
 				Sunniesnow.Utils.warn(`Cannot determine type of ${filename}`)
 			}
 		}
+		if (Sunniesnow.Utils.isBrowser()) {
+			await Sunniesnow.Dom.untilSelectsLoaded();
+		}
 		if (Sunniesnow.game?.settings) {
-			Sunniesnow.game.settings.musicSelect ||= Object.keys(this.loaded.chart.music)[0];
-			Sunniesnow.game.settings.chartSelect ||= Object.keys(this.loaded.chart.charts)[0];
+			if (Sunniesnow.Utils.isBrowser()) {
+				Sunniesnow.game.settings.musicSelect = Object.keys(this.loaded.chart.music)[0];
+				Sunniesnow.game.settings.chartSelect = Object.keys(this.loaded.chart.charts)[0];
+			} else {
+				Sunniesnow.game.settings.musicSelect ||= Object.keys(this.loaded.chart.music)[0];
+				Sunniesnow.game.settings.chartSelect ||= Object.keys(this.loaded.chart.charts)[0];
+			}
 		}
 	},
 
@@ -188,12 +190,16 @@ Sunniesnow.Loader = {
 			case 'default':
 				return null;
 			case 'online':
-				const response = await fetch(Sunniesnow.Utils.url(
-					Sunniesnow.Config.skinPrefix,
-					Sunniesnow.game.settings.skinOnline,
-					'.ssp'
-				));
-				return await response.blob();
+				try {
+					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(
+						Sunniesnow.Config.skinPrefix,
+						Sunniesnow.game.settings.skinOnline,
+						'.ssp'
+					), 'skin-downloading');
+				} catch (e) {
+					Sunniesnow.Utils.warn(`Failed to download skin: ${e.message ?? e}`, e);
+					return null;
+				}
 			case 'upload':
 				return Sunniesnow.game.settings.skinUpload;
 		}
@@ -204,12 +210,16 @@ Sunniesnow.Loader = {
 			case 'default':
 				return null;
 			case 'online':
-				const response = await fetch(Sunniesnow.Utils.url(
-					Sunniesnow.Config.fxPrefix,
-					Sunniesnow.game.settings.fxOnline,
-					'.ssp'
-				));
-				return await response.blob();
+				try {
+					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(
+						Sunniesnow.Config.fxPrefix,
+						Sunniesnow.game.settings.fxOnline,
+						'.ssp'
+					), 'fx-downloading');
+				} catch (e) {
+					Sunniesnow.Utils.warn(`Failed to download fx: ${e.message ?? e}`, e);
+					return null;
+				}
 			case 'upload':
 				return Sunniesnow.game.settings.fxUpload;
 		}
@@ -220,12 +230,16 @@ Sunniesnow.Loader = {
 			case 'default':
 				return null;
 			case 'online':
-				const response = await fetch(Sunniesnow.Utils.url(
-					Sunniesnow.Config.sePrefix,
-					Sunniesnow.game.settings.seOnline,
-					'.ssp'
-				));
-				return await response.blob();
+				try {
+					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(
+						Sunniesnow.Config.sePrefix,
+						Sunniesnow.game.settings.seOnline,
+						'.ssp'
+					), 'se-downloading');
+				} catch (e) {
+					Sunniesnow.Utils.warn(`Failed to download se: ${e.message ?? e}`, e);
+					return null;
+				}
 			case 'upload':
 				return Sunniesnow.game.settings.seUpload;
 		}
@@ -234,12 +248,16 @@ Sunniesnow.Loader = {
 	async pluginBlob(n) {
 		switch (Sunniesnow.game.settings.plugin[n]) {
 			case 'online':
-				const response = await fetch(Sunniesnow.Utils.url(
-					Sunniesnow.Config.pluginPrefix,
-					Sunniesnow.game.settings.pluginOnline[n],
-					'.ssp'
-				));
-				return await response.blob();
+				try {
+					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(
+						Sunniesnow.Config.pluginPrefix,
+						Sunniesnow.game.settings.pluginOnline[n],
+						'.ssp'
+					), `plugin-${n}-downloading`);
+				} catch (e) {
+					Sunniesnow.Utils.warn(`Failed to download plugin ${n}: ${e.message ?? e}`, e);
+					return null;
+				}
 			case 'upload':
 				return Sunniesnow.game.settings.pluginUpload[n];
 		}
@@ -414,6 +432,7 @@ Sunniesnow.Loader = {
 		}
 		this.loadingComplete = false;
 		if (Sunniesnow.game.settings.levelFile === 'online' && this.loaded.chart.sourceContents !== Sunniesnow.game.settings.levelFileOnline) {
+			Sunniesnow.Utils.warn('Level file not loaded, waiting');
 			this.loadChart().then(() => {
 				if (Sunniesnow.Utils.isBrowser()) {
 					Sunniesnow.Dom.saveSettings();

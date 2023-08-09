@@ -13,6 +13,7 @@ description: Sunniesnow is a web rhythm game
 		<label for="level-file-online-radio">Online:</label>
 		<input type="text" id="level-file-online" autocorrect="off" autocapitalize="none" placeholder="sunniesnow-sample">
 		<button type="button" id="level-file-online-button" onclick="Sunniesnow.Loader.triggerLoadChart();">Load</button>
+		<span id="level-file-downloading"></span>
 	</div>
 
 	<div>
@@ -99,6 +100,7 @@ description: Sunniesnow is a web rhythm game
 			<input type="radio" id="background-online-radio" name="background" value="online" checked>
 			<label for="background-online-radio">Online:</label>
 			<input type="text" autocorrect="off" autocapitalize="none" id="background-online" value="default.svg">
+			<span id="background-downloading"></span>
 		</div>
 
 		<div>
@@ -142,6 +144,7 @@ description: Sunniesnow is a web rhythm game
 			<input type="radio" id="fx-online-radio" name="fx" value="online">
 			<label for="fx-online-radio">Online:</label>
 			<input type="text" id="fx-online" autocorrect="off" autocapitalize="none" placeholder="empty">
+			<span id="fx-downloading"></span>
 		</div>
 	
 		<div>
@@ -163,6 +166,7 @@ description: Sunniesnow is a web rhythm game
 			<input type="radio" id="skin-online-radio" name="skin" value="online">
 			<label for="skin-online-radio">Online:</label>
 			<input type="text" id="skin-online" autocorrect="off" autocapitalize="none" placeholder="empty">
+			<span id="skin-downloading"></span>
 		</div>
 
 		<div>
@@ -234,6 +238,7 @@ description: Sunniesnow is a web rhythm game
 			<input type="radio" id="se-online-radio" name="se" value="online">
 			<label for="se-online-radio">Online:</label>
 			<input type="text" id="se-online" autocorrect="off" autocapitalize="none" placeholder="empty">
+			<span id="se-downloading"></span>
 		</div>
 
 		<div>
@@ -606,9 +611,5 @@ function runJavascript() {
 </div>
 
 <script>
-document.getElementById('level-file-online').addEventListener('keydown', event => {
-	if (event.key === 'Enter') {
-		document.getElementById('level-file-online-button').click();
-	}
-});
+	Sunniesnow.Preprocess.run();
 </script>

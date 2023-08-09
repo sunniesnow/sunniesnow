@@ -8,6 +8,7 @@ Sunniesnow.Preprocess = {
 
 	async run() {
 		this.applyPatches();
+		Sunniesnow.Dom.addEventListeners();
 		Sunniesnow.Dom.associateDomElements();
 		Sunniesnow.Dom.setDeviceDependentDefaults();
 		await Sunniesnow.Dom.writeSavedSettings();
@@ -43,7 +44,3 @@ Sunniesnow.Preprocess = {
 	}
 
 };
-
-if (Sunniesnow.Utils.isBrowser()) {
-	window.addEventListener('load', () => Sunniesnow.Preprocess.run());
-}

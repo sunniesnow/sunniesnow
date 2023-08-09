@@ -373,6 +373,52 @@ Sunniesnow.Utils = {
 
 	isBlobUrl(url) {
 		return url.startsWith('blob:');
+	},
+
+	async strictFetch(url, options) {
+		return fetch(url, options).then(response => {
+			if (!response.ok) {
+				let message = `HTTP ${response.status}`;
+				if (response.statusText) {
+					message += `: ${response.statusText}`;
+				}
+				throw new Error(message);
+			}
+			return response;
+		});
+	},
+
+	async fetchBlobWithProgress(url, elementId, options) {
+		const response = await this.strictFetch(url, options);
+		const contentLength = Number(response.headers.get('Content-Length'));
+		const reader = response.body.getReader();
+		const chunks = [];
+		const element = document.getElementById(elementId);
+		let receivedLength = 0;
+		while (true) {
+			const {done, value} = await reader.read();
+			if (done) {
+				break;
+			}
+			chunks.push(value);
+			receivedLength += value.length;
+			if (this.isBrowser() && elementId) {
+				element.textContent = `${this.toPercentage(receivedLength / contentLength)} (${receivedLength} / ${contentLength})`;
+			}
+		}
+		const blob = new Blob(chunks, {type: response.headers.get('Content-Type')});
+		return blob;
+	},
+
+	async untilLoaded(elementId) {
+		const element = document.getElementById(elementId);
+		const img = document.createElement('img');
+		img.src = '';
+		element.appendChild(img);
+		return new Promise((resolve, reject) => img.addEventListener('error', event => {
+			element.removeChild(img);
+			resolve();
+		}));
 	}
 
 };
