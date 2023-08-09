@@ -18,7 +18,7 @@ Sunniesnow.Event = class Event {
 	}
 
 	constructor(time, properties) {
-		this.time = time / Sunniesnow.game.settings.gameSpeed;
+		this.time = time;
 		properties = Object.assign({}, properties);
 		for (const property of this.constructor.PROPERTIES.required) {
 			if (!Object.hasOwn(properties, property)) {

@@ -49,12 +49,16 @@ Sunniesnow.Chart = class Chart {
 		const end = Sunniesnow.game.settings.end * duration;
 		for (const eventData of this.data.events) {
 			const {type, time, properties} = this.readEventMeta(eventData);
-			if (!Sunniesnow.Utils.between(time, start, end)) {
+			const reducedTime = time / Sunniesnow.game.settings.gameSpeed;
+			if (!Sunniesnow.Utils.between(reducedTime, start, end)) {
 				continue;
 			}
-			const event = Sunniesnow.Event.newFromType(type, time, properties);
+			const event = Sunniesnow.Event.newFromType(type, reducedTime, properties);
 			event.id = this.events.length;
 			this.events.push(event);
+		}
+		if (this.events.length === 0) {
+			Sunniesnow.Utils.error('There are no events in the chart in the specified range');
 		}
 		this.events.sort((a, b) => a.time - b.time);
 		for (let i = 0; i < this.events.length - 1; i++) {

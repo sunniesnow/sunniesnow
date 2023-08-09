@@ -104,7 +104,7 @@ Sunniesnow.Audio = class Audio {
 		}
 		[this.sourceNode, this.gainNode] = this.createNodes();
 		if (time >= 0) {
-			this.sourceNode.start(0, time);
+			this.sourceNode.start(0, time * this.playbackRate);
 		} else {
 			this.sourceNode.start(this.startTime, 0);
 		}
