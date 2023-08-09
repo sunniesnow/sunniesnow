@@ -5,17 +5,11 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 		this.levelNote = event.levelNote;
 		this.fxBoard = fxBoard;
 		this.debugBoard = debugBoard;
+		this.addEventListeners();
 	}
 
-	updateState(relativeTime) {
-		this.lastState = this.state;
-		super.updateState(relativeTime);
-		if (this.lastState !== this.state && (this.lastState === 'active' || this.lastState === 'holding')) {
-			this.fxBoard.addFx(this);
-			if (this.lastState === 'active' && !Sunniesnow.game.settings.autoplay && Sunniesnow.game.settings.debug) {
-				this.debugBoard.createEarlyLateText(this);
-			}
-		}
+	update(relativeTime) {
+		super.update(relativeTime);
 		if (Sunniesnow.game.settings.debug) {
 			const judgementWindows = Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows];
 			const earlyBad = judgementWindows[this.levelNote.type].bad[0];
@@ -28,6 +22,17 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 
 	newFx() {
 		return new Sunniesnow[this.event.constructor.FX_CLASS](this);
+	}
+
+	addEventListeners() {
+		this.levelNote.addEventListener('release', event => this.fxBoard.addFx(this));
+		if (this.levelNote instanceof Sunniesnow.LevelHold) {
+			this.levelNote.addEventListener('hit', event => this.fxBoard.addFx(this));
+		}
+		if (!Sunniesnow.game.settings.autoplay && Sunniesnow.game.settings.debug) {
+			const type = this.levelNote instanceof Sunniesnow.LevelDrag ? 'release' : 'hit'
+			this.levelNote.addEventListener(type, event => this.debugBoard.createEarlyLateText(this));
+		}
 	}
 
 };
