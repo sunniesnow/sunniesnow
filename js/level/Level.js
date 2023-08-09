@@ -240,6 +240,9 @@ Sunniesnow.Level = class Level {
 				distance = newDistance;
 			}
 		}
+		if (!note.constructor.ONLY_ONE_PER_TOUCH && Sunniesnow.game.settings.noEarlyDrag) {
+			return null;
+		}
 		if (note.isTappableAt(touch, x, y)) {
 			note.hit(touch, time);
 			return note;

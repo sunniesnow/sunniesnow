@@ -67,6 +67,25 @@ description: Sunniesnow is a web rhythm game
 			<input type="number" id="offset" value="0" step="10">ms
 		</div>
 	</fieldset>
+
+	<fieldset>
+		<legend>Mechanics</legend>
+
+		<div>
+			<input type="checkbox" id="no-early-drag">
+			<label for="no-early-drag">Drag notes cannot be hit early</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="direction-insensitive-flick">
+			<label for="direction-insensitive-flick">Flick notes are direction-insensitive</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="locking-hold">
+			<label for="locking-hold">Hold notes lock the position of touch</label>
+		</div>
+	</fieldset>
 </details>
 
 <details>
@@ -545,7 +564,7 @@ description: Sunniesnow is a web rhythm game
 
 	<fieldset>
 		<legend>Service worker</legend>
-		
+
 		<div>
 			Delete caches of online resources:
 			<button type="button" id="delete-online-caches" onclick="Sunniesnow.Loader.deleteOnlineCaches();">Delete</button>

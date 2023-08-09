@@ -99,6 +99,9 @@ Sunniesnow.Dom = {
 			judgementWindows: this.readRadio('judgement-windows'),
 			noteHitSize: this.readValue('note-hit-size'),
 			offset: this.readValue('offset') / 1000,
+			noEarlyDrag: this.readCheckbox('no-early-drag'),
+			directionInsensitiveFlick: this.readCheckbox('direction-insensitive-flick'),
+			lockingHold: this.readCheckbox('locking-hold'),
 
 			// visual settings
 			speed: this.readValue('speed'),
@@ -207,6 +210,9 @@ Sunniesnow.Dom = {
 		this.writeRadio('judgement-windows', d('judgementWindows'));
 		this.writeValue('note-hit-size', d('noteHitSize'));
 		this.writeValue('offset', d('offset') * 1000);
+		this.writeCheckbox('no-early-drag', d('noEarlyDrag'));
+		this.writeCheckbox('direction-insensitive-flick', d('directionInsensitiveFlick'));
+		this.writeCheckbox('locking-hold', d('lockingHold'));
 
 		this.writeValue('speed', d('speed'));
 		this.writeValue('note-size', d('noteSize'));

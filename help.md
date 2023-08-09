@@ -151,6 +151,43 @@ This setting is intended to fix the latency in the video.
 This does **not** affect the audio-video sync.
 To fix the audio-video sync, use [`delay`](#delay).
 
+#### Mechanics
+
+##### Drag notes cannot be hit early
+{:#no-early-drag}
+
+- **Setting id**: `no-early-drag`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether drag notes can be hit early.
+When this setting is set to `false`,
+whenever you hit the screen, drag notes within a certain range (space and time)
+will be hit and judged
+if there are no other types of notes with higher priority.
+Setting this setting to `true` disables this mechanics
+(and reduces difficulty).
+
+##### Flick notes are direction-insensitive
+{:#direction-insensitive-flick}
+
+- **Setting id**: `direction-insensitive-flick`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether flick notes are direction-insensitive.
+When this setting is set to `true`,
+you can hit flick notes with perfect judgement by flicking in any direction
+(reducing difficulty).
+
+##### Hold notes lock the position of touch
+{:#locking-hold}
+
+- **Setting id**: `locking-hold`.
+- **Possible values**: `true`, `false`.
+
+When this setting is set to `true`,
+moving a touch point away from a hold note is regarded as releasing it
+(increasing difficulty).
+
 ### Visual settings
 
 #### Speed

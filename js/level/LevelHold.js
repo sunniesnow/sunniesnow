@@ -21,4 +21,15 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 		this.judgement = Sunniesnow.Utils.minJudgement(this.highestJudgement, judgement);
 	}
 
+	updateHolding(time) {
+		super.updateHolding(time);
+		if (!this.touch || !Sunniesnow.game.settings.lockingHold) {
+			return;
+		}
+		const {x, y, time: t} = this.touch.end();
+		if (!this.isTappableAt(this.touch, x, y)) {
+			this.release(t);
+		}
+	}
+
 };

@@ -52,9 +52,11 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		}
 		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
 		if (rho >= this.maxFlickDistance()) {
-			const angle = Sunniesnow.Utils.quo(phi - this.event.angle + Math.PI, Math.PI*2)[1] - Math.PI;
-			if (!Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
-				this.badFlick = true;
+			if (!Sunniesnow.game.settings.directionInsensitiveFlick) {
+				const angle = Sunniesnow.Utils.quo(phi - this.event.angle + Math.PI, Math.PI*2)[1] - Math.PI;
+				if (!Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
+					this.badFlick = true;
+				}
 			}
 			this.release(this.touch.end().time);
 		}
