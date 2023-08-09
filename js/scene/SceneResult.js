@@ -22,6 +22,7 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 		this.addChild(this.result = new Sunniesnow.Result());
 		this.addChild(this.retryButton = new Sunniesnow.ButtonResultRetry(() => this.gotoGame()));
 		this.addChild(this.fullscreenButton = new Sunniesnow.ButtonResultFullscreen(() => Sunniesnow.Fullscreen.toggle()));
+		this.addChild(this.additionalInfo = new Sunniesnow.ResultAdditionalInfo());
 	}
 
 	togglePausing() {
@@ -61,6 +62,8 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 		this.pauseButton?.destroy({children: true});
 		this.retryButton.destroy({children: true});
 		this.fullscreenButton.destroy({children: true});
+		this.result.destroy({children: true});
+		this.additionalInfo.destroy({children: true});
 	}
 
 	gotoGame() {

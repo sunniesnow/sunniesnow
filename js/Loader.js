@@ -309,6 +309,7 @@ Sunniesnow.Loader = {
 		this.loadModule('TopLeftHud');
 		this.loadModule('TopRightHud');
 		this.loadModule('Result');
+		this.loadModule('ResultAdditionalInfo');
 	},
 
 	loadUiDebug() {
@@ -497,5 +498,3 @@ Sunniesnow.Loader = {
 	}
 
 };
-
-console.log(5)

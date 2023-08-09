@@ -43,6 +43,7 @@ const SITE_RESOURCES = [
 		'ui/TopRightHud',
 		'ui/ProgressBar',
 		'ui/Result',
+		'ui/ResultAdditionalInfo',
 		'ui-pause/PauseBackground',
 		'ui-pause/ButtonResume',
 		'ui-pause/ButtonRetry',
@@ -117,9 +118,24 @@ const SITE_RESOURCES = [
 	'/favicon.svg',
 ];
 
-self.addEventListener('install', event => event.waitUntil(caches.open('site-v1').then(cache => {
-	cache.addAll([...CDN_RESOURCES, ...SITE_RESOURCES]);
-})));
+const SITE_STORAGE_NAME = 'site-v1';
+const ONLINE_STORAGE_NAME = 'online-v1';
+const EXTERNAL_STORAGE_NAME = 'external-v1';
+const STORAGE_NAMES = [SITE_STORAGE_NAME, ONLINE_STORAGE_NAME, EXTERNAL_STORAGE_NAME]
+
+self.addEventListener('install', event => {
+	skipWaiting();
+	event.waitUntil(caches.open(SITE_STORAGE_NAME).then(
+		cache => cache.addAll([...CDN_RESOURCES, ...SITE_RESOURCES])
+	));
+});
+
+self.addEventListener('activate', event => {
+	event.waitUntil(clients.claim());
+	event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(
+		key => STORAGE_NAMES.includes(key) || caches.delete(key)
+	))));
+})
 
 self.addEventListener('fetch', event => event.respondWith(caches.match(event.request).then(response => {
 	if (response) {
@@ -130,11 +146,11 @@ self.addEventListener('fetch', event => event.respondWith(caches.match(event.req
 		const clone = fetched.clone();
 		let cacheKey;
 		if (url.pathname.endsWith('.ssc') || url.pathname.endsWith('.ssp')) {
-			cacheKey = 'online-v1';
+			cacheKey = ONLINE_STORAGE_NAME;
 		} else if (CDN_HOST === url.hostname || SITE_RESOURCES.includes(url.pathname)) {
-			cacheKey = 'site-v1';
+			cacheKey = SITE_STORAGE_NAME;
 		} else {
-			cacheKey = 'external-v1';
+			cacheKey = EXTERNAL_STORAGE_NAME;
 		}
 		caches.open(cacheKey).then(cache => cache.put(event.request, clone));
 		return fetched;
