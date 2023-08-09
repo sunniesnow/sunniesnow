@@ -33,7 +33,7 @@ Sunniesnow.Loader = {
 			return;
 		}
 		this.loadingChart = true;
-		return this.loadChart().then(() => {
+		return this.loadChart(true).then(() => {
 			this.loadingChart = false;
 			this.onChartLoad();
 		}).catch(reason => {
@@ -42,12 +42,17 @@ Sunniesnow.Loader = {
 		});
 	},
 	
-	async loadChart() {
+	async loadChart(force = false) {
+		console.log('loadChart')
 		let file;
 		let sourceContents;
 		switch (Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Dom.readRadio('level-file')) {
 			case 'online':
-				sourceContents = Sunniesnow.game?.settings.levelFileOnline ?? Sunniesnow.Dom.readValue('level-file-online');
+				if (force) {
+					sourceContents = Sunniesnow.Dom.readValue('level-file-online');
+				} else {
+					sourceContents = Sunniesnow.game?.settings.levelFileOnline ?? Sunniesnow.Dom.readValue('level-file-online');
+				}
 				if (this.loaded.chart.source === 'online' && this.loaded.chart.sourceContents === sourceContents) {
 					return;
 				}
@@ -67,7 +72,11 @@ Sunniesnow.Loader = {
 				file = await response.blob();
 				break;
 			case 'upload':
-				sourceContents = Sunniesnow.Dom.actualLevelFileUpload();
+				if (force) {
+					sourceContents = Sunniesnow.Dom.actualLevelFileUpload();
+				} else {
+					sourceContents = Sunniesnow.game?.settings.levelFileUpload ?? Sunniesnow.Dom.actualLevelFileUpload();
+				}
 				if (this.loaded.chart.source === 'upload' && this.loaded.chart.sourceContents === sourceContents) {
 					return;
 				}

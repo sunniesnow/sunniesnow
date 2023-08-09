@@ -15,7 +15,7 @@ Sunniesnow.Chart = class Chart {
 		Sunniesnow.game.chart = new this(Sunniesnow.Loader.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
 		Sunniesnow.Music.start = Math.min(
 			Sunniesnow.game.settings.start * Sunniesnow.Music.duration,
-			Sunniesnow.game.chart.events[0].appearTime()
+			Sunniesnow.game.settings.speed === 0 ? Infinity : Sunniesnow.game.chart.events[0].appearTime()
 		) - Sunniesnow.game.settings.beginningPreperationTime;
 		if (!Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Audio.loadOfflineAudioContext();
