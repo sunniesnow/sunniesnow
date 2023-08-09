@@ -1,6 +1,7 @@
 Sunniesnow.Audio = class Audio {
 	static async load() {
-		this.context = new AudioContext();
+		// The offline audio context is dummy and will not be used in the main loop
+		this.context = Sunniesnow.Utils.isBrowser() ? new AudioContext() : new OfflineAudioContext(2, 44100, 44100);
 		this.playingAudios = [];
 	}
 

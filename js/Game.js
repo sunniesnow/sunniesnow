@@ -123,7 +123,9 @@ Sunniesnow.Game = class Game {
 	}
 
 	initScene() {
-		this.clearDom();
+		if (Sunniesnow.Utils.isBrowser()) {
+			this.clearDom();
+		}
 		this.goto(new Sunniesnow.SceneGame());
 		this.sceneInitialized = true;
 	}
