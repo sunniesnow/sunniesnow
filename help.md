@@ -905,6 +905,13 @@ The game will show more information on UI in debug mode.
 
 ## Operations
 
+### Webpage
+
+#### Refresh
+
+Refresh the webpage.
+Specially on Firefox, Bypass all network caches.
+
 ### Settings
 
 #### Delete saved settings
@@ -927,7 +934,7 @@ You can export the saved settings to a JSON file here.
 
 You can import saved settings from a JSON file here.
 
-### Cache (service worker)
+### Service worker
 
 [Service worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
 is used to make the game playable even offline.

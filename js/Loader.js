@@ -468,32 +468,34 @@ Sunniesnow.Loader = {
 
 	async deleteOnlineCaches() {
 		if (!window.caches) {
-			Sunniesnow.warn('Caches are not available');
+			Sunniesnow.Utils.warn('Caches are not available');
 			return;
 		}
 		if (!await caches.delete('online-v1')) {
-			Sunniesnow.warn('No caches of online resources to delete');
+			Sunniesnow.Utils.warn('No caches of online resources to delete');
 		}
 	},
 
 	async deleteSiteCaches() {
 		if (!window.caches) {
-			Sunniesnow.warn('Caches are not available');
+			Sunniesnow.Utils.warn('Caches are not available');
 			return;
 		}
 		if (!await caches.delete('site-v1')) {
-			Sunniesnow.warn('No caches of site resources to delete');
+			Sunniesnow.Utils.warn('No caches of site resources to delete');
 		}
 	},
 
 	async deleteExternalCaches() {
 		if (!window.caches) {
-			Sunniesnow.warn('Caches are not available');
+			Sunniesnow.Utils.warn('Caches are not available');
 			return;
 		}
 		if (!await caches.delete('external-v1')) {
-			Sunniesnow.warn('No caches of external resources to delete');
+			Sunniesnow.Utils.warn('No caches of external resources to delete');
 		}
 	}
 
 };
+
+console.log(5)

@@ -1,18 +1,21 @@
-CDN_RESOURCES = [
+const CDN_HOST = 'fastly.jsdelivr.net';
+const CDN_RESOURCES = [
 	'jszip@3.10.1/dist/jszip.min.js',
 	'pixi.js-legacy@7.2.4/dist/pixi-legacy.min.js',
 	'mime@3.0.0/lite/+esm',
 	'marked@5.1.1/marked.min.js',
 	'dompurify@3.0.5/dist/purify.min.js',
 	'audio-decode@2.1.4/+esm'
-].map(path => 'https://fastly.jsdelivr.net/npm/' + path);
+].map(path => `https://${CDN_HOST}/npm/${path}`);
 
-SITE_RESOURCES = [
+const SITE_RESOURCES = [
 	...[
 		'utils/Utils',
 		'utils/ObjectUrl',
+		'utils/PixiPatches',
 		'utils/Patches',
 		'utils/Fullscreen',
+		'utils/Assets',
 		'Config',
 		'Plugin',
 		'Dom',
@@ -32,6 +35,7 @@ SITE_RESOURCES = [
 		'button/ButtonPauseBase',
 		'button/ButtonPause',
 		'button/ButtonResultRetry',
+		'button/ButtonResultFullscreen',
 		'ui/UiComponent',
 		'ui/Background',
 		'ui/TopCenterHud',
@@ -94,9 +98,12 @@ SITE_RESOURCES = [
 		'chart/DiamondGrid',
 		'chart/Pentagon',
 		'chart/Turntable',
-		'tip-point/TipPointBase',
-		'tip-point/TipPoint',
-		'tip-point/TipPointsBoard',
+		'ui-nonevent/tip-point/TipPointBase',
+		'ui-nonevent/tip-point/TipPoint',
+		'ui-nonevent/tip-point/TipPointsBoard',
+		'ui-nonevent/double-line/DoubleLineBase',
+		'ui-nonevent/double-line/DoubleLine',
+		'ui-nonevent/double-line/DoubleLinesBoard',
 		'scene/Scene',
 		'scene/SceneGame',
 		'scene/SceneResult',
@@ -104,18 +111,14 @@ SITE_RESOURCES = [
 	].map(path => `/game/js/${path}.js`),
 	'/game/css/style.css',
 	'/game/json/manifest.json',
-	'/game/help.html',
 	'/game/index.html',
-	'/favicon.ico'
+	'/game/',
+	'/favicon.ico',
+	'/favicon.svg',
 ];
 
 self.addEventListener('install', event => event.waitUntil(caches.open('site-v1').then(cache => {
-	for (const path of CDN_RESOURCES) {
-		cache.add(path);
-	}
-	for (const path of SITE_RESOURCES) {
-		cache.add(path);
-	}
+	cache.addAll([...CDN_RESOURCES, ...SITE_RESOURCES]);
 })));
 
 self.addEventListener('fetch', event => event.respondWith(caches.match(event.request).then(response => {
@@ -123,11 +126,12 @@ self.addEventListener('fetch', event => event.respondWith(caches.match(event.req
 		return response;
 	}
 	return fetch(event.request).then(fetched => {
+		const url = new URL(event.request.url);
 		const clone = fetched.clone();
 		let cacheKey;
-		if (clone.url.endsWith('.ssc') || clone.url.endsWith('.ssp')) {
+		if (url.pathname.endsWith('.ssc') || url.pathname.endsWith('.ssp')) {
 			cacheKey = 'online-v1';
-		} else if (CDN_RESOURCES.includes(event.request) || SITE_RESOURCES.includes(event.request)) {
+		} else if (CDN_HOST === url.hostname || SITE_RESOURCES.includes(url.pathname)) {
 			cacheKey = 'site-v1';
 		} else {
 			cacheKey = 'external-v1';

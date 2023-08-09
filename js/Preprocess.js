@@ -32,12 +32,17 @@ Sunniesnow.Preprocess = {
 	},
 
 	async registerServiceWorker() {
-		if (!navigator.serviceWorker) {
+		const sw = navigator.serviceWorker;
+		if (!sw) {
 			Sunniesnow.Utils.warn('Service worker is not supported on this browser')
 			return;
 		}
 		try {
-			await navigator.serviceWorker.register('/game/service-worker.js', {scope: '/game/'});
+			if (Sunniesnow.serviceWorkerRegistration) {
+				Sunniesnow.serviceWorkerRegistration = await Sunniesnow.serviceWorkerRegistration.update();
+			} else {
+				Sunniesnow.serviceWorkerRegistration = await sw.register('/game/service-worker.js', {scope: '/game/'});
+			}
 		} catch (error) {
 			Sunniesnow.Utils.warn(`Failed to register service worker: ${error}`, error);
 		}
