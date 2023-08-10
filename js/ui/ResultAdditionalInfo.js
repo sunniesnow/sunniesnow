@@ -31,6 +31,9 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		return `Judgement time windows: ${Sunniesnow.game.settings.judgementWindows}
 Note hit size: ${Sunniesnow.game.settings.noteHitSize}
 Offset: ${Sunniesnow.game.settings.offset}
+Drag notes cannot be hit early: ${Sunniesnow.game.settings.noEarlyDrag}
+Flick notes are direction-insensitive: ${Sunniesnow.game.settings.directionInsensitiveFlick}
+Hold notes lock the position of touch: ${Sunniesnow.game.settings.lockingHold}
 Autoplay: ${Sunniesnow.game.settings.autoplay}
 Speed (of music): ${Sunniesnow.game.settings.gameSpeed}
 Horizontal flip: ${Sunniesnow.game.settings.horizontalFlip}
