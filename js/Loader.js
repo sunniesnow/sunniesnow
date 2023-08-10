@@ -45,7 +45,13 @@ Sunniesnow.Loader = {
 	async loadChart(force = false) {
 		let file;
 		let sourceContents;
-		switch (Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Dom.readRadio('level-file')) {
+		let sourceType;
+		if (force) {
+			sourceType = Sunniesnow.Dom.readRadio('level-file');
+		} else {
+			sourceType = Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Dom.readRadio('level-file');
+		}
+		switch (sourceType) {
 			case 'online':
 				if (force) {
 					sourceContents = Sunniesnow.Dom.readValue('level-file-online');
