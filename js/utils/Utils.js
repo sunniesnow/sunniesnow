@@ -393,7 +393,12 @@ Sunniesnow.Utils = {
 		const contentLength = Number(response.headers.get('Content-Length'));
 		const reader = response.body.getReader();
 		const chunks = [];
-		const element = document.getElementById(elementId);
+		let element;
+		let needsUpdateProgress = false;
+		if (this.isBrowser() && elementId) {
+			document.getElementById(elementId);
+			needsUpdateProgress = true;
+		}
 		let receivedLength = 0;
 		while (true) {
 			const {done, value} = await reader.read();
@@ -402,7 +407,7 @@ Sunniesnow.Utils = {
 			}
 			chunks.push(value);
 			receivedLength += value.length;
-			if (this.isBrowser() && elementId) {
+			if (needsUpdateProgress) {
 				element.textContent = `${this.toPercentage(receivedLength / contentLength)} (${receivedLength} / ${contentLength})`;
 			}
 		}

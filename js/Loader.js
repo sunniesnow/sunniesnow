@@ -268,9 +268,8 @@ Sunniesnow.Loader = {
 		this.loadingModulesProgress = 0;
 		this.targetLoadingModulesProgress = 0;
 		this.modulesQueue = [];
-		this.loadAudio();
+		this.loadAudioAndChart();
 		this.loadTouch();
-		this.loadChartModule();
 		this.loadUiComponents();
 		this.loadUiDebug();
 		this.loadUiPause();
@@ -285,9 +284,10 @@ Sunniesnow.Loader = {
 		})();
 	},
 
-	loadAudio() {
+	loadAudioAndChart() {
 		this.loadModule('Audio');
 		this.loadModule('Music');
+		this.loadModule('Chart');
 		this.loadModule('SeTap');
 		this.loadModule('SeHold');
 		this.loadModule('SeFlick');
@@ -296,10 +296,6 @@ Sunniesnow.Loader = {
 
 	loadTouch() {
 		this.loadModule('TouchManager');
-	},
-
-	loadChartModule() {
-		this.loadModule('Chart');
 	},
 
 	loadUiComponents() {
