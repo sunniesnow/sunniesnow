@@ -382,6 +382,23 @@ and will not be stated again to avoid repetition:
 
 - **Setting id**: `hud-top-right`.
 
+#### Miscellaneous
+
+##### Touch effects
+
+- **Setting id**: `touch-effects`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to enable or disable the touch effects.
+
+##### Reverse the display order of notes
+
+- **Setting id**: `reverse-note-order`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to reverse the display order of notes.
+When it is `true`, later notes will be displayed below earlier notes.
+
 ### Audio settings
 
 #### SE (note hit sound effects)

@@ -29,7 +29,7 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 			}
 			this.unappearedEvents.shift();
 			const uiEvent = event.newUiEvent(this.fxBoard, this.doubleLinesBoard, this.debugBoard);
-			this.addChild(uiEvent);
+			Sunniesnow.game.settings.reverseNoteOrder ? this.addChildAt(uiEvent, 0) : this.addChild(uiEvent);
 			this.uiEvents.push(uiEvent);
 		}
 		for (const uiEvent of this.uiEvents) {

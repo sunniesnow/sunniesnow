@@ -25,7 +25,7 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 
 	addFx(uiNote) {
 		const fx = uiNote.newFx();
-		this.addChild(fx);
+		Sunniesnow.game.settings.reverseNoteOrder ? this.addChildAt(fx, 0) : this.addChild(fx);
 		this.presentFx.push(fx);
 	}
 	
