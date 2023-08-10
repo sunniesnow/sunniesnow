@@ -396,7 +396,7 @@ Sunniesnow.Utils = {
 		let element;
 		let needsUpdateProgress = false;
 		if (this.isBrowser() && elementId) {
-			document.getElementById(elementId);
+			element = document.getElementById(elementId);
 			needsUpdateProgress = true;
 		}
 		let receivedLength = 0;
