@@ -6,17 +6,22 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 				'HanWangShinSuMedium-Regular'
 			);
 		}
+		this.fontSize = Sunniesnow.Config.radius * 10 * Sunniesnow.Config.scale();
+		this.maxWidth = Sunniesnow.Config.minWidth * Sunniesnow.Config.scale();
 	}
 
 	populate() {
 		super.populate();
 		this.text = new PIXI.Text(this.event.text, {
 			fontFamily: 'HanWangShinSuMedium-Regular',
-			fontSize: Sunniesnow.Config.radius * 12 * Sunniesnow.Config.scale(),
+			fontSize: this.constructor.fontSize,
 			fill: 0xffffff,
 			align: 'center'
 		});
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
+		if (this.text.width > this.constructor.maxWidth) {
+			this.scale.set(this.constructor.maxWidth / this.text.width);
+		}
 		this.addChild(this.text);
 		this.alpha = 0.8;
 	}

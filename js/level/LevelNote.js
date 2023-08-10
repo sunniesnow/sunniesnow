@@ -33,6 +33,16 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 	}
 
 	hit(touch, time) {
+		this.hitRelativeTime = time - this.time;
+		this.holding = true;
+		this.processHit(touch, time);
+		Sunniesnow.game.level.holdingNotes.push(this);
+		Sunniesnow.game.level.holdingNotes.sort((a, b) => a.endTime - b.endTime);
+		Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
+		this.dispatchEvent(new Event('hit'));
+	}
+
+	processHit(touch, time) {
 		if (!Sunniesnow.game.settings.seWithMusic) {
 			this.event.hitSe();
 		}
@@ -40,12 +50,6 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		if (touch && this.constructor.ONLY_ONE_PER_TOUCH) {
 			touch.note = this;
 		}
-		this.hitRelativeTime = time - this.time;
-		this.holding = true;
-		Sunniesnow.game.level.holdingNotes.push(this);
-		Sunniesnow.game.level.holdingNotes.sort((a, b) => a.endTime - b.endTime);
-		Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
-		this.dispatchEvent(new Event('hit'));
 	}
 
 	determineJudgement() {
@@ -66,26 +70,28 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 	}
 
 	release(time) {
-		if (!Sunniesnow.game.settings.seWithMusic) {
-			this.event.releaseSe();
-		}
 		if (!this.holding) {
 			return;
 		}
 		this.holding = false;
 		this.releaseRelativeTime = time - this.time;
 		this.determineJudgement();
+		this.processRelease(time);
 		Sunniesnow.game.level.holdingNotes.splice(Sunniesnow.game.level.holdingNotes.indexOf(this), 1);
 		Sunniesnow.game.level.onNewJudgement(this);
 		this.dispatchEvent(new Event('release'));
 	}
 
+	processRelease(time) {
+		if (!Sunniesnow.game.settings.seWithMusic) {
+			this.event.releaseSe();
+		}
+	}
+
 	edgeJudge(judgement) {
 		const edge = this.getEarliestLate(judgement);
 		if (this.holding) {
-			if (!Sunniesnow.game.settings.seWithMusic) {
-				this.event.releaseSe();
-			}
+			this.processRelease(this.time + edge);
 			this.holding = false;
 			Sunniesnow.game.level.holdingNotes.splice(Sunniesnow.game.level.holdingNotes.indexOf(this), 1);
 			this.dispatchEvent(new Event('release'));
