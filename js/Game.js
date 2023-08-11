@@ -126,13 +126,16 @@ Sunniesnow.Game = class Game {
 		if (Sunniesnow.Utils.isBrowser()) {
 			this.clearDom();
 		}
+		if (this.settings.touchEffects) {
+			this.app.stage.addChild(Sunniesnow.TouchManager.touchEffectsBoard);
+		}
 		this.goto(new Sunniesnow.SceneGame());
 		this.sceneInitialized = true;
 	}
 
-	updateModules() {
+	updateModules(delta) {
 		Sunniesnow.Music.update();
-		Sunniesnow.TouchManager.update();
+		Sunniesnow.TouchManager.update(delta);
 	}
 
 	update(delta) {
@@ -142,12 +145,12 @@ Sunniesnow.Game = class Game {
 				this.app.stage.removeChild(this.lastScene);
 			}
 			if (this.scene) {
-				this.app.stage.addChild(this.scene);
+				this.app.stage.addChildAt(this.scene, 0);
 				this.scene.start();
 			}
 			this.lastScene = this.scene;
 		}
-		this.updateModules();
+		this.updateModules(delta);
 		if (this.scene) {
 			this.scene.update(delta);
 		} else {

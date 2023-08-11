@@ -230,8 +230,8 @@ Sunniesnow.Dom = {
 		this.writeValue('hud-top-center', d('hudTopCenter'));
 		this.writeValue('hud-top-left', d('hudTopLeft'));
 		this.writeValue('hud-top-right', d('hudTopRight'));
-		this.writeValue('touch-effects', d('touchEffects'));
-		this.writeValue('reverse-note-order', d('reverseNoteOrder'));
+		this.writeCheckbox('touch-effects', d('touchEffects'));
+		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
 
 		this.writeRadio('se', d('se'));
 		this.writeValue('se-online', d('seOnline'));

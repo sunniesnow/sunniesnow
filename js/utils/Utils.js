@@ -424,6 +424,17 @@ Sunniesnow.Utils = {
 			element.removeChild(img);
 			resolve();
 		}));
+	},
+
+	newCanvas(width, height) {
+		if (this.isBrowser()) {
+			const result = document.createElement('canvas');
+			result.width = width;
+			result.height = height;
+			return result;
+		} else {
+			return new PIXI.NodeCanvasElement(width, height);
+		}
 	}
 
 };

@@ -18,19 +18,11 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 	}
 
 	populateUiAndButtons() {
-		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause(() => this.togglePausing()));
+		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause());
 		this.addChild(this.result = new Sunniesnow.Result());
 		this.addChild(this.retryButton = new Sunniesnow.ButtonResultRetry(() => this.gotoGame()));
 		this.addChild(this.fullscreenButton = new Sunniesnow.ButtonResultFullscreen(() => Sunniesnow.Fullscreen.toggle()));
 		this.addChild(this.additionalInfo = new Sunniesnow.ResultAdditionalInfo());
-	}
-
-	togglePausing() {
-		if (Sunniesnow.Music.pausing) {
-			Sunniesnow.Music.resume();
-		} else {
-			Sunniesnow.Music.pause();
-		}
 	}
 
 	update(delta) {

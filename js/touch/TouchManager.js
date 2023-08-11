@@ -9,6 +9,7 @@ Sunniesnow.TouchManager = {
 
 	clear() {
 		this.touches = {};
+		this.touchEffectsBoard?.clear();
 	},
 
 	clearListeners() {
@@ -17,7 +18,7 @@ Sunniesnow.TouchManager = {
 		this.endListeners = [];
 	},
 
-	update() {
+	update(delta) {
 		for (const id in this.touches) {
 			const touch = this.touches[id];
 			if (touch.needsUpdating) {
@@ -25,6 +26,9 @@ Sunniesnow.TouchManager = {
 				this.onMove(touch);
 			}
 			touch.needsUpdating = true;
+		}
+		if (Sunniesnow.game.settings.touchEffects) {
+			this.touchEffectsBoard.update(delta);
 		}
 	},
 
@@ -41,6 +45,9 @@ Sunniesnow.TouchManager = {
 	},
 
 	onStart(touch) {
+		if (Sunniesnow.game.settings.touchEffects) {
+			this.touchEffectsBoard.addTouchEffect(touch);
+		}
 		this.callListeners(this.startListeners, touch)
 	},
 
@@ -340,6 +347,9 @@ Sunniesnow.TouchManager = {
 		this.addDomTouchListeners();
 		this.addDomKeyListeners();
 		this.addDomMouseListeners();
+		if (Sunniesnow.game.settings.touchEffects) {
+			this.touchEffectsBoard = new Sunniesnow.TouchEffectsBoard();
+		}
 	},
 
 	terminate() {

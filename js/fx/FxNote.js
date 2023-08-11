@@ -5,7 +5,7 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 
 	constructor(uiNote) {
 		super();
-		this.state = 'present' // present -> finished
+		this.state = 'present'; // present -> finished
 		this.uiNote = uiNote;
 		this.x = uiNote.x;
 		this.y = uiNote.y;

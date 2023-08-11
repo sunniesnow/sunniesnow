@@ -301,6 +301,7 @@ Sunniesnow.Loader = {
 	},
 
 	loadTouch() {
+		this.loadModule('TouchEffect');
 		this.loadModule('TouchManager');
 	},
 
