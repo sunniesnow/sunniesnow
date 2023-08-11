@@ -57,7 +57,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 	}
 
 	getJudgementByRelativeTime(relativeTime) {
-		const judgementWindows = Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows][this.type];
+		const judgementWindows = this.judgementWindows();
 		if (Sunniesnow.Utils.between(relativeTime, ...judgementWindows.perfect)) {
 			return 'perfect';
 		} else if (Sunniesnow.Utils.between(relativeTime, ...judgementWindows.good)) {
@@ -90,31 +90,30 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 
 	edgeJudge(judgement) {
 		const edge = this.getEarliestLate(judgement);
+		this.releaseRelativeTime = edge;
+		this.judgement = judgement;
 		if (this.holding) {
-			this.processRelease(this.time + edge);
 			this.holding = false;
+			this.processRelease(this.time + edge);
 			Sunniesnow.game.level.holdingNotes.splice(Sunniesnow.game.level.holdingNotes.indexOf(this), 1);
 			this.dispatchEvent(new Event('release'));
 		} else {
 			this.hitRelativeTime = edge;
 			Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
 		}
-		this.releaseRelativeTime = edge;
-		this.judgement = judgement;
 		Sunniesnow.game.level.onNewJudgement(this);
 	}
 
 	getEarliestLate(judgement) {
-		const judgementWindows = Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows][this.type];
 		switch (judgement) {
 			case 'perfect':
 				return 0;
 			case 'good':
-				return judgementWindows.perfect[1];
+				return this.latePerfect();
 			case 'bad':
-				return judgementWindows.good[1];
+				return this.lateGood();
 			case 'miss':
-				return judgementWindows.bad[1];
+				return this.lateBad();
 		}
 	}
 
@@ -129,4 +128,33 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		}
 		this.needsToUpdateHolding = true;
 	}
+
+	judgementWindows() {
+		return Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows][this.type];
+	}
+
+	earlyPerfect() {
+		return this.judgementWindows().perfect[0];
+	}
+
+	latePerfect() {
+		return this.judgementWindows().perfect[1];
+	}
+
+	earlyGood() {
+		return this.judgementWindows().good[0];
+	}
+
+	lateGood() {
+		return this.judgementWindows().good[1];
+	}
+
+	earlyBad() {
+		return this.judgementWindows().bad[0];
+	}
+
+	lateBad() {
+		return this.judgementWindows().bad[1];
+	}
+
 };

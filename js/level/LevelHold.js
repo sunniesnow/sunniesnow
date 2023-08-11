@@ -8,7 +8,7 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 	determineJudgement() {
 		let judgement;
 		const ratio = this.releaseRelativeTime / this.event.duration;
-		const judgementWindows = Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows].holdEnd;
+		const judgementWindows = this.endJudgementWindows();
 		if (ratio >= judgementWindows.perfect) {
 			judgement = 'perfect';
 		} else if (ratio >= judgementWindows.good) {
@@ -30,6 +30,10 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 		if (!this.isTappableAt(this.touch, x, y)) {
 			this.release(t);
 		}
+	}
+
+	endJudgementWindows() {
+		return Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows].holdEnd;
 	}
 
 };
