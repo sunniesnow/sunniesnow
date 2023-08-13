@@ -225,19 +225,23 @@ Sunniesnow.Level = class Level {
 		const {x, y} = touch.start();
 		const events = note.event.simultaneousEvents;
 		// Should we replace Euclidean distance with L-infinity distance?
-		let distance = Sunniesnow.Utils.distance(x, y, note.event.x, note.event.y);
+		let [distance, angle] = Sunniesnow.Utils.cartesianToPolar(x - note.event.x, y - note.event.y);
 		for (let i = 0; i < events.length; i++) {
 			const event = events[i];
 			const newNote = event.levelNote;
 			if (!newNote || newNote.hitRelativeTime !== null) {
 				continue;
 			}
-			const newDistance = Sunniesnow.Utils.distance(x, y, event.x, event.y);
+			const [newDistance, newAngle] = Sunniesnow.Utils.cartesianToPolar(x - event.x, y - event.y);
 			let condition = (!note.constructor.ONLY_ONE_PER_TOUCH || newDistance < distance) && newNote.constructor.ONLY_ONE_PER_TOUCH;
 			condition ||= !note.constructor.ONLY_ONE_PER_TOUCH && !newNote.constructor.ONLY_ONE_PER_TOUCH && newDistance < distance;
+			if (note.type === 'flick' && newNote.type === 'flick') {
+				condition ||= newDistance === distance && Sunniesnow.Utils.angleDistance(event.angle, newAngle) < Sunniesnow.Utils.angleDistance(note.event.angle, angle);
+			}
 			if (condition && newNote.isTappableAt(touch, x, y)) {
 				note = newNote;
 				distance = newDistance;
+				angle = newAngle;
 			}
 		}
 		if (!note.constructor.ONLY_ONE_PER_TOUCH && Sunniesnow.game.settings.noEarlyDrag) {

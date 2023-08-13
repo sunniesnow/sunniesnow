@@ -3,7 +3,7 @@ Sunniesnow.Utils = {
 		if (Sunniesnow.record?.suppressWarnings) {
 			return;
 		}
-		if (this.isBrowser() && !Sunniesnow.game?.settings.suppressWarnings) {
+		if (Sunniesnow.Utils.isBrowser() && !Sunniesnow.game?.settings.suppressWarnings) {
 			const div = document.createElement('div');
 			div.innerHTML = msg;
 			document.getElementById('warnings').appendChild(div);
@@ -17,7 +17,7 @@ Sunniesnow.Utils = {
 	},
 
 	error(msg, e) {
-		if (this.isBrowser()) {
+		if (Sunniesnow.Utils.isBrowser()) {
 			const div = document.createElement('div');
 			div.innerHTML = msg;
 			document.getElementById('errors').appendChild(div);
@@ -48,7 +48,7 @@ Sunniesnow.Utils = {
 	},
 
 	url(prefix, text, suffix = '') {
-		if (this.isValidUrl(text)) {
+		if (Sunniesnow.Utils.isValidUrl(text)) {
 			return text;
 		} else {
 			return prefix + (text.endsWith(suffix) ? text : text + suffix);
@@ -90,18 +90,18 @@ Sunniesnow.Utils = {
 	},
 
 	cartesianToPolar(x, y) {
-		return [this.hypot(x, y), Math.atan2(y, x)];
+		return [Sunniesnow.Utils.hypot(x, y), Math.atan2(y, x)];
 	},
 	
 	between(x, a, b) {
-		[a, b] = this.minmax(a, b);
+		[a, b] = Sunniesnow.Utils.minmax(a, b);
 		return a <= x && x <= b || b <= x && x <= a;
 	},
 
 	drawDashedLine(graphics, x0, y0, x1, y1, dashLength, gapLength) {
 		const dx = x1 - x0;
 		const dy = y1 - y0;
-		const length = this.hypot(dx, dy);
+		const length = Sunniesnow.Utils.hypot(dx, dy);
 		if (length === 0) {
 			return;
 		}
@@ -111,7 +111,7 @@ Sunniesnow.Utils = {
 		const gapDy = gapLength * dy / length;
 		let x = x0;
 		let y = y0;
-		while (this.between(x, x0, x1) && this.between(y, y0, y1)) {
+		while (Sunniesnow.Utils.between(x, x0, x1) && Sunniesnow.Utils.between(y, y0, y1)) {
 			graphics.moveTo(x, y);
 			x += dashDx;
 			y += dashDy;
@@ -141,7 +141,7 @@ Sunniesnow.Utils = {
 	},
 
 	distance(x0, y0, x1, y1) {
-		return this.hypot(x1 - x0, y1 - y0);
+		return Sunniesnow.Utils.hypot(x1 - x0, y1 - y0);
 	},
 
 	// The L-infinity distance
@@ -261,7 +261,7 @@ Sunniesnow.Utils = {
 		const params = new URLSearchParams(searchString || location.search);
 		const result = {};
 		for (const [key, value] of params) {
-			const k = this.slugToCamel(key);
+			const k = Sunniesnow.Utils.slugToCamel(key);
 			if (Object.hasOwn(result, k)) {
 				if (Array.isArray(result[k])) {
 					result[k].push(value);
@@ -311,11 +311,11 @@ Sunniesnow.Utils = {
 	},
 
 	inScreen(x, y) {
-		return this.between(x, 0, Sunniesnow.game.settings.width) && this.between(y, 0, Sunniesnow.game.settings.height);
+		return Sunniesnow.Utils.between(x, 0, Sunniesnow.game.settings.width) && Sunniesnow.Utils.between(y, 0, Sunniesnow.game.settings.height);
 	},
 
 	inScreenPage(x, y, canvas) {
-		return this.inScreen(...this.pageToCanvasCoordinates(x, y, canvas));
+		return Sunniesnow.Utils.inScreen(...Sunniesnow.Utils.pageToCanvasCoordinates(x, y, canvas));
 	},
 
 	needsDisplayTextFile(filename) {
@@ -357,7 +357,7 @@ Sunniesnow.Utils = {
 	},
 
 	isMobileSafari() {
-		return this.isBrowser() && /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
+		return Sunniesnow.Utils.isBrowser() && /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
 	},
 
 	until(condition, interval = 100) {
@@ -389,13 +389,13 @@ Sunniesnow.Utils = {
 	},
 
 	async fetchBlobWithProgress(url, elementId, options) {
-		const response = await this.strictFetch(url, options);
+		const response = await Sunniesnow.Utils.strictFetch(url, options);
 		const contentLength = Number(response.headers.get('Content-Length'));
 		const reader = response.body.getReader();
 		const chunks = [];
 		let element;
 		let needsUpdateProgress = false;
-		if (this.isBrowser() && elementId) {
+		if (Sunniesnow.Utils.isBrowser() && elementId) {
 			element = document.getElementById(elementId);
 			needsUpdateProgress = true;
 		}
@@ -408,7 +408,7 @@ Sunniesnow.Utils = {
 			chunks.push(value);
 			receivedLength += value.length;
 			if (needsUpdateProgress) {
-				element.textContent = `${this.toPercentage(receivedLength / contentLength)} (${receivedLength} / ${contentLength})`;
+				element.textContent = `${Sunniesnow.Utils.toPercentage(receivedLength / contentLength)} (${receivedLength} / ${contentLength})`;
 			}
 		}
 		const blob = new Blob(chunks, {type: response.headers.get('Content-Type')});
@@ -427,7 +427,7 @@ Sunniesnow.Utils = {
 	},
 
 	newCanvas(width, height) {
-		if (this.isBrowser()) {
+		if (Sunniesnow.Utils.isBrowser()) {
 			const result = document.createElement('canvas');
 			result.width = width;
 			result.height = height;
@@ -435,6 +435,15 @@ Sunniesnow.Utils = {
 		} else {
 			return new PIXI.NodeCanvasElement(width, height);
 		}
+	},
+
+	// range: [-pi, pi)
+	angleDifference(angle1, angle2) {
+		return Sunniesnow.Utils.quo(angle1 - angle2 + Math.PI, Math.PI*2)[1] - Math.PI;
+	},
+
+	angleDistance(angle1, angle2) {
+		return Math.abs(Sunniesnow.Utils.angleDifference(angle1, angle2));
 	}
 
 };

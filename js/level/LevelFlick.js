@@ -18,7 +18,7 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 			return;
 		}
 		if (!Sunniesnow.game.settings.directionInsensitiveFlick) {
-			const angle = Sunniesnow.Utils.quo(phi - this.event.angle + Math.PI, Math.PI * 2)[1] - Math.PI;
+			const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
 			if (!Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
 				this.judgement = 'bad';
 				return;
