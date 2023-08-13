@@ -48,12 +48,18 @@ Sunniesnow.Chart = class Chart {
 		const start = Sunniesnow.game.settings.start * duration - Sunniesnow.game.settings.resumePreperationTime;
 		const end = Sunniesnow.game.settings.end * duration;
 		for (const eventData of this.data.events) {
+			if (!Sunniesnow.Event.check(eventData)) {
+				continue;
+			}
 			const {type, time, properties} = this.readEventMeta(eventData);
 			const reducedTime = time / Sunniesnow.game.settings.gameSpeed;
 			if (!Sunniesnow.Utils.between(reducedTime, start, end)) {
 				continue;
 			}
 			const event = Sunniesnow.Event.newFromType(type, reducedTime, properties);
+			if (!event) {
+				continue;
+			}
 			event.id = this.events.length;
 			this.events.push(event);
 		}

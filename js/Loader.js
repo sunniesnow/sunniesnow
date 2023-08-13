@@ -128,6 +128,7 @@ Sunniesnow.Loader = {
 		}
 		if (Sunniesnow.Utils.isBrowser()) {
 			await Sunniesnow.Dom.untilSelectsLoaded();
+			Sunniesnow.Dom.tryAvoidingNoBackground();
 		}
 		if (Sunniesnow.game?.settings) {
 			if (Sunniesnow.Utils.isBrowser()) {

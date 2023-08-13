@@ -13,8 +13,24 @@ Sunniesnow.Event = class Event {
 		if (eventClass?.prototype instanceof Sunniesnow.Event) {
 			return new eventClass(time, properties);
 		} else {
-			Sunniesnow.Utils.error(`Unknown event type \`${type}\``);
+			Sunniesnow.Utils.warn(`Unknown event type \`${type}\``);
 		}
+	}
+
+	static check(eventData) {
+		if (!eventData || typeof eventData !== 'object') {
+			Sunniesnow.Utils.warn('Found an event that is not an object');
+			return false;
+		}
+		if (typeof eventData.time !== 'number') {
+			Sunniesnow.Utils.warn('Found an event that does not have a time');
+			return false;
+		}
+		if (typeof eventData.type !== 'string') {
+			Sunniesnow.Utils.warn('Found an event that does not have a type');
+			return false;
+		}
+		return true;
 	}
 
 	constructor(time, properties) {

@@ -67,6 +67,12 @@ Sunniesnow.Dom = {
 		this.fillSelect('background-from-level', filename);
 	},
 
+	tryAvoidingNoBackground() {
+		if (this.readRadio('background') === 'from-level' && !this.readValue('background-from-level')) {
+			this.writeRadio('background', 'online');
+		}
+	},
+
 	fillLevelReadme(filename, text) {
 		const type = mime.getType(filename);
 		const details = document.createElement('details');
