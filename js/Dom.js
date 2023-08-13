@@ -148,6 +148,7 @@ Sunniesnow.Dom = {
 			end: this.readValue('end'),
 			resumePreperationTime: this.readValue('resume-preperation-time'),
 			beginningPreperationTime: this.readValue('beginning-preperation-time'),
+			notesPriorityOverPause: this.readCheckbox('notes-priority-over-pause'),
 
 			// control settings
 			enableKeyboard: this.readCheckbox('enable-keyboard'),
@@ -255,6 +256,7 @@ Sunniesnow.Dom = {
 		this.writeValue('end', d('end'));
 		this.writeValue('resume-preperation-time', d('resumePreperationTime'));
 		this.writeValue('beginning-preperation-time', d('beginningPreperationTime'));
+		this.writeCheckbox('notes-priority-over-pause', d('notesPriorityOverPause'));
 
 		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));
 		this.writeCheckbox('keyboard-whole-screen', d('keyboardWholeScreen'));

@@ -586,6 +586,19 @@ than the (start) time of the first event that appears in gameplay
 or the start position defined by [`start`](#start)
 (whichever is earlier).
 
+#### Priorities
+
+##### Notes have priority over the pause button
+{:#notes-priority-over-pause}
+
+- **Setting id**: `notes-priority-over-pause`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the notes should have priority over the pause button.
+If a touch can potentially either a note or the pause button,
+then it will hit the note if this setting is `true`,
+otherwise it will hit the pause button.
+
 ### Control settings
 
 Although Lyrica is a mobile rhythm game,

@@ -50,7 +50,10 @@ Sunniesnow.Level = class Level {
 	}
 
 	addTouchListeners() {
-		Sunniesnow.TouchManager.addStartListener(this.touchStartListener = this.touchStart.bind(this));
+		Sunniesnow.TouchManager.addStartListener(
+			this.touchStartListener = this.touchStart.bind(this),
+			Sunniesnow.game.settings.notesPriorityOverPause ? 200 : 0
+		);
 		Sunniesnow.TouchManager.addMoveListener(this.touchMoveListener = this.touchMove.bind(this));
 		Sunniesnow.TouchManager.addEndListener(this.touchEndListener = this.touchEnd.bind(this));
 	}
@@ -196,7 +199,7 @@ Sunniesnow.Level = class Level {
 
 	touchStart(touch) {
 		if (Sunniesnow.Music.pausing || this.finished) {
-			return;
+			return false;
 		}
 		this.fillCandidateForHolds(touch, this.unhitNotes);
 		this.fillCandidateForHolds(touch, this.holdingNotes);
@@ -204,12 +207,12 @@ Sunniesnow.Level = class Level {
 		for (let i = 0; i < this.unhitNotes.length;) {
 			let note = this.unhitNotes[i];
 			if (time < note.time + this.earliestEarlyBad) {
-				break;
+				return false;
 			}
 			if (Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows[note.type].bad)) {
 				note = this.tryHitNote(note, touch, time);
 				if (note?.constructor?.ONLY_ONE_PER_TOUCH) {
-					break;
+					return true;
 				} else {
 					i++;
 				}
@@ -217,6 +220,7 @@ Sunniesnow.Level = class Level {
 				i++;
 			}
 		}
+		return false;
 	}
 
 	fillCandidateForHolds(touch, notes) {
