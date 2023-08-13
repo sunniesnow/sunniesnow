@@ -18,6 +18,7 @@ Sunniesnow.Touch = class Touch {
 		}
 		const [x, y] = Sunniesnow.Config.pageMapping(pageX, pageY);
 		this.history = [{time, x, y, pageX, pageY}];
+		this.finished = false;
 	}
 
 	move(time, pageX, pageY) {

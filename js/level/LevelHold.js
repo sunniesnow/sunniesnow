@@ -1,4 +1,9 @@
 Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
+
+	constructor(event) {
+		super(event);
+		this.candidateTouches = [];
+	}
 	
 	processHit(touch, time) {
 		super.processHit(touch, time);
@@ -34,6 +39,29 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 
 	endJudgementWindows() {
 		return Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows].holdEnd;
+	}
+
+	release(time) {
+		if (time >= this.endTime) {
+			return super.release(time);
+		}
+		if (!this.holding || !this.touch) {
+			return;
+		}
+		for (let i = 0; i < this.candidateTouches.length;) {
+			const touch = this.candidateTouches[i];
+			if (touch.finished) {
+				this.candidateTouches.splice(i, 1);
+				continue;
+			}
+			if (!touch.note) {
+				touch.note = this;
+				this.touch = touch;
+				return;
+			}
+			i++;
+		}
+		super.release(time);
 	}
 
 };

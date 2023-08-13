@@ -29,6 +29,7 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 		if (this.levelNote instanceof Sunniesnow.LevelHold) {
 			this.levelNote.addEventListener('hit', event => this.fxBoard.addFx(this));
 		}
+		this.levelNote.addEventListener('miss', event => this.fxBoard.addFx(this));
 		if (!Sunniesnow.game.settings.autoplay && Sunniesnow.game.settings.debug) {
 			const type = this.levelNote instanceof Sunniesnow.LevelDrag ? 'release' : 'hit'
 			this.levelNote.addEventListener(type, event => this.debugBoard.createEarlyLateText(this));

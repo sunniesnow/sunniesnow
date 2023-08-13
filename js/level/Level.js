@@ -198,6 +198,8 @@ Sunniesnow.Level = class Level {
 		if (Sunniesnow.Music.pausing || this.finished) {
 			return;
 		}
+		this.fillCandidateForHolds(touch, this.unhitNotes);
+		this.fillCandidateForHolds(touch, this.holdingNotes);
 		const time = touch.start().time;
 		for (let i = 0; i < this.unhitNotes.length;) {
 			let note = this.unhitNotes[i];
@@ -213,6 +215,19 @@ Sunniesnow.Level = class Level {
 				}
 			} else {
 				i++;
+			}
+		}
+	}
+
+	fillCandidateForHolds(touch, notes) {
+		for (let i = 0; i < notes.length; i++) {
+			const note = notes[i];
+			if (note.type !== 'hold') {
+				continue;
+			}
+			const {x, y, time} = touch.start();
+			if (note.isTappableAt(touch, x, y) && Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows.hold.bad)) {
+				note.candidateTouches.push(touch);
 			}
 		}
 	}

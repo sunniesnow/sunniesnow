@@ -57,6 +57,7 @@ Sunniesnow.TouchManager = {
 	},
 
 	onEnd(touch) {
+		touch.finished = true;
 		this.callListeners(this.endListeners, touch)
 	},
 

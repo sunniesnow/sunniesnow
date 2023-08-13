@@ -76,10 +76,13 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		this.holding = false;
 		this.releaseRelativeTime = time - this.time;
 		this.determineJudgement();
+		if (this.touch && this.constructor.ONLY_ONE_PER_TOUCH) {
+			this.touch.note = null;
+		}
 		this.processRelease(time);
 		Sunniesnow.game.level.holdingNotes.splice(Sunniesnow.game.level.holdingNotes.indexOf(this), 1);
-		Sunniesnow.game.level.onNewJudgement(this);
 		this.dispatchEvent(new Event('release'));
+		Sunniesnow.game.level.onNewJudgement(this);
 	}
 
 	processRelease(time) {
@@ -100,6 +103,9 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		} else {
 			this.hitRelativeTime = edge;
 			Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
+			if (judgement === 'miss') {
+				this.dispatchEvent(new Event('miss'));
+			}
 		}
 		Sunniesnow.game.level.onNewJudgement(this);
 	}
