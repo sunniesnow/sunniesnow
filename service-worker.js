@@ -1,4 +1,6 @@
-const CDN_HOST = 'fastly.jsdelivr.net';
+const ONLINE_HOST = atob('c3Vubmllc25vdy1jb21tdW5pdHkuNzU3MzY4MDgueHl6');
+
+const CDN_RESOURCES_PREFIX = 'https://fastly.jsdelivr.net/npm/';
 const CDN_RESOURCES = [
 	'jszip@3.10.1/dist/jszip.min.js',
 	'pixi.js-legacy@7.2.4/dist/pixi-legacy.min.js',
@@ -6,7 +8,7 @@ const CDN_RESOURCES = [
 	'marked@5.1.1/marked.min.js',
 	'dompurify@3.0.5/dist/purify.min.js',
 	'audio-decode@2.1.4/+esm'
-].map(path => `https://${CDN_HOST}/npm/${path}`);
+].map(path => `${CDN_RESOURCES_PREFIX}${path}`);
 
 const SITE_RESOURCES = [
 	...[
@@ -138,7 +140,7 @@ self.addEventListener('activate', event => {
 	event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(
 		key => STORAGE_NAMES.includes(key) || caches.delete(key)
 	))));
-})
+});
 
 self.addEventListener('fetch', event => event.respondWith(caches.match(event.request).then(response => {
 	if (response) {
@@ -148,9 +150,9 @@ self.addEventListener('fetch', event => event.respondWith(caches.match(event.req
 		const url = new URL(event.request.url);
 		const clone = fetched.clone();
 		let cacheKey;
-		if (url.pathname.endsWith('.ssc') || url.pathname.endsWith('.ssp')) {
+		if (url.host === ONLINE_HOST) {
 			cacheKey = ONLINE_STORAGE_NAME;
-		} else if (CDN_HOST === url.hostname || SITE_RESOURCES.includes(url.pathname)) {
+		} else if (url.href.startsWith(CDN_RESOURCES_PREFIX) || SITE_RESOURCES.includes(url.pathname)) {
 			cacheKey = SITE_STORAGE_NAME;
 		} else {
 			cacheKey = EXTERNAL_STORAGE_NAME;
