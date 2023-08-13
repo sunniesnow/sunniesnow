@@ -7,6 +7,12 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		this.doubleCircleGeometry = this.createCircleGeometry(0xf9f9e9);
 		this.geometry = this.createGeometry(0x29a9b9, 0xe8f8b8);
 		this.doubleGeometry = this.createGeometry(0x3171d1, 0xe3f3f3);
+		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.Note && e.text)) {
+			await Sunniesnow.Assets.loadFont(
+				'https://fastly.jsdelivr.net/gh/dictcp/wangfonts/TrueType/wt024.ttf',
+				'HanWangFangSongMedium-Regular'
+			);
+		}
 	}
 
 	static createCircleGeometry(color) {
@@ -82,7 +88,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 			fontSize: maxSize,
 			fill: 'white',
 			align: 'center',
-			fontFamily: font || 'Arial'
+			fontFamily: font || 'HanWangFangSongMedium-Regular'
 		});
 		text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
 		text.scale.set(Math.min(maxWidth / text.width, 1));
