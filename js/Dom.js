@@ -173,6 +173,7 @@ Sunniesnow.Dom = {
 			antialias: this.readCheckbox('antialias'),
 			powerPreference: this.readRadio('power-preference'),
 			debug: this.readCheckbox('debug'),
+			suppressWarnings: this.readCheckbox('suppress-warnings')
 		}
 		this.readPluginSettings();
 		this.readUploadSettings();
@@ -286,6 +287,7 @@ Sunniesnow.Dom = {
 		this.writeCheckbox('fullscreen-on-start', d('fullscreenOnStart'));
 		this.writeCheckbox('float-as-fullscreen', d('floatAsFullscreen'));
 		this.writeCheckbox('debug', d('debug'));
+		this.writeCheckbox('suppress-warnings', d('suppressWarnings'));
 
 		const plugin = d('plugin');
 		const pluginOnline = d('pluginOnline');

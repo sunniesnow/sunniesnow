@@ -3,7 +3,7 @@ Sunniesnow.Utils = {
 		if (Sunniesnow.record?.suppressWarnings) {
 			return;
 		}
-		if (this.isBrowser()) {
+		if (this.isBrowser() && !Sunniesnow.game?.settings.suppressWarnings) {
 			const div = document.createElement('div');
 			div.innerHTML = msg;
 			document.getElementById('warnings').appendChild(div);
