@@ -950,12 +950,26 @@ Because this is just a hint, whether it actually affects the performance
 or the power consumption is **not** certain.
 
 #### Debug
+{:#debug-category}
+
+##### Enable debug mode
+{:#debug}
 
 - **Setting id**: `debug`.
 - **Possible values**: `true`, `false`.
 
 If it is `true`, the game will be in debug mode.
 The game will show more information on UI in debug mode.
+
+##### Suppress warnings
+
+- **Setting id**: `suppress-warnings`.
+- **Possible values**: `true`, `false`.
+
+If it is `true`, the game will suppress warnings from showing on DOM.
+It is useful when a chart contains many warnings, and you do not care about them.
+
+Even when suppressed, the warnings are still showing in the console.
 
 ## Operations
 
