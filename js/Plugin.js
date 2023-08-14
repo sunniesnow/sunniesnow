@@ -11,20 +11,24 @@ Sunniesnow.Plugin = class Plugin {
 		this.loaded = false;
 		this.loading = false;
 		this.applied = false;
-		this.constructor.plugins[id] = this;
 	}
 
 	static async load(id, blob) {
 		if (blob) {
-			const plugin = new this(id, blob)
-			await plugin.load();
-			return plugin;
+			if (this.plugins[id]?.blob !== blob) {
+				this.plugins[id] = new this(id, blob)
+			}
+			await this.plugins[id].load();
 		} else {
 			delete this.plugins[id];
 		}
 	}
 
 	async load() {
+		if (this.loaded) {
+			this.onLoad();
+			return;
+		}
 		this.loading = true;
 		let zip;
 		try {
@@ -87,6 +91,12 @@ Sunniesnow.Plugin = class Plugin {
 	}
 
 	async apply() {
+		if (this.applied) {
+			if (this.main) {
+				await this.main();
+			}
+			return;
+		}
 		const blob = this.blobs['main.js'];
 		if (!blob) {
 			Sunniesnow.Utils.warn(`Plugin ${this.id} does not have a main.js`);
@@ -152,8 +162,8 @@ Sunniesnow.Plugin = class Plugin {
 			n = this.additionalTotal ||= 0;
 		}
 		document.getElementById('plugin-list').appendChild(this.html(n));
-		Sunniesnow.Preprocess.associateRadio(`plugin-${n}-online-radio`, `plugin-${n}-online`);
-		Sunniesnow.Preprocess.associateRadio(`plugin-${n}-upload-radio`, `plugin-${n}-upload`);
+		Sunniesnow.Dom.associateRadio(`plugin-${n}-online-radio`, `plugin-${n}-online`);
+		Sunniesnow.Dom.associateRadio(`plugin-${n}-upload-radio`, `plugin-${n}-upload`);
 		this.additionalTotal = Math.max(this.additionalTotal || 0, n) + 1;
 	}
 
@@ -171,32 +181,8 @@ Sunniesnow.Plugin = class Plugin {
 		}
 	}
 
-	static async loadSkin() {
-		const plugin = await this.load('skin', await Sunniesnow.Loader.skinBlob());
-		await plugin?.apply();
-	}
-
-	static async loadFx() {
-		const plugin = await this.load('fx', await Sunniesnow.Loader.fxBlob());
-		await plugin?.apply();
-	}
-
-	static async loadSe() {
-		const plugin = await this.load('se', await Sunniesnow.Loader.seBlob());
-		await plugin?.apply();
-	}
-
 	static async loadPlugin(id) {
-		switch (id) {
-			case 'skin':
-				return this.loadSkin();
-			case 'fx':
-				return this.loadFx();
-			case 'se':
-				return this.loadSe();
-			default:
-				const plugin = await this.load(id, await Sunniesnow.Loader.pluginBlob(id));
-				await plugin?.apply();
-		}
+		await this.load(id, await Sunniesnow.Loader.pluginBlob(id));
+		await this.plugins[id]?.apply();
 	}
 };

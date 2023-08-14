@@ -548,7 +548,10 @@ Sunniesnow.Dom = {
 		document.getElementById('fx-downloading').innerHTML = '';
 		document.getElementById('se-downloading').innerHTML = '';
 		for (const pluginId in Sunniesnow.Plugin.plugins) {
-			document.getElementById(`plugin-${pluginId}-downloading`).innerHTML = '';
+			if (typeof pluginId === 'number') {
+				console.log(pluginId)
+				document.getElementById(`plugin-${pluginId}-downloading`).innerHTML = '';
+			}
 		}
 	},
 

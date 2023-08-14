@@ -23,7 +23,10 @@ Sunniesnow.Loader = {
 			// keys: filename
 			// values: Blob
 			backgrounds: {}
-		}
+		},
+
+		// id: {source: 'online' | 'upload', sourceContents: string | File}
+		plugins: {}
 	},
 
 	chartLoadListeners: [],
@@ -191,82 +194,57 @@ Sunniesnow.Loader = {
 		}
 		return Sunniesnow.ObjectUrl.create(blob);
 	},
-
-	async skinBlob() {
-		switch (Sunniesnow.game.settings.skin) {
-			case 'default':
-				return null;
-			case 'online':
-				try {
-					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(
-						Sunniesnow.Config.skinPrefix,
-						Sunniesnow.game.settings.skinOnline,
-						'.ssp'
-					), 'skin-downloading');
-				} catch (e) {
-					Sunniesnow.Utils.warn(`Failed to download skin: ${e.message ?? e}`, e);
-					return null;
-				}
-			case 'upload':
-				return Sunniesnow.game.settings.skinUpload;
-		}
-	},
-
-	async fxBlob() {
-		switch (Sunniesnow.game.settings.fx) {
-			case 'default':
-				return null;
-			case 'online':
-				try {
-					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(
-						Sunniesnow.Config.fxPrefix,
-						Sunniesnow.game.settings.fxOnline,
-						'.ssp'
-					), 'fx-downloading');
-				} catch (e) {
-					Sunniesnow.Utils.warn(`Failed to download fx: ${e.message ?? e}`, e);
-					return null;
-				}
-			case 'upload':
-				return Sunniesnow.game.settings.fxUpload;
-		}
-	},
-
-	async seBlob() {
-		switch (Sunniesnow.game.settings.se) {
-			case 'default':
-				return null;
-			case 'online':
-				try {
-					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(
-						Sunniesnow.Config.sePrefix,
-						Sunniesnow.game.settings.seOnline,
-						'.ssp'
-					), 'se-downloading');
-				} catch (e) {
-					Sunniesnow.Utils.warn(`Failed to download se: ${e.message ?? e}`, e);
-					return null;
-				}
-			case 'upload':
-				return Sunniesnow.game.settings.seUpload;
-		}
-	},
 	
-	async pluginBlob(n) {
-		switch (Sunniesnow.game.settings.plugin[n]) {
+	async pluginBlob(id) {
+		let source, prefix, online, upload, downloading;
+		switch (id) {
+			case 'skin':
+				source = Sunniesnow.game.settings.skin;
+				prefix = Sunniesnow.Config.skinPrefix;
+				online = Sunniesnow.game.settings.skinOnline;
+				upload = Sunniesnow.game.settings.skinUpload;
+				downloading = 'skin-downloading';
+				break;
+			case 'fx':
+				source = Sunniesnow.game.settings.fx;
+				prefix = Sunniesnow.Config.fxPrefix;
+				online = Sunniesnow.game.settings.fxOnline;
+				upload = Sunniesnow.game.settings.fxUpload;
+				downloading = 'fx-downloading';
+				break;
+			case 'se':
+				source = Sunniesnow.game.settings.se;
+				prefix = Sunniesnow.Config.sePrefix;
+				online = Sunniesnow.game.settings.seOnline;
+				upload = Sunniesnow.game.settings.seUpload;
+				downloading = 'se-downloading';
+				break;
+			default:
+				source = Sunniesnow.game.settings.plugin[id];
+				prefix = Sunniesnow.Config.pluginPrefix;
+				online = Sunniesnow.game.settings.pluginOnline[id];
+				upload = Sunniesnow.game.settings.pluginUpload[id];
+				downloading = `plugin-${id}-downloading`;
+		}
+		switch (source) {
 			case 'online':
+				const loaded = this.loaded.plugins[id];
+				if (loaded?.source === 'online' && loaded.sourceContents === online) {
+					if (Sunniesnow.Plugin.plugins[id]) {
+						return Sunniesnow.Plugin.plugins[id].blob;
+					}
+				} else {
+					this.loaded.plugins[id] = {source: 'online', sourceContents: online};
+				}
 				try {
-					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(
-						Sunniesnow.Config.pluginPrefix,
-						Sunniesnow.game.settings.pluginOnline[n],
-						'.ssp'
-					), `plugin-${n}-downloading`);
+					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(prefix, online, '.ssp'), downloading);
 				} catch (e) {
-					Sunniesnow.Utils.warn(`Failed to download plugin ${n}: ${e.message ?? e}`, e);
+					Sunniesnow.Utils.warn(`Failed to download plugin ${id}: ${e.message ?? e}`, e);
 					return null;
 				}
 			case 'upload':
-				return Sunniesnow.game.settings.pluginUpload[n];
+				this.loaded.plugins[id] = {source: 'upload', sourceContents: upload};
+				return upload;
 		}
 	},
 
