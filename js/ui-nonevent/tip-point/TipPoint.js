@@ -247,21 +247,34 @@ void main() {
 		const halfThickness = this.constructor.radius / 1.5; // half thickness of trail
 		for (let i = 1, lastX1 = 0, lastY1 = 0; i < checkpoints.length; i++) {
 			const index = i * 4;
+			let perpX, perpY;
 			const x = checkpoints[i].x;
 			const y = checkpoints[i].y;
-			const xp = checkpoints[i-1].x;
-			const yp = checkpoints[i-1].y;
-			let perpX = y - yp;
-			let perpY = xp - x;
-			const perpLength = Math.sqrt(perpX * perpX + perpY * perpY);
-			perpX *= halfThickness / perpLength;
-			perpY *= halfThickness / perpLength;
-			let x1 = checkpoints[i].x + perpX;
-			let y1 = checkpoints[i].y + perpY;
-			let x2 = checkpoints[i].x - perpX;
-			let y2 = checkpoints[i].y - perpY;
-			const c1 = Sunniesnow.Utils.clockwiseness(xp, yp, x, y, x1, y1);
-			const c2 = Sunniesnow.Utils.clockwiseness(xp, yp, x, y, lastX1, lastY1);
+			const xP = checkpoints[i-1].x;
+			const yP = checkpoints[i-1].y;
+			if (i === checkpoints.length - 1) {
+				perpX = y - yP;
+				perpY = xP - x;
+				const perpLength = Sunniesnow.Utils.hypot(perpX, perpY);
+				perpX *= halfThickness / perpLength;
+				perpY *= halfThickness / perpLength;
+			} else {
+				const xN = checkpoints[i+1].x;
+				const yN = checkpoints[i+1].y;
+				const angleP = this.atan2(xP - x, yP - y);
+				const angleN = this.atan2(xN - x, yN - y);
+				let angle = (angleP + angleN) / 2;
+				if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI / 2) {
+					angle += Math.PI / 2;
+				}
+				[perpX, perpY] = Sunniesnow.Utils.polarToCartesian(halfThickness, angle);
+			}
+			let x1 = x + perpX;
+			let y1 = y + perpY;
+			let x2 = x - perpX;
+			let y2 = y - perpY;
+			const c1 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x1, y1);
+			const c2 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, lastX1, lastY1);
 			if (c1 !== c2) {
 				let t = x1;
 				x1 = x2;

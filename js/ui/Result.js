@@ -24,17 +24,19 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	}
 
 	static createDifficultyGeometry() {
+		this.difficultyNameWidth = this.titleWidth / 2;
+		this.difficultyWidth = this.titleWidth / 3;
 		const graphics = new PIXI.Graphics();
 		graphics.beginFill(0xfbfbff);
 		graphics.arc(0, 0, this.titleHeight /2, Math.PI/2, -Math.PI/2);
-		graphics.lineTo(this.titleWidth * 2 / 3, -this.titleHeight /2);
-		graphics.lineTo(this.titleWidth * 1 / 2, this.titleHeight /2);
+		graphics.lineTo(this.titleWidth - this.difficultyWidth, -this.titleHeight /2);
+		graphics.lineTo(this.titleWidth - this.difficultyNameWidth, this.titleHeight /2);
 		graphics.closePath();
 		graphics.endFill();
 		graphics.beginFill(Sunniesnow.game.chart.difficultyColor);
 		graphics.arc(this.titleWidth, 0, this.titleHeight /2, -Math.PI/2, Math.PI/2);
-		graphics.lineTo(this.titleWidth * 1 / 2, this.titleHeight /2);
-		graphics.lineTo(this.titleWidth * 2 / 3, -this.titleHeight /2);
+		graphics.lineTo(this.titleWidth - this.difficultyNameWidth, this.titleHeight /2);
+		graphics.lineTo(this.titleWidth - this.difficultyWidth, -this.titleHeight /2);
 		graphics.closePath();
 		graphics.endFill();
 		return graphics.geometry;
@@ -200,6 +202,9 @@ void main() {
 			align: 'left'
 		});
 		this.titleText.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
+		if (this.titleText.width > this.constructor.titleWidth) {
+			this.titleText.scale.set(this.constructor.titleWidth / this.titleText.width);
+		}
 		this.title = new PIXI.Container();
 		this.title.addChild(this.titleBackground);
 		this.title.addChild(this.titleText);
@@ -217,12 +222,18 @@ void main() {
 			align: 'left'
 		});
 		this.difficultyNameText.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
+		if (this.difficultyNameText.width > this.constructor.difficultyNameWidth) {
+			this.difficultyNameText.scale.set(this.constructor.difficultyNameWidth / this.difficultyNameText.width);
+		}
 		this.difficultyText = new PIXI.Text(Sunniesnow.game.chart.difficulty, {
 			fontFamily: 'Arial',
 			fontSize: this.constructor.titleHeight / 2,
 			fill: '#fbfbff',
 			align: 'right'
 		});
+		if (this.difficultyText.width > this.constructor.difficultyWidth) {
+			this.difficultyText.scale.set(this.constructor.difficultyWidth / this.difficultyText.width);
+		}
 		this.difficultyText.anchor = new PIXI.ObservablePoint(null, null, 1, 0.5);
 		this.difficultyText.x = this.constructor.titleWidth;
 		this.difficulty = new PIXI.Container();

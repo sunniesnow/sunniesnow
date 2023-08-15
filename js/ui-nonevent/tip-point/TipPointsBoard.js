@@ -6,6 +6,18 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 
 	clear() {
 		this.events = Sunniesnow.game.chart.events.filter(event => event.tipPoint !== null && event.tipPoint !== undefined);
+		this.unappearedTipPointHeads = new Map();
+		for (const event of Sunniesnow.game.chart.events) {
+			if (event.tipPoint === null || event.tipPoint === undefined) {
+				continue;
+			}
+			if (this.unappearedTipPointHeads.has(event.tipPoint)) {
+				this.unappearedTipPointHeads.get(event.tipPoint).push(event);
+			} else {
+				this.unappearedTipPointHeads.set(event.tipPoint, [event]);
+			}
+		}
+		this.unappearedTipPointHeads = Array.from(this.unappearedTipPointHeads);
 		this.tipPoints ||= {};
 		for (const id in this.tipPoints) {
 			const tipPoint = this.tipPoints[id];
@@ -16,25 +28,9 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	}
 
 	addNewTipPoints(time) {
-		if (this.events.length === 0) {
-			return;
+		while (this.unappearedTipPointHeads.length > 0 && time >= this.unappearedTipPointHeads[0][1][0].time - Sunniesnow.Config.uiPreperationTime) {
+			this.add(...this.unappearedTipPointHeads.shift());
 		}
-		if (time < this.events[0].time - Sunniesnow.Config.uiPreperationTime) {
-			return;
-		}
-		const events = [this.events.shift()];
-		const tipPoint = events[0].tipPoint;
-		for (let i = 0; i < this.events.length;) {
-			const event = this.events[i];
-			if (event.tipPoint === tipPoint) {
-				events.push(event);
-				this.events.splice(i, 1);
-			} else {
-				i++;
-			}
-		}
-		this.add(tipPoint, events);
-		this.addNewTipPoints(time);
 	}
 
 	update(delta) {
