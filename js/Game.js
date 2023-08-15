@@ -74,6 +74,9 @@ Sunniesnow.Game = class Game {
 	addWindowListeners() {
 		this.blurListener = event => {
 			Sunniesnow.TouchManager.clear();
+			if (Sunniesnow.Fullscreen.entering || Sunniesnow.Fullscreen.quitting) {
+				return;
+			}
 			if (!this.level?.finished && this.sceneInitialized) {
 				Sunniesnow.Music.pause();
 			}
