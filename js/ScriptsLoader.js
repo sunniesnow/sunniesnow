@@ -2,6 +2,11 @@ Sunniesnow.ScriptsLoader = {
 
 	CDN_PREFIX: 'https://fastly.jsdelivr.net/npm/',
 	SITE_PREFIX: '/game/js/',
+	polyfill: {keys: [], values: []},
+
+	setPolyfill(polyfill) {
+		[this.polyfill.keys, this.polyfill.values] = Sunniesnow.Utils.transposeArray(Object.entries(polyfill));
+	},
 
 	async runAllScripts() {
 		await this.runCdnScripts();
@@ -18,6 +23,7 @@ Sunniesnow.ScriptsLoader = {
 		for (const [script, scriptPath] of await this.scriptContents(scriptPaths)) {
 			this.runScriptFromString(script, scriptPath);
 		}
+		Sunniesnow.ScriptsLoader.polyfill = this.polyfill;
 	},
 
 	async scriptContents(scriptPaths) {
@@ -46,7 +52,7 @@ Sunniesnow.ScriptsLoader = {
 		if (scriptPath) {
 			scriptString += `\n//# sourceURL=${scriptPath}`;
 		}
-		new Function(scriptString)();
+		new Function(...this.polyfill.keys, scriptString)(...this.polyfill.values);
 	}
 };
 

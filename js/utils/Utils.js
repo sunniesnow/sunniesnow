@@ -417,6 +417,10 @@ Sunniesnow.Utils = {
 
 	angleDistance(angle1, angle2) {
 		return Math.abs(Sunniesnow.Utils.angleDifference(angle1, angle2));
+	},
+
+	transposeArray(array) {
+		return array[0].map((_, i) => array.map(row => row[i]));
 	}
 
 };

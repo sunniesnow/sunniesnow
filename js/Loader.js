@@ -395,11 +395,12 @@ Sunniesnow.Loader = {
 	},
 
 	async load() {
+		let element;
 		if (Sunniesnow.Utils.isBrowser()) {
+			element = document.getElementById('loading-progress');
+			element.style.display = '';
 			Sunniesnow.Dom.readSettings();
 		}
-		const element = document.getElementById('loading-progress');
-		element.style.display = '';
 		this.loadingComplete = false;
 		if (Sunniesnow.game.settings.levelFile === 'online' && this.loaded.chart.sourceContents !== Sunniesnow.game.settings.levelFileOnline) {
 			Sunniesnow.Utils.warn('Level file not loaded, waiting');
@@ -416,7 +417,9 @@ Sunniesnow.Loader = {
 		await this.loadPlugins();
 		await this.loadModules();
 		this.loadingComplete = true;
-		element.style.display = 'none';
+		if (element) {
+			element.style.display = 'none';
+		}
 	},
 
 	clearLocalStorage() {

@@ -25,8 +25,10 @@ Sunniesnow.Plugin = class Plugin {
 	static async load(id, blob) {
 		if (blob) {
 			if (this.plugins[id]?.blob !== blob) {
-				this.plugins[id]?.deleteReadmeDom();
-				this.needsReset = true;
+				if (this.plugins[id]) {
+					this.plugins[id].deleteReadmeDom();
+					this.needsReset = true;
+				}
 				this.plugins[id] = new this(id, blob);
 			}
 			await this.plugins[id].load();
