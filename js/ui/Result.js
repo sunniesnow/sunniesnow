@@ -101,26 +101,26 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 
 	static createApGeometry() {
 		this.apVertexShader = `
-attribute vec2 aVertexPosition;
-attribute vec3 aColor;
+			attribute vec2 aVertexPosition;
+			attribute vec3 aColor;
 
-uniform mat3 projectionMatrix;
-uniform mat3 translationMatrix;
+			uniform mat3 projectionMatrix;
+			uniform mat3 translationMatrix;
 
-varying vec3 vColor;
+			varying vec3 vColor;
 
-void main() {
-	gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
-	vColor = aColor;
-}
-`;
+			void main() {
+				gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
+				vColor = aColor;
+			}
+		`;
 		this.apFragmentShader = `
-varying vec3 vColor;
+			varying vec3 vColor;
 
-void main() {
-	gl_FragColor = vec4(vColor, 1.0);
-}
-`;
+			void main() {
+				gl_FragColor = vec4(vColor, 1.0);
+			}
+		`;
 		this.apGeometry = new PIXI.Geometry();
 		this.apGeometry.addAttribute('aVertexPosition', new PIXI.Buffer(new Float32Array([
 			this.rankRadius, 0,

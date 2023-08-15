@@ -5,26 +5,26 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	static ZOOMING_OUT_DURATION = 0.3;
 
 	static TRAIL_VERTEX_SHADER = `
-attribute vec2 aVertexPosition;
-attribute vec2 aTextureCoord;
+		attribute vec2 aVertexPosition;
+		attribute vec2 aTextureCoord;
 
-uniform mat3 projectionMatrix;
-uniform mat3 translationMatrix;
+		uniform mat3 projectionMatrix;
+		uniform mat3 translationMatrix;
 
-varying vec2 vTextureCoord; // x=0 means trail tail, x=1 means trail head
+		varying vec2 vTextureCoord; // x=0 means trail tail, x=1 means trail head
 
-void main() {
-	gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
-	vTextureCoord = aTextureCoord;
-}
-`;
+		void main() {
+			gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
+			vTextureCoord = aTextureCoord;
+		}
+	`;
 	static TRAIL_FRAGMENT_SHADER = `
-varying vec2 vTextureCoord;
+		varying vec2 vTextureCoord;
 
-void main() {
-	gl_FragColor = vec4(vTextureCoord.xxx*0.5, 1.0);
-}
-`;
+		void main() {
+			gl_FragColor = vec4(vTextureCoord.xxx*0.5, 1.0);
+		}
+	`;
 
 	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius() / 3;
