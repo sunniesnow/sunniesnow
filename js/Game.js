@@ -1,16 +1,18 @@
 Sunniesnow.Game = class Game {
 	static run() {
 		if (Sunniesnow.Loader.loadingChart) {
+			Sunniesnow.Utils.warn('Waiting for level file to load')
 			Sunniesnow.Loader.addChartLoadListener(() => this.run());
 			return;
 		}
-		Sunniesnow.Utils.clearWarningsAndErrors();
 		if (Sunniesnow.game) {
 			if (!Sunniesnow.Loader.loadingComplete) {
+				Sunniesnow.Utils.warn('Still loading');
 				return;
 			}
 			Sunniesnow.game.terminate();
 		}
+		Sunniesnow.Utils.clearWarningsAndErrors();
 		Sunniesnow.game = new this();
 		Sunniesnow.Loader.load();
 		Sunniesnow.game.start();

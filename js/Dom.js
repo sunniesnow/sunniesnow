@@ -518,6 +518,26 @@ Sunniesnow.Dom = {
 		listener();
 	},
 
+	setTextInput(elementId) {
+		const element = document.getElementById(elementId);
+		element.spellcheck = false;
+		element.autocomplete = 'off';
+		element.autocorrect = 'off';
+		element.autocapitalize = 'none';
+	},
+
+	setTextInputs() {
+		this.setTextInput('level-file-online');
+		this.setTextInput('background-online');
+		this.setTextInput('skin-online');
+		this.setTextInput('fx-online');
+		this.setTextInput('se-online');
+		this.setTextInput('exclude-keys');
+		this.setTextInput('pause-keys');
+		this.setTextInput('exclude-buttons');
+		this.setTextInput('pause-buttons');
+	},
+
 	associateDomElements() {
 		this.associateRadio('level-file-online-radio', 'level-file-online');
 		this.associateRadio('level-file-online-radio', 'level-file-online-button');
@@ -560,6 +580,14 @@ Sunniesnow.Dom = {
 				document.getElementById('level-file-online-button').click();
 			}
 		});
+	},
+
+	async preprocess() {
+		this.addEventListeners();
+		this.setTextInputs();
+		this.associateDomElements();
+		this.setDeviceDependentDefaults();
+		await this.writeSavedSettings();
 	},
 
 	async triggerPreprocess() {

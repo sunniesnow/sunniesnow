@@ -8,10 +8,7 @@ Sunniesnow.Preprocess = {
 
 	async run() {
 		this.applyPatches();
-		Sunniesnow.Dom.addEventListeners();
-		Sunniesnow.Dom.associateDomElements();
-		Sunniesnow.Dom.setDeviceDependentDefaults();
-		await Sunniesnow.Dom.writeSavedSettings();
+		await Sunniesnow.Dom.preprocess();
 		this.readUrlParams();
 		await this.registerServiceWorker();
 	},

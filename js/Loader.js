@@ -41,7 +41,7 @@ Sunniesnow.Loader = {
 			this.onChartLoad();
 		}).catch(reason => {
 			this.loadingChart = false;
-			Sunniesnow.Utils.error('Failed to load chart: ' + reason, reason);
+			Sunniesnow.Utils.error('Failed to load level: ' + reason, reason);
 		});
 	},
 	
@@ -69,9 +69,11 @@ Sunniesnow.Loader = {
 				this.loaded.chart.sourceContents = sourceContents;
 				const url = Sunniesnow.Utils.url(Sunniesnow.Config.chartPrefix, sourceContents, '.ssc');
 				try {
-					file = await Sunniesnow.Utils.fetchBlobWithProgress(url, 'level-file-downloading');
+					file = await Sunniesnow.Fetcher.blob(url, 'level-file-downloading');
 				} catch (e) {
-					Sunniesnow.Utils.error(`Failed to load chart: ${e.message ?? e}`, e);
+					this.loaded.chart.source = null;
+					this.loaded.chart.sourceContents = null;
+					Sunniesnow.Utils.error(`Failed to load level ${sourceContents}: ${e.message ?? e}`, e);
 				}
 				break;
 			case 'upload':
@@ -237,7 +239,7 @@ Sunniesnow.Loader = {
 					this.loaded.plugins[id] = {source: 'online', sourceContents: online};
 				}
 				try {
-					return await Sunniesnow.Utils.fetchBlobWithProgress(Sunniesnow.Utils.url(prefix, online, '.ssp'), downloading);
+					return await Sunniesnow.Fetcher.blob(Sunniesnow.Utils.url(prefix, online, '.ssp'), downloading);
 				} catch (e) {
 					Sunniesnow.Utils.warn(`Failed to download plugin ${id}: ${e.message ?? e}`, e);
 					return null;

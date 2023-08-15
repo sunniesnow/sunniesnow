@@ -14,7 +14,7 @@ description: Sunniesnow is a web rhythm game
 	<div>
 		<input type="radio" id="level-file-online-radio" name="level-file" value="online" checked>
 		<label for="level-file-online-radio">Online:</label>
-		<input type="text" id="level-file-online" autocorrect="off" autocapitalize="none" placeholder="sunniesnow-sample">
+		<input type="text" id="level-file-online" placeholder="sunniesnow-sample" oninput="Sunniesnow.Fetcher.interrupt();">
 		<button type="button" id="level-file-online-button" onclick="Sunniesnow.Loader.triggerLoadChart();">Load</button>
 		<span id="level-file-downloading"></span>
 	</div>
@@ -121,7 +121,7 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="radio" id="background-online-radio" name="background" value="online" checked>
 			<label for="background-online-radio">Online:</label>
-			<input type="text" autocorrect="off" autocapitalize="none" id="background-online" value="default.svg">
+			<input type="text" id="background-online" value="default.svg">
 			<span id="background-downloading"></span>
 		</div>
 
@@ -165,7 +165,7 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="radio" id="fx-online-radio" name="fx" value="online">
 			<label for="fx-online-radio">Online:</label>
-			<input type="text" id="fx-online" autocorrect="off" autocapitalize="none" placeholder="empty">
+			<input type="text" id="fx-online" placeholder="empty">
 			<span id="fx-downloading"></span>
 		</div>
 	
@@ -187,7 +187,7 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="radio" id="skin-online-radio" name="skin" value="online">
 			<label for="skin-online-radio">Online:</label>
-			<input type="text" id="skin-online" autocorrect="off" autocapitalize="none" placeholder="empty">
+			<input type="text" id="skin-online" placeholder="empty">
 			<span id="skin-downloading"></span>
 		</div>
 
@@ -274,7 +274,7 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="radio" id="se-online-radio" name="se" value="online">
 			<label for="se-online-radio">Online:</label>
-			<input type="text" id="se-online" autocorrect="off" autocapitalize="none" placeholder="empty">
+			<input type="text" id="se-online" placeholder="empty">
 			<span id="se-downloading"></span>
 		</div>
 
@@ -409,12 +409,12 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			Exclude keys:
-			<input type="text" id="exclude-keys" autocorrect="off" autocapitalize="none" value="Escape PrintScreen Alt Control Fn Meta F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12">
+			<input type="text" id="exclude-keys" value="Escape PrintScreen Alt Control Fn Meta F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12">
 		</div>
 
 		<div>
 			Pause keys:
-			<input type="text" id="pause-keys" autocorrect="off" autocapitalize="none" value="`">
+			<input type="text" id="pause-keys" value="`">
 		</div>
 
 		<div>
@@ -438,12 +438,12 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			Exclude mouse buttons:
-			<input type="text" id="exclude-buttons" autocorrect="off" autocapitalize="none" value="">
+			<input type="text" id="exclude-buttons" value="">
 		</div>
 		
 		<div>
 			Pause mouse buttons:
-			<input type="text" id="pause-buttons" autocorrect="off" autocapitalize="none" value="">
+			<input type="text" id="pause-buttons" value="">
 		</div>
 
 		<div>

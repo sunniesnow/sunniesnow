@@ -388,33 +388,6 @@ Sunniesnow.Utils = {
 		});
 	},
 
-	async fetchBlobWithProgress(url, elementId, options) {
-		const response = await Sunniesnow.Utils.strictFetch(url, options);
-		const contentLength = Number(response.headers.get('Content-Length'));
-		const reader = response.body.getReader();
-		const chunks = [];
-		let element;
-		let needsUpdateProgress = false;
-		if (Sunniesnow.Utils.isBrowser() && elementId) {
-			element = document.getElementById(elementId);
-			needsUpdateProgress = true;
-		}
-		let receivedLength = 0;
-		while (true) {
-			const {done, value} = await reader.read();
-			if (done) {
-				break;
-			}
-			chunks.push(value);
-			receivedLength += value.length;
-			if (needsUpdateProgress) {
-				element.textContent = `${Sunniesnow.Utils.toPercentage(receivedLength / contentLength)} (${receivedLength} / ${contentLength})`;
-			}
-		}
-		const blob = new Blob(chunks, {type: response.headers.get('Content-Type')});
-		return blob;
-	},
-
 	async untilLoaded(elementId) {
 		const element = elementId instanceof HTMLElement ? elementId : document.getElementById(elementId);
 		const img = document.createElement('img');

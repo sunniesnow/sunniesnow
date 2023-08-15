@@ -166,6 +166,7 @@ Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
 	'utils/ObjectUrl',
 	'utils/PixiPatches',
 	'utils/Patches',
+	'utils/Fetcher',
 	'utils/Fullscreen',
 	'utils/Assets',
 

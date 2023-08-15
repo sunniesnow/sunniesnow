@@ -166,6 +166,7 @@ Sunniesnow.Plugin = class Plugin {
 		document.getElementById('plugin-list').appendChild(this.html(n));
 		Sunniesnow.Dom.associateRadio(`plugin-${n}-online-radio`, `plugin-${n}-online`);
 		Sunniesnow.Dom.associateRadio(`plugin-${n}-upload-radio`, `plugin-${n}-upload`);
+		Sunniesnow.Dom.setTextInput(`plugin-${n}-online`);
 		this.additionalTotal = Math.max(this.additionalTotal || 0, n) + 1;
 	}
 
