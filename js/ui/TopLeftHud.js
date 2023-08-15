@@ -2,6 +2,7 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 
 	static async load() {
 		this.backgroundGeometry = this.createBackgroundGeometry();
+		this.textMaxWidth = Sunniesnow.game.settings.width / 60 * 13;
 	}
 
 	static createBackgroundGeometry() {
@@ -58,12 +59,15 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 			fontFamily: 'Arial'
 		});
 		this.text.x = Sunniesnow.game.settings.width / 15;
-		this.text.y = Sunniesnow.game.settings.width / 45;
+		this.text.y = Sunniesnow.game.settings.width / 30;
+		this.text.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
 		this.addChild(this.text);
 	}
 
 	update(delta, data) {
 		super.update(delta);
 		this.text.text = data;
+		const rescale = Math.min(1 / this.text.scale.x, this.constructor.textMaxWidth / this.text.width);
+		this.text.scale.set(this.text.scale.x * rescale);
 	}
 };
