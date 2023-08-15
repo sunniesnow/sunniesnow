@@ -2,6 +2,7 @@ Sunniesnow.Plugin = class Plugin {
 
 	static now = null;
 	static plugins = {};
+	static needsReset = false;
 
 	constructor(id, blob) {
 		this.id = id;
@@ -13,13 +14,27 @@ Sunniesnow.Plugin = class Plugin {
 		this.applied = false;
 	}
 
+	static async reset() {
+		if (!this.needsReset) {
+			return;
+		}
+		await Sunniesnow.ScriptsLoader.runSiteScripts(Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS);
+		this.needsReset = false;
+	}
+
 	static async load(id, blob) {
 		if (blob) {
 			if (this.plugins[id]?.blob !== blob) {
-				this.plugins[id] = new this(id, blob)
+				this.plugins[id]?.deleteReadmeDom();
+				this.needsReset = true;
+				this.plugins[id] = new this(id, blob);
 			}
 			await this.plugins[id].load();
 		} else {
+			if (this.plugins[id]) {
+				this.needsReset = true;
+				this.plugins[id].deleteReadmeDom();
+			}
 			delete this.plugins[id];
 		}
 	}
@@ -91,32 +106,19 @@ Sunniesnow.Plugin = class Plugin {
 	}
 
 	async apply() {
-		if (this.applied) {
-			if (this.main) {
-				await this.main();
-			}
-			return;
-		}
-		const blob = this.blobs['main.js'];
-		if (!blob) {
-			Sunniesnow.Utils.warn(`Plugin ${this.id} does not have a main.js`);
-			return;
-		}
 		this.constructor.now = this;
-		if (Sunniesnow.Utils.isBrowser()) {
-			const script = document.createElement('script');
-			script.src = Sunniesnow.ObjectUrl.create(blob);
-			document.body.appendChild(script);
-			await new Promise((resolve, reject) => script.addEventListener('load', event => resolve()));
-			document.body.removeChild(script);
-		} else {
-			new Function(await blob.text())();
+		if (!this.applied) {
+			const blob = this.blobs['main.js'];
+			if (!blob) {
+				Sunniesnow.Utils.warn(`Plugin ${this.id} does not have a main.js`);
+				this.constructor.now = null;
+				return;
+			}
+			Sunniesnow.ScriptsLoader.runScriptFromString(await blob.text(), `plugin-${this.id}/main.js`);
+			this.applied = true;
 		}
-		if (this.main) {
-			await this.main();
-		}
+		await this.main?.();
 		this.constructor.now = null;
-		this.applied = true;
 	}
 
 	addLoadListener(listener) {
@@ -175,14 +177,16 @@ Sunniesnow.Plugin = class Plugin {
 
 	static clearDomElements() {
 		this.additionalTotal = 0;
-		const element = document.getElementById('plugin-list');
-		while (element.firstChild) {
-			element.removeChild(element.firstChild);
-		}
+		document.getElementById('plugin-list').innerHTML = '';
 	}
 
 	static async loadPlugin(id) {
 		await this.load(id, await Sunniesnow.Loader.pluginBlob(id));
-		await this.plugins[id]?.apply();
+	}
+
+	static async applyPlugins() {
+		for (const id in this.plugins) {
+			await this.plugins[id].apply();
+		}
 	}
 };

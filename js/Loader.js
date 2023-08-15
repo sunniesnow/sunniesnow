@@ -248,7 +248,7 @@ Sunniesnow.Loader = {
 		}
 	},
 
-	loadModules() {
+	async loadModules() {
 		this.loadingModulesComplete = false;
 		this.loadingModulesProgress = 0;
 		this.targetLoadingModulesProgress = 0;
@@ -262,11 +262,10 @@ Sunniesnow.Loader = {
 		this.loadUiEvents();
 		this.loadFx();
 		this.loadUiNonevents();
-		(async () => {
-			while (this.modulesQueue.length > 0) {
-				await this.modulesQueue.shift()();
-			}
-		})();
+		while (this.modulesQueue.length > 0) {
+			await this.modulesQueue.shift()();
+		}
+		this.loadingModulesComplete = true;
 	},
 
 	loadAudioAndChart() {
@@ -350,54 +349,39 @@ Sunniesnow.Loader = {
 
 	updateLoadingModules() {
 		if (!Sunniesnow.Utils.isBrowser()) {
-			if (this.loadingModulesProgress >= this.targetLoadingModulesProgress) {
-				this.loadingModulesComplete = true;
-				this.loadingComplete = true;
-			}
 			return;
 		}
 		const element = document.getElementById('loading-progress');
-		if (this.loadingModulesProgress >= this.targetLoadingModulesProgress) {
-			element.style.display = 'none';
-			this.loadingModulesComplete = true;
-			this.loadingComplete = true;
-		} else {
-			element.style.display = '';
-			element.innerHTML = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}`;
-		}
+		element.textContent = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}`;
 	},
 
-	loadPlugins() {
+	async loadPlugins() {
 		this.loadingPluginsProgress = 0;
 		this.targetLoadingPluginsProgress = 0;
 		this.loadingPluginsComplete = false;
 		for (const id of ['skin', 'fx', 'se', ...Object.keys(Sunniesnow.game.settings.plugin)]) {
 			this.targetLoadingPluginsProgress++;
-			Sunniesnow.Plugin.loadPlugin(id).then(
-				() => this.loadingPluginsProgress++
-			).catch(
-				reason => Sunniesnow.Utils.warn(`Failed to load plugin ${id}: ${reason}`, reason)
-			);
+			try {
+				await Sunniesnow.Plugin.loadPlugin(id);
+			} catch (e) {
+				Sunniesnow.Utils.warn(`Failed to load plugin ${id}: ${e.message ?? e}`, e);
+			}
+			this.loadingPluginsProgress++;
 		}
+		await Sunniesnow.Plugin.reset();
+		await Sunniesnow.Plugin.applyPlugins();
+		this.loadingPluginsComplete = true;
 	},
 
 	updateLoadingPlugins() {
 		if (!Sunniesnow.Utils.isBrowser()) {
-			if (this.loadingPluginsProgress >= this.targetLoadingPluginsProgress) {
-				this.loadingPluginsComplete = true;
+			if (this.loadingPluginsComplete) {
 				this.loadModules();
 			}
 			return;
 		}
 		const element = document.getElementById('loading-progress');
-		if (this.loadingPluginsProgress >= this.targetLoadingPluginsProgress) {
-			element.style.display = 'none';
-			this.loadingPluginsComplete = true;
-			this.loadModules();
-		} else {
-			element.style.display = '';
-			element.innerHTML = `Loading plugins: ${this.loadingPluginsProgress}/${this.targetLoadingPluginsProgress}`;
-		}
+		element.textContent = `Loading plugins: ${this.loadingPluginsProgress}/${this.targetLoadingPluginsProgress}`;
 	},
 
 	updateLoadingChart() {
@@ -405,34 +389,32 @@ Sunniesnow.Loader = {
 			return;
 		}
 		const element = document.getElementById('loading-progress');
-		element.style.display = '';
-		element.innerHTML = 'Loading chart';
+		element.textContent = 'Loading chart';
 	},
 
-	load() {
+	async load() {
 		if (Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Dom.readSettings();
 		}
+		const element = document.getElementById('loading-progress');
+		element.style.display = '';
 		this.loadingComplete = false;
 		if (Sunniesnow.game.settings.levelFile === 'online' && this.loaded.chart.sourceContents !== Sunniesnow.game.settings.levelFileOnline) {
 			Sunniesnow.Utils.warn('Level file not loaded, waiting');
-			this.loadChart().then(() => {
-				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Dom.saveSettings();
-				}
-				this.loadingChartComplete = true;
-				this.loadPlugins();
-			}).catch(
-				reason => Sunniesnow.Utils.error(`Failed to load chart: ${reason}`, reason)
-			);
-		} else {
-			if (Sunniesnow.Utils.isBrowser()) {
-				Sunniesnow.Dom.saveSettings();
+			try {
+				await this.loadChart()
+			} catch (e) {
+				Sunniesnow.Utils.error(`Failed to load chart: ${e.message ?? e}`, e);
 			}
-			this.loadingChartComplete = true;
-			this.loadPlugins();
 		}
-		// loadModules() will be called in updateLoadingPlugins().
+		if (Sunniesnow.Utils.isBrowser()) {
+			Sunniesnow.Dom.saveSettings();
+		}
+		this.loadingChartComplete = true;
+		await this.loadPlugins();
+		await this.loadModules();
+		this.loadingComplete = true;
+		element.style.display = 'none';
 	},
 
 	clearLocalStorage() {

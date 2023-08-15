@@ -416,7 +416,7 @@ Sunniesnow.Utils = {
 	},
 
 	async untilLoaded(elementId) {
-		const element = document.getElementById(elementId);
+		const element = elementId instanceof HTMLElement ? elementId : document.getElementById(elementId);
 		const img = document.createElement('img');
 		img.src = '';
 		element.appendChild(img);

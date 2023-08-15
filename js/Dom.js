@@ -549,7 +549,6 @@ Sunniesnow.Dom = {
 		document.getElementById('se-downloading').innerHTML = '';
 		for (const pluginId in Sunniesnow.Plugin.plugins) {
 			if (typeof pluginId === 'number') {
-				console.log(pluginId)
 				document.getElementById(`plugin-${pluginId}-downloading`).innerHTML = '';
 			}
 		}
@@ -561,5 +560,12 @@ Sunniesnow.Dom = {
 				document.getElementById('level-file-online-button').click();
 			}
 		});
+	},
+
+	async triggerPreprocess() {
+		const script = document.createElement('script');
+		script.textContent = 'Sunniesnow.Preprocess.run();';
+		document.body.appendChild(script);
+		await Sunniesnow.Utils.untilLoaded(document.body);
 	}
 };
