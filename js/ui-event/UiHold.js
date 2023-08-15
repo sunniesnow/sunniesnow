@@ -104,8 +104,8 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 
 	updateFadingOut(progress, relativeTime) {
-		super.updateFadingOut(progress, relativeTime);
-		Sunniesnow.UiTap.prototype.updateTextFadingOut.call(this, progress);
+		Sunniesnow.UiNote.prototype.updateFadingOut.call(this, progress, relativeTime);
+		Sunniesnow.UiTap.prototype.updateTextFadingOut.call(this, progress, relativeTime);
 		progress *= 2;
 		this.halo.visible = false;
 		if (this.levelNote.judgement === 'miss') {
