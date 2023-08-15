@@ -80,7 +80,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.circle.visible = false;
 		this.arrow.scale.set(1.05);
 		if (progress <= 1) {
-			this.arrow.alpha = 1 - progress;
+			this.arrow.alpha = (1 - progress)**3;
 			this.arrow.position.set(...Sunniesnow.Utils.polarToCartesian(
 				distance * (1 - (1-progress)**2),
 				this.arrow.transform.rotation

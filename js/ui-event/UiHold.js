@@ -114,7 +114,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 		}
 		if (progress <= 1) {
 			this.noteBody.scale.set(1.2 + (1-(1-progress)**2) * 0.3);
-			this.noteBody.alpha = 1 - progress;
+			this.noteBody.alpha = (1 - progress)**3;
 		} else {
 			this.noteBody.visible = false;
 		}
