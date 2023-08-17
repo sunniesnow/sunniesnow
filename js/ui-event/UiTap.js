@@ -9,8 +9,20 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		this.doubleGeometry = this.createGeometry(0x3171d1, 0xe3f3f3);
 		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.Note && e.text)) {
 			await Sunniesnow.Assets.loadFont(
-				'https://fastly.jsdelivr.net/gh/dictcp/wangfonts/TrueType/wt024.ttf',
-				'HanWangFangSongMedium-Regular'
+				//'https://fastly.jsdelivr.net/gh/kaio/wangfonts/TrueType/wt024.ttf',
+				//'HanWangFangSongMedium-Regular'
+
+				//'https://fastly.jsdelivr.net/gh/l10n-tw/cwtex-q-fonts-TTFs@v0.42/ttf/cwTeXQFangsong-Medium.ttf',
+				//'cwTeXQFangsong-Medium'
+
+				//'https://fastly.jsdelivr.net/gh/Kinutafontfactory/Yuji/fonts/ttf/YujiSyuku-Regular.ttf',
+				//'YujiSyuku-Regular'
+
+				'https://fastly.jsdelivr.net/gh/lxgw/LxgwWenKai/fonts/TTF/LXGWWenKai-Regular.ttf',
+				'LXGWWenKai-Regular'
+
+				//'https://fastly.jsdelivr.net/gh/chengda/popular-fonts/华文仿宋.ttf',
+				//'HuaWenFangSong'
 			);
 		}
 	}
@@ -88,7 +100,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 			fontSize: maxSize,
 			fill: 'white',
 			align: 'center',
-			fontFamily: font || 'HanWangFangSongMedium-Regular'
+			fontFamily: font || 'LXGWWenKai-Regular'
 		});
 		text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
 		text.scale.set(Math.min(maxWidth / text.width, 1));

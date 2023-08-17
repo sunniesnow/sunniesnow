@@ -12,7 +12,13 @@ Sunniesnow.Fetcher = {
 			needsUpdateProgress = true;
 			element.textContent = '0% (0 / ?)';
 		}
-		const response = await Sunniesnow.Utils.strictFetch(url, options);
+		let response;
+		try {
+			response = await Sunniesnow.Utils.strictFetch(url, options);
+		} catch (e) {
+			this.fetching = false;
+			throw e;
+		}
 		const contentLength = Number(response.headers.get('Content-Length'));
 		const reader = response.body.getReader();
 		const chunks = [];

@@ -2,8 +2,12 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 	static async load() {
 		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.BigText)) {
 			await Sunniesnow.Assets.loadFont(
-				'https://fastly.jsdelivr.net/gh/dictcp/wangfonts/TrueType/wt071.ttf',
+				'https://fastly.jsdelivr.net/gh/kaio/wangfonts/TrueType/wt071.ttf',
 				'HanWangShinSuMedium-Regular'
+			);
+			await Sunniesnow.Assets.loadFont(
+				'https://fastly.jsdelivr.net/gh/Kinutafontfactory/Yuji/fonts/ttf/YujiBoku-Regular.ttf',
+				'YujiBoku-Regular'
 			);
 		}
 		this.fontSize = Sunniesnow.Config.radius * 10 * Sunniesnow.Config.scale();
@@ -13,7 +17,7 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 	populate() {
 		super.populate();
 		this.text = new PIXI.Text(this.event.text, {
-			fontFamily: 'HanWangShinSuMedium-Regular',
+			fontFamily: 'HanWangShinSuMedium-Regular,YujiBoku-Regular',
 			fontSize: this.constructor.fontSize,
 			fill: 0xffffff,
 			align: 'center'

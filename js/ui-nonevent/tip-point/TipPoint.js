@@ -264,7 +264,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 				const angleP = this.atan2(xP - x, yP - y);
 				const angleN = this.atan2(xN - x, yN - y);
 				let angle = (angleP + angleN) / 2;
-				if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI / 2) {
+				if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI / 2 - 1e-3) {
 					angle += Math.PI / 2;
 				}
 				[perpX, perpY] = Sunniesnow.Utils.polarToCartesian(halfThickness, angle);

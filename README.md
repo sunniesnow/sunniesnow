@@ -36,7 +36,8 @@ The open-source projects used by Sunniesnow:
 - [audio-decode](https://github.com/audiojs/audio-decode) (MIT),
 - [marked](https://marked.js.org) (MIT),
 - [DOMPurify](https://github.com/cure53/DOMPurify) (Apache-2.0 or MPL-2.0),
-- [wangfonts](http://code.google.com/p/wangfonts) (GPL-2.0).
+- [wangfonts](http://code.google.com/p/wangfonts) (GPL-2.0),
+- [cwtex-q-fonts](https://github.com/l10n-tw/cwtex-q-fonts) (GPL-2.0).
 
 Sunniesnow does not contain any files from the above projects
 but uses them by letting the client browser download needed files
