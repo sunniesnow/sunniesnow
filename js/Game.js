@@ -84,7 +84,7 @@ Sunniesnow.Game = class Game {
 			}
 		};
 		window.addEventListener('blur', this.blurListener);
-		document.addEventListener('fullscreenchange', this.blurListener);
+		document.addEventListener('fullscreenchange', this.blurListener, true);
 		document.addEventListener('visibilitychange', this.blurListener);
 	}
 

@@ -35,13 +35,7 @@ Sunniesnow.Fullscreen = {
 		}
 		const promise = Sunniesnow.game.canvas.requestFullscreen();
 		if (typeof promise?.then === 'function') {
-			promise.then(() => {
-				this.entering = false;
-				this.is = true;
-				if (!this.should) {
-					this.quit();
-				}
-			}).catch(reason => {
+			promise.catch(reason => {
 				this.entering = false;
 				Sunniesnow.Utils.warn('Failed to request fullscreen: ' + reason, reason);
 			});
@@ -61,13 +55,7 @@ Sunniesnow.Fullscreen = {
 		}
 		const promise = document.exitFullscreen();
 		if (typeof promise?.then === 'function') {
-			promise.then(() => {
-				this.quitting = false;
-				this.is = false;
-				if (this.should) {
-					this.enter();
-				}
-			}).catch(reason => {
+			promise.catch(reason => {
 				this.quitting = false;
 				Sunniesnow.Utils.warn('Failed to exit fullscreen: ' + reason, reason);
 			});
@@ -78,7 +66,10 @@ Sunniesnow.Fullscreen = {
 	},
 
 	addListenerToCanvas() {
-		this.canvasFullscreenChangeListener = event => this.should = this.is = !!document.fullscreenElement;
+		this.canvasFullscreenChangeListener = event => {
+			this.entering = this.quitting = false;
+			this.should = this.is = !!document.fullscreenElement;
+		};
 		Sunniesnow.game.canvas.addEventListener('fullscreenchange', this.canvasFullscreenChangeListener);
 	},
 
