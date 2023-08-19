@@ -595,5 +595,6 @@ Sunniesnow.Dom = {
 		script.textContent = 'Sunniesnow.Preprocess.run();';
 		document.body.appendChild(script);
 		await Sunniesnow.Utils.untilLoaded(document.body);
+		script.remove();
 	}
 };

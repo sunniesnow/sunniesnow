@@ -61,7 +61,7 @@ Sunniesnow.Loader = {
 				} else {
 					sourceContents = Sunniesnow.game?.settings.levelFileOnline ?? Sunniesnow.Dom.readValue('level-file-online');
 				}
-				if (this.loaded.chart.source === 'online' && this.loaded.chart.sourceContents === sourceContents) {
+				if (!force && this.loaded.chart.source === 'online' && this.loaded.chart.sourceContents === sourceContents) {
 					return;
 				}
 				this.clearChart();
@@ -82,7 +82,7 @@ Sunniesnow.Loader = {
 				} else {
 					sourceContents = Sunniesnow.game?.settings.levelFileUpload ?? Sunniesnow.Dom.actualLevelFileUpload();
 				}
-				if (this.loaded.chart.source === 'upload' && this.loaded.chart.sourceContents === sourceContents) {
+				if (!force && this.loaded.chart.source === 'upload' && this.loaded.chart.sourceContents === sourceContents) {
 					return;
 				}
 				this.clearChart();

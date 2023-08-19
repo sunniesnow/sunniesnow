@@ -172,8 +172,14 @@ Sunniesnow.Game = class Game {
 		Sunniesnow.TouchManager.terminate();
 		this.removeCanvasListeners();
 		this.removeWindowListeners();
-		if (this.app) {
+		if (!this.app) {
+			return;
+		}
+		try {
 			this.app.stop();
+			this.app.destroy();
+		} catch (error) {
+			console.error(error);
 		}
 	}
 };

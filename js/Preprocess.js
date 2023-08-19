@@ -19,13 +19,17 @@ Sunniesnow.Preprocess = {
 
 	readUrlParams() {
 		const params = Sunniesnow.Utils.urlSearchParamsObject();
+		const processedParams = {};
 		for (const key in this.EXTRA_URL_PARAMS) {
 			if (Object.hasOwn(params, key)) {
-				this.EXTRA_URL_PARAMS[key].call(this, params[key]);
+				processedParams[key] = params[key];
 				delete params[key];
 			}
 		}
 		Sunniesnow.Dom.writeSettings(params);
+		for (const key in processedParams) {
+			this.EXTRA_URL_PARAMS[key].call(this, processedParams[key]);
+		}
 	},
 
 	async registerServiceWorker() {
