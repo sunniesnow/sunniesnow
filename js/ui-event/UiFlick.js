@@ -69,15 +69,14 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
 		Sunniesnow.UiTap.prototype.updateTextFadingOut.call(this, progress);
+		this.noteBody.visible = false;
+		this.circle.visible = false;
 		progress *= 2;
 		if (this.levelNote.judgement === 'miss' || this.levelNote.judgement === 'bad') {
-			this.noteBody.visible = false;
 			this.arrow.visible = false;
 			return;
 		}
 		const distance = this.constructor.radius * 2;
-		this.noteBody.visible = false;
-		this.circle.visible = false;
 		this.arrow.scale.set(1.05);
 		if (progress <= 1) {
 			this.arrow.alpha = (1 - progress)**3;

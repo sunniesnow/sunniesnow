@@ -10,6 +10,11 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	}
 
 	populate() {
+		this.createText();
+		this.createRightText();
+	}
+
+	createText() {
 		this.text = new PIXI.Text(this.getTextContents(), {
 			fontFamily: 'Arial',
 			fontSize: this.constructor.fontSize,
@@ -19,8 +24,22 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.addChild(this.text);
 	}
 
+	createRightText() {
+		this.rightText = new PIXI.Text(this.getRightTextContents(), {
+			fontFamily: 'Arial',
+			fontSize: this.constructor.fontSize,
+			fill: '#ff00ff'
+		});
+		this.rightText.anchor = new PIXI.ObservablePoint(null, null, 1, 1);
+		this.rightText.x = Sunniesnow.game.settings.width;
+		this.rightText.y = Sunniesnow.game.settings.height;
+		this.rightText.visible = false;
+		this.addChild(this.rightText);
+	}
+
 	trigger() {
 		this.text.visible = !this.text.visible;
+		this.rightText.visible = !this.rightText.visible;
 	}
 
 	hitRegion() {
@@ -40,5 +59,10 @@ Horizontal flip: ${Sunniesnow.game.settings.horizontalFlip}
 Vertical flip: ${Sunniesnow.game.settings.verticalFlip}
 Start: ${Sunniesnow.game.settings.start}
 End: ${Sunniesnow.game.settings.end}`
+	}
+
+	getRightTextContents() {
+		return `Early: ${Sunniesnow.game.level.early}
+Late: ${Sunniesnow.game.level.late}`
 	}
 };

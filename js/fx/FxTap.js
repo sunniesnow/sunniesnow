@@ -4,6 +4,20 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		this.sparkLine = this.createSparkLine();
 		this.explosionContourArc = this.createExplosionContourArc();
 		this.missHalo = this.createMissHalo();
+		this.earlyTextTexture = this.createTextTexture('E', 0x9f57e4);
+		this.lateTextTexture = this.createTextTexture('L', 0xe74c4c);
+	}
+
+	static createTextTexture(text, color) {
+		const sprite = new PIXI.Text(text, {
+			align: 'center',
+			fill: color,
+			fontSize: this.radius,
+			fontFamily: 'Arial',
+			fontWeight: 'bold'
+		});
+		sprite.updateText();
+		return sprite.texture;
 	}
 
 	static createSparkLine() {
@@ -37,7 +51,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 			const spark = new PIXI.Graphics(this.constructor.sparkLine);
 			spark.transform.rotation = Math.random() * Math.PI * 2;
 			spark.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
-			this.addChild(spark);
+			this.back.addChild(spark);
 			this.sparks.push(spark);
 		}
 	}
@@ -48,7 +62,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 			const contour = new PIXI.Graphics(this.constructor.explosionContourArc);
 			contour.transform.rotation = Math.random() * Math.PI * 2;
 			contour.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
-			this.addChild(contour);
+			this.back.addChild(contour);
 			this.contours.push(contour);
 		}
 	}
@@ -114,6 +128,36 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		this.graphics.alpha -= delta * 0.05;
 		if (this.graphics.alpha <= 0) {
 			this.state = 'finished';
+		}
+	}
+
+	populate() {
+		super.populate();
+		this.createEarlyLateText();
+	}
+
+	createEarlyLateText() {
+		if (!this.earlyLate) {
+			return;
+		}
+		this.earlyLateText = new PIXI.Sprite(this.earlyLate < 0 ? this.constructor.earlyTextTexture : this.constructor.lateTextTexture);
+		this.earlyLateText.anchor.set(0.5);
+		this.addChild(this.earlyLateText);
+	}
+
+	update(delta) {
+		super.update(delta);
+		this.updateEarlyLateText(delta);
+	}
+
+	updateEarlyLateText(delta) {
+		if (!this.earlyLateText) {
+			return;
+		}
+		this.earlyLateText.alpha -= delta * 0.05;
+		if (this.earlyLateText.alpha <= 0) {
+			this.removeChild(this.earlyLateText);
+			this.earlyLateText = null;
 		}
 	}
 };

@@ -31,6 +31,7 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 			this.highestJudgement = newHighest;
 			this.hitRelativeTime = relativeTime;
 			this.touch = touch;
+			this.determineEarlyLate();
 		}
 	}
 

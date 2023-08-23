@@ -9,6 +9,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		this.hitRelativeTime = null;
 		this.releaseRelativeTime = null;
 		this.judgement = null;
+		this.earlyLate = null;
 		this.touch = null;
 		this.holding = false;
 		this.needsToUpdateHolding = true;
@@ -36,6 +37,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		this.hitRelativeTime = time - this.time;
 		this.holding = true;
 		this.processHit(touch, time);
+		this.determineEarlyLate();
 		Sunniesnow.game.level.holdingNotes.push(this);
 		Sunniesnow.game.level.holdingNotes.sort((a, b) => a.endTime - b.endTime);
 		Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
@@ -49,6 +51,13 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		this.touch = touch;
 		if (touch && this.constructor.ONLY_ONE_PER_TOUCH) {
 			touch.note = this;
+		}
+	}
+
+	determineEarlyLate() {
+		this.earlyLate = 0;
+		if (!Sunniesnow.Utils.between(this.hitRelativeTime, ...this.judgementWindows().perfect)) {
+			this.earlyLate = Math.sign(this.hitRelativeTime);
 		}
 	}
 

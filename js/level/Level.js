@@ -43,6 +43,8 @@ Sunniesnow.Level = class Level {
 		this.good = 0;
 		this.bad = 0;
 		this.miss = 0;
+		this.early = 0;
+		this.late = 0;
 		this.combo = 0;
 		this.maxCombo = 0;
 		this.lastJudgement = null;
@@ -292,6 +294,13 @@ Sunniesnow.Level = class Level {
 		this.maxCombo = Math.max(this.maxCombo, this.combo);
 		this.lastJudgement = note.judgement;
 		this[note.judgement]++;
+		if (note.earlyLate) {
+			if (note.earlyLate < 0) {
+				this.early++;
+			} else {
+				this.late++;
+			}
+		}
 	}
 
 	swipeDrags(touch) {
