@@ -2,7 +2,9 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 	constructor() {
 		super();
 		this.presentFx = [];
-		this.back = new PIXI.Container();
+		if (!Sunniesnow.game.settings.hideFxInFront) {
+			this.front = new PIXI.Container();
+		}
 	}
 
 	clear() {
@@ -10,7 +12,9 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 			const fx = this.presentFx.shift();
 			fx.destroy({children: true});
 			this.removeChild(fx);
-			this.back.removeChild(fx.back);
+			if (!Sunniesnow.game.settings.hideFxInFront) {
+				this.front.removeChild(fx.front);
+			}
 		}
 	}
 
@@ -29,10 +33,14 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		const fx = uiNote.newFx();
 		if (Sunniesnow.game.settings.reverseNoteOrder) {
 			this.addChildAt(fx, 0);
-			this.back.addChildAt(fx.back, 0);
+			if (!Sunniesnow.game.settings.hideFxInFront) {
+				this.front.addChildAt(fx.front, 0);
+			}
 		} else {
 			this.addChild(fx);
-			this.back.addChild(fx.back);
+			if (!Sunniesnow.game.settings.hideFxInFront) {
+				this.front.addChild(fx.front);
+			}
 		}
 		this.presentFx.push(fx);
 	}

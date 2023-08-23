@@ -51,7 +51,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 			const spark = new PIXI.Graphics(this.constructor.sparkLine);
 			spark.transform.rotation = Math.random() * Math.PI * 2;
 			spark.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
-			this.back.addChild(spark);
+			this.addChild(spark);
 			this.sparks.push(spark);
 		}
 	}
@@ -62,7 +62,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 			const contour = new PIXI.Graphics(this.constructor.explosionContourArc);
 			contour.transform.rotation = Math.random() * Math.PI * 2;
 			contour.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
-			this.back.addChild(contour);
+			this.addChild(contour);
 			this.contours.push(contour);
 		}
 	}
@@ -142,7 +142,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		}
 		this.earlyLateText = new PIXI.Sprite(this.earlyLate < 0 ? this.constructor.earlyTextTexture : this.constructor.lateTextTexture);
 		this.earlyLateText.anchor.set(0.5);
-		this.addChild(this.earlyLateText);
+		this.front.addChild(this.earlyLateText);
 	}
 
 	update(delta) {
@@ -156,7 +156,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		}
 		this.earlyLateText.alpha -= delta * 0.05;
 		if (this.earlyLateText.alpha <= 0) {
-			this.removeChild(this.earlyLateText);
+			this.front.removeChild(this.earlyLateText);
 			this.earlyLateText = null;
 		}
 	}

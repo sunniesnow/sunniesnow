@@ -129,6 +129,8 @@ Sunniesnow.Dom = {
 			hudTopRight: this.readValue('hud-top-right'),
 			touchEffects: this.readCheckbox('touch-effects'),
 			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
+			hideTipPoints: this.readCheckbox('hide-tip-points'),
+			hideFxInFront: this.readCheckbox('hide-fx-in-front'),
 
 			// audio settings
 			se: this.readRadio('se'),
@@ -240,6 +242,8 @@ Sunniesnow.Dom = {
 		this.writeValue('hud-top-right', d('hudTopRight'));
 		this.writeCheckbox('touch-effects', d('touchEffects'));
 		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
+		this.writeCheckbox('hide-tip-points', d('hideTipPoints'));
+		this.writeCheckbox('hide-fx-in-front', d('hideFxInFront'));
 
 		this.writeRadio('se', d('se'));
 		this.writeValue('se-online', d('seOnline'));

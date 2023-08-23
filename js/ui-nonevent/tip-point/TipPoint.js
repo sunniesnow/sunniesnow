@@ -27,6 +27,9 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	`;
 
 	static async load() {
+		if (Sunniesnow.game.settings.hideTipPoints) {
+			return;
+		}
 		this.radius = Sunniesnow.Config.noteRadius() / 3;
 		this.tipPointGeometry = this.createTipPointGeometry();
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
@@ -245,26 +248,38 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 
 		const vertices = this.trailVertices.data;
 		const halfThickness = this.constructor.radius / 1.5; // half thickness of trail
-		for (let i = 1, lastX1 = 0, lastY1 = 0; i < checkpoints.length; i++) {
+		let lastX1, lastX2, lastY1, lastY2;
+		lastX1 = lastX2 = vertices[0] = vertices[2] = checkpoints[0].x
+		lastY1 = lastY2 = vertices[1] = vertices[3] = checkpoints[0].y;
+		for (let i = 1; i < checkpoints.length; i++) {
 			const index = i * 4;
-			let perpX, perpY;
-			const x = checkpoints[i].x;
-			const y = checkpoints[i].y;
-			const xP = checkpoints[i-1].x;
-			const yP = checkpoints[i-1].y;
-			if (i === checkpoints.length - 1) {
+			const {x, y} = checkpoints[i];
+			const {x: xP, y: yP} = checkpoints[i-1];
+			if (x == xP && y == yP) {
+				vertices[index] = lastX1;
+				vertices[index + 1] = lastY1;
+				vertices[index + 2] = lastX2;
+				vertices[index + 3] = lastY2;
+				continue;
+			}
+			let j, xN, yN, perpX, perpY;
+			for (j = i + 1; j < checkpoints.length; j++) {
+				({x: xN, y: yN} = checkpoints[j]);
+				if (xN != x || yN != y) {
+					break;
+				}
+			}
+			if (j === checkpoints.length) {
 				perpX = y - yP;
 				perpY = xP - x;
 				const perpLength = Sunniesnow.Utils.hypot(perpX, perpY);
 				perpX *= halfThickness / perpLength;
 				perpY *= halfThickness / perpLength;
 			} else {
-				const xN = checkpoints[i+1].x;
-				const yN = checkpoints[i+1].y;
 				const angleP = this.atan2(xP - x, yP - y);
 				const angleN = this.atan2(xN - x, yN - y);
 				let angle = (angleP + angleN) / 2;
-				if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI / 2 - 1e-3) {
+				if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI/2 - 1e-3) {
 					angle += Math.PI / 2;
 				}
 				[perpX, perpY] = Sunniesnow.Utils.polarToCartesian(halfThickness, angle);
@@ -276,20 +291,13 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 			const c1 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x1, y1);
 			const c2 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, lastX1, lastY1);
 			if (c1 !== c2) {
-				let t = x1;
-				x1 = x2;
-				x2 = t;
-				t = y1;
-				y1 = y2;
-				y2 = t;
+				[x1, y1, x2, y2] = [x2, y2, x1, y1]
 			}
 			vertices[index] = lastX1 = x1;
 			vertices[index + 1] = lastY1 = y1;
-			vertices[index + 2] = x2;
-			vertices[index + 3] = y2;
+			vertices[index + 2] = lastX2 = x2;
+			vertices[index + 3] = lastY2 = y2;
 		}
-		vertices[0] = vertices[2] = checkpoints[0].x;
-		vertices[1] = vertices[3] = checkpoints[0].y;
 		this.trailVertices.update();
 	}
 };

@@ -19,7 +19,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.pauseButton = new Sunniesnow.ButtonPause();
 		this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard();
 		this.doubleLinesBoard = new Sunniesnow.DoubleLinesBoard();
-		this.tipPointsBoard = new Sunniesnow.TipPointsBoard();
+		if (!Sunniesnow.game.settings.hideTipPoints) {
+			this.tipPointsBoard = new Sunniesnow.TipPointsBoard();
+		}
 		this.fxBoard = new Sunniesnow.FxBoard();
 		this.pauseBoard = new Sunniesnow.PauseBoard(this);
 		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.doubleLinesBoard, this.debugBoard);
@@ -30,12 +32,16 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.addChild(this.topRightHud);
 		this.addChild(this.topCenterHud);
 		this.addChild(this.pauseButton);
-		this.addChild(this.fxBoard.back);
+		this.addChild(this.fxBoard);
 		this.addChild(this.uiBgNotesBoard);
 		this.addChild(this.doubleLinesBoard);
 		this.addChild(this.uiNotesBoard);
-		this.addChild(this.tipPointsBoard);
-		this.addChild(this.fxBoard);
+		if (!Sunniesnow.game.settings.hideTipPoints) {
+			this.addChild(this.tipPointsBoard);
+		}
+		if (!Sunniesnow.game.settings.hideFxInFront) {
+			this.addChild(this.fxBoard.front);
+		}
 		this.addChild(this.pauseBoard);
 		if (Sunniesnow.game.settings.debug) {
 			this.addChild(this.debugHud);
@@ -71,16 +77,22 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	gotoResult() {
-		Sunniesnow.game.goto(new Sunniesnow.SceneResult([
+		const boards = [
 			this.background,
 			this.progressBar,
 			this.uiBgPatternBoard,
 			this.fxBoard,
 			this.uiBgNotesBoard,
 			this.doubleLinesBoard,
-			this.uiNotesBoard,
-			this.tipPointsBoard,
-		]));
+			this.uiNotesBoard
+		];
+		if (!Sunniesnow.game.settings.hideTipPoints) {
+			boards.push(this.tipPointsBoard);
+		}
+		if (!Sunniesnow.game.settings.hideFxInFront) {
+			boards.push(this.fxBoard.front);
+		}
+		Sunniesnow.game.goto(new Sunniesnow.SceneResult(boards));
 	}
 
 	updateAudio() {
@@ -95,7 +107,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.doubleLinesBoard.update(delta);
 		this.uiNotesBoard.update(delta);
 		this.fxBoard.update(delta);
-		this.tipPointsBoard.update(delta);
+		if (!Sunniesnow.game.settings.hideTipPoints) {
+			this.tipPointsBoard.update(delta);
+		}
 	}
 
 	terminate() {
@@ -111,7 +125,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.uiBgNotesBoard.clear();
 		this.doubleLinesBoard.clear();
 		this.uiNotesBoard.clear();
-		this.tipPointsBoard.clear();
+		if (!Sunniesnow.game.settings.hideTipPoints) {
+			this.tipPointsBoard.clear();
+		}
 		this.fxBoard.clear();
 		if (Sunniesnow.game.settings.seWithMusic) {
 			this.seWithMusic.clear();

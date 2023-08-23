@@ -392,12 +392,31 @@ and will not be stated again to avoid repetition:
 This setting is used to enable or disable the touch effects.
 
 ##### Reverse the display order of notes
+{:#reverse-note-order}
 
 - **Setting id**: `reverse-note-order`.
 - **Possible values**: `true`, `false`.
 
 This setting is used to reverse the display order of notes.
 When it is `true`, later notes will be displayed below earlier notes.
+
+##### Hide tip points
+
+- **Setting id**: `hide-tip-points`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the tip points.
+When it is `true`, the tip points will not be displayed.
+
+##### Hide FX in front of notes (e.g. E/L of default skin)
+
+- **Setting id**: `hide-fx-in-front`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the FX in front of notes.
+When it is `true`, the FX in front of notes will not be displayed.
+
+For the default skin, the FX in front of notes are the E/L indicators.
 
 ### Audio settings
 

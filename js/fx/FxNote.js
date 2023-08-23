@@ -5,11 +5,11 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 
 	constructor(uiNote) {
 		super();
-		this.back = new PIXI.Container();
+		this.front = new PIXI.Container();
 		this.state = 'present'; // present -> finished
 		this.uiNote = uiNote;
-		this.x = this.back.x = uiNote.x;
-		this.y = this.back.y = uiNote.y;
+		this.x = this.front.x = uiNote.x;
+		this.y = this.front.y = uiNote.y;
 		this.judgement = uiNote.levelNote.judgement || uiNote.levelNote.highestJudgement;
 		this.earlyLate = uiNote.levelNote.earlyLate;
 		this.populate();
@@ -82,7 +82,7 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 
 	destroy(options) {
 		super.destroy(options);
-		this.back.destroy(options);
+		this.front.destroy(options);
 	}
 
 };
