@@ -11,6 +11,12 @@ Sunniesnow.Event = class Event {
 	static newFromType(type, time, properties) {
 		const eventClass = Sunniesnow[Sunniesnow.Utils.upcaseFirst(type)];
 		if (eventClass?.prototype instanceof Sunniesnow.Event) {
+			for (const property of eventClass.PROPERTIES.required) {
+				if (!Object.hasOwn(properties, property)) {
+					Sunniesnow.Utils.warn(`Missing property \`${property}\` in ${type} event`);
+					return null;
+				}
+			}
 			return new eventClass(time, properties);
 		} else {
 			Sunniesnow.Utils.warn(`Unknown event type \`${type}\``);

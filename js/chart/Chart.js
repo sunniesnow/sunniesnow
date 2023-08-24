@@ -82,7 +82,8 @@ Sunniesnow.Chart = class Chart {
 		for (const field of Sunniesnow.Chart.EVENT_FIELDS) {
 			result[field] = eventData[field];
 			if (!Object.hasOwn(result, field)) {
-				Sunniesnow.Utils.error(`Missing \`${field}\` in event`);
+				Sunniesnow.Utils.warn(`Missing \`${field}\` in event`);
+				return null;
 			}
 		}
 		return result;
