@@ -38,20 +38,41 @@ self.addEventListener('fetch', event => event.respondWith(caches.match(event.req
 	}
 	return fetch(event.request).then(fetched => {
 		const url = new URL(event.request.url);
-		const clone = fetched.clone();
 		let cacheKey;
 		if (url.host === ONLINE_HOST) {
 			cacheKey = ONLINE_STORAGE_NAME;
 		} else if (url.href.startsWith(CDN_PREFIX) || SITE_RESOURCES.includes(url.pathname) || url.pathname.startsWith(dirname(location.pathname))) {
 			cacheKey = SITE_STORAGE_NAME;
-		} else {
+		} else if (!isPrivate(url.hostname)) {
 			cacheKey = EXTERNAL_STORAGE_NAME;
 		}
-		caches.open(cacheKey).then(cache => cache.put(event.request, clone));
+		if (cacheKey) {
+			const clone = fetched.clone();
+			caches.open(cacheKey).then(cache => cache.put(event.request, clone));
+		}
 		return fetched;
 	});
 })));
 
 function dirname(path) {
 	return path.replace(/\/[^/]*$/, '');
+}
+
+function isPrivate(hostname) {
+	if (hostname === 'localhost') {
+		return true;
+	}
+	if (/10\.\d+\.\d+\.\d+/.test(hostname)) {
+		return true;
+	}
+	if (/192\.168\.\d+\.\d+/.test(hostname)) {
+		return true;
+	}
+	if (/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+/.test(hostname)) {
+		return true;
+	}
+	if (/127\.\d+\.\d+\.\d+/.test(hostname)) {
+		return true;
+	}
+	return false;
 }
