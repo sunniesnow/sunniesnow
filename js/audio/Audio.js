@@ -6,7 +6,12 @@ Sunniesnow.Audio = class Audio {
 	}
 
 	static loadOfflineAudioContext() {
-		const end = Sunniesnow.game.chart.endTime() + Sunniesnow.record.resultsDuration;
+		let end;
+		if (Sunniesnow.record.waitForMusic) {
+			end = Sunniesnow.Music.duration;
+		} else {
+			end = Sunniesnow.game.chart.endTime() + Sunniesnow.record.resultsDuration;
+		}
 		this.context = new OfflineAudioContext(
 			this.context.destination.channelCount,
 			Math.ceil((end - Sunniesnow.Music.start) * this.context.sampleRate),
