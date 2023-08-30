@@ -148,8 +148,8 @@ Sunniesnow.Dom = {
 			verticalFlip: this.readCheckbox('vertical-flip'),
 			start: this.readValue('start'),
 			end: this.readValue('end'),
-			resumePreperationTime: this.readValue('resume-preperation-time'),
-			beginningPreperationTime: this.readValue('beginning-preperation-time'),
+			resumePreparationTime: this.readValue('resume-preparation-time'),
+			beginningPreparationTime: this.readValue('beginning-preparation-time'),
 			notesPriorityOverPause: this.readCheckbox('notes-priority-over-pause'),
 
 			// control settings
@@ -258,8 +258,8 @@ Sunniesnow.Dom = {
 		this.writeCheckbox('vertical-flip', d('verticalFlip'));
 		this.writeValue('start', d('start'));
 		this.writeValue('end', d('end'));
-		this.writeValue('resume-preperation-time', d('resumePreperationTime'));
-		this.writeValue('beginning-preperation-time', d('beginningPreperationTime'));
+		this.writeValue('resume-preparation-time', d('resumePreparationTime'));
+		this.writeValue('beginning-preparation-time', d('beginningPreparationTime'));
 		this.writeCheckbox('notes-priority-over-pause', d('notesPriorityOverPause'));
 
 		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));

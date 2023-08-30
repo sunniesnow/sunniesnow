@@ -19,7 +19,7 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 		const time = Sunniesnow.Music.currentTime;
 		while (this.unappearedEvents.length > 0) {
 			const event = this.unappearedEvents[0];
-			const shouldStartTime = event.appearTime() - Sunniesnow.Config.uiPreperationTime;
+			const shouldStartTime = event.appearTime() - Sunniesnow.Config.uiPreparationTime;
 			if (time < shouldStartTime) {
 				break;
 			}

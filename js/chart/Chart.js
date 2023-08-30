@@ -16,7 +16,7 @@ Sunniesnow.Chart = class Chart {
 		Sunniesnow.Music.start = Math.min(
 			Sunniesnow.game.settings.start * Sunniesnow.Music.duration,
 			Sunniesnow.game.settings.speed === 0 ? Infinity : Sunniesnow.game.chart.events[0].appearTime()
-		) - Sunniesnow.game.settings.beginningPreperationTime;
+		) - Sunniesnow.game.settings.beginningPreparationTime;
 		if (!Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Audio.loadOfflineAudioContext();
 		}
@@ -45,7 +45,7 @@ Sunniesnow.Chart = class Chart {
 	readEvents() {
 		this.events = [];
 		const duration = Sunniesnow.Music.duration;
-		const start = Sunniesnow.game.settings.start * duration - Sunniesnow.game.settings.resumePreperationTime;
+		const start = Sunniesnow.game.settings.start * duration - Sunniesnow.game.settings.resumePreparationTime;
 		const end = Sunniesnow.game.settings.end * duration;
 		for (const eventData of this.data.events) {
 			if (!Sunniesnow.Event.check(eventData)) {

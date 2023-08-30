@@ -28,7 +28,7 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	}
 
 	addNewTipPoints(time) {
-		while (this.unappearedTipPointHeads.length > 0 && time >= this.unappearedTipPointHeads[0][1][0].time - Sunniesnow.Config.uiPreperationTime) {
+		while (this.unappearedTipPointHeads.length > 0 && time >= this.unappearedTipPointHeads[0][1][0].time - Sunniesnow.Config.uiPreparationTime) {
 			this.add(...this.unappearedTipPointHeads.shift());
 		}
 	}

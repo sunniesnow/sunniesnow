@@ -16,7 +16,7 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 		const time = Sunniesnow.Music.currentTime - Sunniesnow.Music.delay();
 		while (this.unhitEvents.length > 0) {
 			const event = this.unhitEvents[0];
-			if (time < event.time - Sunniesnow.Config.uiPreperationTime) {
+			if (time < event.time - Sunniesnow.Config.uiPreparationTime) {
 				break;
 			}
 			this.holdingEvents.push(this.unhitEvents.shift());
@@ -25,7 +25,7 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 		}
 		while (this.holdingEvents.length > 0) {
 			const event = this.holdingEvents[0];
-			if (time < event.endTime() - Sunniesnow.Config.uiPreperationTime) {
+			if (time < event.endTime() - Sunniesnow.Config.uiPreparationTime) {
 				break;
 			}
 			this.holdingEvents.shift();

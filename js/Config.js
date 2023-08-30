@@ -19,8 +19,8 @@ Sunniesnow.Config = {
 
 	// UI of chart events will be spawned
 	// this much time (in seconds) before it actually appears.
-	// Must be smaller than preperationTime.
-	uiPreperationTime: 0.1,
+	// Must be smaller than preparationTime.
+	uiPreparationTime: 0.1,
 
 	// Note radius in chart coordinate length units.
 	// This is used for calculating judgement space window.

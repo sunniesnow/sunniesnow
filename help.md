@@ -560,7 +560,7 @@ The actual events in the chart that are included are those
 that satisfy both of the following rules:
 
 - The (start) time of the event is greater than or equal to
-the position specified by [`start`](#start) minus [`resume-preperation-time`](#resume-preperation-time).
+the position specified by [`start`](#start) minus [`resume-preparation-time`](#resume-preparation-time).
 - The (start) time of the event is less than or equal to
 the position specified by [`end`](#end).
 
@@ -574,14 +574,14 @@ the position specified by [`end`](#end).
 - **Setting id**: `end`.
 - **Possible values**: Any number.
 
-#### Preperation time
+#### Preparation time
 
-##### Resume preperation time
+##### Resume preparation time
 
-- **Setting id**: `resume-preperation-time`.
+- **Setting id**: `resume-preparation-time`.
 - **Possible values**: Any non-negative number.
 
-This setting is used to set the preperation time before resuming the game
+This setting is used to set the preparation time before resuming the game
 in seconds.
 When you pause the game and then resume it,
 the music does **not** start at the exact position where you paused it,
@@ -591,12 +591,12 @@ This setting also affects which events defined in the chart will actually
 appear in gameplay.
 See [start and end](#start-and-end) for more details.
 
-##### Beginning preperation time
+##### Beginning preparation time
 
-- **Setting id**: `beginning-preperation-time`.
+- **Setting id**: `beginning-preparation-time`.
 - **Possible values**: Any non-negative number.
 
-This setting is used to set the preperation time before starting the game
+This setting is used to set the preparation time before starting the game
 in seconds.
 When you start playing a chart,
 the actual position where the music starts is a little bit earlier
