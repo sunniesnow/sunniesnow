@@ -38,6 +38,6 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
-		this.graphics.alpha = 1 - progress;
+		this.graphics.alpha = (1 - progress)**2;
 	}
 };
