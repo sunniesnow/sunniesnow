@@ -127,6 +127,10 @@ Sunniesnow.Dom = {
 			hudTopCenter: this.readValue('hud-top-center'),
 			hudTopLeft: this.readValue('hud-top-left'),
 			hudTopRight: this.readValue('hud-top-right'),
+			doubleLineTap: this.readCheckbox('double-line-tap'),
+			doubleLineHold: this.readCheckbox('double-line-hold'),
+			doubleLineDrag: this.readCheckbox('double-line-drag'),
+			doubleLineFlick: this.readCheckbox('double-line-flick'),
 			touchEffects: this.readCheckbox('touch-effects'),
 			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
 			hideTipPoints: this.readCheckbox('hide-tip-points'),
@@ -240,6 +244,10 @@ Sunniesnow.Dom = {
 		this.writeValue('hud-top-center', d('hudTopCenter'));
 		this.writeValue('hud-top-left', d('hudTopLeft'));
 		this.writeValue('hud-top-right', d('hudTopRight'));
+		this.writeCheckbox('double-line-tap', d('doubleLineTap'));
+		this.writeCheckbox('double-line-hold', d('doubleLineHold'));
+		this.writeCheckbox('double-line-drag', d('doubleLineDrag'));
+		this.writeCheckbox('double-line-flick', d('doubleLineFlick'));
 		this.writeCheckbox('touch-effects', d('touchEffects'));
 		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
 		this.writeCheckbox('hide-tip-points', d('hideTipPoints'));
