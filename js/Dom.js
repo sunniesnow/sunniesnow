@@ -131,10 +131,12 @@ Sunniesnow.Dom = {
 			doubleLineHold: this.readCheckbox('double-line-hold'),
 			doubleLineDrag: this.readCheckbox('double-line-drag'),
 			doubleLineFlick: this.readCheckbox('double-line-flick'),
+			hideFxInFront: this.readCheckbox('hide-fx-in-front'),
+			hideFxPerfect: this.readCheckbox('hide-fx-perfect'),
+			hideFxHoldStart: this.readCheckbox('hide-fx-hold-start'),
 			touchEffects: this.readCheckbox('touch-effects'),
 			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
 			hideTipPoints: this.readCheckbox('hide-tip-points'),
-			hideFxInFront: this.readCheckbox('hide-fx-in-front'),
 
 			// audio settings
 			se: this.readRadio('se'),
@@ -248,10 +250,12 @@ Sunniesnow.Dom = {
 		this.writeCheckbox('double-line-hold', d('doubleLineHold'));
 		this.writeCheckbox('double-line-drag', d('doubleLineDrag'));
 		this.writeCheckbox('double-line-flick', d('doubleLineFlick'));
+		this.writeCheckbox('hide-fx-in-front', d('hideFxInFront'));
+		this.writeCheckbox('hide-fx-perfect', d('hideFxPerfect'));
+		this.writeCheckbox('hide-fx-hold-start', d('hideFxHoldStart'));
 		this.writeCheckbox('touch-effects', d('touchEffects'));
 		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
 		this.writeCheckbox('hide-tip-points', d('hideTipPoints'));
-		this.writeCheckbox('hide-fx-in-front', d('hideFxInFront'));
 
 		this.writeRadio('se', d('se'));
 		this.writeValue('se-online', d('seOnline'));
