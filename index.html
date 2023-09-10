@@ -14,15 +14,15 @@ description: Sunniesnow is a web rhythm game
 	<div>
 		<input type="radio" id="level-file-online-radio" name="level-file" value="online" checked>
 		<label for="level-file-online-radio">Online:</label>
-		<input type="text" id="level-file-online" placeholder="sunniesnow-sample" oninput="Sunniesnow.Fetcher.interrupt();">
-		<button type="button" id="level-file-online-button" onclick="Sunniesnow.Loader.triggerLoadChart();">Load</button>
+		<input type="text" id="level-file-online" placeholder="sunniesnow-sample">
+		<button type="button" id="level-file-online-button">Load</button>
 		<span id="level-file-downloading"></span>
 	</div>
 
 	<div>
 		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload">
 		<label for="level-file-upload-radio">Upload:</label>
-		<input type="file" id="level-file-upload" accept=".ssc" onchange="Sunniesnow.Dom.markManual('level-file-upload'); Sunniesnow.Loader.triggerLoadChart();">
+		<input type="file" id="level-file-upload" accept=".ssc">
 	</div>
 </fieldset>
 
@@ -134,7 +134,7 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="radio" id="background-upload-radio" name="background" value="upload">
 			<label for="background-upload-radio">Upload:</label>
-			<input type="file" id="background-upload" accept="image/*" onchange="Sunniesnow.Dom.markManual('background-upload');">
+			<input type="file" id="background-upload" accept="image/*">
 		</div>
 	</fieldset>
 
@@ -172,7 +172,7 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="radio" id="fx-upload-radio" name="fx" value="upload">
 			<label for="fx-upload-radio">Upload:</label>
-			<input type="file" id="fx-upload" accept=".ssp" onchange="Sunniesnow.Dom.markManual('fx-upload');">
+			<input type="file" id="fx-upload" accept=".ssp">
 		</div>
 	</fieldset>
 
@@ -194,7 +194,7 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="radio" id="skin-upload-radio" name="skin" value="upload">
 			<label for="skin-upload-radio">Upload:</label>
-			<input type="file" id="skin-upload" accept=".ssp" onchange="Sunniesnow.Dom.markManual('skin-upload');">
+			<input type="file" id="skin-upload" accept=".ssp">
 		</div>
 	</fieldset>
 
@@ -307,7 +307,7 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="radio" id="se-upload-radio" name="se" value="upload">
 			<label for="se-upload-radio">Upload:</label>
-			<input type="file" id="se-upload" accept=".ssp" onchange="Sunniesnow.Dom.markManual('se-upload');">
+			<input type="file" id="se-upload" accept=".ssp">
 		</div>
 	</fieldset>
 

@@ -208,7 +208,7 @@ Sunniesnow.Dom = {
 	},
 
 	async writeSettings(settings) {
-		Sunniesnow.Loader.loadingChart = true;
+		// Sunniesnow.Loader.loadingChart = true;
 
 		const d = property => {
 			const result = settings[property];
@@ -218,7 +218,7 @@ Sunniesnow.Dom = {
 		this.writeRadio('level-file', d('levelFile'));
 		this.writeValue('level-file-online', d('levelFileOnline'));
 
-		await Sunniesnow.Loader.loadChart();
+		// await Sunniesnow.Loader.loadChart();
 
 		this.writeValue('music-select', d('musicSelect'));
 		this.writeValue('chart-select', d('chartSelect'));
@@ -324,8 +324,8 @@ Sunniesnow.Dom = {
 			console.warn(`Unknown settings item ${property}`);
 		}
 
-		Sunniesnow.Loader.loadingChart = false;
-		Sunniesnow.Loader.onChartLoad();
+		// Sunniesnow.Loader.loadingChart = false;
+		// Sunniesnow.Loader.onChartLoad();
 	},
 
 	readUploadSettings() {
@@ -587,19 +587,35 @@ Sunniesnow.Dom = {
 	},
 
 	addEventListeners() {
-		document.getElementById('level-file-online').addEventListener('keydown', event => {
+		const levelFileOnline = document.getElementById('level-file-online')
+		levelFileOnline.addEventListener('keydown', event => {
 			if (event.key === 'Enter') {
-				document.getElementById('level-file-online-button').click();
+				Sunniesnow.Loader.triggerLoadChart();
 			}
+		});
+		levelFileOnline.addEventListener('input', event => {
+			Sunniesnow.Fetcher.interrupt();
+		});
+		document.getElementById('level-file-online-button').addEventListener('click', event => {
+			Sunniesnow.Loader.triggerLoadChart();
+		});
+		document.getElementById('level-file-upload').addEventListener('change', event => {
+			Sunniesnow.Dom.markManual('level-file-upload');
+			Sunniesnow.Loader.triggerLoadChart();
+		});
+		['background-upload', 'fx-upload', 'skin-upload', 'se-upload'].forEach(elementId => {
+			document.getElementById(elementId).addEventListener('change', event => {
+				Sunniesnow.Dom.markManual(elementId);
+			});
 		});
 	},
 
 	async preprocess() {
-		this.addEventListeners();
-		this.setTextInputs();
-		this.associateDomElements();
 		this.setDeviceDependentDefaults();
 		await this.writeSavedSettings();
+		this.setTextInputs();
+		this.associateDomElements();
+		this.addEventListeners();
 	},
 
 	async triggerPreprocess() {
