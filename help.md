@@ -382,6 +382,72 @@ and will not be stated again to avoid repetition:
 
 - **Setting id**: `hud-top-right`.
 
+#### Simultaneity hints
+
+Simultaneity hints are lines connecting notes that are supposed to be hit at the same time.
+Note that the recoloring of simultaneous tap notes is **not** controlled by these settings
+because it is a skin feature.
+
+##### Tap
+{:#double-line-tap}
+
+- **Setting id**: `double-line-tap`.
+- **Possible values**: `true`, `false`.
+
+Enable simultaneity hints for tap notes.
+
+##### Hold
+{:#double-line-hold}
+
+- **Setting id**: `double-line-hold`.
+- **Possible values**: `true`, `false`.
+
+Enable simultaneity hints for hold notes.
+
+##### Drag
+{:#double-line-drag}
+
+- **Setting id**: `double-line-drag`.
+- **Possible values**: `true`, `false`.
+
+Enable simultaneity hints for drag notes.
+
+##### Flick
+{:#double-line-flick}
+
+- **Setting id**: `double-line-flick`.
+- **Possible values**: `true`, `false`.
+
+Enable simultaneity hints for flick notes.
+
+#### FX options
+
+##### Hide FX in front of notes (e.g. E/L of default skin)
+
+- **Setting id**: `hide-fx-in-front`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the FX in front of notes.
+When it is `true`, the FX in front of notes will not be displayed.
+
+For the default skin, the FX in front of notes are the E/L indicators.
+
+##### Hide FX of perfect judgement
+
+- **Setting id**: `hide-fx-perfect`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the FX of perfect judgement.
+When it is `true`, the FX of perfect judgement will not be displayed.
+
+##### Hide FX of start of hold notes
+
+- **Setting id**: `hide-fx-hold-start`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the FX of the start of hold notes.
+When it is `true`, the FX of the start of hold notes will not be displayed.
+
 #### Miscellaneous
 
 ##### Touch effects
@@ -407,16 +473,6 @@ When it is `true`, later notes will be displayed below earlier notes.
 
 This setting is used to hide the tip points.
 When it is `true`, the tip points will not be displayed.
-
-##### Hide FX in front of notes (e.g. E/L of default skin)
-
-- **Setting id**: `hide-fx-in-front`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to hide the FX in front of notes.
-When it is `true`, the FX in front of notes will not be displayed.
-
-For the default skin, the FX in front of notes are the E/L indicators.
 
 ### Audio settings
 
