@@ -143,6 +143,9 @@ Sunniesnow.Loader = {
 				Sunniesnow.game.settings.musicSelect ||= Object.keys(this.loaded.chart.music)[0];
 				Sunniesnow.game.settings.chartSelect ||= Object.keys(this.loaded.chart.charts)[0];
 			}
+			if (Sunniesnow.game.settings.background === 'from-level') {
+				Sunniesnow.game.settings.backgroundFromLevel ||= Object.keys(this.loaded.chart.backgrounds)[0];
+			}
 		}
 	},
 
