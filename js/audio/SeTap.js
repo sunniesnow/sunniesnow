@@ -6,7 +6,10 @@ Object.setPrototypeOf(Sunniesnow.SeTap = {
 		const data = this.buffer.getChannelData(0);
 		for (let i = 0; i < data.length; i++) {
 			const t = i / context.sampleRate;
-			data[i] = Math.sin(2*Math.PI * 0.1/(t+0.006)) * Math.exp(-t * 40);
+			data[i] = (
+				0.4*Math.sin(2*Math.PI*0.1/(t+0.005)) +
+				0.6*Math.sin(2*Math.PI*0.12/(t+0.01))
+			) * Math.exp(-40*t);
 		}
 		this.audio = new Sunniesnow.Audio(this.buffer, Sunniesnow.game.settings.volumeSe);
 	},
