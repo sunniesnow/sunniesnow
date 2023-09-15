@@ -63,13 +63,16 @@ Sunniesnow.Dom = {
 	},
 
 	fillBackgroundSelect(filename) {
-		this.writeRadio('background', 'from-level');
+		// this.writeRadio('background', 'from-level');
 		this.fillSelect('background-from-level', filename);
 	},
 
 	tryAvoidingNoBackground() {
 		if (this.readRadio('background') === 'from-level' && !this.readValue('background-from-level')) {
 			this.writeRadio('background', 'online');
+			if (Sunniesnow.game?.settings) {
+				Sunniesnow.game.settings.background = 'online';
+			}
 		}
 	},
 
