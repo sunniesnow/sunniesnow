@@ -152,6 +152,7 @@ Sunniesnow.Dom = {
 
 			// game settings
 			autoplay: this.readCheckbox('autoplay'),
+			chartOffset: this.readValue('chart-offset') / 1000,
 			gameSpeed: this.readValue('game-speed'),
 			horizontalFlip: this.readCheckbox('horizontal-flip'),
 			verticalFlip: this.readCheckbox('vertical-flip'),
@@ -209,6 +210,7 @@ Sunniesnow.Dom = {
 			}
 		}
 		delete settings.pluginUpload;
+		delete settings.chartOffset; // use writeSavedChartOffset() instead
 		await this.writeSettings(settings);
 	},
 
@@ -268,6 +270,7 @@ Sunniesnow.Dom = {
 		this.writeValue('delay', d('delay') * 1000);
 
 		this.writeCheckbox('autoplay', d('autoplay'));
+		this.writeValue('chart-offset', d('chartOffset'));
 		this.writeValue('game-speed', d('gameSpeed'));
 		this.writeCheckbox('horizontal-flip', d('horizontalFlip'));
 		this.writeCheckbox('vertical-flip', d('verticalFlip'));
@@ -333,6 +336,27 @@ Sunniesnow.Dom = {
 
 		// Sunniesnow.Loader.loadingChart = false;
 		// Sunniesnow.Loader.onChartLoad();
+	},
+
+	saveChartOffset(key) {
+		let chartOffsets = JSON.parse(localStorage.getItem('chartOffsets'));
+		if (!chartOffsets) {
+			chartOffsets = {};
+		}
+		chartOffsets[key] = this.readValue('chart-offset');
+		try {
+			localStorage.setItem('chartOffsets', JSON.stringify(chartOffsets));
+		} catch (e) {
+			Sunniesnow.Utils.warn(`Failed to save chart offset: ${e.message ?? e}`);
+		}
+	},
+
+	writeSavedChartOffset(key) {
+		const chartOffsets = JSON.parse(localStorage.getItem('chartOffsets'));
+		if (!chartOffsets) {
+			return;
+		}
+		this.writeValue('chart-offset', chartOffsets[key]);
 	},
 
 	readUploadSettings() {
@@ -405,8 +429,16 @@ Sunniesnow.Dom = {
 		if (!file) {
 			return;
 		}
-		localStorage.setItem('settings', await file.text());
-		this.writeSavedSettings();
+		let importSuccess = false;
+		try {
+			localStorage.setItem('settings', await file.text());
+			importSuccess = true;
+		} catch (e) {
+			Sunniesnow.Utils.warn(`Failed to import settings: ${e.message ? e.message : e}`);
+		}
+		if (importSuccess) {
+			this.writeSavedSettings();
+		}
 	},
 
 	readCheckbox(id) {

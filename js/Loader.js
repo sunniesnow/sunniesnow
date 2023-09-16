@@ -75,6 +75,7 @@ Sunniesnow.Loader = {
 					this.loaded.chart.sourceContents = null;
 					Sunniesnow.Utils.error(`Failed to load level ${sourceContents}: ${e.message ?? e}`, e);
 				}
+				Sunniesnow.Dom.writeSavedChartOffset(sourceContents);
 				break;
 			case 'upload':
 				if (force) {
@@ -415,6 +416,9 @@ Sunniesnow.Loader = {
 		}
 		if (Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Dom.saveSettings();
+			if (this.loaded.chart.source === 'online') {
+				Sunniesnow.Dom.saveChartOffset(this.loaded.chart.sourceContents);
+			}
 		}
 		this.loadingChartComplete = true;
 		await this.loadPlugins();

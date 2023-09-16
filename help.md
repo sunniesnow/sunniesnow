@@ -565,6 +565,22 @@ All notes are hit perfectly and automatically.
 
 Whether the UI reflects whether the game is autoplaying is dependent on the skin.
 
+#### Chart offset
+
+- **Setting id**: `chart-offset`.
+- **Possible values**: Any number.
+
+This setting is used to set the offset of the chart in milliseconds.
+The time of all events will be shifted by this value.
+The larger the number is, the later the events will be played.
+
+This setting is used to adjust the chart when the chart is not well-timed.
+
+This setting is special in that it is not saved together with other settings.
+It is only saved for online level files,
+and every time you load an online level file,
+the value of this setting will be reset to the value saved for it.
+
 #### Speed (of music)
 {:#game-speed}
 
@@ -1153,11 +1169,84 @@ the game will be restarted (i.e. [stopped](#game-stop) and then started).
 {:#game-stop}
 
 This button is used to stop the game.
-After the game is stopped, it does not update its graphics anymore,
-but the graphics shown on the screen will **not** be cleared immediately.
+After the game is stopped, it does not update its graphics anymore.
+Memory is released, so you cannot resume the game after you stop it.
 
 If you want to start the game again,
 you can hit [*Start*](#game-start) button again.
+
+## Differences between different offsets
+
+There are three different offsets that you can set in Sunniesnow:
+[`offset`](#offset), [`delay`](#delay), and [`chart-offset`](#chart-offset).
+Each of them mitigates a different synchronization problem.
+Here is a comparison in what they actually shift
+and what problems they can mitigate:
+
+| Setting | What it shifts | What it mitigates |
+|-|-|-|
+| `offset` | Judgement time windows | Display delay, input delay, etc. |
+| `delay` | Music | Audio output delay |
+| `chart-offset` | Events in the chart | Charter mis-timed the chart |
+
+Normally, if the same person plays on the browser on the same device,
+the `offset` setting and `delay` setting should be the same for all charts.
+On the other hand, the `chart-offset` should be different for different charts,
+but it should be the same for all players, browsers, and devices.
+For this reason, `offset` and `delay` are saved together with other settings,
+but `chart-offset` is saved separately per each online level file.
+
+In the following subsections,
+we will discuss how these three offsets affect different aspects of the game.
+<!--
+### Which one should I use?
+
+Theoretically, you should try to let the three things synchronous:
+the display of a note, the music, and the input of the player.
+(Because human brain also has different delays for vision, hearing, and touch,
+so the standards of synchronism is dependent on individuals.)
+There is no easy way to measure the display delay, the input delay,
+and the audio output delay,
+but we can only measure two of them relative to the other.
+Therefore, there are two 
+
+In most times, the chart should be well-timed,
+and the difference in the display delay and the input delay is low enough.
+The only significant source of asynchronism is the audio output delay.
+Therefore, you should only need to adjust the `delay` setting to a negative value
+to make the music play earlier.
+-->
+
+### How `start` and `end` treat different offsets
+
+The [`start`](#start) and [`end`](#end) settings are used to set the range of the chart to play.
+
+Whether an event in the chart is included in the gameplay is determined
+by whether its time is within a specified range of music.
+Therefore, the inclusion of events will possibly change
+if you change `chart-offset` because events may be shifted out of or into the range.
+However, `offset` and `delay` do **not** affect the inclusion of events.
+
+### How different offset affect SEs
+
+When we talk about SEs being affected,
+it means whether the time at which an SE is played **relative to the music** is affected.
+
+When `se-with-music` is `true`, Sunniesnow tries to play the SEs
+at the exact same time of the music as the events in the chart specify.
+Therefore, the SEs will be affected by `chart-offset`
+while `offset` and `delay` do **not** affect the SEs.
+
+When `se-with-music` is `false`, Sunniesnow plays the SEs immediately
+when the judgement is made.
+When `autoplay` is false, SE are played immediately after the player hits the note,
+which depends on the player, so we cannot talk about how they are affected by offsets.
+When `autoplay` is true, the judgement of a note is made at the frame when the judgement should have been made,
+so the SEs will then be affected by `offset`.
+Because the judgement time windows are different relative to the music
+when the music is delayed,
+so the time at which SEs play relative to the music will also change in this case,
+so `delay` also affects SEs.
 
 ## URL search parameters
 
