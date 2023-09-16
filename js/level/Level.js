@@ -47,6 +47,7 @@ Sunniesnow.Level = class Level {
 		this.late = 0;
 		this.combo = 0;
 		this.maxCombo = 0;
+		this.inaccuracies = [];
 		this.lastJudgement = null;
 		this.apFcIndicator = 'ap'; // possible values: 'ap', 'fc', ''
 	}
@@ -300,6 +301,9 @@ Sunniesnow.Level = class Level {
 			} else {
 				this.late++;
 			}
+		}
+		if (note.judgement !== 'miss' && note.constructor.ONLY_ONE_PER_TOUCH) {
+			this.inaccuracies.push(note.hitRelativeTime);
 		}
 	}
 

@@ -1248,6 +1248,12 @@ when the music is delayed,
 so the time at which SEs play relative to the music will also change in this case,
 so `delay` also affects SEs.
 
+### How `game-speed` treats different offsets
+
+The [`game-speed`] setting is used to set the speed of the music.
+The actual shifted amount by `chart-offset` is affected by `game-speed`,
+but `offset` and `delay` are **not** affected.
+
 ## URL search parameters
 
 You can use URL search parameters to specify settings.

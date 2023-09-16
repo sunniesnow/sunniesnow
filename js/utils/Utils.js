@@ -421,6 +421,20 @@ Sunniesnow.Utils = {
 
 	transposeArray(array) {
 		return array[0].map((_, i) => array.map(row => row[i]));
+	},
+
+	currentTimeIso() {
+		const date = new Date();
+		const timezoneOffset = -date.getTimezoneOffset();
+		return date.getFullYear().toString().padStart(4, '0') +
+			'-' + (date.getMonth() + 1).toString().padStart(2, '0') +
+			'-' + date.getDate().toString().padStart(2, '0') +
+			'T' + date.getHours().toString().padStart(2, '0') +
+			':' + date.getMinutes().toString().padStart(2, '0') +
+			':' + date.getSeconds().toString().padStart(2, '0') +
+			(timezoneOffset >= 0 ? '+' : '-') +
+			Math.floor(Math.abs(timezoneOffset) / 60).toString().padStart(2, '0') +
+			':' + (Math.abs(timezoneOffset) % 60).toString().padStart(2, '0');
 	}
 
 };
