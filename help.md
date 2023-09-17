@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Sunniesnow Help
+math: true
 ---
 
 # Sunniesnow Help
@@ -1185,8 +1186,8 @@ and what problems they can mitigate:
 
 | Setting | What it shifts | What it mitigates |
 |-|-|-|
-| `offset` | Judgement time windows | Display delay, input delay, etc. |
-| `delay` | Music | Audio output delay |
+| `offset` | Judgement time windows | Display lag and input lag |
+| `delay` | Music | Audio output lag |
 | `chart-offset` | Events in the chart | Charter mis-timed the chart |
 
 Normally, if the same person plays on the browser on the same device,
@@ -1198,24 +1199,71 @@ but `chart-offset` is saved separately per each online level file.
 
 In the following subsections,
 we will discuss how these three offsets affect different aspects of the game.
-<!--
-### Which one should I use?
+
+### How to set offsets
 
 Theoretically, you should try to let the three things synchronous:
-the display of a note, the music, and the input of the player.
-(Because human brain also has different delays for vision, hearing, and touch,
+the display of a note, the music, and
+the input of the player (or the judgement time).
+(Because human brain also has different lags for vision, hearing, and touch,
 so the standards of synchronism is dependent on individuals.)
-There is no easy way to measure the display delay, the input delay,
-and the audio output delay,
+There is no easy way to measure the display lag, the input lag,
+and the audio output lag,
 but we can only measure two of them relative to the other.
-Therefore, there are two 
+Fortunately, by the same reason, we just need to offset two things
+(namely the music and the judgement windows),
+i.e., setting `offset` and `delay`, to make the three things synchronous.
 
-In most times, the chart should be well-timed,
-and the difference in the display delay and the input delay is low enough.
-The only significant source of asynchronism is the audio output delay.
-Therefore, you should only need to adjust the `delay` setting to a negative value
-to make the music play earlier.
--->
+Setting the offsets rely on a well-timed chart.
+You can utilize the
+[Offset Wizard](https://sunniesnow.github.io/game/?level-file=online&level-file-online=offset-wizard){:target="_blank"},
+whose chart is **guaranteed** to be well-timed.
+Before you start, you should set [`autoplay`](#autoplay) to `false`
+and set [`volume-se`](#volume-se) to `0` (to avoid the SEs from affecting your timing).
+The full process of setting the offsets consists of two steps.
+The first is to set `offset`, and the second is to set `delay`:
+
+{% katexmm %}
+
+1. On most devices, the difference in the display lag and the input lag is low enough
+so that you can just skip this step.
+This step requires you to time your inputs purely by vision
+so that you can synchronize the display and the judgement time.
+To avoid the music from affecting your timing,
+first set [`volume-music`](#volume-music) to `0`.
+Then, play the Offset Wizard.
+In the results scene, tap the screen in the center to see judgement details.
+You should see the mean value ($\mu$) and the standard deviation ($\sigma$).
+You should try to let $\sigma$ to be lower than 30 milliseconds
+(it is OK if you cannot, but try to make it as low as possible).
+Then, add the value of $\mu$ to the `offset` setting.
+You can repeat this step until your $\mu$ is very close to zero
+(lower than 5 milliseconds at best).
+After this step, the display and the judgement time should be synchronous enough.
+2. This step requires you to time your inputs purely by hearing
+so that you can synchronize the music and the judgement time.
+Therefore, do not look at the screen when you play the Offset Wizard in this step.
+First, set `volume-music` back to a non-zero value so that you can clearly hear it.
+Then, play the Offset Wizard.
+Try to let $\sigma$ to be lower than 20 milliseconds
+(it is OK if you cannot, but try to make it as low as possible).
+Then, subtract the value of $\mu$ from the `delay` setting.
+You can repeat this step until your $\mu$ is very close to zero
+(lower than 5 milliseconds at best).
+After this step, the music and the judgement time should be synchronous enough.
+{% endkatexmm %}
+
+After these two steps, you should have your `offset` and `delay` settings well-set.
+Normally you do not need to adjust often
+because they should be the same for all charts.
+
+After you have set `offset` and `delay`,
+you should play well-timed charts without any synchronism problems.
+However, if you find that the chart is not well-timed,
+you need to adjust the `chart-offset` setting.
+You can just add the {% katex %}\mu{% endkatex %} value of one of your plays of the chart
+to the `chart-offset` setting
+(before that, make sure that `game-speed` is `1`).
 
 ### How `start` and `end` treat different offsets
 
@@ -1250,7 +1298,7 @@ so `delay` also affects SEs.
 
 ### How `game-speed` treats different offsets
 
-The [`game-speed`] setting is used to set the speed of the music.
+The [`game-speed`](#game-speed) setting is used to set the speed of the music.
 The actual shifted amount by `chart-offset` is affected by `game-speed`,
 but `offset` and `delay` are **not** affected.
 
