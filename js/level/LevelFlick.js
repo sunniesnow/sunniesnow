@@ -55,7 +55,16 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		if (time - this.time > this.lateBad()) {
 			this.slow = true;
 			this.release(this.lateBad());
-		} else if (this.touch.totalDisplacement() >= this.maxFlickDistance()) {
+			return;
+		}
+		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
+		let condition = rho >= this.minFlickDistance();
+		if (condition && !Sunniesnow.game.settings.directionInsensitiveFlick) {
+			const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
+			condition = Sunniesnow.Utils.between(angle, ...this.angleRange());
+		}
+		condition ||= rho >= this.maxFlickDistance();
+		if (condition) {
 			this.release(this.touch.end().time);
 		}
 	}
