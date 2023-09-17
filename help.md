@@ -1107,6 +1107,19 @@ You can export the saved settings to a JSON file here.
 
 You can import saved settings from a JSON file here.
 
+### Chart offsets
+
+#### Delete saved chart offsets
+{:#delete-chart-offsets}
+
+The chart offsets that you set above by filling in [`chart-offset`](#chart-offset)
+are automatically saved for every every online level file
+that you have played.
+They are saved when you hit the *Start* button.
+They are restored when you load the same online level file again.
+If you want to delete the saved chart offsets,
+you can click the *Delete* button here.
+
 ### Service worker
 
 [Service worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)

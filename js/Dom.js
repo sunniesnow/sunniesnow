@@ -359,6 +359,10 @@ Sunniesnow.Dom = {
 		this.writeValue('chart-offset', chartOffsets[key]);
 	},
 
+	deleteSavedChartOffsets() {
+		localStorage.removeItem('chartOffsets');
+	},
+
 	readUploadSettings() {
 		if (!this.saved) {
 			return;
