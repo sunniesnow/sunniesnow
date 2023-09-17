@@ -7,7 +7,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		this.doubleCircleGeometry = this.createCircleGeometry(0xf9f9e9);
 		this.geometry = this.createGeometry(0x29a9b9, 0xe8f8b8);
 		this.doubleGeometry = this.createGeometry(0x3171d1, 0xe3f3f3);
-		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.Note && e.text)) {
+		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.NoteBase && e.text)) {
 			try {
 				await Sunniesnow.Assets.loadFont(
 					//'https://fastly.jsdelivr.net/gh/kaio/wangfonts/TrueType/wt024.ttf',
@@ -98,13 +98,13 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 	}
 
 	createText(maxWidth, maxSize, font) {
-		maxWidth ||= this.constructor.radius * 1.5;
-		maxSize ||= this.constructor.radius;
+		maxWidth ??= this.constructor.radius * 1.5;
+		maxSize ??= this.constructor.radius;
 		const text = new PIXI.Text(this.event.text, {
 			fontSize: maxSize,
 			fill: 'white',
 			align: 'center',
-			fontFamily: font || 'LXGWWenKai-Regular,Arial'
+			fontFamily: font ?? 'LXGWWenKai-Regular,Arial'
 		});
 		text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
 		text.scale.set(Math.min(maxWidth / text.width, 1));

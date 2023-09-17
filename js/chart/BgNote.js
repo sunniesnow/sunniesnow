@@ -1,4 +1,4 @@
-Sunniesnow.BgNote = class BgNote extends Sunniesnow.Event {
+Sunniesnow.BgNote = class BgNote extends Sunniesnow.NoteBase {
 	static PROPERTIES = {
 		required: ['x', 'y'],
 		optional: {tipPoint: null, text: '', duration: 0}
@@ -6,10 +6,5 @@ Sunniesnow.BgNote = class BgNote extends Sunniesnow.Event {
 
 	static UI_CLASS = 'UiBgNote'
 	static TYPE_NAME = 'bgNote'
-
-	appearTime() {
-		const activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
-		return this.time - activeDuration - Sunniesnow[this.constructor.UI_CLASS].FADING_IN_DURATION;
-	}
 
 };

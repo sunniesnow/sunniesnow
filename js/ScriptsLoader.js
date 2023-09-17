@@ -140,6 +140,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 
 	'chart/Chart',
 	'chart/Event',
+	'chart/NoteBase',
 	'chart/Note',
 	'chart/Placeholder',
 	'chart/Tap',

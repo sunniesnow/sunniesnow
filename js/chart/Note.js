@@ -1,4 +1,4 @@
-Sunniesnow.Note = class Note extends Sunniesnow.Event {
+Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 	static PROPERTIES = {
 		required: ['x', 'y'],
 		optional: {tipPoint: null}
@@ -9,11 +9,6 @@ Sunniesnow.Note = class Note extends Sunniesnow.Event {
 	static FX_CLASS = 'FxNote'
 	static SE_CLASS = 'Se'
 	static TYPE_NAME = 'note'
-
-	appearTime() {
-		const activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
-		return this.time - activeDuration - Sunniesnow[this.constructor.UI_CLASS].FADING_IN_DURATION;
-	}
 
 	hitSe(when) {
 		try {

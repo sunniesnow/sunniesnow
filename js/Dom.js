@@ -199,13 +199,13 @@ Sunniesnow.Dom = {
 		}
 		const settings = Object.assign({}, this.saved);
 		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
-			if (this.saved[key]) {
+			if (key in this.saved) {
 				this.saved[key] = await Sunniesnow.Utils.base64ToBlob(this.saved[key]);
 				delete settings[key];
 			}
 		}
 		for (const key in this.saved.plugin) {
-			if (this.saved.pluginUpload[key]) {
+			if (key in this.saved.pluginUpload) {
 				this.saved.pluginUpload[key] = await Sunniesnow.Utils.base64ToBlob(this.saved.pluginUpload[key]);
 			}
 		}
