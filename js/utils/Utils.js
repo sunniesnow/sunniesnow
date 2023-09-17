@@ -435,6 +435,18 @@ Sunniesnow.Utils = {
 			(timezoneOffset >= 0 ? '+' : '-') +
 			Math.floor(Math.abs(timezoneOffset) / 60).toString().padStart(2, '0') +
 			':' + (Math.abs(timezoneOffset) % 60).toString().padStart(2, '0');
+	},
+
+	downloadText(text, filename, type = 'text/plain') {
+		const url = Sunniesnow.ObjectUrl.createPersistent(new Blob([text], {type}));
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = filename;
+		a.style.display = 'none';
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		Sunniesnow.ObjectUrl.revoke(url);
 	}
 
 };

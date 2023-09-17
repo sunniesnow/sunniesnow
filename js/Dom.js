@@ -327,7 +327,7 @@ Sunniesnow.Dom = {
 				}
 			}
 		} else if (pluginOnline) {
-			Sunniesnow.warn('plugin-online settings are ignored because plugin settings are not set');
+			Sunniesnow.Utils.warn('plugin-online settings are ignored because plugin settings are not set');
 		}
 
 		for (const property in settings) {
@@ -414,18 +414,19 @@ Sunniesnow.Dom = {
 	exportSavedSettings() {
 		const text = localStorage.getItem('settings');
 		if (!text) {
-			Sunniesnow.warn('No saved settings to export');
+			Sunniesnow.Utils.warn('No saved settings to export');
 			return;
 		}
-		const url = Sunniesnow.ObjectUrl.createPersistent(new Blob([text], {type: 'application/json'}));
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = 'settings.json';
-		a.style.display = 'none';
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
-		Sunniesnow.ObjectUrl.revoke(url);
+		Sunniesnow.Utils.downloadText(text, 'settings.json', 'application/json');
+	},
+
+	exportSavedChartOffsets() {
+		const text = localStorage.getItem('chartOffsets');
+		if (!text) {
+			Sunniesnow.Utils.warn('No saved chart offsets to export');
+			return;
+		}
+		Sunniesnow.Utils.downloadText(text, 'chart-offsets.json', 'application/json');
 	},
 
 	async importSettings() {
@@ -438,12 +439,28 @@ Sunniesnow.Dom = {
 			localStorage.setItem('settings', await file.text());
 			importSuccess = true;
 		} catch (e) {
-			Sunniesnow.Utils.warn(`Failed to import settings: ${e.message ? e.message : e}`);
+			Sunniesnow.Utils.warn(`Failed to import settings: ${e.message ?? e}`);
 		}
 		if (importSuccess) {
 			this.writeSavedSettings();
 		}
 	},
+
+	async importChartOffsets() {
+		const file = this.readFile('import-chart-offsets');
+		if (!file) {
+			return;
+		}
+		const oldJson = localStorage.getItem('chartOffsets');
+		const chartOffsets = oldJson ? JSON.parse(oldJson) : {};
+		Object.assign(chartOffsets, JSON.parse(await file.text()));
+		try {
+			localStorage.setItem('chartOffsets', JSON.stringify(chartOffsets));
+		} catch (e) {
+			Sunniesnow.Utils.warn(`Failed to import chart offsets: ${e.message ?? e}`);
+		}
+	},
+
 
 	readCheckbox(id) {
 		return document.getElementById(id).checked;
@@ -667,5 +684,17 @@ Sunniesnow.Dom = {
 		document.body.appendChild(script);
 		await Sunniesnow.Utils.untilLoaded(document.body);
 		script.remove();
+	},
+
+	async offsetWizard() {
+		this.writeRadio('level-file', 'online');
+		this.writeValue('level-file-online', 'offset-wizard');
+		await Sunniesnow.Loader.loadChart();
+		Sunniesnow.Game.run();
+		Object.assign(Sunniesnow.game.settings, {
+			volumeSe: 0,
+			autoplay: false,
+			chartOffset: 0
+		});
 	}
 };

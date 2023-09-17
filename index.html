@@ -643,10 +643,22 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Chart offsets</legend>
+		<legend>Offsets</legend>
 		<div>
 			Delete saved chart offsets:
 			<button type="button" id="delete-chart-offsets" onclick="Sunniesnow.Dom.deleteSavedChartOffsets();">Delete</button>
+		</div>
+		<div>
+			Export saved chart offsets:
+			<button type="button" id="export-chart-offsets" onclick="Sunniesnow.Dom.exportSavedChartOffsets();">Export</button>
+		</div>
+		<div>
+			Import saved chart offsets:
+			<input type="file" id="import-chart-offsets" onchange="Sunniesnow.Dom.importChartOffsets();">
+		</div>
+		<div>
+			Play the Offset Wizard:
+			<button type="button" id="offset-wizard" onclick="Sunniesnow.Dom.offsetWizard();">Start</button>
 		</div>
 	</fieldset>
 

@@ -20,7 +20,7 @@ Sunniesnow.ObjectUrl = {
 	revoke(url) {
 		URL.revokeObjectURL(url);
 		if (!this.urls.has(url)) {
-			Sunniesnow.warn(`ObjectUrl ${url} was not created by Sunniesnow.ObjectUrl`);
+			Sunniesnow.Utils.warn(`ObjectUrl ${url} was not created by Sunniesnow.ObjectUrl`);
 			return;
 		}
 		this.urls.delete(url);

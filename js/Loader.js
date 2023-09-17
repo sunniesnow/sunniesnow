@@ -41,7 +41,7 @@ Sunniesnow.Loader = {
 			this.onChartLoad();
 		}).catch(reason => {
 			this.loadingChart = false;
-			Sunniesnow.Utils.error('Failed to load level: ' + reason, reason);
+			throw reason;
 		});
 	},
 	
@@ -408,11 +408,7 @@ Sunniesnow.Loader = {
 		this.loadingComplete = false;
 		if (Sunniesnow.game.settings.levelFile === 'online' && this.loaded.chart.sourceContents !== Sunniesnow.game.settings.levelFileOnline) {
 			Sunniesnow.Utils.warn('Level file not loaded, waiting');
-			try {
-				await this.loadChart()
-			} catch (e) {
-				Sunniesnow.Utils.error(`Failed to load chart: ${e.message ?? e}`, e);
-			}
+			await this.loadChart()
 		}
 		if (Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Dom.saveSettings();

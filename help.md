@@ -1107,7 +1107,7 @@ You can export the saved settings to a JSON file here.
 
 You can import saved settings from a JSON file here.
 
-### Chart offsets
+### Offsets
 
 #### Delete saved chart offsets
 {:#delete-chart-offsets}
@@ -1119,6 +1119,34 @@ They are saved when you hit the *Start* button.
 They are restored when you load the same online level file again.
 If you want to delete the saved chart offsets,
 you can click the *Delete* button here.
+
+#### Export saved chart offsets
+{:#export-chart-offsets}
+
+You can export the saved chart offsets to a JSON file here.
+
+#### Import saved chart offsets
+{:#import-chart-offsets}
+
+You can import saved chart offsets from a JSON file here.
+They are merged with the existing saved chart offsets.
+
+#### Play the Offset Wizard
+{:#offset-wizard}
+
+You can play the Offset Wizard by hitting this button.
+The chart of the Offset Wizard is **guaranteed** to be well-timed,
+so you can use it to set the offsets.
+For detailed instructions, see [how to set offsets](#how-to-set-offsets).
+
+How this is different from just setting
+[`level-file-online`](#level-file-online) to `"offset-wizard"`
+and starting the game is that
+this button will automatically set [`autoplay`](#autoplay) to `false`,
+[`volume-se`](#volume-se) to `0`,
+and [`chart-offset`](#chart-offset) to `0`.
+These three settings, if different from the saved settings, will not be saved
+so that you can immediately play other levels without changing them back.
 
 ### Service worker
 
@@ -1221,8 +1249,7 @@ the input of the player (or the judgement time).
 (Because human brain also has different lags for vision, hearing, and touch,
 so the standards of synchronism is dependent on individuals.)
 There is no easy way to measure the display lag, the input lag,
-and the audio output lag,
-but we can only measure two of them relative to the other.
+and the audio output lag at the same time.
 Fortunately, by the same reason, we just need to offset two things
 (namely the music and the judgement windows),
 i.e., setting `offset` and `delay`, to make the three things synchronous.
@@ -1238,8 +1265,8 @@ The first is to set `offset`, and the second is to set `delay`:
 
 {% katexmm %}
 
-1. On most devices, the difference in the display lag and the input lag is low enough
-so that you can just skip this step.
+1. (On most devices, the display lag and the input lag is low enough
+so that you can just skip this step.)
 This step requires you to time your inputs purely by vision
 so that you can synchronize the display and the judgement time.
 To avoid the music from affecting your timing,
