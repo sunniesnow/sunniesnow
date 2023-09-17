@@ -2,7 +2,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.circleRadius = this.radius * 4;
-		this.circleGeometry = Sunniesnow.UiTap.createCircleGeometry.call(this, 0xeefefe);
+		this.circleGeometry = Sunniesnow.UiTap.createCircleGeometry.call(this, 0xccfcfc);
 		this.geometry = Sunniesnow.UiTap.createGeometry.call(this, 0xfe6e4e, 0xffffff);
 		this.arrowGeometry = this.createArrowGeometry();
 	}

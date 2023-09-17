@@ -4,7 +4,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.haloRadius = this.radius * 1.5;
 		this.circleRadius = this.radius * 4;
-		this.circleGeometry = this.createCircleGeometry(0xeefefe);
+		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
 		this.geometry = this.createGeometry(0x29a9b9, 0xe8f8b8);
 		this.haloGeometry = this.createHaloGeometry();
 	}

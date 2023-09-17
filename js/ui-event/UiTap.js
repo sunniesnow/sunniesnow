@@ -3,7 +3,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 	static async load() {
 		this.radius = Sunniesnow.Config.noteRadius();
 		this.circleRadius = this.radius * 4;
-		this.circleGeometry = this.createCircleGeometry(0xeefefe);
+		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
 		this.doubleCircleGeometry = this.createCircleGeometry(0xf9f9e9);
 		this.geometry = this.createGeometry(0x29a9b9, 0xe8f8b8);
 		this.doubleGeometry = this.createGeometry(0x3171d1, 0xe3f3f3);
@@ -66,7 +66,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 
 	hasConnectedTap() {
 		return this.event.simultaneousEvents.some(event => {
-			return event !== this.event && (event instanceof Sunniesnow.Tap)
+			return event !== this.event && event instanceof Sunniesnow.Tap
 		});
 	}
 

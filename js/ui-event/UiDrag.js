@@ -11,7 +11,7 @@ Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
 
 	static createCircleGeometry() {
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.circleRadius / 24, 0xeefefe, 1, 0);
+		graphics.lineStyle(this.circleRadius / 24, 0xccfcfc, 1, 0);
 		graphics.drawCircle(0, 0, this.circleRadius);
 		return graphics.geometry;
 	}
