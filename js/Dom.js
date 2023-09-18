@@ -5,6 +5,18 @@ Sunniesnow.Dom = {
 	// keys: elementId; values: boolean
 	manual: {},
 
+	toFill: {
+		chart: null,
+		music: null,
+		background: null
+	},
+
+	clearToFill() {
+		this.toFill.chart = null;
+		this.toFill.music = null;
+		this.toFill.background = null;
+	},
+
 	readPluginSettings() {
 		const plugin = Sunniesnow.game.settings.plugin = {};
 		const pluginOnline = Sunniesnow.game.settings.pluginOnline = {};
@@ -55,16 +67,25 @@ Sunniesnow.Dom = {
 	fillMusicSelect(filename) {
 		const select = this.fillSelect('music-select', filename);
 		select.disabled = false;
+		if (filename === this.toFill.music) {
+			select.value = filename;
+		}
 	},
 
 	fillChartSelect(filename) {
 		const select = this.fillSelect('chart-select', filename);
 		select.disabled = false;
+		if (filename === this.toFill.chart) {
+			select.value = filename;
+		}
 	},
 
 	fillBackgroundSelect(filename) {
 		// this.writeRadio('background', 'from-level');
 		this.fillSelect('background-from-level', filename);
+		if (filename === this.toFill.background) {
+			this.writeValue('background-from-level', filename);
+		}
 	},
 
 	tryAvoidingNoBackground() {
@@ -215,8 +236,6 @@ Sunniesnow.Dom = {
 	},
 
 	async writeSettings(settings) {
-		// Sunniesnow.Loader.loadingChart = true;
-
 		const d = property => {
 			const result = settings[property];
 			delete settings[property];
@@ -225,10 +244,16 @@ Sunniesnow.Dom = {
 		this.writeRadio('level-file', d('levelFile'));
 		this.writeValue('level-file-online', d('levelFileOnline'));
 
-		// await Sunniesnow.Loader.loadChart();
-
-		this.writeValue('music-select', d('musicSelect'));
-		this.writeValue('chart-select', d('chartSelect'));
+		const musicToFill = d('musicSelect');
+		this.writeValue('music-select', musicToFill);
+		if (musicToFill && this.readValue('music-select') !== musicToFill) {
+			this.toFill.music = musicToFill;
+		}
+		const chartToFill = d('chartSelect');
+		this.writeValue('chart-select', chartToFill);
+		if (chartToFill && this.readValue('chart-select') !== chartToFill) {
+			this.toFill.chart = chartToFill;
+		}
 
 		this.writeRadio('judgement-windows', d('judgementWindows'));
 		this.writeValue('note-hit-size', d('noteHitSize'));
@@ -241,7 +266,11 @@ Sunniesnow.Dom = {
 		this.writeValue('note-size', d('noteSize'));
 		this.writeRadio('background', d('background'));
 		this.writeValue('background-online', d('backgroundOnline'));
-		this.writeValue('background-from-level', d('backgroundFromLevel'));
+		const backgroundToFill = d('backgroundFromLevel');
+		this.writeValue('background-from-level', backgroundToFill);
+		if (backgroundToFill && this.readValue('background-from-level') !== backgroundToFill) {
+			this.toFill.background = backgroundToFill;
+		}
 		this.writeValue('background-blur', d('backgroundBlur'));
 		this.writeValue('background-brightness', d('backgroundBrightness'));
 		this.writeRadio('skin', d('skin'));
@@ -333,9 +362,6 @@ Sunniesnow.Dom = {
 		for (const property in settings) {
 			console.warn(`Unknown settings item ${property}`);
 		}
-
-		// Sunniesnow.Loader.loadingChart = false;
-		// Sunniesnow.Loader.onChartLoad();
 	},
 
 	saveChartOffset(key) {
@@ -654,7 +680,7 @@ Sunniesnow.Dom = {
 			}
 		});
 		levelFileOnline.addEventListener('input', event => {
-			Sunniesnow.Fetcher.interrupt();
+			Sunniesnow.Loader.interruptLevelLoad();
 		});
 		document.getElementById('level-file-online-button').addEventListener('click', event => {
 			Sunniesnow.Loader.triggerLoadChart();
