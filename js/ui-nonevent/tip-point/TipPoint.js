@@ -313,6 +313,16 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 			if (c1 !== c2) {
 				[x1, y1, x2, y2] = [x2, y2, x1, y1]
 			}
+			const cP11 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x1, y1);
+			const cP12 = Sunniesnow.Utils.clockwiseness(lastX1, lastY1, x, y, x1, y1);
+			if (cP11 !== cP12) {
+				[x1, y1] = [lastX1, lastY1];
+			}
+			const cP21 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x2, y2);
+			const cP22 = Sunniesnow.Utils.clockwiseness(lastX2, lastY2, x, y, x2, y2);
+			if (cP21 !== cP22) {
+				[x2, y2] = [lastX2, lastY2];
+			}
 			vertices[index] = lastX1 = x1;
 			vertices[index + 1] = lastY1 = y1;
 			vertices[index + 2] = lastX2 = x2;
