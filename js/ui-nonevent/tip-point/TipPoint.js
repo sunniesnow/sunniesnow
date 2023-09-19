@@ -1,6 +1,7 @@
 Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 
 	static TRAIL_DURATION = 0.5;
+	static TRAIL_TAIL_DURATION = 0.1;
 	static ZOOMING_IN_DURATION = 0.3;
 	static ZOOMING_OUT_DURATION = 0.3;
 
@@ -21,8 +22,10 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	static TRAIL_FRAGMENT_SHADER = `
 		varying vec2 vTextureCoord;
 
+		uniform float uAlpha;
+
 		void main() {
-			gl_FragColor = vec4(vTextureCoord.xxx*0.5, 1.0);
+			gl_FragColor = vec4(vTextureCoord.xxx * 0.5 * uAlpha, 1.0);
 		}
 	`;
 
@@ -32,9 +35,6 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		}
 		this.radius = Sunniesnow.Config.noteRadius() / 3;
 		this.tipPointGeometry = this.createTipPointGeometry();
-		if (Sunniesnow.game.settings.renderer === 'webgl') {
-			this.trailShader = this.createTrailShader();
-		}
 	}
 
 	static createTipPointGeometry() {
@@ -55,13 +55,6 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		return graphics.geometry;
 	}
 
-	static createTrailShader() {
-		return PIXI.Shader.from(
-			this.TRAIL_VERTEX_SHADER,
-			this.TRAIL_FRAGMENT_SHADER
-		);
-	}
-
 	populate() {
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
 			this.createTrail();
@@ -80,7 +73,12 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.trailVertices = this.trailGeometry.getBuffer('aVertexPosition');
 		this.trailUvs = this.trailGeometry.getBuffer('aTextureCoord');
 		this.trailIndices = this.trailGeometry.getIndex();
-		this.trail = new PIXI.Mesh(this.trailGeometry, this.constructor.trailShader);
+		this.trailShader = PIXI.Shader.from(
+			this.constructor.TRAIL_VERTEX_SHADER,
+			this.constructor.TRAIL_FRAGMENT_SHADER,
+			{uAlpha: 1}
+		);
+		this.trail = new PIXI.Mesh(this.trailGeometry, this.trailShader);
 		this.trail.blendMode = PIXI.BLEND_MODES.ADD;
 		this.addChild(this.trail);
 	}
@@ -89,6 +87,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		super.updateZoomingIn(time);
 		const sinceStart = time - this.startTime;
 		this.tipPoint.scale.set(sinceStart / this.constructor.ZOOMING_IN_DURATION);
+		this.trailShader.uniforms.uAlpha = 1;
 		this.updateTrail(time);
 		this.updateTipPoint(time);
 	}
@@ -96,7 +95,9 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	updateZoomingOut(time) {
 		super.updateZoomingOut(time);
 		const sinceEnd = time - this.endTime;
-		this.tipPoint.scale.set(1 - sinceEnd / this.constructor.ZOOMING_OUT_DURATION);
+		const alpha = 1 - sinceEnd / this.constructor.ZOOMING_OUT_DURATION;
+		this.trailShader.uniforms.uAlpha = alpha;
+		this.tipPoint.scale.set(alpha);
 		this.updateTrail(time);
 		this.updateTipPoint(time);
 	}
@@ -104,6 +105,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	updateHolding(time) {
 		super.updateHolding(time);
 		this.tipPoint.scale.set(1);
+		this.trailShader.uniforms.uAlpha = 1;
 		this.updateTrail(time);
 		this.updateTipPoint(time);
 	}
@@ -170,13 +172,25 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		const checkpoints = [];
 		let previousCheckpoint = null;
 		let nextCheckpoint = null;
+		const tailConnectTime = startTime + this.constructor.TRAIL_TAIL_DURATION
+		let tailConnect = null;
 		for (let i = 0; i < this.checkpoints.length; i++) {
 			const checkpoint = this.checkpoints[i];
 			if (checkpoint.time >= startTime) {
+				if (!tailConnect && i > 0 && checkpoint.time >= tailConnectTime && tailConnectTime < endTime) {
+					const lastCheckpoint = this.checkpoints[i-1];
+					const progress = (tailConnectTime - lastCheckpoint.time) / (checkpoint.time - lastCheckpoint.time);
+					tailConnect = {
+						time: tailConnectTime,
+						x: lastCheckpoint.x + (checkpoint.x - lastCheckpoint.x) * progress,
+						y: lastCheckpoint.y + (checkpoint.y - lastCheckpoint.y) * progress
+					};
+					checkpoints.push(tailConnect);
+				}
 				if (checkpoint.time > endTime) {
 					nextCheckpoint = checkpoint;
 					break;
-				}
+				} else
 				checkpoints.push(checkpoint);
 			} else {
 				previousCheckpoint = checkpoint;
@@ -200,6 +214,12 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 				y: lastCheckpoint.y + (nextCheckpoint.y - lastCheckpoint.y) * progress
 			});
 		}
+		checkpoints.forEach(checkpoint => {
+			checkpoint.thicknessRatio = Math.min(
+				(checkpoint.time - startTime) / this.constructor.TRAIL_TAIL_DURATION,
+				1
+			);
+		});
 		return checkpoints;
 	}
 
@@ -253,7 +273,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		lastY1 = lastY2 = vertices[1] = vertices[3] = checkpoints[0].y;
 		for (let i = 1; i < checkpoints.length; i++) {
 			const index = i * 4;
-			const {x, y} = checkpoints[i];
+			const {x, y, thicknessRatio} = checkpoints[i];
 			const {x: xP, y: yP} = checkpoints[i-1];
 			if (x == xP && y == yP) {
 				vertices[index] = lastX1;
@@ -273,8 +293,8 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 				perpX = y - yP;
 				perpY = xP - x;
 				const perpLength = Sunniesnow.Utils.hypot(perpX, perpY);
-				perpX *= halfThickness / perpLength;
-				perpY *= halfThickness / perpLength;
+				perpX *= halfThickness / perpLength * thicknessRatio;
+				perpY *= halfThickness / perpLength * thicknessRatio;
 			} else {
 				const angleP = this.atan2(xP - x, yP - y);
 				const angleN = this.atan2(xN - x, yN - y);
@@ -282,7 +302,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 				if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI/2 - 1e-3) {
 					angle += Math.PI / 2;
 				}
-				[perpX, perpY] = Sunniesnow.Utils.polarToCartesian(halfThickness, angle);
+				[perpX, perpY] = Sunniesnow.Utils.polarToCartesian(halfThickness * thicknessRatio, angle);
 			}
 			let x1 = x + perpX;
 			let y1 = y + perpY;
