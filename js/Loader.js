@@ -147,9 +147,7 @@ Sunniesnow.Loader = {
 			if (Sunniesnow.Utils.isBrowser()) {
 				Sunniesnow.game.settings.musicSelect = Sunniesnow.Dom.readValue('music-select');
 				Sunniesnow.game.settings.chartSelect = Sunniesnow.Dom.readValue('chart-select');
-				if (Sunniesnow.game.settings.background === 'from-level') {
-					Sunniesnow.game.settings.backgroundFromLevel ||= Sunniesnow.Dom.readValue('background-from-level');
-				}
+				Sunniesnow.game.settings.backgroundFromLevel ||= Sunniesnow.Dom.readValue('background-from-level');
 			} else {
 				Sunniesnow.game.settings.musicSelect ||= Object.keys(this.loaded.chart.music)[0];
 				Sunniesnow.game.settings.chartSelect ||= Object.keys(this.loaded.chart.charts)[0];
