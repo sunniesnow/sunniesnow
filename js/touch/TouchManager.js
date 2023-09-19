@@ -290,7 +290,9 @@ Sunniesnow.TouchManager = {
 	addDomKeyListeners() {
 		this.keyDownListener = event => {
 			this.preventKeyEventIfShould(event);
-			this.keyDown(event);
+			if (document.activeElement.tagName !== 'INPUT') {
+				this.keyDown(event);
+			}
 		}
 		this.keyUpListener = event => {
 			this.preventKeyEventIfShould(event);
