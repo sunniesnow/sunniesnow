@@ -58,7 +58,7 @@ Sunniesnow.ScriptsLoader = {
 
 Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 	'jszip@3.10.1/dist/jszip.min.js',
-	'pixi.js-legacy@7.2.4/dist/pixi-legacy.min.js',
+	'pixi.js-legacy@7.3.1/dist/pixi-legacy.min.js',
 	'mime@3.0.0/lite/+esm',
 	'marked@5.1.1/marked.min.js',
 	'dompurify@3.0.5/dist/purify.min.js',

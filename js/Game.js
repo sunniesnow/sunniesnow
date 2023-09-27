@@ -117,12 +117,12 @@ Sunniesnow.Game = class Game {
 		if (Sunniesnow.Utils.isBrowser()) {
 			document.getElementById('main-canvas').replaceWith(this.app.view);
 		}
-		if (this.settings.renderer === 'canvas') {
+		/*if (this.settings.renderer === 'canvas') {
 			this.maxTextureSize = Infinity
 		} else {
 			const gl = this.app.renderer.gl;
 			this.maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-		}
+		}*/
 	}
 
 	initLevel() {
