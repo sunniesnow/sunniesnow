@@ -92,7 +92,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.samplesDiagram.moveTo(0, 3*unit);
 		this.samplesDiagram.lineTo(diagramWidth, 3*unit);
 
-		const zeroY = -this.sampleMean / this.sampleSd * unit + 2*unit;
+		const zeroY = this.sampleMean / this.sampleSd * unit + 2*unit;
 		if (Sunniesnow.Utils.between(zeroY, 0, 4*unit)) {
 			this.zeroText = new PIXI.Text('0', { ...this.constructor.textStyle });
 			this.zeroText.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);

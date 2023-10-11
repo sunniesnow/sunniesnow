@@ -86,9 +86,11 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	updateZoomingIn(time) {
 		super.updateZoomingIn(time);
 		const sinceStart = time - this.startTime;
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.trailShader.uniforms.uAlpha = 1;
+			this.updateTrail(time);
+		}
 		this.tipPoint.scale.set(sinceStart / this.constructor.ZOOMING_IN_DURATION);
-		this.trailShader.uniforms.uAlpha = 1;
-		this.updateTrail(time);
 		this.updateTipPoint(time);
 	}
 
@@ -96,24 +98,25 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		super.updateZoomingOut(time);
 		const sinceEnd = time - this.endTime;
 		const alpha = 1 - sinceEnd / this.constructor.ZOOMING_OUT_DURATION;
-		this.trailShader.uniforms.uAlpha = alpha;
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.trailShader.uniforms.uAlpha = alpha;
+			this.updateTrail(time);
+		}
 		this.tipPoint.scale.set(alpha);
-		this.updateTrail(time);
 		this.updateTipPoint(time);
 	}
 
 	updateHolding(time) {
 		super.updateHolding(time);
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.trailShader.uniforms.uAlpha = 1;
+			this.updateTrail(time);
+		}
 		this.tipPoint.scale.set(1);
-		this.trailShader.uniforms.uAlpha = 1;
-		this.updateTrail(time);
 		this.updateTipPoint(time);
 	}
 
 	updateTrail(time) {
-		if (Sunniesnow.game.settings.renderer !== 'webgl') {
-			return;
-		}
 		this.drawTrailThrough(this.getCheckpointsBetween(
 			Math.max(this.startTime, time - this.constructor.TRAIL_DURATION),
 			Math.min(this.endTime, time)
