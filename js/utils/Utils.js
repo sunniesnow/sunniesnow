@@ -447,6 +447,22 @@ Sunniesnow.Utils = {
 		a.click();
 		document.body.removeChild(a);
 		Sunniesnow.ObjectUrl.revoke(url);
+	},
+
+	judgementText(judgement) {
+		switch (judgement) {
+			case 'perfect':
+				return 'Perfect';
+			case 'good':
+				return 'Good';
+			case 'bad':
+				return Sunniesnow.game.settings.lyrica5 ? 'Ok' : 'Bad';
+			case 'miss':
+				return 'Miss';
+			default:
+				this.warn(`Unknown judgement: ${judgement}`);
+				return this.upcaseFirst(judgement);
+		}
 	}
 
 };

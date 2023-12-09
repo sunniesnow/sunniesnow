@@ -50,35 +50,49 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 	}
 
 	updateLastJudgement() {
-		switch (Sunniesnow.game.level.lastJudgement) {
-			case 'perfect':
-			case 'good':
-				let text
-				if (Sunniesnow.game.settings.autoplay) {
-					text = 'Autoplay';
-				} else {
-					text = Sunniesnow.Utils.upcaseFirst(Sunniesnow.game.level.lastJudgement);
-				}
-				this.lastJudgement.text = text;
-				this.text.visible = true;
-				this.lastJudgement.visible = true;
-				break;
-			default:
-				this.text.visible = false;
-				this.lastJudgement.visible = false;
-				return;
+		let hidden = !Sunniesnow.game.level.lastJudgement;
+		hidden ||= Sunniesnow.game.level.lastJudgement === "miss";
+		hidden ||= !Sunniesnow.game.settings.lyrica5 && Sunniesnow.game.level.lastJudgement === "bad";
+		if (hidden) {
+			this.text.visible = false;
+			this.lastJudgement.visible = false;
+			return;
 		}
+		let text
+		if (Sunniesnow.game.settings.autoplay) {
+			text = 'Autoplay';
+		} else {
+			text = Sunniesnow.Utils.judgementText(Sunniesnow.game.level.lastJudgement);
+		}
+		this.lastJudgement.text = text;
+		this.text.visible = true;
+		this.lastJudgement.visible = true;
 		switch (Sunniesnow.game.level.apFcIndicator) {
 			case 'ap':
-				this.lastJudgement.style.fill = 'yellow';
+				if (Sunniesnow.game.settings.lyrica5) {
+					this.lastJudgement.style.fill = [0xf3eba2, 0xd2fbfa];
+					this.lastJudgement.style.fillGradientStops = [0, 1];
+				} else {
+					this.lastJudgement.style.fill = 'yellow';
+				}
 				this.lastJudgement.text = `⟐ ${this.lastJudgement.text} ⟐`;
 				break;
 			case 'fc':
-				this.lastJudgement.style.fill = 'white';
+				if (Sunniesnow.game.settings.lyrica5) {
+					this.lastJudgement.style.fill = [0xf9dc52, 0xfbf88a];
+					this.lastJudgement.style.fillGradientStops = [0, 1];
+				} else {
+					this.lastJudgement.style.fill = 'white';
+				}
 				this.lastJudgement.text = `⟐ ${this.lastJudgement.text} ⟐`;
 				break;
+			case 'fcs': // only in Lyrica 5
+				this.lastJudgement.style.fill = [0xb4d7d9, 0xf4fbfc];
+				this.lastJudgement.style.fillGradientStops = [0, 1];
+				this.lastJudgement.text = `· ${this.lastJudgement.text} ·`;
+				break;
 			default:
-				this.lastJudgement.style.fill = 'white';
+				this.lastJudgement.style.fill = Sunniesnow.game.settings.lyrica5 ? 0xa0c9cf : 'white';
 				break;
 		}
 	}

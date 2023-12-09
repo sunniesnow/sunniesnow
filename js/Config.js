@@ -156,6 +156,104 @@ Sunniesnow.Config = {
 		}
 	},
 
+	judgementWindows5: {
+		loose: {
+			tap: {
+				perfect: [-0.11, 0.15],
+				good: [-0.3, 0.3],
+				bad: [-0.4, 0.4]
+			},
+			drag: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
+			flick: {
+				perfect: [-0.3, 0.15],
+				good: [-0.4, 0.3],
+				bad: [-0.4, 0.4],
+			},
+			hold: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
+			holdEnd: {
+				perfect: 0.7,
+				good: 0.4,
+				bad: -Infinity
+			}
+		},
+		medium: {
+			tap: {
+				perfect: [-0.08, 0.08],
+				good: [-0.16, 0.16],
+				bad: [-0.24, 0.24]
+			},
+			drag: {
+				perfect: [-0.24, 0.24],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+			flick: {
+				perfect: [-0.11, 0.11],
+				good: [-0.18, 0.18],
+				bad: [-0.24, 0.24]
+			},
+			hold: {
+				perfect: [-0.11, 0.11],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+			holdEnd: {
+				perfect: 0.7,
+				good: 0.7,
+				bad: -Infinity
+			}
+		},
+		strict: {
+			tap: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+			drag: {
+				perfect: [-0.15, 0.15],
+				good: [-0.15, 0.15],
+				bad: [-0.15, 0.15]
+			},
+			flick: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+			hold: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+			holdEnd: {
+				perfect: 0.8,
+				good: 0.8,
+				bad: -Infinity
+			}
+		}
+	},
+
+	accuracies: {
+		perfect: 1,
+		good: 0.5,
+		bad: 0.1,
+		miss: 0
+	},
+
+	accuracies5: {
+		perfect: 1,
+		good: 0.6,
+		bad: 0.2,
+		miss: 0
+	},
+
 	chartPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovY2hhcnQv'),
 	backgroundPrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovYmFja2dyb3VuZC8='),
 	sePrefix: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovc2Uv'),

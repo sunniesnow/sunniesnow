@@ -215,6 +215,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		return `Judgement time windows: ${Sunniesnow.game.settings.judgementWindows}
 Note hit size: ${Sunniesnow.game.settings.noteHitSize}
 Offset: ${Sunniesnow.game.settings.offset}
+Lyrica 5 mechanics: ${Sunniesnow.game.settings.lyrica5}
 Drag notes cannot be hit early: ${Sunniesnow.game.settings.noEarlyDrag}
 Flick notes are direction-insensitive: ${Sunniesnow.game.settings.directionInsensitiveFlick}
 Hold notes lock the position of touch: ${Sunniesnow.game.settings.lockingHold}

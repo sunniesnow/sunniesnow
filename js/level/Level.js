@@ -77,7 +77,11 @@ Sunniesnow.Level = class Level {
 
 	score() {
 		const accuracy = this.effectiveHits() / this.notesCount;
-		return Math.floor(900000 * accuracy + 100000 * this.maxCombo / this.notesCount);
+		if (Sunniesnow.game.settings.lyrica5) {
+			return Math.floor(1000000 * accuracy);
+		} else {
+			return Math.floor(900000 * accuracy + 100000 * this.maxCombo / this.notesCount);
+		}
 	}
 
 	accuracy() {
@@ -108,7 +112,8 @@ Sunniesnow.Level = class Level {
 	}
 
 	effectiveHits() {
-		return this.perfect + this.good / 2 + this.bad / 10;
+		const {perfect, good, bad, miss} = Sunniesnow.game.settings.lyrica5 ? Sunniesnow.Config.accuracies5 : Sunniesnow.Config.accuracies;
+		return this.perfect * perfect + this.good * good + this.bad * bad + this.miss * miss;
 	}
 
 	update() {
@@ -287,7 +292,14 @@ Sunniesnow.Level = class Level {
 				this.combo++;
 				break;
 			case 'bad':
-			case 'miss':
+				if (Sunniesnow.game.settings.lyrica5) {
+					if (this.apFcIndicator === 'ap' || this.apFcIndicator === 'fc') {
+						this.apFcIndicator = 'fcs'; // full combo silver
+					}
+					this.combo++;
+					break;
+				}
+			case 'miss': // bad also goes here in Lyrica 4
 				this.apFcIndicator = '';
 				this.combo = 0;
 				break;

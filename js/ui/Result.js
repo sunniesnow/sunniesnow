@@ -278,7 +278,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	populateStats(judgement) {
 		this.statsBackgrounds[judgement] = new PIXI.Graphics(this.constructor.statsBackgroundGeometry);
 		this.statsTexts[judgement] = new PIXI.Text(
-			Sunniesnow.Utils.upcaseFirst(judgement) + '\n' + Sunniesnow.game.level[judgement],
+			Sunniesnow.Utils.judgementText(judgement) + '\n' + Sunniesnow.game.level[judgement],
 			{
 				fontFamily: 'Arial',
 				fontSize: this.constructor.statsRadius / 3,
