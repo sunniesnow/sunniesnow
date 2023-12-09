@@ -125,6 +125,9 @@ Data for the strict tier:
 | hold (*start*) | -150 | -100 | -50 | +50 | +100 | +150 |
 | hold (*end*) | -&infin; | 0.8 | 0.8 | | | |
 
+The interval for drag notes are **different** when [`lyrica-5`](#lyrica-5) is `true`:
+the perfect interval is the same as the bad interval.
+
 #### Note hit size
 
 - **Setting id**: `note-hit-size`.
@@ -153,6 +156,23 @@ This does **not** affect the audio-video sync.
 To fix the audio-video sync, use [`delay`](#delay).
 
 #### Mechanics
+
+##### Lyrica 5 mechanics
+{:#lyrica-5}
+
+- **Setting id**: `lyrica-5`.
+- **Possible values**: `true`, `false`.
+
+There was a major update in Lyrica 5.0.0 that changed the mechanics of the game.
+This setting is used to set whether the mechanics of the game should mock that of Lyrica 5.0.0.
+
+When this setting is set to `true`, the following mechanics are changed:
+
+- The score and the accuracy is calculated differently.
+- The bad judgement is called *Ok* now, but it depends on the skin.
+- The perfect interval of drag notes are changed to be the same as the bad interval of them.
+- Bad judgement does not break the combo.
+- The look of the AP/FC indicator is changed.
 
 ##### Drag notes cannot be hit early
 {:#no-early-drag}
