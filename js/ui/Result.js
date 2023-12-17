@@ -235,11 +235,19 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 			this.difficultyText.scale.set(this.constructor.difficultyWidth / this.difficultyText.width);
 		}
 		this.difficultyText.anchor = new PIXI.ObservablePoint(null, null, 1, 0.5);
-		this.difficultyText.x = this.constructor.titleWidth;
+		this.difficultySupText = new PIXI.Text(Sunniesnow.game.chart.difficultySup, {
+			fontFamily: 'Arial',
+			fontSize: this.constructor.titleHeight / 4,
+			fill: '#fbfbff'
+		});
+		this.difficultySupText.anchor = new PIXI.ObservablePoint(null, null, 1, 1);
+		this.difficultySupText.x = this.constructor.titleWidth;
+		this.difficultyText.x = this.difficultySupText.getBounds().x;
 		this.difficulty = new PIXI.Container();
 		this.difficulty.addChild(this.difficultyBackground);
 		this.difficulty.addChild(this.difficultyNameText);
 		this.difficulty.addChild(this.difficultyText);
+		this.difficulty.addChild(this.difficultySupText);
 		this.difficulty.x = this.title.x;
 		this.difficulty.y = this.title.y + this.constructor.titleHeight * 5/4;
 		this.addChild(this.difficulty);

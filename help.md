@@ -443,7 +443,7 @@ Enable simultaneity hints for flick notes.
 
 #### FX options
 
-##### Hide FX in front of notes (e.g. E/L of default skin)
+##### Hide FX in front of notes
 
 - **Setting id**: `hide-fx-in-front`.
 - **Possible values**: `true`, `false`.
@@ -451,7 +451,7 @@ Enable simultaneity hints for flick notes.
 This setting is used to hide the FX in front of notes.
 When it is `true`, the FX in front of notes will not be displayed.
 
-For the default skin, the FX in front of notes are the E/L indicators.
+For the default skin, this has no effect.
 
 ##### Hide FX of perfect judgement
 
