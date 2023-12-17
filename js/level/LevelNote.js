@@ -145,7 +145,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 	}
 
 	judgementWindows() {
-		return Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows][this.type];
+		return Sunniesnow.Config.appropriateJudgementWindows()[this.type];
 	}
 
 	earlyPerfect() {

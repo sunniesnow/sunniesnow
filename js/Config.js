@@ -72,6 +72,10 @@ Sunniesnow.Config = {
 		return angle;
 	},
 
+	appropriateJudgementWindows() {
+		return (Sunniesnow.game.settings.lyrica5 ? this.judgementWindows5 : this.judgementWindows)[Sunniesnow.game.settings.judgementWindows];
+	},
+
 	judgementWindows: {
 		loose: {
 			tap: {

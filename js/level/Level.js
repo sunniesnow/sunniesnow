@@ -10,7 +10,7 @@ Sunniesnow.Level = class Level {
 	}
 
 	initializeAuxiliaryQuantities() {
-		this.judgementWindows = Sunniesnow.Config.judgementWindows[Sunniesnow.game.settings.judgementWindows];
+		this.judgementWindows = Sunniesnow.Config.appropriateJudgementWindows();
 		[this.earliestLateBad, this.latestLateBad] = Sunniesnow.Utils.minmax(
 			this.judgementWindows.tap.bad[1],
 			this.judgementWindows.drag.bad[1],

@@ -70,7 +70,8 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		if (Sunniesnow.game.settings.debug) {
 			this.debugHud.update(delta, {
 				FPS: Sunniesnow.game.app.ticker.FPS,
-				Time: Sunniesnow.Music.currentTime
+				Time: Sunniesnow.Music.currentTime,
+				Progress: Sunniesnow.Music.progress
 			});
 			this.debugBoard.update(delta);
 		}
