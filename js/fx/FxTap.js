@@ -133,7 +133,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 
 	populate() {
 		super.populate();
-		this.createEarlyLateText();
+		// this.createEarlyLateText(); // commented in favor of Lyrica 5 style E/L indicator
 	}
 
 	createEarlyLateText() {

@@ -49,6 +49,7 @@ Sunniesnow.Level = class Level {
 		this.maxCombo = 0;
 		this.inaccuracies = [];
 		this.lastJudgement = null;
+		this.lastJudgedNote = null;
 		this.apFcIndicator = 'ap'; // possible values: 'ap', 'fc', ''
 	}
 
@@ -306,6 +307,7 @@ Sunniesnow.Level = class Level {
 		}
 		this.maxCombo = Math.max(this.maxCombo, this.combo);
 		this.lastJudgement = note.judgement;
+		this.lastJudgedNote = note;
 		this[note.judgement]++;
 		if (note.earlyLate) {
 			if (note.earlyLate < 0) {

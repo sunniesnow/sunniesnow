@@ -6,7 +6,8 @@ Sunniesnow.Chart = class Chart {
 		charter: '',
 		difficultyName: 'Unknown',
 		difficultyColor: '#7f7f7f',
-		difficulty: ''
+		difficulty: '',
+		difficultySup: ''
 	}
 
 	static EVENT_FIELDS = ['time', 'type', 'properties']

@@ -32,8 +32,13 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 			fontFamily: 'Arial',
 			align: 'center'
 		});
+		this.earlyLate = new PIXI.Text('', {
+			fontSize: Sunniesnow.game.settings.width / 45,
+			fontFamily: 'Arial'
+		});
 		this.lastJudgement.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0);
 		this.addChild(this.lastJudgement);
+		this.addChild(this.earlyLate);
 	}
 
 	update(delta, data) {
@@ -56,9 +61,10 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 		if (hidden) {
 			this.text.visible = false;
 			this.lastJudgement.visible = false;
+			this.earlyLate.visible = false;
 			return;
 		}
-		let text
+		let text;
 		if (Sunniesnow.game.settings.autoplay) {
 			text = 'Autoplay';
 		} else {
@@ -93,7 +99,15 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 				break;
 			default:
 				this.lastJudgement.style.fill = Sunniesnow.game.settings.lyrica5 ? 0xa0c9cf : 'white';
-				break;
+		}
+		const earlyLate = Sunniesnow.game.level.lastJudgedNote.earlyLate;
+		if (earlyLate) {
+			this.earlyLate.visible = true;
+			this.earlyLate.text = earlyLate < 0 ? 'Early' : 'Late';
+			this.earlyLate.style.fill = earlyLate < 0 ? 0x4887dc : 0xdc5449;
+			this.earlyLate.x = this.lastJudgement.getLocalBounds().right + Sunniesnow.game.settings.width / 90;
+		} else {
+			this.earlyLate.visible = false;
 		}
 	}
 
