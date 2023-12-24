@@ -234,10 +234,22 @@ ${Sunniesnow.Utils.currentTimeIso()}`;
 	}
 
 	getRightTextContents() {
-		return `Early: ${Sunniesnow.game.level.early}
-Late: ${Sunniesnow.game.level.late}
-Mean (μ): ${Math.round(this.sampleMean * 1000)}ms
-SD (σ): ${Math.round(this.sampleSd * 1000)}ms`;
+		let result = `Early: ${Sunniesnow.game.level.early}; Late: ${Sunniesnow.game.level.late}
+Mean μ = ${Math.round(this.sampleMean * 1000)}ms
+SD σ = ${Math.round(this.sampleSd * 1000)}ms
+
+`;
+		const judgementWindows = Sunniesnow.Config.appropriateJudgementWindows();
+		for (const noteType of ['tap', 'drag', 'flick', 'hold']) {
+			result += `${noteType}: `;
+			let intervals = [];
+			for (const judgement of ['perfect', 'good', 'bad']) {
+				intervals = judgementWindows[noteType][judgement].toSpliced(1, 0, ...intervals);
+			}
+			result += intervals.join(', ') + '\n';
+		}
+		result += `hold (end): -\u221e, ${judgementWindows.holdEnd.good}, ${judgementWindows.holdEnd.perfect}`
+		return result;
 	}
 
 };

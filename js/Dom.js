@@ -38,6 +38,19 @@ Sunniesnow.Dom = {
 		}
 	},
 
+	readCustomJudgementWindowsSettings() {
+		for (const noteType of ['tap', 'drag', 'flick', 'hold']) {
+			for (const judgement of ['bad', 'good', 'perfect']) {
+				for (const earlyLate of ['early', 'late']) {
+					const id = `judgement-windows-custom-${noteType}-${earlyLate}-${judgement}`;
+					Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(id)] = this.readValue(id) / 1000;
+				}
+			}
+		}
+		Sunniesnow.game.settings.judgementWindowsCustomHoldEndEarlyGood = this.readValue('judgement-windows-custom-hold-end-early-good');
+		Sunniesnow.game.settings.judgementWindowsCustomHoldEndEarlyPerfect = this.readValue('judgement-windows-custom-hold-end-early-perfect');
+	},
+
 	fillSelect(elementId, filename) {
 		const select = document.getElementById(elementId);
 		const option = document.createElement('option');
@@ -210,6 +223,7 @@ Sunniesnow.Dom = {
 			debug: this.readCheckbox('debug'),
 			suppressWarnings: this.readCheckbox('suppress-warnings')
 		}
+		this.readCustomJudgementWindowsSettings();
 		this.readPluginSettings();
 		this.readUploadSettings();
 	},
@@ -343,6 +357,17 @@ Sunniesnow.Dom = {
 		this.writeCheckbox('float-as-fullscreen', d('floatAsFullscreen'));
 		this.writeCheckbox('debug', d('debug'));
 		this.writeCheckbox('suppress-warnings', d('suppressWarnings'));
+
+		for (const noteType of ['tap', 'drag', 'hold', 'flick']) {
+			for (const judgement of ['bad', 'good', 'perfect']) {
+				for (const earlyLate of ['early', 'late']) {
+					const id = `judgement-windows-custom-${noteType}-${earlyLate}-${judgement}`;
+					this.writeValue(id, d(Sunniesnow.Utils.slugToCamel(id)) * 1000);
+				}
+			}
+		}
+		this.writeValue('judgement-windows-custom-hold-end-early-good', d('judgementWindowsCustomHoldEndEarlyGood'));
+		this.writeValue('judgement-windows-custom-hold-end-early-perfect', d('judgementWindowsCustomHoldEndEarlyPerfect'));
 
 		const plugin = d('plugin');
 		const pluginOnline = d('pluginOnline');
@@ -700,6 +725,7 @@ Sunniesnow.Dom = {
 
 	async preprocess() {
 		this.addScrollbarToAndroidWebView();
+		this.adjustCustomJudgementWindowsTable();
 		this.setDeviceDependentDefaults();
 		await this.writeSavedSettings();
 		this.setTextInputs();
@@ -734,4 +760,27 @@ Sunniesnow.Dom = {
 		}
 		document.getElementById('main-wrapper').classList.add('force-scrollbar');
 	},
+
+	adjustCustomJudgementWindowsTable() {
+		const wrapper = document.getElementById('judgement-windows-custom-wrapper');
+		const table = document.getElementById('judgement-windows-custom-table');
+		const observer = new ResizeObserver(entries => {
+			for (const entry of entries) {
+				const height = entry.contentBoxSize?.[0]?.blockSize;
+				if (!height) {
+					continue;
+				}
+				wrapper.style.paddingBottom = `${height}px`;
+			}
+		});
+		observer.observe(table);
+
+		const radio = document.getElementById('judgement-windows-custom');
+		const radios = document.getElementsByName(radio.name);
+		const listener = () => (wrapper.style.display = radio.checked ? '' : 'none');
+		for (const otherRadio of radios) {
+			otherRadio.addEventListener("change", listener);
+		}
+		listener();
+	}
 };

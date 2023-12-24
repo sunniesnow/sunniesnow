@@ -73,7 +73,43 @@ Sunniesnow.Config = {
 	},
 
 	appropriateJudgementWindows() {
-		return (Sunniesnow.game.settings.lyrica5 ? this.judgementWindows5 : this.judgementWindows)[Sunniesnow.game.settings.judgementWindows];
+		if (Sunniesnow.game.settings.judgementWindows !== 'custom') {
+			return (Sunniesnow.game.settings.lyrica5 ? this.judgementWindows5 : this.judgementWindows)[Sunniesnow.game.settings.judgementWindows];
+		}
+		if (this.judgementWindowsCustom) {
+			return this.judgementWindowsCustom;
+		}
+		const judgementWindows = {};
+		for (const noteType of ['tap', 'drag', 'flick', 'hold']) {
+			judgementWindows[noteType] = {};
+			let lastEarly = Infinity;
+			let lastLate = -Infinity;
+			for (const judgement of ['perfect', 'good', 'bad']) {
+				let early = Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(`judgement-windows-custom-${noteType}-early-${judgement}`)];
+				let late = Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(`judgement-windows-custom-${noteType}-late-${judgement}`)];
+				if (early >= late) {
+					Sunniesnow.Utils.warn(`Illegal custom judgement window: ${noteType} ${judgement} interval is empty`);
+					early = late = (early + late) / 2;
+				}
+				if (early > lastEarly) {
+					Sunniesnow.Utils.warn(`Illegal custom judgement window: ${noteType} early ${judgement} is narrower than the inner judgement window`);
+					early = lastEarly;
+				}
+				if (late < lastLate) {
+					Sunniesnow.Utils.warn(`Illegal custom judgement window: ${noteType} late ${judgement} is narrower than the inner judgement window`);
+					late = lastLate;
+				}
+				judgementWindows[noteType][judgement] = [lastEarly = early, lastLate = late];
+			}
+		}
+		let perfect = Sunniesnow.game.settings.judgementWindowsCustomHoldEndEarlyPerfect
+		let good = Sunniesnow.game.settings.judgementWindowsCustomHoldEndEarlyGood;
+		if (perfect < good) {
+			Sunniesnow.Utils.warn(`Illegal custom judgement window: hold end early good interval is narrower than the inner interval`);
+			good = perfect;
+		}
+		judgementWindows['holdEnd'] = {perfect, good, bad: -Infinity};
+		return this.judgementWindowsCustom = judgementWindows;
 	},
 
 	judgementWindows: {
@@ -151,6 +187,33 @@ Sunniesnow.Config = {
 				perfect: [-0.05, 0.05],
 				good: [-0.1, 0.1],
 				bad: [-0.15, 0.15]
+			},
+			holdEnd: {
+				perfect: 0.8,
+				good: 0.8,
+				bad: -Infinity
+			}
+		},
+		rigorous: {
+			tap: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			drag: {
+				perfect: [-0.08, 0.08],
+				good: [-0.12, 0.12],
+				bad: [-0.12, 0.12]
+			},
+			flick: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			hold: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
 			},
 			holdEnd: {
 				perfect: 0.8,
@@ -235,6 +298,33 @@ Sunniesnow.Config = {
 				perfect: [-0.05, 0.05],
 				good: [-0.1, 0.1],
 				bad: [-0.15, 0.15]
+			},
+			holdEnd: {
+				perfect: 0.8,
+				good: 0.8,
+				bad: -Infinity
+			}
+		},
+		rigorous: {
+			tap: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			drag: {
+				perfect: [-0.12, 0.12],
+				good: [-0.12, 0.12],
+				bad: [-0.12, 0.12]
+			},
+			flick: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			hold: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
 			},
 			holdEnd: {
 				perfect: 0.8,

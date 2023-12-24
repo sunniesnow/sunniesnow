@@ -40,3 +40,15 @@
 .force-scrollbar::-webkit-scrollbar-thumb {
 	background-color: #888;
 }
+
+#judgement-windows-custom-wrapper {
+	/* set padding-bottom in js */
+	position: relative;
+	overflow-x: auto;
+	table {
+		position: absolute;
+		input {
+			width: 50px;
+		}
+	}
+}
