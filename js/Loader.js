@@ -336,6 +336,7 @@ Sunniesnow.Loader = {
 		this.loadModule('UiDiamondGrid');
 		this.loadModule('UiPentagon');
 		this.loadModule('UiTurntable');
+		this.loadModule('UiHexagram');
 	},
 
 	loadFx() {

@@ -123,6 +123,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui-event/UiDiamondGrid',
 	'ui-event/UiPentagon',
 	'ui-event/UiTurntable',
+	'ui-event/UiHexagram',
 
 	'fx/FxBoard',
 	'fx/FxNote',
@@ -156,6 +157,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'chart/DiamondGrid',
 	'chart/Pentagon',
 	'chart/Turntable',
+	'chart/Hexagram',
 
 	'ui-nonevent/tip-point/TipPointBase',
 	'ui-nonevent/tip-point/TipPoint',
