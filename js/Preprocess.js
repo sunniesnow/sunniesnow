@@ -7,14 +7,10 @@ Sunniesnow.Preprocess = {
 	},
 
 	async run() {
-		this.applyPatches();
+		Sunniesnow.Patches.apply();
 		await Sunniesnow.Dom.preprocess();
 		this.readUrlParams();
 		await this.registerServiceWorker();
-	},
-
-	applyPatches() {
-		Sunniesnow.Patches.apply();
 	},
 
 	readUrlParams() {

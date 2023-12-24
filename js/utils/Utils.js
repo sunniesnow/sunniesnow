@@ -463,6 +463,10 @@ Sunniesnow.Utils = {
 				this.warn(`Unknown judgement: ${judgement}`);
 				return this.upcaseFirst(judgement);
 		}
+	},
+
+	isAndroidWebView() {
+		return this.isBrowser() && !navigator.mediaSession;
 	}
 
 };

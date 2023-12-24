@@ -699,6 +699,7 @@ Sunniesnow.Dom = {
 	},
 
 	async preprocess() {
+		this.addScrollbarToAndroidWebView();
 		this.setDeviceDependentDefaults();
 		await this.writeSavedSettings();
 		this.setTextInputs();
@@ -724,5 +725,13 @@ Sunniesnow.Dom = {
 			autoplay: false,
 			chartOffset: 0
 		});
-	}
+	},
+
+	// https://github.com/pixijs/pixijs/issues/10020
+	addScrollbarToAndroidWebView() {
+		if (!Sunniesnow.Utils.isAndroidWebView()) {
+			return;
+		}
+		document.getElementById('main-wrapper').classList.add('force-scrollbar');
+	},
 };
