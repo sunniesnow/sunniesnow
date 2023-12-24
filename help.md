@@ -87,7 +87,7 @@ The list of JSON files will be available in the dropdown menu of this setting
 {:#judgement-windows}
 
 - **Setting id**: `judgement-windows`.
-- **Possible values**: `"strict"`, `"medium"`, `"loose"`.
+- **Possible values**: `"loose"`, `"medium"`, `"strict"`, `"rigorous"`, `"custom"`.
 
 This setting is used to set the judgement time windows.
 There are three tiers of judgement time windows: *strict*, *medium*, and *loose*.
@@ -125,8 +125,54 @@ Data for the strict tier:
 | hold (*start*) | -150 | -100 | -50 | +50 | +100 | +150 |
 | hold (*end*) | -&infin; | 0.8 | 0.8 | | | |
 
+Data for the rigorous tier:
+
+| | early bad | early good | early perfect | late perfect | late good | late bad |
+|:--|--:|--:|--:|--:|--:|--:|
+| tap | -100 | -60 | -30 | +30 | +60 | +100 |
+| drag | -120 | -120 | -80 | +80 | +120 | +120 |
+| flick | -100 | -60 | -30 | +30 | +60 | +100 |
+| hold (*start*) | -100 | -60 | -30 | +30 | +60 | +100 |
+| hold (*end*) | -&infin; | 0.8 | 0.8 | | | |
+
 The interval for drag notes are **different** when [`lyrica-5`](#lyrica-5) is `true`:
 the perfect interval is the same as the bad interval.
+
+When this setting is `"custom"`, the following settings will be available to enter,
+and they will be used to determine the judgement time windows:
+
+- `judgement-windows-custom-tap-early-bad`,
+- `judgement-windows-custom-tap-early-good`,
+- `judgement-windows-custom-tap-early-perfect`,
+- `judgement-windows-custom-tap-late-perfect`,
+- `judgement-windows-custom-tap-late-good`,
+- `judgement-windows-custom-tap-late-bad`,
+- `judgement-windows-custom-drag-early-bad`,
+- `judgement-windows-custom-drag-early-good`,
+- `judgement-windows-custom-drag-early-perfect`,
+- `judgement-windows-custom-drag-late-perfect`,
+- `judgement-windows-custom-drag-late-good`,
+- `judgement-windows-custom-drag-late-bad`,
+- `judgement-windows-custom-flick-early-bad`,
+- `judgement-windows-custom-flick-early-good`,
+- `judgement-windows-custom-flick-early-perfect`,
+- `judgement-windows-custom-flick-late-perfect`,
+- `judgement-windows-custom-flick-late-good`,
+- `judgement-windows-custom-flick-late-bad`,
+- `judgement-windows-custom-hold-early-bad`,
+- `judgement-windows-custom-hold-early-good`,
+- `judgement-windows-custom-hold-early-perfect`,
+- `judgement-windows-custom-hold-late-perfect`,
+- `judgement-windows-custom-hold-late-good`,
+- `judgement-windows-custom-hold-late-bad`,
+- `judgement-windows-custom-hold-end-early-good`, and
+- `judgement-windows-custom-hold-end-early-perfect`.
+
+All the values are in seconds although they are entered in milliseconds,
+so you need to enter milliseconds in judgement settings UI,
+but you need to enter seconds when using URL parameters.
+When using custom windows, the windows for drag notes are **not** affected by [`lyrica-5`](#lyrica-5).
+The early bad judgement for hold end is always negative infinity.
 
 #### Note hit size
 
