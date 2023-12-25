@@ -34,7 +34,7 @@ Sunniesnow.Chart = class Chart {
 
 	readMeta() {
 		for (const field in Sunniesnow.Chart.META_FIELDS) {
-			if (this.data[field]) {
+			if (this.data[field] != null) {
 				this[field] = this.data[field];
 			} else {
 				this[field] = Sunniesnow.Chart.META_FIELDS[field];
