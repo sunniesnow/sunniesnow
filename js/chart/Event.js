@@ -17,7 +17,11 @@ Sunniesnow.Event = class Event {
 					return null;
 				}
 			}
-			return new eventClass(time, properties);
+			const result = new eventClass(time, properties);
+			if (!result.checkProperties()) {
+				return null;
+			}
+			return result;
 		} else {
 			Sunniesnow.Utils.warn(`Unknown event type \`${type}\``);
 		}
@@ -76,5 +80,18 @@ Sunniesnow.Event = class Event {
 
 	newUiEvent(fxBoard, doubleLinesBoard, debugBoard) {
 		return new Sunniesnow[this.constructor.UI_CLASS](this, fxBoard, debugBoard);
+	}
+
+	checkProperties() {
+		return true;
+	}
+
+	assertType(property, expected) {
+		const type = typeof this[property];
+		if (type !== expected) {
+			Sunniesnow.Utils.warn(`Property \`${property}\` in ${this.constructor.TYPE_NAME} event must be ${expected}, but got ${this[property]}: ${type}`);
+			return false;
+		}
+		return true;
 	}
 };
