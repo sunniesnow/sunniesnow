@@ -9,4 +9,8 @@ Sunniesnow.Flick = class Flick extends Sunniesnow.Note {
 	static FX_CLASS = 'FxFlick'
 	static SE_CLASS = 'SeFlick'
 	static TYPE_NAME = 'flick'
+
+	checkProperties() {
+		return super.checkProperties() && this.assertType("angle", "number");
+	}
 };

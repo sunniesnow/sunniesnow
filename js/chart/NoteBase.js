@@ -7,4 +7,8 @@ Sunniesnow.NoteBase = class NoteBase extends Sunniesnow.Event {
 		const activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
 		return this.time - activeDuration - Sunniesnow[this.constructor.UI_CLASS].FADING_IN_DURATION;
 	}
+
+	checkProperties() {
+		return super.checkProperties() && this.assertType("x", "number") && this.assertType("y", "number");
+	}
 };
