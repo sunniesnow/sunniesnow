@@ -14,12 +14,12 @@ Sunniesnow.PixiPatches = {
 	},
 
 	patchLoadSvg() {
-		const old = PIXI.SVGResource.prototype._loadSvg.toString().match(/\{(.*)\}/s)[1].split('\n');
-		const srcLineno = old.findIndex(l => /\w+\.src\s*=\s*this\.svg/.test(l));
-		old.push(old.splice(srcLineno, 1)[0]);
+		let src = PIXI.SVGResource.prototype._loadSvg.toString().match(/\{(.*)\}/s)[1];
+		src = src.replace(/tempImage\.src\s*=\s*this\.svg[,;]/, '');
+		src += 'tempImage.src = this.svg;'
 		PIXI.SVGResource.prototype._loadSvg = new Function(
 			'Image', 'BaseImageResource', 'uid',
-			`return (function _loadSvg() { ${old.join('\n')} });`
+			`return (function _loadSvg() { ${src} });`
 		)(require('canvas').Image, PIXI.BaseImageResource, PIXI.utils.uid);
 	},
 
