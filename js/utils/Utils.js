@@ -446,7 +446,9 @@ Sunniesnow.Utils = {
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
-		Sunniesnow.ObjectUrl.revoke(url);
+		if (!this.isAndroidWebView()) { // causes bug in Android WebView
+			Sunniesnow.ObjectUrl.revoke(url);
+		}
 	},
 
 	judgementText(judgement) {
