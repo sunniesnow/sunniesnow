@@ -31,8 +31,10 @@ Sunniesnow.Assets = {
 			const path = require('path');
 			const fs = require('fs');
 			const dest = path.join(Sunniesnow.record.tempDir, path.basename(url));
-			const data = await Sunniesnow.Utils.strictFetch(url).then(res => res.arrayBuffer());
-			fs.writeFileSync(dest, Buffer.from(data));
+			if (!fs.existsSync(dest) || Sunniesnow.record.clean) {
+				const data = await Sunniesnow.Utils.strictFetch(url).then(res => res.arrayBuffer());
+				fs.writeFileSync(dest, Buffer.from(data));
+			}
 			return await PIXI.Assets.load({src: dest, loadParser: 'loadNodeFont', data: {family}});
 		}
 	},
