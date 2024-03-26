@@ -196,7 +196,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	populateTitle() {
 		this.titleBackground = new PIXI.Graphics(this.constructor.titleBackgroundGeometry);
 		this.titleText = new PIXI.Text(Sunniesnow.game.chart.title, {
-			fontFamily: 'Arial',
+			fontFamily: 'Arial,Cambria,Microsoft YaHei',
 			fontSize: this.constructor.titleHeight / 2,
 			fill: '#43586e',
 			align: 'left'
@@ -216,7 +216,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	populateDifficulty() {
 		this.difficultyBackground = new PIXI.Graphics(this.constructor.difficultyBackgroundGeometry);
 		this.difficultyNameText = new PIXI.Text(Sunniesnow.game.chart.difficultyName, {
-			fontFamily: 'Arial',
+			fontFamily: 'Arial,Cambria,Microsoft YaHei',
 			fontSize: this.constructor.titleHeight / 2,
 			fill: '#43586e',
 			align: 'left'
@@ -226,7 +226,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 			this.difficultyNameText.scale.set(this.constructor.difficultyNameWidth / this.difficultyNameText.width);
 		}
 		this.difficultyText = new PIXI.Text(Sunniesnow.game.chart.difficulty, {
-			fontFamily: 'Arial',
+			fontFamily: 'Arial,Cambria,Microsoft YaHei',
 			fontSize: this.constructor.titleHeight / 2,
 			fill: '#fbfbff',
 			align: 'right'
@@ -236,7 +236,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		}
 		this.difficultyText.anchor = new PIXI.ObservablePoint(null, null, 1, 0.5);
 		this.difficultySupText = new PIXI.Text(Sunniesnow.game.chart.difficultySup, {
-			fontFamily: 'Arial',
+			fontFamily: 'Arial,Cambria,Microsoft YaHei',
 			fontSize: this.constructor.titleHeight / 4,
 			fill: '#fbfbff'
 		});

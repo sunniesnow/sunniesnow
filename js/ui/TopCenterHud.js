@@ -18,7 +18,7 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 		this.text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 30,
 			fill: 'white',
-			fontFamily: 'Arial',
+			fontFamily: 'Arial,Cambria,Microsoft YaHei',
 			align: 'center'
 		});
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 1);
@@ -29,7 +29,7 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 		this.lastJudgement = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 45,
 			fill: 'yellow',
-			fontFamily: 'Arial',
+			fontFamily: 'Arial,Cambria',
 			align: 'center'
 		});
 		this.earlyLate = new PIXI.Text('', {
