@@ -361,11 +361,15 @@ Sunniesnow.Loader = {
 	},
 
 	updateLoadingModules() {
-		if (!Sunniesnow.Utils.isBrowser()) {
-			return;
+		if (Sunniesnow.Utils.isBrowser()) {
+			const element = document.getElementById('loading-progress');
+			element.textContent = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}`;
+		} else {
+			if (this.lastLoadingModulesProgress !== this.loadingModulesProgress) {
+				Sunniesnow.record.print(`Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}`);
+				this.lastLoadingModulesProgress = this.loadingModulesProgress;
+			}
 		}
-		const element = document.getElementById('loading-progress');
-		element.textContent = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}`;
 	},
 
 	async loadPlugins() {
