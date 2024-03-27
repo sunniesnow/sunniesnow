@@ -366,7 +366,7 @@ Sunniesnow.Loader = {
 			element.textContent = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}`;
 		} else {
 			if (this.lastLoadingModulesProgress !== this.loadingModulesProgress) {
-				Sunniesnow.record.print(`Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}`);
+				Sunniesnow.record.print(`Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}\n`);
 				this.lastLoadingModulesProgress = this.loadingModulesProgress;
 			}
 		}
