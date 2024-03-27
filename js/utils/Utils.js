@@ -469,6 +469,13 @@ Sunniesnow.Utils = {
 
 	isAndroidWebView() {
 		return this.isBrowser() && !navigator.mediaSession;
+	},
+
+	fonts(family) {
+		if (!this.isBrowser() && process.platform === 'win32') {
+			return `${family},Cambria,MicroSoft YaHei`;
+		}
+		return family;
 	}
 
 };
