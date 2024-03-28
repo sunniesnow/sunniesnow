@@ -17,7 +17,7 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 			}
 		}
 		this.fontSize = Sunniesnow.Config.radius * 10 * Sunniesnow.Config.scale();
-		this.maxWidth = Sunniesnow.Config.minWidth * Sunniesnow.Config.scale();
+		this.maxWidth = Sunniesnow.Config.minWidth * 0.9 * Sunniesnow.Config.scale();
 	}
 
 	populate() {
@@ -30,7 +30,6 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 			padding: this.constructor.fontSize / 2
 		});
 		const textMetrics = PIXI.TextMetrics.measureText(this.event.text, style);
-		console.log(textMetrics.width, this.constructor.maxWidth)
 		if (textMetrics.width > this.constructor.maxWidth) {
 			style.fontSize *= this.constructor.maxWidth / textMetrics.width;
 		}
