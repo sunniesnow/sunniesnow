@@ -13,7 +13,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 			align: 'center',
 			fill: color,
 			fontSize: this.radius,
-			fontFamily: 'Arial',
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontWeight: 'bold'
 		});
 		sprite.updateText();

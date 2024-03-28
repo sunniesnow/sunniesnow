@@ -25,7 +25,7 @@ Sunniesnow.ButtonResultFullscreen = class ButtonResultFullscreen extends Sunnies
 		super.populate();
 		this.background = new PIXI.Graphics(this.constructor.geometry);
 		this.text = new PIXI.Text(this.constructor.text, {
-			fontFamily: 'Arial',
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.radius / 4,
 			fill: '#43586e',
 			align: 'center'

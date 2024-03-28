@@ -54,7 +54,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		const text = touchUi.text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 90,
 			fill: '#ff00ff',
-			fontFamily: 'Arial',
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 		});
 		text.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
 		touchUi.addChild(text);
@@ -92,7 +92,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	createEarlyLateText(uiNote) {
 		const text = Math.round(uiNote.levelNote.hitRelativeTime * 1000).toString();
 		const earlyLateText = new PIXI.Text(text, {
-			fontFamily: 'Arial',
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: Sunniesnow.game.settings.width / 36,
 			fill: '#ff00ff',
 			align: 'center'

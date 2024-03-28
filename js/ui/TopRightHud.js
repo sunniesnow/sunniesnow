@@ -57,7 +57,7 @@ Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 		this.text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 45,
 			fill: 'white',
-			fontFamily: Sunniesnow.Utils.fonts('Arial'),
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			align: 'right'
 		});
 		this.text.x = Sunniesnow.game.settings.width * (1 - 1 / 30);
@@ -70,7 +70,7 @@ Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 		this.difficultyName = new PIXI.Text(Sunniesnow.game.chart.difficultyName, {
 			fontSize: Sunniesnow.game.settings.width / 45,
 			fill: Sunniesnow.game.chart.difficultyColor,
-			fontFamily: Sunniesnow.Utils.fonts('Arial'),
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 		});
 		this.difficultyName.x = Sunniesnow.game.settings.width - Sunniesnow.game.settings.width / 4;
 		this.difficultyName.y = Sunniesnow.game.settings.width / 45;

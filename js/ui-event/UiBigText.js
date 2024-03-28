@@ -2,14 +2,16 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 	static async load() {
 		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.BigText)) {
 			try {
-				await Sunniesnow.Assets.loadFont(
-					'https://fastly.jsdelivr.net/gh/kaio/wangfonts/TrueType/wt071.ttf',
-					'HanWangShinSuMedium-Regular'
-				);
-				await Sunniesnow.Assets.loadFont(
-					'https://fastly.jsdelivr.net/gh/Kinutafontfactory/Yuji/fonts/ttf/YujiBoku-Regular.ttf',
-					'YujiBoku-Regular'
-				);
+				await Promise.all([
+					Sunniesnow.Assets.loadFont(
+						'https://fastly.jsdelivr.net/gh/kaio/wangfonts/TrueType/wt071.ttf',
+						'HanWangShinSuMedium-Regular'
+					),
+					Sunniesnow.Assets.loadFont(
+						'https://fastly.jsdelivr.net/gh/Kinutafontfactory/Yuji/fonts/ttf/YujiBoku-Regular.ttf',
+						'YujiBoku-Regular'
+					)
+				]);
 			} catch (e) {
 				Sunniesnow.Utils.warn(`Failed to load font for big texts: ${e.message ?? e}`, e);
 			}
@@ -21,13 +23,14 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 	populate() {
 		super.populate();
 		const style = new PIXI.TextStyle({
-			fontFamily: 'HanWangShinSuMedium-Regular,YujiBoku-Regular,Arial',
+			fontFamily: 'HanWangShinSuMedium-Regular,YujiBoku-Regular,NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.fontSize,
 			fill: 0xffffff,
 			align: 'center',
 			padding: this.constructor.fontSize / 2
 		});
 		const textMetrics = PIXI.TextMetrics.measureText(this.event.text, style);
+		console.log(textMetrics.width, this.constructor.maxWidth)
 		if (textMetrics.width > this.constructor.maxWidth) {
 			style.fontSize *= this.constructor.maxWidth / textMetrics.width;
 		}

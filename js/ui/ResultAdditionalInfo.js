@@ -16,7 +16,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	static async load() {
 		this.fontSize = Sunniesnow.game.settings.height / 30;
 		this.textStyle = {
-			fontFamily: 'Arial',
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.fontSize,
 			fill: this.COLOR
 		};

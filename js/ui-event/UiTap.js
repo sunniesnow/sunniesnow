@@ -104,7 +104,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 			fontSize: maxSize,
 			fill: 'white',
 			align: 'center',
-			fontFamily: font ?? 'LXGWWenKai-Regular,Arial'
+			fontFamily: font ?? 'LXGWWenKai-Regular,NotoSansMath-Regular'
 		});
 		text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
 		text.scale.set(Math.min(maxWidth / text.width, 1));

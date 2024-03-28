@@ -196,7 +196,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	populateTitle() {
 		this.titleBackground = new PIXI.Graphics(this.constructor.titleBackgroundGeometry);
 		this.titleText = new PIXI.Text(Sunniesnow.game.chart.title, {
-			fontFamily: Sunniesnow.Utils.fonts('Arial'),
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.titleHeight / 2,
 			fill: '#43586e',
 			align: 'left'
@@ -216,7 +216,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	populateDifficulty() {
 		this.difficultyBackground = new PIXI.Graphics(this.constructor.difficultyBackgroundGeometry);
 		this.difficultyNameText = new PIXI.Text(Sunniesnow.game.chart.difficultyName, {
-			fontFamily: Sunniesnow.Utils.fonts('Arial'),
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.titleHeight / 2,
 			fill: '#43586e',
 			align: 'left'
@@ -226,7 +226,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 			this.difficultyNameText.scale.set(this.constructor.difficultyNameWidth / this.difficultyNameText.width);
 		}
 		this.difficultyText = new PIXI.Text(Sunniesnow.game.chart.difficulty, {
-			fontFamily: Sunniesnow.Utils.fonts('Arial'),
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.titleHeight / 2,
 			fill: '#fbfbff',
 			align: 'right'
@@ -236,7 +236,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		}
 		this.difficultyText.anchor = new PIXI.ObservablePoint(null, null, 1, 0.5);
 		this.difficultySupText = new PIXI.Text(Sunniesnow.game.chart.difficultySup, {
-			fontFamily: Sunniesnow.Utils.fonts('Arial'),
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.titleHeight / 4,
 			fill: '#fbfbff'
 		});
@@ -288,7 +288,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.statsTexts[judgement] = new PIXI.Text(
 			Sunniesnow.Utils.judgementText(judgement) + '\n' + Sunniesnow.game.level[judgement],
 			{
-				fontFamily: 'Arial',
+				fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 				fontSize: this.constructor.statsRadius / 3,
 				fill: '#43586e',
 				align: 'center'
@@ -304,7 +304,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	populateCombo() {
 		this.comboBackground = new PIXI.Graphics(this.constructor.comboBackgroundGeometry);
 		this.comboText = new PIXI.Text('Combo\n' + Sunniesnow.game.level.maxCombo, {
-			fontFamily: 'Arial',
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.comboRadius / 3,
 			fill: '#43586e',
 			align: 'center'
@@ -330,7 +330,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 			this.rank.addChild(this.rankFrame);
 		}
 		this.rankText = new PIXI.Text(Sunniesnow.game.level.rank(), {
-			fontFamily: 'Arial',
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.rankRadius / 1.5,
 			fill: '#fbfbff',
 			align: 'center'
@@ -345,7 +345,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	populateScore() {
 		this.scoreBackground = new PIXI.Graphics(this.constructor.scoreBackgroundGeometry);
 		this.scoreText = new PIXI.Text(Sunniesnow.game.level.score(), {
-			fontFamily: 'Arial',
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.scoreHeight / 1.5,
 			fill: '#43586e',
 			align: 'center'
@@ -362,7 +362,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	populateAccuracy() {
 		this.accuracyBackground = new PIXI.Graphics(this.constructor.accuracyBackgroundGeometry);
 		this.accuracyText = new PIXI.Text(Sunniesnow.game.level.accuracyText(), {
-			fontFamily: 'Arial',
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			fontSize: this.constructor.accuracyHeight / 1.5,
 			fill: '#43586e',
 			align: 'center'

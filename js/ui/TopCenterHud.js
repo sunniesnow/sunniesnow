@@ -1,5 +1,18 @@
 Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 
+	static async load() {
+		await Promise.all([
+			Sunniesnow.Assets.loadFont(
+				'https://fastly.jsdelivr.net/gh/notofonts/math@gh-pages/fonts/NotoSansMath/full/ttf/NotoSansMath-Regular.ttf',
+				'NotoSansMath-Regular,NotoSansCJK-Regular'
+			),
+			Sunniesnow.Assets.loadFont(
+				'https://fastly.jsdelivr.net/gh/notofonts/noto-cjk/Sans/OTC/NotoSansCJK-Regular.ttc',
+				'NotoSansCJK-Regular'
+			)
+		]);
+	}
+
 	constructor() {
 		super();
 		this.lastData = '';
@@ -18,7 +31,7 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 		this.text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 30,
 			fill: 'white',
-			fontFamily: Sunniesnow.Utils.fonts('Arial'),
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			align: 'center'
 		});
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 1);
@@ -29,12 +42,12 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 		this.lastJudgement = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 45,
 			fill: 'yellow',
-			fontFamily: Sunniesnow.Utils.fonts('Arial'),
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
 			align: 'center'
 		});
 		this.earlyLate = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 45,
-			fontFamily: 'Arial'
+			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular'
 		});
 		this.lastJudgement.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0);
 		this.addChild(this.lastJudgement);
