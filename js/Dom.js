@@ -667,7 +667,6 @@ Sunniesnow.Dom = {
 
 	associateDomElements() {
 		this.associateRadio('level-file-online-radio', 'level-file-online');
-		this.associateRadio('level-file-online-radio', 'level-file-online-button');
 		this.associateRadio('level-file-upload-radio', 'level-file-upload');
 		this.associateRadio('background-online-radio', 'background-online');
 		this.associateRadio('background-from-level-radio', 'background-from-level');
@@ -711,7 +710,7 @@ Sunniesnow.Dom = {
 		levelFileOnline.addEventListener('input', event => {
 			Sunniesnow.Loader.interruptLevelLoad();
 		});
-		document.getElementById('level-file-online-button').addEventListener('click', event => {
+		document.getElementById('level-file-button').addEventListener('click', event => {
 			Sunniesnow.Loader.triggerLoadChart();
 		});
 		document.getElementById('level-file-upload').addEventListener('change', event => {
