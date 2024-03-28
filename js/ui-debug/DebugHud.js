@@ -9,7 +9,7 @@ Sunniesnow.DebugHud = class DebugHud extends Sunniesnow.UiComponent {
 		this.text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 60,
 			fill: '#ff00ff',
-			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
+			fontFamily: 'Noto Sans Math,Noto Sans CJK',
 		});
 		this.text.alpha = 0.7;
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0, 1);

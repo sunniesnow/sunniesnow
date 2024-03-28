@@ -5,11 +5,11 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 				await Promise.all([
 					Sunniesnow.Assets.loadFont(
 						'https://fastly.jsdelivr.net/gh/kaio/wangfonts/TrueType/wt071.ttf',
-						'HanWangShinSuMedium-Regular'
+						undefined // 'HanWangShinSuMedium'
 					),
 					Sunniesnow.Assets.loadFont(
 						'https://fastly.jsdelivr.net/gh/Kinutafontfactory/Yuji/fonts/ttf/YujiBoku-Regular.ttf',
-						'YujiBoku-Regular'
+						undefined // 'YujiBoku'
 					)
 				]);
 			} catch (e) {
@@ -23,7 +23,7 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 	populate() {
 		super.populate();
 		const style = new PIXI.TextStyle({
-			fontFamily: 'HanWangShinSuMedium-Regular,YujiBoku-Regular,NotoSansMath-Regular,NotoSansCJK-Regular',
+			fontFamily: 'HanWangShinSuMedium,YujiBoku,Noto Sans Math,Noto Sans CJK',
 			fontSize: this.constructor.fontSize,
 			fill: 0xffffff,
 			align: 'center',

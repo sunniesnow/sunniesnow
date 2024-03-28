@@ -56,7 +56,7 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 		this.text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 45,
 			fill: 'white',
-			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular'
+			fontFamily: 'Noto Sans Math,Noto Sans CJK'
 		});
 		this.text.x = Sunniesnow.game.settings.width / 15;
 		this.text.y = Sunniesnow.game.settings.width / 30;

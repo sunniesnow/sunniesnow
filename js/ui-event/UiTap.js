@@ -20,7 +20,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 					//'YujiSyuku-Regular'
 
 					'https://fastly.jsdelivr.net/gh/lxgw/LxgwWenKai/fonts/TTF/LXGWWenKai-Regular.ttf',
-					'LXGWWenKai-Regular'
+					undefined // 'LXGW WenKai'
 
 					//'https://fastly.jsdelivr.net/gh/chengda/popular-fonts/华文仿宋.ttf',
 					//'HuaWenFangSong'
@@ -104,7 +104,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 			fontSize: maxSize,
 			fill: 'white',
 			align: 'center',
-			fontFamily: font ?? 'LXGWWenKai-Regular,NotoSansMath-Regular'
+			fontFamily: font ?? 'LXGW WenKai,Noto Sans Math'
 		});
 		text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
 		text.scale.set(Math.min(maxWidth / text.width, 1));

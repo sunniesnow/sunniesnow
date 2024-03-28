@@ -20,7 +20,7 @@ Sunniesnow.ButtonResume = class ButtonResume extends Sunniesnow.Button {
 		super.populate();
 		this.background = new PIXI.Graphics(this.constructor.geometry);
 		this.text = new PIXI.Text(this.constructor.text, {
-			fontFamily: 'NotoSansMath-Regular,NotoSansCJK-Regular',
+			fontFamily: 'Noto Sans Math,Noto Sans CJK',
 			fontSize: this.constructor.radius / 3,
 			fill: '#43586e',
 			align: 'center'
