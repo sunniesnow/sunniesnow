@@ -39,7 +39,7 @@ Sunniesnow.Assets = {
 				const data = await Sunniesnow.Utils.strictFetch(url).then(res => res.arrayBuffer());
 				fs.writeFileSync(dest, Buffer.from(data));
 			}
-			return await PIXI.Assets.load({src: dest, loadParser: 'loadNodeFont', data: {family}});
+			return await PIXI.Assets.load({src: dest, loadParser: 'loadNodeFont'}); //, data: {family}});
 		}
 	},
 

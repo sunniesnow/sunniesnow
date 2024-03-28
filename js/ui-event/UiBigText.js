@@ -5,11 +5,11 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 				await Promise.all([
 					Sunniesnow.Assets.loadFont(
 						'https://fastly.jsdelivr.net/gh/kaio/wangfonts/TrueType/wt071.ttf',
-						undefined // 'HanWangShinSuMedium'
+						'HanWangShinSuMedium'
 					),
 					Sunniesnow.Assets.loadFont(
 						'https://fastly.jsdelivr.net/gh/Kinutafontfactory/Yuji/fonts/ttf/YujiBoku-Regular.ttf',
-						undefined // 'YujiBoku'
+						'YujiBoku'
 					)
 				]);
 			} catch (e) {

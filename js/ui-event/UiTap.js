@@ -20,7 +20,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 					//'YujiSyuku-Regular'
 
 					'https://fastly.jsdelivr.net/gh/lxgw/LxgwWenKai/fonts/TTF/LXGWWenKai-Regular.ttf',
-					undefined // 'LXGW WenKai'
+					'LXGW WenKai'
 
 					//'https://fastly.jsdelivr.net/gh/chengda/popular-fonts/华文仿宋.ttf',
 					//'HuaWenFangSong'

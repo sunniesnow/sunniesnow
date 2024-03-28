@@ -4,11 +4,11 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 		await Promise.all([
 			Sunniesnow.Assets.loadFont(
 				'https://fastly.jsdelivr.net/gh/notofonts/math@gh-pages/fonts/NotoSansMath/full/ttf/NotoSansMath-Regular.ttf',
-				undefined // 'Noto Sans Math'
+				'Noto Sans Math'
 			),
 			Sunniesnow.Assets.loadFont(
 				'https://fastly.jsdelivr.net/gh/notofonts/noto-cjk/Sans/OTC/NotoSansCJK-Regular.ttc',
-				undefined // 'Noto Sans CJK'
+				'Noto Sans CJK'
 			)
 		]);
 	}
