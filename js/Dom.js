@@ -217,6 +217,7 @@ Sunniesnow.Dom = {
 			height: this.readValue('height'),
 			fullscreenOnStart: this.readCheckbox('fullscreen-on-start'),
 			floatAsFullscreen: this.readCheckbox('float-as-fullscreen'),
+			avoidDownloadingFonts: this.readCheckbox('avoid-downloading-fonts'),
 			renderer: this.readRadio('renderer'),
 			antialias: this.readCheckbox('antialias'),
 			powerPreference: this.readRadio('power-preference'),
@@ -355,6 +356,7 @@ Sunniesnow.Dom = {
 		this.writeRadio('power-preference', d('powerPreference'));
 		this.writeCheckbox('fullscreen-on-start', d('fullscreenOnStart'));
 		this.writeCheckbox('float-as-fullscreen', d('floatAsFullscreen'));
+		this.writeCheckbox('avoid-downloading-fonts', d('avoidDownloadingFonts'));
 		this.writeCheckbox('debug', d('debug'));
 		this.writeCheckbox('suppress-warnings', d('suppressWarnings'));
 

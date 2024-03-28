@@ -21,6 +21,10 @@ Sunniesnow.Assets = {
 	},
 
 	async loadFont(url, family) {
+		if (Sunniesnow.game.settings.avoidDownloadingFonts) {
+			Sunniesnow.Utils.warn(`Skipped downloading font ${family}`);
+			return;
+		}
 		if (Sunniesnow.Utils.isBrowser()) {
 			const result = await PIXI.Assets.load({src: url, loadParser: 'loadWebFont', data: {family}});
 			if (!(result instanceof FontFace)) {

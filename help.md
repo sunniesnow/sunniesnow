@@ -1021,6 +1021,18 @@ Some browser environments also lack the proper support of the Fullscreen API.
 When using the Fullscreen API,
 you can exit fullscreen mode when you hit <kbd>Escape</kbd> or <kbd>F11</kbd> on most browsers.
 
+#### Fonts
+
+##### Avoid downloading fonts
+{:#avoid-downloading-fonts}
+
+- **Setting id**: `avoid-downloading-fonts`.
+- **Possible values**: `true`, `false`.
+
+If it is `true`, the game will not download any fonts.
+This is useful when your network is slow
+because downloading fonts may take a long time.
+
 #### Plugins
 {:#plugin}
 
