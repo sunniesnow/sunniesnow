@@ -219,7 +219,7 @@ Sunniesnow.Utils = {
 	},
 
 	toPercentage(number) {
-		return (number * 100).toFixed(2) + '%';
+		return (Math.trunc(number * 10000) / 100).toFixed(2) + '%';
 	},
 
 	async blobToBase64(blob) {

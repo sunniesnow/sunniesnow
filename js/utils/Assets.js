@@ -39,6 +39,7 @@ Sunniesnow.Assets = {
 				const data = await Sunniesnow.Utils.strictFetch(url).then(res => res.arrayBuffer());
 				fs.writeFileSync(dest, Buffer.from(data));
 			}
+			// https://github.com/Automattic/node-canvas/issues/2369
 			return await PIXI.Assets.load({src: dest, loadParser: 'loadNodeFont'}); //, data: {family}});
 		}
 	},
