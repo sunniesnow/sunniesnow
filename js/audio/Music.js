@@ -75,6 +75,14 @@ Sunniesnow.Music = {
 	},
 
 	convertTimeStamp(timeStamp) {
-		return (timeStamp - this.lastResumeTimeStamp) / 1000 + this.lastResumeTime;
+		/* The only places where this method is called are in TouchManager,
+		when it wants to get the time of the touch events.
+		The current implementation leads to a curious bug on most browsers:
+		the time are wrong by an offset after a long pause.
+		The modified implementation does not do exactly what it should do,
+		but it fixes the bug. */
+		// return (timeStamp - this.lastResumeTimeStamp) / 1000 + this.lastResumeTime;
+		this.updateCurrentTime();
+		return this.currentTime;
 	}
 };
