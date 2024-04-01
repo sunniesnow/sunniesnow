@@ -82,7 +82,9 @@ Sunniesnow.Music = {
 		The modified implementation does not do exactly what it should do,
 		but it fixes the bug. */
 		// return (timeStamp - this.lastResumeTimeStamp) / 1000 + this.lastResumeTime;
-		this.updateCurrentTime();
+		if (!this.pausing) {
+			this.updateCurrentTime();
+		}
 		return this.currentTime;
 	}
 };
