@@ -1,6 +1,7 @@
 Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	
 	static async load() {
+		this.prepareColors();
 		this.statsBackgroundGeometry = this.createStatsGeometry();
 		this.comboBackgroundGeometry = this.createComboGeometry();
 		this.titleBackgroundGeometry = this.createTitleGeometry();
@@ -10,11 +11,34 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.accuracyBackgroundGeometry = this.createAccuracyGeometry();
 	}
 
+	static prepareColors() {
+		this.mainColor = 0xfbfbff;
+		this.mainContourColor = 0xaaaaaa;
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.shaderColors = {
+				fc: [0xffd55d, 0xfff2a6, 0xffd55d, 0xfff2a6],
+				fcs: [0xe4ffff, 0x94b7d0, 0xe4ffff, 0x94b7d0],
+				ap: [0x99ffee, 0x6688ff, 0xee77ff, 0xffffaa]
+			};
+			for (const key in this.shaderColors) {
+				this.shaderColors[key] = new Float32Array(
+					this.shaderColors[key].map(color => new PIXI.Color(color).toRgbArray()).flat()
+				);
+			}
+		} else {
+			this.plainColors = {
+				fc: 0xfef856,
+				fcs: 0xc9dcda,
+				ap: 0xee99ff
+			};
+		}
+	}
+
 	static createTitleGeometry() {
 		this.titleWidth = this.statsRadius * 4 + this.statsSeperation * 3;
 		this.titleHeight = Sunniesnow.game.settings.width / 22.5;
 		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0xfbfbff);
+		graphics.beginFill(this.mainColor);
 		graphics.arc(0, 0, this.titleHeight /2, Math.PI/2, -Math.PI/2);
 		graphics.lineTo(this.titleWidth, -this.titleHeight /2);
 		graphics.arc(this.titleWidth, 0, this.titleHeight /2, -Math.PI/2, Math.PI/2);
@@ -27,7 +51,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.difficultyNameWidth = this.titleWidth / 2;
 		this.difficultyWidth = this.titleWidth / 3;
 		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0xfbfbff);
+		graphics.beginFill(this.mainColor);
 		graphics.arc(0, 0, this.titleHeight /2, Math.PI/2, -Math.PI/2);
 		graphics.lineTo(this.titleWidth - this.difficultyWidth, -this.titleHeight /2);
 		graphics.lineTo(this.titleWidth - this.difficultyNameWidth, this.titleHeight /2);
@@ -46,11 +70,11 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.statsRadius = Sunniesnow.game.settings.width / 18.5;
 		this.statsSeperation = this.statsRadius / 4;
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.statsRadius / 15, 0xfbfbff, 1, 1);
-		graphics.beginFill(0xfbfbff, 1);
+		graphics.lineStyle(this.statsRadius / 15, this.mainColor, 1, 1);
+		graphics.beginFill(this.mainColor, 1);
 		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.statsRadius, 4, 0);
 		graphics.endFill();
-		graphics.lineStyle(this.statsRadius / 100, 0xaaaaaa, 1, 0);
+		graphics.lineStyle(this.statsRadius / 100, this.mainContourColor, 1, 0);
 		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.statsRadius, 4, 0);
 		return graphics.geometry;
 	}
@@ -58,11 +82,11 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	static createComboGeometry() {
 		this.comboRadius = Sunniesnow.game.settings.width / 14;
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.comboRadius / 15, 0xfbfbff, 1, 1);
-		graphics.beginFill(0xfbfbff, 1);
+		graphics.lineStyle(this.comboRadius / 15, this.mainColor, 1, 1);
+		graphics.beginFill(this.mainColor, 1);
 		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.comboRadius, 4, 0);
 		graphics.endFill();
-		graphics.lineStyle(this.comboRadius / 100, 0xaaaaaa, 1, 0);
+		graphics.lineStyle(this.comboRadius / 100, this.mainContourColor, 1, 0);
 		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.comboRadius, 4, 0);
 		return graphics.geometry;
 	}
@@ -71,7 +95,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.rankFrameGeometry = this.createRankFrameGeometry();
 		this.rankBackgroundGeometry = this.createRankBackgroundGeometry();
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
-			this.createApGeometry();
+			this.createApFcGeometry();
 		}
 	}
 
@@ -79,15 +103,15 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.rankRadius = Sunniesnow.game.settings.width / 8;
 		const innerRadius = this.rankRadius * 5/6;
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.rankRadius / 15, 0xfbfbff, 1, 0);
+		graphics.lineStyle(this.rankRadius / 15, this.mainColor, 1, 0);
 		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.rankRadius, 4, 0);
-		graphics.lineStyle(this.rankRadius / 30, 0xfbfbff, 1, 0);
+		graphics.lineStyle(this.rankRadius / 30, this.mainColor, 1, 0);
 		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, innerRadius, 4, 0);
 		graphics.beginFill(0xebfbff, 1);
 		const smallRadius = this.rankRadius / 8;
 		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, innerRadius - smallRadius, smallRadius, 4, 0);
 		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, -innerRadius + smallRadius, smallRadius, 4, 0);
-	graphics.endFill();
+		graphics.endFill();
 		return graphics.geometry;
 	}
 
@@ -99,8 +123,8 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		return graphics.geometry;
 	}
 
-	static createApGeometry() {
-		this.apVertexShader = `
+	static createApFcGeometry() {
+		this.apFcVertexShader = `
 			attribute vec2 aVertexPosition;
 			attribute vec3 aColor;
 
@@ -114,31 +138,26 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 				vColor = aColor;
 			}
 		`;
-		this.apFragmentShader = `
+		this.apFcFragmentShader = `
 			varying vec3 vColor;
 
 			void main() {
 				gl_FragColor = vec4(vColor, 1.0);
 			}
 		`;
-		this.apGeometry = new PIXI.Geometry();
-		this.apGeometry.addAttribute('aVertexPosition', new PIXI.Buffer(new Float32Array([
+		this.apFcGeometry = new PIXI.Geometry();
+		this.apFcGeometry.addAttribute('aVertexPosition', new PIXI.Buffer(new Float32Array([
 			this.rankRadius, 0,
 			0, this.rankRadius,
 			-this.rankRadius, 0,
 			0, -this.rankRadius
 		]), true), 2, false, PIXI.TYPES.FLOAT);
-		this.apGeometry.addAttribute('aColor', new PIXI.Buffer(new Float32Array([
-			...new PIXI.Color(0x99ffee).toRgbArray(),
-			...new PIXI.Color(0x6688ff).toRgbArray(),
-			...new PIXI.Color(0xee77ff).toRgbArray(),
-			...new PIXI.Color(0xffffaa).toRgbArray()
-		]), true), 3, false, PIXI.TYPES.FLOAT);
-		this.apGeometry.addIndex(new PIXI.Buffer(new Uint16Array([
+		this.apFcGeometry.addAttribute('aColor', new PIXI.Buffer(new Float32Array(12), true), 3, false, PIXI.TYPES.FLOAT);
+		this.apFcGeometry.addIndex(new PIXI.Buffer(new Uint16Array([
 			0, 1, 2,
 			0, 2, 3
 		]), true, true));
-		this.apShader = PIXI.Shader.from(this.apVertexShader, this.apFragmentShader);
+		this.apFcShader = PIXI.Shader.from(this.apFcVertexShader, this.apFcFragmentShader);
 	}
 
 	static createScoreGeometry() {
@@ -153,11 +172,11 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 			w/2+h/2, 0
 		]
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(h/10, 0xfbfbff, 1, 1);
-		graphics.beginFill(0xfbfbff, 1);
+		graphics.lineStyle(h/10, this.mainColor, 1, 1);
+		graphics.beginFill(this.mainColor, 1);
 		graphics.drawPolygon(path);
 		graphics.endFill();
-		graphics.lineStyle(h/40, 0xaaaaaa, 1, 0);
+		graphics.lineStyle(h/40, this.mainContourColor, 1, 0);
 		graphics.drawPolygon(path);
 		return graphics.geometry;
 	}
@@ -174,11 +193,11 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 			w / 2 + h / 2, 0
 		]
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(h / 10, 0xfbfbff, 1, 1);
-		graphics.beginFill(0xfbfbff, 1);
+		graphics.lineStyle(h / 10, this.mainColor, 1, 1);
+		graphics.beginFill(this.mainColor, 1);
 		graphics.drawPolygon(path);
 		graphics.endFill();
-		graphics.lineStyle(h / 40, 0xaaaaaa, 1, 0);
+		graphics.lineStyle(h / 40, this.mainContourColor, 1, 0);
 		graphics.drawPolygon(path);
 		return graphics.geometry;
 	}
@@ -320,15 +339,23 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.rank = new PIXI.Container();
 		this.rankBackground = new PIXI.Graphics(this.constructor.rankBackgroundGeometry);
 		this.rank.addChild(this.rankBackground);
-		if (Sunniesnow.game.level.apFcIndicator === 'ap' && Sunniesnow.game.settings.renderer === 'webgl') {
-			this.rankFrame = new PIXI.Mesh(this.constructor.apGeometry, this.constructor.apShader);
-			this.rankFrame.mask = new PIXI.Graphics(this.constructor.rankFrameGeometry);
-			this.rank.addChild(this.rankFrame);
-			this.rank.addChild(this.rankFrame.mask);
+		if (Sunniesnow.game.level.apFcIndicator) {
+			if (Sunniesnow.game.settings.renderer === 'webgl') {
+				this.constructor.apFcGeometry.getBuffer('aColor').data.set(
+					this.constructor.shaderColors[Sunniesnow.game.level.apFcIndicator]
+				);
+				this.rankFrame = new PIXI.Mesh(this.constructor.apFcGeometry, this.constructor.apFcShader);
+				this.rankFrame.mask = new PIXI.Graphics(this.constructor.rankFrameGeometry);
+				this.rank.addChild(this.rankFrame.mask);
+			} else {
+				this.rankFrame = new PIXI.Graphics(this.constructor.rankFrameGeometry);
+				this.rankFrame.tint = this.constructor.plainColors[Sunniesnow.game.level.apFcIndicator];
+			}
 		} else {
 			this.rankFrame = new PIXI.Graphics(this.constructor.rankFrameGeometry);
-			this.rank.addChild(this.rankFrame);
+			this.rankFrame.tint = this.constructor.mainColor;
 		}
+		this.rank.addChild(this.rankFrame);
 		this.rankText = new PIXI.Text(Sunniesnow.game.level.rank(), {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK',
 			fontSize: this.constructor.rankRadius / 1.5,
