@@ -25,7 +25,7 @@ Sunniesnow.ButtonResultRetry = class ButtonResultRetry extends Sunniesnow.Button
 		super.populate();
 		this.background = new PIXI.Graphics(this.constructor.geometry);
 		this.text = new PIXI.Text(this.constructor.text, {
-			fontFamily: 'Noto Sans Math,Noto Sans CJK',
+			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.constructor.radius / 4,
 			fill: '#43586e',
 			align: 'center'

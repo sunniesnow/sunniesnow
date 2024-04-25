@@ -6,9 +6,14 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 				'https://fastly.jsdelivr.net/gh/notofonts/math@gh-pages/fonts/NotoSansMath/full/ttf/NotoSansMath-Regular.ttf',
 				'Noto Sans Math'
 			),
-			Sunniesnow.Assets.loadFont(
+			// Firefox does not support ttc format
+			/*Sunniesnow.Assets.loadFont(
 				'https://fastly.jsdelivr.net/gh/notofonts/noto-cjk/Sans/OTC/NotoSansCJK-Regular.ttc',
-				'Noto Sans CJK'
+				'Noto Sans CJK TC'
+			)*/
+			Sunniesnow.Assets.loadFont(
+				'https://fastly.jsdelivr.net/gh/notofonts/noto-cjk/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Regular.otf',
+				'Noto Sans CJK TC'
 			)
 		]);
 	}
@@ -31,7 +36,7 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 		this.text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 30,
 			fill: 'white',
-			fontFamily: 'Noto Sans Math,Noto Sans CJK',
+			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			align: 'center'
 		});
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 1);
@@ -42,12 +47,12 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 		this.lastJudgement = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 45,
 			fill: 'yellow',
-			fontFamily: 'Noto Sans Math,Noto Sans CJK',
+			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			align: 'center'
 		});
 		this.earlyLate = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 45,
-			fontFamily: 'Noto Sans Math,Noto Sans CJK'
+			fontFamily: 'Noto Sans Math,Noto Sans CJK TC'
 		});
 		this.lastJudgement.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0);
 		this.addChild(this.lastJudgement);

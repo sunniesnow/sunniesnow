@@ -23,7 +23,7 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 	populate() {
 		super.populate();
 		const style = new PIXI.TextStyle({
-			fontFamily: 'HanWangShinSuMedium,YujiBoku,Noto Sans Math,Noto Sans CJK',
+			fontFamily: 'HanWangShinSuMedium,YujiBoku,Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.constructor.fontSize,
 			fill: 0xffffff,
 			align: 'center',
