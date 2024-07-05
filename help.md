@@ -234,17 +234,6 @@ if there are no other types of notes with higher priority.
 Setting this setting to `true` disables this mechanics
 (and reduces difficulty).
 
-##### Flick notes are direction-insensitive
-{:#direction-insensitive-flick}
-
-- **Setting id**: `direction-insensitive-flick`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to set whether flick notes are direction-insensitive.
-When this setting is set to `true`,
-you can hit flick notes with perfect judgement by flicking in any direction
-(reducing difficulty).
-
 ##### Hold notes lock the position of touch
 {:#locking-hold}
 
@@ -254,6 +243,58 @@ you can hit flick notes with perfect judgement by flicking in any direction
 When this setting is set to `true`,
 moving a touch point away from a hold note is regarded as releasing it
 (increasing difficulty).
+
+#### Flick windows
+
+##### Minimum distance
+{:#min-flick-distance}
+
+- **Setting id**: `min-flick-distance`.
+- **Possible values**: Any non-negative number.
+
+After a touch point hit a flick note,
+the touch point must move by a certain distance
+before the end of the bad judgement window
+(see [`judgement-windows`](#judgement-windows));
+otherwise, the flick note will be judged as a **miss**.
+This distance is defined as the value of this setting **times** the radius of the note
+(when the value of [`note-size`](#note-size) is one).
+
+When the touch point moves by more than this distance
+**while** being in the angle range specified by [`flick-angle-range`](#flick-angle-range),
+the flick note will be forced to release immediately.
+The judgement of a released flick note is explained in [`flick-angle-range`](#flick-angle-range).
+
+##### Maximum distance
+{:#max-flick-distance}
+
+- **Setting id**: `max-flick-distance`.
+- **Possible values**: Any non-negative number.
+
+A flick note is forced to release when the touch point that hit it
+moves by a certain distance.
+This distance is defined as the value of this setting **times** the radius of the note
+(when the value of [`note-size`](#note-size) is one).
+The judgement of a released flick note is explained in [`flick-angle-range`](#flick-angle-range).
+
+##### Angle range
+{:#flick-angle-range}
+
+- **Setting id**: `flick-angle-range`.
+- **Possible values**: Any number between 0 and 180 (inclusive).
+
+After a flick note is properly released,
+the direction of the displacement vector of the touch point that hit the flick note
+is compared to the direction of the flick note.
+
+If the angle between these two directions is less than the value of this setting (in degrees),
+then the flick note will be judged as a perfect or good,
+depending on the time when it was hit.
+This judgement is independent of the time when it was released,
+and is independent of the direction of the movement of the touch point.
+
+If the angle between these two directions is greater than the value of this setting (in degrees),
+then the flick note will be judged as a bad.
 
 ### Visual settings
 

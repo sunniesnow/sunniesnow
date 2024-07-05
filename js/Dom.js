@@ -144,8 +144,10 @@ Sunniesnow.Dom = {
 			offset: this.readValue('offset') / 1000,
 			lyrica5: this.readCheckbox('lyrica-5'),
 			noEarlyDrag: this.readCheckbox('no-early-drag'),
-			directionInsensitiveFlick: this.readCheckbox('direction-insensitive-flick'),
 			lockingHold: this.readCheckbox('locking-hold'),
+			minFlickDistance: this.readValue('min-flick-distance'),
+			maxFlickDistance: this.readValue('max-flick-distance'),
+			flickAngleRange: this.readValue('flick-angle-range') / 180 * Math.PI,
 
 			// visual settings
 			speed: this.readValue('speed'),
@@ -276,8 +278,10 @@ Sunniesnow.Dom = {
 		this.writeValue('offset', d('offset') * 1000);
 		this.writeCheckbox('lyrica-5', d('lyrica5'));
 		this.writeCheckbox('no-early-drag', d('noEarlyDrag'));
-		this.writeCheckbox('direction-insensitive-flick', d('directionInsensitiveFlick'));
 		this.writeCheckbox('locking-hold', d('lockingHold'));
+		this.writeValue('min-flick-distance', d('minFlickDistance'));
+		this.writeValue('max-flick-distance', d('maxFlickDistance'));
+		this.writeValue('flick-angle-range', d('flickAngleRange') / Math.PI * 180);
 
 		this.writeValue('speed', d('speed'));
 		this.writeValue('note-size', d('noteSize'));
