@@ -198,6 +198,8 @@ Sunniesnow.Dom = {
 			resumePreparationTime: this.readValue('resume-preparation-time'),
 			beginningPreparationTime: this.readValue('beginning-preparation-time'),
 			notesPriorityOverPause: this.readCheckbox('notes-priority-over-pause'),
+			pauseFullscreen: this.readCheckbox('pause-fullscreen'),
+			pauseBlur: this.readCheckbox('pause-blur'),
 			secondPause: this.readRadio('second-pause'),
 
 			// control settings
@@ -331,6 +333,8 @@ Sunniesnow.Dom = {
 		this.writeValue('resume-preparation-time', d('resumePreparationTime'));
 		this.writeValue('beginning-preparation-time', d('beginningPreparationTime'));
 		this.writeCheckbox('notes-priority-over-pause', d('notesPriorityOverPause'));
+		this.writeCheckbox('pause-fullscreen', d('pauseFullscreen'));
+		this.writeCheckbox('pause-blur', d('pauseBlur'));
 		this.writeRadio('second-pause', d('secondPause'));
 
 		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));

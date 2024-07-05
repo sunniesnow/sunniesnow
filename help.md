@@ -785,7 +785,7 @@ than the (start) time of the first event that appears in gameplay
 or the start position defined by [`start`](#start)
 (whichever is earlier).
 
-#### Pause button
+#### Pause
 
 ##### Notes have priority over the pause button
 {:#notes-priority-over-pause}
@@ -798,7 +798,29 @@ If a touch can potentially either a note or the pause button,
 then it will hit the note if this setting is `true`,
 otherwise it will hit the pause button.
 
-##### Function while pausing
+##### Automatically pause when toggling fullscreen
+{:#pause-fullscreen}
+
+- **Setting id**: `pause-fullscreen`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the game should be paused when toggling fullscreen.
+When it is `true`, the game will be paused when you toggle fullscreen.
+When it is `false`, the game will not be paused when you toggle fullscreen.
+
+##### Automatically pause when losing focus
+{:#pause-blur}
+
+- **Setting id**: `pause-blur`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the game should be paused when the window loses focus.
+On desktop, it means switching browser tab, minimizing the window, etc.
+On mobile, it means switching to another app, locking the screen, etc.
+When it is `true`, the game will be paused when it loses focus.
+When it is `false`, the game will not be paused when it loses focus.
+
+##### Function of the pause button while pausing
 {:#second-pause}
 
 - **Setting id**: `second-pause`.

@@ -521,7 +521,7 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Pause button</legend>
+		<legend>Pause</legend>
 
 		<div>
 			<input type="checkbox" id="notes-priority-over-pause">
@@ -529,7 +529,17 @@ description: Sunniesnow is a web rhythm game
 		</div>
 
 		<div>
-			Function while pausing:
+			<input type="checkbox" id="pause-fullscreen" checked>
+			<label for="pause-fullscreen">Automatically pause when toggling fullscreen</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="pause-blur" checked>
+			<label for="pause-blur">Automatically pause when losing focus</label>
+		</div>
+
+		<div>
+			Function of the pause button while pausing:
 			<input type="radio" name="second-pause" value="disabled" id="second-pause-disabled">
 			<label for="second-pause">Disabled</label>
 			<input type="radio" name="second-pause" value="resume" id="second-pause-resume" checked>

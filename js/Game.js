@@ -83,20 +83,28 @@ Sunniesnow.Game = class Game {
 				Sunniesnow.Music.pause();
 			}
 		};
-		window.addEventListener('blur', this.blurListener);
-		document.addEventListener('fullscreenchange', this.blurListener, true);
-		document.addEventListener('visibilitychange', this.blurListener);
-		document.addEventListener('pagehide', this.blurListener);
+		if (this.settings.pauseFullscreen) {
+			document.addEventListener('fullscreenchange', this.blurListener, true);
+		}
+		if (this.settings.pauseBlur) {
+			window.addEventListener('blur', this.blurListener);
+			document.addEventListener('visibilitychange', this.blurListener);
+			document.addEventListener('pagehide', this.blurListener);
+		}
 	}
 
 	removeWindowListeners() {
 		if (!this.blurListener) {
 			return;
 		}
-		window.removeEventListener('blur', this.blurListener);
-		document.removeEventListener('fullscreenchange', this.blurListener);
-		document.removeEventListener('visibilitychange', this.blurListener);
-		document.removeEventListener('pagehide', this.blurListener);
+		if (this.settings.pauseFullscreen) {
+			document.removeEventListener('fullscreenchange', this.blurListener);
+		}
+		if (this.settings.pauseBlur) {
+			window.removeEventListener('blur', this.blurListener);
+			document.removeEventListener('visibilitychange', this.blurListener);
+			document.removeEventListener('pagehide', this.blurListener);
+		}
 	}
 
 	initPixiApp() {
