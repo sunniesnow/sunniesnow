@@ -18,6 +18,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.textStyle = {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.fontSize,
+			lineHeight: this.fontSize,
 			fill: this.COLOR
 		};
 		this.samplesDiagramHeight = Sunniesnow.game.settings.height / 4;
@@ -190,7 +191,10 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	}
 
 	createText() {
-		this.text = new PIXI.Text(this.getTextContents(), {...this.constructor.textStyle});
+		const style = {...this.constructor.textStyle};
+		const text = this.getTextContents();
+		style.fontSize = style.lineHeight = (Sunniesnow.game.settings.height - this.constructor.samplesDiagramHeight) / Sunniesnow.Utils.countLines(text);
+		this.text = new PIXI.Text(text, style);
 		this.text.y = this.constructor.samplesDiagramHeight;
 		this.allContents.addChild(this.text);
 	}
@@ -212,20 +216,22 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	}
 
 	getTextContents() {
-		return `Judgement time windows: ${Sunniesnow.game.settings.judgementWindows}
-Note hit size: ${Sunniesnow.game.settings.noteHitSize}
-Offset: ${Sunniesnow.game.settings.offset}
-Lyrica 5 mechanics: ${Sunniesnow.game.settings.lyrica5}
-Drag notes cannot be hit early: ${Sunniesnow.game.settings.noEarlyDrag}
-Flick notes are direction-insensitive: ${Sunniesnow.game.settings.directionInsensitiveFlick}
-Hold notes lock the position of touch: ${Sunniesnow.game.settings.lockingHold}
-Autoplay: ${Sunniesnow.game.settings.autoplay}
-Chart offset: ${Sunniesnow.game.settings.chartOffset}
-Speed (of music): ${Sunniesnow.game.settings.gameSpeed}
-Horizontal flip: ${Sunniesnow.game.settings.horizontalFlip}
-Vertical flip: ${Sunniesnow.game.settings.verticalFlip}
-Start: ${Sunniesnow.game.settings.start}
-End: ${Sunniesnow.game.settings.end}
+		return `judgement-windows: ${Sunniesnow.game.settings.judgementWindows}
+note-hit-size: ${Sunniesnow.game.settings.noteHitSize}
+offset: ${Sunniesnow.game.settings.offset}
+lyrica-5: ${Sunniesnow.game.settings.lyrica5}
+no-early-drag: ${Sunniesnow.game.settings.noEarlyDrag}
+locking-hold: ${Sunniesnow.game.settings.lockingHold}
+min-flick-distance: ${Sunniesnow.game.settings.minFlickDistance}
+max-flick-distance: ${Sunniesnow.game.settings.maxFlickDistance}
+flick-angle-range: ${Sunniesnow.game.settings.flickAngleRange}
+autoplay: ${Sunniesnow.game.settings.autoplay}
+chart-offset: ${Sunniesnow.game.settings.chartOffset}
+game-speed: ${Sunniesnow.game.settings.gameSpeed}
+horizontal-flip: ${Sunniesnow.game.settings.horizontalFlip}
+vertical-flip: ${Sunniesnow.game.settings.verticalFlip}
+start: ${Sunniesnow.game.settings.start}
+end: ${Sunniesnow.game.settings.end}
 
 Artist: ${Sunniesnow.game.chart.artist}
 Charter: ${Sunniesnow.game.chart.charter}

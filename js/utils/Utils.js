@@ -476,6 +476,10 @@ Sunniesnow.Utils = {
 			return `${family},Cambria,MicroSoft YaHei`;
 		}
 		return family;
+	},
+
+	countLines(string) {
+		return string.split('\n').length;
 	}
 
 };
