@@ -1,7 +1,8 @@
 Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
 	
-	constructor(priority = 150) {
-		super(() => Sunniesnow.Music.togglePausing(), priority);
+	constructor(pauseBoard, priority = 150) {
+		super(() => this.theOnTrigger(), priority);
+		this.pauseBoard = pauseBoard;
 	}
 	
 	onTouchStart(touch) {
@@ -31,6 +32,23 @@ Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
 				break;
 		}
 		return super.onTouchStart(touch);
+	}
+
+	theOnTrigger() {
+		if (!Sunniesnow.Music.pausing || Sunniesnow.game.level.finished) {
+			Sunniesnow.Music.togglePausing();
+			return;
+		}
+		switch (Sunniesnow.game.settings.secondPause) {
+			case 'resume':
+				Sunniesnow.Music.resume();
+				break;
+			case 'disabled':
+				break;
+			case 'toggle-ui':
+				this.pauseBoard.hiddenByPauseButton = !this.pauseBoard.hiddenByPauseButton;
+				break;
+		}
 	}
 
 };

@@ -44,6 +44,9 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	update(delta) {
+		if (Sunniesnow.game.settings.hideDebugExceptPause) {
+			this.visible = Sunniesnow.Music.pausing;
+		}
 		this.updateEarlyLateTexts(delta);
 		this.updateTouchAreas(delta);
 	}

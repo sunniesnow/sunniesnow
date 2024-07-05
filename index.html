@@ -521,11 +521,21 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Priorities</legend>
+		<legend>Pause button</legend>
 
 		<div>
 			<input type="checkbox" id="notes-priority-over-pause">
 			<label for="notes-priority-over-pause">Notes have priority over the pause button</label>
+		</div>
+
+		<div>
+			Function while pausing:
+			<input type="radio" name="second-pause" value="disabled" id="second-pause-disabled">
+			<label for="second-pause">Disabled</label>
+			<input type="radio" name="second-pause" value="resume" id="second-pause-resume" checked>
+			<label for="second-pause">Resume</label>
+			<input type="radio" name="second-pause" value="toggle-ui" id="second-pause-toggle-ui">
+			<label for="second-pause">Toggle pause UI</label>
 		</div>
 	</fieldset>
 </details>
@@ -707,6 +717,11 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="checkbox" id="debug">
 			<label for="debug">Enable debug mode</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="hide-debug-except-pause">
+			<label for="hide-debug-except-pause">Hide debug UI except in pause</label>
 		</div>
 
 		<div>

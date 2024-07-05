@@ -785,7 +785,7 @@ than the (start) time of the first event that appears in gameplay
 or the start position defined by [`start`](#start)
 (whichever is earlier).
 
-#### Priorities
+#### Pause button
 
 ##### Notes have priority over the pause button
 {:#notes-priority-over-pause}
@@ -797,6 +797,23 @@ This setting is used to set whether the notes should have priority over the paus
 If a touch can potentially either a note or the pause button,
 then it will hit the note if this setting is `true`,
 otherwise it will hit the pause button.
+
+##### Function while pausing
+{:#second-pause}
+
+- **Setting id**: `second-pause`.
+- **Possible values**: `disabled`, `resume`, `toggle-ui`.
+
+This setting is used to set the function of the pause button when the game is already paused.
+When it is `disabled`,
+the pause button does nothing when the game is already paused.
+When it is `resume`,
+the game will resume when the pause button is hit when the game is already paused.
+When it is `toggle-ui`,
+the pause button will toggle the visibility of the pause UI (the three big buttons)
+when the game is already paused.
+This setting does **not** affect the function of the pause button
+when the level is finished.
 
 ### Control settings
 
@@ -1184,6 +1201,17 @@ or the power consumption is **not** certain.
 
 If it is `true`, the game will be in debug mode.
 The game will show more information on UI in debug mode.
+
+##### Hide debug UI except in pause
+{:#hide-debug-except-pause}
+
+- **Setting id**: `hide-debug-except-pause`.
+- **Possible values**: `true`, `false`.
+
+This setting is **only** useful when [`debug`](#debug) is `true`.
+
+If this setting is `true`, the debug UI will be hidden except when the game is paused.
+If it is `false`, the debug UI will be shown all the time.
 
 ##### Suppress warnings
 

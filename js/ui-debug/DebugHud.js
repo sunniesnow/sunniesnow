@@ -19,6 +19,9 @@ Sunniesnow.DebugHud = class DebugHud extends Sunniesnow.UiComponent {
 
 	update(delta, data) {
 		super.update(delta);
+		if (Sunniesnow.game.settings.hideDebugExceptPause) {
+			this.visible = Sunniesnow.Music.pausing;
+		}
 		this.text.text = Sunniesnow.Utils.stringify(data);
 	}
 

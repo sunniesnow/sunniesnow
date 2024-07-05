@@ -198,6 +198,7 @@ Sunniesnow.Dom = {
 			resumePreparationTime: this.readValue('resume-preparation-time'),
 			beginningPreparationTime: this.readValue('beginning-preparation-time'),
 			notesPriorityOverPause: this.readCheckbox('notes-priority-over-pause'),
+			secondPause: this.readRadio('second-pause'),
 
 			// control settings
 			enableKeyboard: this.readCheckbox('enable-keyboard'),
@@ -224,6 +225,7 @@ Sunniesnow.Dom = {
 			antialias: this.readCheckbox('antialias'),
 			powerPreference: this.readRadio('power-preference'),
 			debug: this.readCheckbox('debug'),
+			hideDebugExceptPause: this.readCheckbox('hide-debug-except-pause'),
 			suppressWarnings: this.readCheckbox('suppress-warnings')
 		}
 		this.readCustomJudgementWindowsSettings();
@@ -329,6 +331,7 @@ Sunniesnow.Dom = {
 		this.writeValue('resume-preparation-time', d('resumePreparationTime'));
 		this.writeValue('beginning-preparation-time', d('beginningPreparationTime'));
 		this.writeCheckbox('notes-priority-over-pause', d('notesPriorityOverPause'));
+		this.writeRadio('second-pause', d('secondPause'));
 
 		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));
 		this.writeCheckbox('keyboard-whole-screen', d('keyboardWholeScreen'));
@@ -362,6 +365,7 @@ Sunniesnow.Dom = {
 		this.writeCheckbox('float-as-fullscreen', d('floatAsFullscreen'));
 		this.writeCheckbox('avoid-downloading-fonts', d('avoidDownloadingFonts'));
 		this.writeCheckbox('debug', d('debug'));
+		this.writeCheckbox('hide-debug-except-pause', d('hideDebugExceptPause'));
 		this.writeCheckbox('suppress-warnings', d('suppressWarnings'));
 
 		for (const noteType of ['tap', 'drag', 'hold', 'flick']) {

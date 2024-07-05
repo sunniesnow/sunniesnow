@@ -16,14 +16,14 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.topLeftHud = new Sunniesnow.TopLeftHud();
 		this.topRightHud = new Sunniesnow.TopRightHud();
 		this.topCenterHud = new Sunniesnow.TopCenterHud();
-		this.pauseButton = new Sunniesnow.ButtonPause();
+		this.pauseBoard = new Sunniesnow.PauseBoard(this);
+		this.pauseButton = new Sunniesnow.ButtonPause(this.pauseBoard);
 		this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard();
 		this.doubleLinesBoard = new Sunniesnow.DoubleLinesBoard();
 		if (!Sunniesnow.game.settings.hideTipPoints) {
 			this.tipPointsBoard = new Sunniesnow.TipPointsBoard();
 		}
 		this.fxBoard = new Sunniesnow.FxBoard();
-		this.pauseBoard = new Sunniesnow.PauseBoard(this);
 		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.doubleLinesBoard, this.debugBoard);
 		this.addChild(this.background);
 		this.addChild(this.progressBar);
