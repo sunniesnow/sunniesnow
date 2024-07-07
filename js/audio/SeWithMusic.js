@@ -1,5 +1,11 @@
 Sunniesnow.SeWithMusic = class SeWithMusic {
 	constructor() {
+		this.allEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.Note);
+		if (Sunniesnow.game.progressAdjustable) {
+			// e.time instead of e.time - Sunniesnow.Config.uiPreparationTime
+			// because we want update() to handle hitSe() correctly.
+			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.time, e => e.endTime());
+		}
 		this.clear();
 	}
 
@@ -8,7 +14,7 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 		Sunniesnow.SeFlick.stop();
 		Sunniesnow.SeHold.stop();
 		Sunniesnow.SeDrag.stop();
-		this.unhitEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.Note);
+		this.unhitEvents = this.allEvents.slice();
 		this.holdingEvents = [];
 	}
 
@@ -20,9 +26,9 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 				break;
 			}
 			this.holdingEvents.push(this.unhitEvents.shift());
-			this.holdingEvents.sort((a, b) => a.endTime() - b.endTime());
 			event.hitSe(event.time - time);
 		}
+		this.holdingEvents.sort((a, b) => a.endTime() - b.endTime());
 		while (this.holdingEvents.length > 0) {
 			const event = this.holdingEvents[0];
 			if (time < event.endTime() - Sunniesnow.Config.uiPreparationTime) {
@@ -31,5 +37,13 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 			this.holdingEvents.shift();
 			event.releaseSe(event.endTime() - time);
 		}
+	}
+
+	adjustProgress(time) {
+		time -= Sunniesnow.Music.delay();
+		this.unhitEvents = this.allEvents.slice(
+			Sunniesnow.Utils.bisectLeft(this.allEvents, event => event.time - Sunniesnow.Config.uiPreparationTime - time)
+		);
+		this.holdingEvents = this.timeline[Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)].events.slice();
 	}
 };

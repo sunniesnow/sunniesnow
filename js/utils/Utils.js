@@ -480,6 +480,97 @@ Sunniesnow.Utils = {
 
 	countLines(string) {
 		return string.split('\n').length;
+	},
+
+	// If there no match, return the next index.
+	// Less than all: return 0. Greater than all: return array.length.
+	// Empty: return 0.
+	bisectLeft(array, compareFn, low = 0, high = array.length) {
+		if (typeof compareFn !== 'function') {
+			const value = compareFn;
+			compareFn = e => e < value ? -1 : e > value ? 1 : 0;
+		}
+		while (low < high) {
+			const mid = low + high >>> 1;
+			const compare = compareFn(array[mid]);
+			if (compare === 0) {
+				return mid;
+			} else if (compare < 0) {
+				low = mid + 1;
+			} else {
+				high = mid;
+			}
+		}
+		return low;
+	},
+
+	// If there no match, return the previous index.
+	// Less than all: return -1. Greater than all: return array.length - 1.
+	// Empty: return -1.
+	bisectRight(array, compareFn, low = 0, high = array.length) {
+		if (typeof compareFn !== 'function') {
+			const value = compareFn;
+			compareFn = e => e < value ? -1 : e > value ? 1 : 0;
+		}
+		while (low < high) {
+			const mid = low + high >>> 1;
+			const compare = compareFn(array[mid]);
+			if (compare === 0) {
+				return mid;
+			} else if (compare < 0) {
+				low = mid + 1;
+			} else {
+				high = mid;
+			}
+		}
+		return high - 1;
+	},
+
+	// Returns [a - b, b - a].
+	// Not the best algorithm, but should be fast enough.
+	bidirectionalSetMinus(a, b) {
+		aMinusB = [];
+		for (const e of a) {
+			if (!b.includes(e)) {
+				aMinusB.push(e);
+			}
+		}
+		bMinusA = [];
+		for (const e of b) {
+			if (!a.includes(e)) {
+				bMinusA.push(e);
+			}
+		}
+		return [aMinusB, bMinusA];
+	},
+
+	// events: an array of objects; each of them is understood as an event.
+	// beginFn: maps an event to its begin time.
+	// endFn: maps an event to its end time.
+	// Returns an array of objects `{time:, events:}`,
+	// where `events` is the array of events (sorted by begin time) that is active since `time`.
+	eventsTimeline(events, beginFn, endFn) {
+		const instants = [];
+		events.forEach(event => {
+			const begin = beginFn(event);
+			const end = endFn(event);
+			if (begin < end) {
+				instants.push({time: begin, event, appear: true});
+				instants.push({time: end, event, appear: false});
+			}
+		});
+		instants.sort((a, b) => a.time - b.time);
+		result = [{time: -Infinity, events: []}];
+		for (const {time, event, appear} of instants) {
+			let {time: lastTime, events} = result[result.length - 1];
+			if (time !== lastTime) {
+				events = events.slice();
+				result.push({time, events});
+			}
+			appear ? events.push(event) : events.splice(events.indexOf(event), 1);
+		}
+		return result;
 	}
+
 
 };

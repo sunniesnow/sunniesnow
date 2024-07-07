@@ -73,10 +73,7 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 	}
 
 	updateLastJudgement() {
-		let hidden = !Sunniesnow.game.level.lastJudgement;
-		hidden ||= Sunniesnow.game.level.lastJudgement === "miss";
-		hidden ||= !Sunniesnow.game.settings.lyrica5 && Sunniesnow.game.level.lastJudgement === "bad";
-		if (hidden) {
+		if (Sunniesnow.game.level.combo === 0) {
 			this.text.visible = false;
 			this.lastJudgement.visible = false;
 			this.earlyLate.visible = false;

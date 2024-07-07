@@ -6,10 +6,25 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		this.type = event.constructor.TYPE_NAME;
 		this.time = event.time + Sunniesnow.game.settings.offset;
 		this.endTime = this.time + (event.duration || 0);
+		this.clear();
+	}
+
+	clear() {
 		this.hitRelativeTime = null;
 		this.releaseRelativeTime = null;
 		this.judgement = null;
 		this.earlyLate = null;
+		this.touch = null;
+		this.holding = false;
+		this.needsToUpdateHolding = true;
+	}
+
+	// Only used for progress adjustment
+	clearReleased() {
+		this.hitRelativeTime = 0;
+		this.releaseRelativeTime = this.endTime - this.time;
+		this.judgement = 'perfect';
+		this.earlyLate = 0;
 		this.touch = null;
 		this.holding = false;
 		this.needsToUpdateHolding = true;
@@ -33,14 +48,19 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		return Math.abs(this.event.x - x) < r && Math.abs(this.event.y - y) < r;
 	}
 
-	hit(touch, time) {
+	// Hit without processing (see processHit()) or event dispatching
+	dryHit(time) {
 		this.hitRelativeTime = time - this.time;
 		this.holding = true;
-		this.processHit(touch, time);
 		this.determineEarlyLate();
 		Sunniesnow.game.level.holdingNotes.push(this);
 		Sunniesnow.game.level.holdingNotes.sort((a, b) => a.endTime - b.endTime);
 		Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
+	}
+
+	hit(touch, time) {
+		this.dryHit(time);
+		this.processHit(touch, time);
 		this.dispatchEvent(new Event('hit'));
 	}
 

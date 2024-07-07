@@ -15,6 +15,7 @@ Sunniesnow.Game = class Game {
 		Sunniesnow.Utils.clearWarningsAndErrors();
 		Sunniesnow.game = new this();
 		Sunniesnow.Loader.load();
+		Sunniesnow.game.progressAdjustable = true; // TODO
 		Sunniesnow.game.start();
 		Sunniesnow.game.app.ticker.add(Sunniesnow.game.mainTicker.bind(Sunniesnow.game));
 	}

@@ -25,15 +25,37 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 	}
 
 	addEventListeners() {
-		this.levelNote.addEventListener('release', event => this.fxBoard.addFx(this));
-		if (this.levelNote instanceof Sunniesnow.LevelHold) {
-			this.levelNote.addEventListener('hit', event => this.fxBoard.addFx(this));
+		this.removeEventListeners();
+		this.listenerForFx = event => this.fxBoard.addFx(this);
+		this.levelNote.addEventListener('release', this.listenerForFx);
+		if (this.levelNote instanceof Sunniesnow.LevelHold && !Sunniesnow.game.settings.hideFxHoldStart) {
+			this.levelNote.addEventListener('hit', this.listenerForFx);
 		}
-		this.levelNote.addEventListener('miss', event => this.fxBoard.addFx(this));
+		this.levelNote.addEventListener('miss', this.listenerForFx);
 		if (!Sunniesnow.game.settings.autoplay && Sunniesnow.game.settings.debug) {
+			this.listenerForDebug = event => this.debugBoard.createEarlyLateText(this);
 			const type = this.levelNote instanceof Sunniesnow.LevelDrag ? 'release' : 'hit'
-			this.levelNote.addEventListener(type, event => this.debugBoard.createEarlyLateText(this));
+			this.levelNote.addEventListener(type, this.listenerForDebug);
 		}
+	}
+
+	removeEventListeners() {
+		if (this.listenerForFx) {
+			this.levelNote.removeEventListener('release', this.listenerForFx);
+			if (this.levelNote instanceof Sunniesnow.LevelHold && !Sunniesnow.game.settings.hideFxHoldStart) {
+				this.levelNote.removeEventListener('hit', this.listenerForFx);
+			}
+			this.levelNote.removeEventListener('miss', this.listenerForFx);
+		}
+		if (this.listenerForDebug) {
+			const type = this.levelNote instanceof Sunniesnow.LevelDrag ? 'release' : 'hit'
+			this.levelNote.removeEventListener(type, this.listenerForDebug);
+		}
+	}
+
+	destroy(options) {
+		this.removeEventListeners();
+		super.destroy(options);
 	}
 
 };

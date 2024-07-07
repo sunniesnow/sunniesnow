@@ -70,16 +70,24 @@ Sunniesnow.Event = class Event {
 		this.simultaneousEvents = [this];
 	}
 
+	uiClass() {
+		return Sunniesnow[this.constructor.UI_CLASS];
+	}
+
 	appearTime() {
-		return this.time - Sunniesnow[this.constructor.UI_CLASS].FADING_IN_DURATION;
+		return this.time - (this.uiClass().FADING_IN_DURATION || 0);
 	}
 
 	endTime() {
 		return this.time + (this.duration || 0);
 	}
 
-	newUiEvent(fxBoard, doubleLinesBoard, debugBoard) {
-		return new Sunniesnow[this.constructor.UI_CLASS](this, fxBoard, debugBoard);
+	disappearTime() {
+		return this.endTime() + (this.uiClass().FADING_OUT_DURATION || 0);
+	}
+
+	newUiEvent(fxBoard, debugBoard) {
+		return new (this.uiClass())(this, fxBoard, debugBoard);
 	}
 
 	checkProperties() {

@@ -2,6 +2,8 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 
 	constructor() {
 		super();
+		this.allEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.BgPattern)
+		this.allEvents.sort((a, b) => a.appearTime() - b.appearTime());
 		this.clear();
 		if (Sunniesnow.game.settings.horizontalFlip) {
 			this.scale.x = -1;
@@ -12,9 +14,12 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 	}
 
 	clear() {
-		this.unappearedEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.BgPattern)
-		this.unappearedEvents.sort((a, b) => a.appearTime() - b.appearTime());
+		this.unappearedEvents = this.allEvents.slice();
 		this.uiEvents ||= [];
+		this.removeAll();
+	}
+
+	removeAll() {
 		while (this.uiEvents.length > 0) {
 			const uiEvent = this.uiEvents.shift();
 			uiEvent.destroy({children: true});
@@ -52,6 +57,25 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 			}
 		} else if (index === 0 && this.children.indexOf(this.uiEvents[0]) === -1) {
 			this.addChild(this.uiEvents[index]);
+		}
+	}
+
+	adjustProgress(time) {
+		this.removeAll();
+		let index = Sunniesnow.Utils.bisectLeft(this.allEvents, event => event.appearTime() - time);
+		let event = this.allEvents[index - 1];
+		if (!event || event.disappearTime() < time) {
+			event = this.allEvents[index];
+			if (!event || event.appearTime() - Sunniesnow.Config.uiPreparationTime > time) {
+				event = null;
+			} else {
+				index++;
+			}
+		}
+		this.unappearedEvents = this.allEvents.slice(index);
+		if (event) {
+			this.uiEvents = [event.newUiEvent()];
+			this.addChild(this.uiEvents[0]);
 		}
 	}
 

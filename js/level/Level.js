@@ -35,6 +35,10 @@ Sunniesnow.Level = class Level {
 		if (this.unhitNotes.length === 0) {
 			Sunniesnow.Utils.error('No notes in the chart');
 		}
+		if (Sunniesnow.game.progressAdjustable) {
+			this.allNotes = this.unhitNotes.slice();
+			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allNotes, e => e.time, e => e.endTime);
+		}
 		this.holdingNotes = [];
 	}
 
@@ -115,6 +119,34 @@ Sunniesnow.Level = class Level {
 	effectiveHits() {
 		const {perfect, good, bad, miss} = Sunniesnow.game.settings.lyrica5 ? Sunniesnow.Config.accuracies5 : Sunniesnow.Config.accuracies;
 		return this.perfect * perfect + this.good * good + this.bad * bad + this.miss * miss;
+	}
+
+	// time travel!
+	adjustProgress(time) {
+		const index = Sunniesnow.Utils.bisectLeft(this.allNotes, note => note.time - time);
+		this.unhitNotes = this.allNotes.slice(index);
+		for (let i = 0; i < index; i++) {
+			this.allNotes[i].clearReleased();
+		}
+		this.unhitNotes.forEach(note => note.clear());
+		this.holdingNotes = [];
+		this.timeline[
+			Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)
+		].events.forEach(note => {
+			note.clear();
+			note.dryHit(note.time); // this adds note to this.holdingNotes.
+		});
+		this.perfect = this.combo = this.maxCombo = this.notesCount - this.unhitNotes.length - this.holdingNotes.length;
+		this.inaccuracies = new Array(this.combo).fill(0);
+		for (let i = 0; i < index; i++) {
+			if (!this.holdingNotes.includes(this.allNotes[index - 1 - i])) {
+				this.lastJudgedNote = this.allNotes[index - 1 - i];
+				this.lastJudgement = 'perfect';
+				return;
+			}
+		}
+		this.lastJudgedNote = null;
+		this.lastJudgement = null;
 	}
 
 	update() {

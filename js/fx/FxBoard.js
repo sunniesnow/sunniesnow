@@ -35,9 +35,6 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		if (judgement === 'perfect' && Sunniesnow.game.settings.hideFxPerfect) {
 			return;
 		}
-		if (uiNote instanceof Sunniesnow.UiHold && !levelNote.judgement && Sunniesnow.game.settings.hideFxHoldStart) {
-			return;
-		}
 		const fx = uiNote.newFx(uiNote);
 		if (Sunniesnow.game.settings.reverseNoteOrder) {
 			this.addChildAt(fx, 0);

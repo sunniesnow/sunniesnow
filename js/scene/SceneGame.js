@@ -24,7 +24,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.tipPointsBoard = new Sunniesnow.TipPointsBoard();
 		}
 		this.fxBoard = new Sunniesnow.FxBoard();
-		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.doubleLinesBoard, this.debugBoard);
+		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.debugBoard);
 		this.addChild(this.background);
 		this.addChild(this.progressBar);
 		this.addChild(this.uiBgPatternBoard);
@@ -164,6 +164,21 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			case 'accuracy':
 				return Sunniesnow.game.level.accuracyText();
 		}
+	}
+
+	adjustProgress(time) {
+		Sunniesnow.Music.play(time);
+		this.uiBgPatternBoard.adjustProgress(time);
+		this.uiBgNotesBoard.adjustProgress(time);
+		this.doubleLinesBoard.adjustProgress(time);
+		this.uiNotesBoard.adjustProgress(time);
+		if (!Sunniesnow.game.settings.hideTipPoints) {
+			this.tipPointsBoard.adjustProgress(time);
+		}
+		if (Sunniesnow.game.settings.seWithMusic) {
+			this.seWithMusic.adjustProgress(time);
+		}
+		Sunniesnow.game.level.adjustProgress(time);
 	}
 
 };

@@ -1,24 +1,36 @@
 Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	constructor() {
 		super();
-		this.clear();
-	}
-
-	clear() {
-		this.events = Sunniesnow.game.chart.events.filter(event => event.tipPoint !== null && event.tipPoint !== undefined);
-		this.unappearedTipPointHeads = new Map();
+		// [{id, events}, ...], sorted by events[0].time
+		this.allTipPointHeads = new Map();
 		for (const event of Sunniesnow.game.chart.events) {
 			if (event.tipPoint === null || event.tipPoint === undefined) {
 				continue;
 			}
-			if (this.unappearedTipPointHeads.has(event.tipPoint)) {
-				this.unappearedTipPointHeads.get(event.tipPoint).push(event);
+			if (this.allTipPointHeads.has(event.tipPoint)) {
+				this.allTipPointHeads.get(event.tipPoint).push(event);
 			} else {
-				this.unappearedTipPointHeads.set(event.tipPoint, [event]);
+				this.allTipPointHeads.set(event.tipPoint, [event]);
 			}
 		}
-		this.unappearedTipPointHeads = Array.from(this.unappearedTipPointHeads);
+		this.allTipPointHeads = Array.from(this.allTipPointHeads.entries().map(([id, events]) => ({id, events})));
+		if (Sunniesnow.game.progressAdjustable) {
+			this.timeline = Sunniesnow.Utils.eventsTimeline(
+				this.allTipPointHeads,
+				e => e.events[0].time - Sunniesnow.Config.uiPreparationTime,
+				e => e.events[e.events.length - 1].time + Sunniesnow.TipPoint.ZOOMING_OUT_DURATION
+			);
+		}
+		this.clear();
+	}
+
+	clear() {
+		this.unappearedTipPointHeads = this.allTipPointHeads.slice();
 		this.tipPoints ||= {};
+		this.removeAll();
+	}
+
+	removeAll() {
 		for (const id in this.tipPoints) {
 			const tipPoint = this.tipPoints[id];
 			tipPoint.destroy({children: true});
@@ -28,8 +40,9 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	}
 
 	addNewTipPoints(time) {
-		while (this.unappearedTipPointHeads.length > 0 && time >= this.unappearedTipPointHeads[0][1][0].time - Sunniesnow.Config.uiPreparationTime) {
-			this.add(...this.unappearedTipPointHeads.shift());
+		while (this.unappearedTipPointHeads.length > 0 && time >= this.unappearedTipPointHeads[0].events[0].time - Sunniesnow.Config.uiPreparationTime) {
+			const {id, events} = this.unappearedTipPointHeads.shift();
+			this.add(id, events);
 		}
 	}
 
@@ -51,5 +64,15 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	add(id, events) {
 		this.tipPoints[id] = new Sunniesnow.TipPoint(events);
 		this.addChild(this.tipPoints[id]);
+	}
+
+	adjustProgress(time) {
+		this.unappearedTipPointHeads = this.allTipPointHeads.slice(
+			Sunniesnow.Utils.bisectLeft(this.allTipPointHeads, e => e.events[0].time - Sunniesnow.Config.uiPreparationTime - time)
+		);
+		this.removeAll();
+		this.timeline[Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)].events.forEach(
+			({id, events}) => this.add(id, events)
+		);
 	}
 }
