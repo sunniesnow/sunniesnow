@@ -190,6 +190,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.seWithMusic.adjustProgress(time);
 		}
 		Sunniesnow.game.level.adjustProgress(time);
+		if (method === 'pause') {
+			this.pauseBoard.hiddenByPauseButton = Sunniesnow.game.settings.hidePauseUi;
+		}
 	}
 
 };
