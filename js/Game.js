@@ -59,7 +59,9 @@ Sunniesnow.Game = class Game {
 		this.canvasContextMenuListener = event => {
 			if (!Sunniesnow.Music.pausing && !this.level.finished) {
 				event.preventDefault();
+				return;
 			}
+			Sunniesnow.TouchManager.clear();
 		};
 		this.canvas.addEventListener('contextmenu', this.canvasContextMenuListener);
 		Sunniesnow.Fullscreen.addListenerToCanvas();

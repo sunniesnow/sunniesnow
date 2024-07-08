@@ -8,6 +8,9 @@ Sunniesnow.TouchManager = {
 	endListeners: [],
 
 	clear() {
+		for (const id in this.touches) {
+			this.onEnd(this.touches[id]);
+		}
 		this.touches = {};
 		this.touchEffectsBoard?.clear();
 	},
