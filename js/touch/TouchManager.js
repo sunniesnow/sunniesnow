@@ -118,6 +118,7 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreMouse(event)) {
 			return;
 		}
+		document.activeElement.blur(); // see preventKeyEventIfShould
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const id = this.mouseButtonId(event.button);
 		const touch = Sunniesnow.Touch.mouseButton(event.button, time, this.mousePageX, this.mousePageY);
@@ -169,6 +170,7 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreTouch(event)) {
 			return;
 		}
+		document.activeElement.blur(); // see preventKeyEventIfShould
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		for (const domTouch of event.changedTouches) {
 			const id = this.touchId(domTouch.identifier);
