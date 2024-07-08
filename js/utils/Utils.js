@@ -570,7 +570,9 @@ Sunniesnow.Utils = {
 			appear ? events.push(event) : events.splice(events.indexOf(event), 1);
 		}
 		return result;
+	},
+
+	average(array, fn = e => e) {
+		return array.reduce((sum, e) => sum + fn(e), 0) / array.length;
 	}
-
-
 };

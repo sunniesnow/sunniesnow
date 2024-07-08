@@ -3,6 +3,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		super.start();
 		this.populateUiAndBoards();
 		this.populateAudio();
+		if (Sunniesnow.game.progressAdjustable) {
+			Sunniesnow.ProgressControl.init(this);
+		}
 	}
 
 	populateUiAndBoards() {
@@ -59,10 +62,17 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	update(delta) {
 		super.update(delta);
 		this.updateAudio();
+		if (Sunniesnow.game.progressAdjustable) {
+			Sunniesnow.ProgressControl.update(delta);
+		}
 		this.updateUiComponents(delta);
+		this.updateBoards(delta);
 		if (!Sunniesnow.Music.pausing) {
 			Sunniesnow.game.level.update();
-			this.updateBoards(delta);
+			// The reason why fxBoard is not updated during pausing is because
+			// in Lyrica, fx stops when pausing.
+			// While I don't like this design, I'll make it this way.
+			this.fxBoard.update(delta);
 			if (Sunniesnow.game.level.finished) {
 				this.gotoResult();
 			}
@@ -102,12 +112,12 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 	}
 	
+	// except fxBoard
 	updateBoards(delta) {
 		this.uiBgPatternBoard.update(delta);
 		this.uiBgNotesBoard.update(delta);
 		this.doubleLinesBoard.update(delta);
 		this.uiNotesBoard.update(delta);
-		this.fxBoard.update(delta);
 		if (!Sunniesnow.game.settings.hideTipPoints) {
 			this.tipPointsBoard.update(delta);
 		}
@@ -166,8 +176,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 	}
 
-	adjustProgress(time) {
-		Sunniesnow.Music.play(time);
+	// method: seek | play | pause
+	adjustProgress(time, method = 'seek') {
+		Sunniesnow.Music[method](time);
 		this.uiBgPatternBoard.adjustProgress(time);
 		this.uiBgNotesBoard.adjustProgress(time);
 		this.doubleLinesBoard.adjustProgress(time);

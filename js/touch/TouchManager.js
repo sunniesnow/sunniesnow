@@ -1,6 +1,6 @@
 Sunniesnow.TouchManager = {
 
-	// format: {id: {id:, history: [{time:, x:, y:}, ...]}, ...}
+	// format: {id: {id:, history: [{time:, x:, y:, canvasX:, canvasY:}, ...]}, ...}
 	touches: {},
 
 	startListeners: [],

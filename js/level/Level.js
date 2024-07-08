@@ -219,23 +219,26 @@ Sunniesnow.Level = class Level {
 
 	touchEnd(touch) {
 		if (Sunniesnow.Music.pausing || this.finished) {
-			return;
+			return false;
 		}
 		const note = touch.note;
 		if (note) {
 			note.release(touch.end().time);
+			return true;
 		}
+		return false;
 	}
 
 	touchMove(touch) {
 		if (Sunniesnow.Music.pausing || this.finished) {
-			return;
+			return false;
 		}
 		const note = touch.note;
 		if (note?.holding) {
 			note.updateHolding(touch.end().time);
 		}
 		this.swipeDrags(touch);
+		return true;
 	}
 
 	touchStart(touch) {
@@ -252,7 +255,7 @@ Sunniesnow.Level = class Level {
 			}
 			if (Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows[note.type].bad)) {
 				note = this.tryHitNote(note, touch, time);
-				if (note?.constructor?.ONLY_ONE_PER_TOUCH) {
+				if (note?.constructor.ONLY_ONE_PER_TOUCH) {
 					return true;
 				} else {
 					i++;

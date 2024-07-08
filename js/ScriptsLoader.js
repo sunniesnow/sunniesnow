@@ -75,6 +75,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'audio/SeDrag',
 	'audio/SeWithMusic',
 
+	'touch/ProgressControl',
 	'touch/TouchEffectBase',
 	'touch/TouchEffect',
 	'touch/TouchEffectsBoard',

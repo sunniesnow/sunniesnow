@@ -16,8 +16,8 @@ Sunniesnow.Button = class Button extends PIXI.Container {
 	}
 
 	onTouchStart(touch) {
-		const {pageX, pageY} = touch.start();
-		return this.triggerIfContainsPage(pageX, pageY);
+		const {canvasX, canvasY} = touch.start();
+		return this.triggerIfContains(canvasX, canvasY);
 	}
 
 	removeTouchListener() {
@@ -45,11 +45,5 @@ Sunniesnow.Button = class Button extends PIXI.Container {
 			return true;
 		}
 		return false;
-	}
-
-	triggerIfContainsPage(x, y) {
-		return this.triggerIfContains(
-			...Sunniesnow.Utils.pageToCanvasCoordinates(x, y, Sunniesnow.game.canvas)
-		);
 	}
 };

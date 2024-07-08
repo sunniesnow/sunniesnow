@@ -51,16 +51,8 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.samples = Sunniesnow.game.level.inaccuracies;
 		this.sortedSamples = this.samples.toSorted((a, b) => a - b);
 		this.sampleCount = this.samples.length;
-		this.sampleMean = 0;
-		for (const sample of this.samples) {
-			this.sampleMean += sample;
-		}
-		this.sampleMean /= this.sampleCount;
-		this.sampleVariance = 0;
-		for (const sample of this.samples) {
-			this.sampleVariance += (sample - this.sampleMean)**2;
-		}
-		this.sampleVariance /= this.sampleCount;
+		this.sampleMean = Sunniesnow.Utils.average(this.samples);
+		this.sampleVariance = Sunniesnow.Utils.average(this.samples, x => (x - this.sampleMean)**2);
 		this.sampleSd = Math.sqrt(this.sampleVariance);
 	}
 

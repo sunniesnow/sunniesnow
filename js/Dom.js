@@ -189,6 +189,7 @@ Sunniesnow.Dom = {
 
 			// game settings
 			autoplay: this.readCheckbox('autoplay'),
+			progressAdjustable: this.readCheckbox('progress-adjustable'),
 			chartOffset: this.readValue('chart-offset') / 1000,
 			gameSpeed: this.readValue('game-speed'),
 			horizontalFlip: this.readCheckbox('horizontal-flip'),
@@ -200,6 +201,7 @@ Sunniesnow.Dom = {
 			notesPriorityOverPause: this.readCheckbox('notes-priority-over-pause'),
 			pauseFullscreen: this.readCheckbox('pause-fullscreen'),
 			pauseBlur: this.readCheckbox('pause-blur'),
+			hidePauseUi: this.readCheckbox('hide-pause-ui'),
 			secondPause: this.readRadio('second-pause'),
 
 			// control settings
@@ -324,6 +326,7 @@ Sunniesnow.Dom = {
 		this.writeValue('delay', d('delay') * 1000);
 
 		this.writeCheckbox('autoplay', d('autoplay'));
+		this.writeCheckbox('progress-adjustable', d('progressAdjustable'));
 		this.writeValue('chart-offset', d('chartOffset'));
 		this.writeValue('game-speed', d('gameSpeed'));
 		this.writeCheckbox('horizontal-flip', d('horizontalFlip'));
@@ -335,6 +338,7 @@ Sunniesnow.Dom = {
 		this.writeCheckbox('notes-priority-over-pause', d('notesPriorityOverPause'));
 		this.writeCheckbox('pause-fullscreen', d('pauseFullscreen'));
 		this.writeCheckbox('pause-blur', d('pauseBlur'));
+		this.writeCheckbox('hide-pause-ui', d('hidePauseUi'));
 		this.writeRadio('second-pause', d('secondPause'));
 
 		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));
@@ -657,6 +661,14 @@ Sunniesnow.Dom = {
 		listener();
 	},
 
+	associateCheckbox(checkboxId, inputId) {
+		const checkbox = document.getElementById(checkboxId);
+		const input = document.getElementById(inputId);
+		const listener = () => input.disabled = !checkbox.checked;
+		checkbox.addEventListener('change', listener);
+		listener();
+	},
+
 	setTextInput(elementId) {
 		const element = document.getElementById(elementId);
 		element.spellcheck = false;
@@ -697,6 +709,7 @@ Sunniesnow.Dom = {
 		this.associateRange('volume-music', 'volume-music-value');
 		this.associateRange('background-blur', 'background-blur-value');
 		this.associateRange('background-brightness', 'background-brightness-value');
+		this.associateCheckbox('autoplay', 'progress-adjustable');
 	},
 
 	clearDownloadingProgresses() {

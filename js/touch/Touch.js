@@ -16,14 +16,14 @@ Sunniesnow.Touch = class Touch {
 				this.identifier = options.identifier;
 				break;
 		}
-		const [x, y] = Sunniesnow.Config.pageMapping(pageX, pageY);
-		this.history = [{time, x, y, pageX, pageY}];
+		const [x, y, canvasX, canvasY] = Sunniesnow.Config.pageMapping(pageX, pageY);
+		this.history = [{time, x, y, canvasX, canvasY, pageX, pageY}];
 		this.finished = false;
 	}
 
 	move(time, pageX, pageY) {
-		const [x, y] = Sunniesnow.Config.pageMapping(pageX, pageY);
-		this.history.push({time, x, y, pageX, pageY});
+		const [x, y, canvasX, canvasY] = Sunniesnow.Config.pageMapping(pageX, pageY);
+		this.history.push({time, x, y, canvasX, canvasY, pageX, pageY});
 	}
 
 	start() {

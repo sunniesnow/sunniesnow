@@ -35,12 +35,19 @@ Sunniesnow.Music = {
 		}
 	},
 
-	pause() {
-		if (this.pausing) {
-			return false;
-		}
+	pause(time = null) {
 		this.stop();
-		return true;
+		if (time !== null) {
+			this.seek(time);
+		}
+	},
+
+	seek(time) {
+		if (this.pausing) {
+			this.lastResumeTime = this.currentTime = time;
+		} else {
+			this.play(time);
+		}
 	},
 
 	resume() {
@@ -61,6 +68,9 @@ Sunniesnow.Music = {
 	},
 
 	stop() {
+		if (this.pausing) {
+			return;
+		}
 		this.updateCurrentTime();
 		this.audio.stop();
 		this.pausing = true;

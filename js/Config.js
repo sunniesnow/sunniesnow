@@ -47,7 +47,7 @@ Sunniesnow.Config = {
 		return [x, y];
 	},
 
-	// Get coordinates on chart by providing the page coordinates.
+	// Get coordinates on chart and canvas by providing the page coordinates.
 	pageMapping(pageX, pageY) {
 		const [canvasX, canvasY] = Sunniesnow.Utils.pageToCanvasCoordinates(pageX, pageY, Sunniesnow.game.canvas);
 		const scale = this.scale();
@@ -59,7 +59,7 @@ Sunniesnow.Config = {
 		if (Sunniesnow.game.settings.verticalFlip) {
 			chartY = -chartY;
 		}
-		return [chartX, chartY];
+		return [chartX, chartY, canvasX, canvasY];
 	},
 
 	chartMappingAngle(angle) {

@@ -14,14 +14,14 @@ Sunniesnow.PauseBoard = class PauseBoard extends PIXI.Container {
 		this.addChild(this.fullscreen = new Sunniesnow.ButtonFullscreen(() => Sunniesnow.Fullscreen.toggle()));
 	}
 
-	triggerIfContainsPage(x, y) {
-		if (this.resume.triggerIfContainsPage(x, y)) {
+	triggerIfContains(x, y) {
+		if (this.resume.triggerIfContains(x, y)) {
 			return true;
 		}
-		if (this.retry.triggerIfContainsPage(x, y)) {
+		if (this.retry.triggerIfContains(x, y)) {
 			return true;
 		}
-		if (this.fullscreen.triggerIfContainsPage(x, y)) {
+		if (this.fullscreen.triggerIfContains(x, y)) {
 			return true;
 		}
 		return false;

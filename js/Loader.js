@@ -415,6 +415,7 @@ Sunniesnow.Loader = {
 			element = document.getElementById('loading-progress');
 			element.style.display = '';
 			Sunniesnow.Dom.readSettings();
+			Sunniesnow.game.progressAdjustable = Sunniesnow.game.settings.progressAdjustable && Sunniesnow.game.settings.autoplay;
 		}
 		this.loadingComplete = false;
 		if (Sunniesnow.game.settings.levelFile === 'online' && this.loaded.chart.sourceContents !== Sunniesnow.game.settings.levelFileOnline) {

@@ -662,6 +662,10 @@ To adjust judgements, you may want to use the [`offset`](#offset) setting.
 ### Game settings
 
 #### Autoplay
+{:#autoplay-category}
+
+##### Autoplay
+{:#autoplay}
 
 - **Setting id**: `autoplay`.
 - **Possible values**: `true`, `false`.
@@ -672,6 +676,19 @@ When it is `true`, the game will be played automatically.
 All notes are hit perfectly and automatically.
 
 Whether the UI reflects whether the game is autoplaying is dependent on the skin.
+
+##### Progress adjustable
+
+- **Setting id**: `progress-adjustable`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the progress of the game should be adjustable when autoplaying.
+It is only useful when [`autoplay`](#autoplay) is `true`.
+
+When it is `true`, you can adjust the progress of the game when autoplaying.
+When it is `false`, the progress of the game will not be adjustable when autoplaying.
+
+To adjust the progress, drag the progress bar at the bottom of the screen.
 
 #### Chart offset
 
@@ -819,6 +836,18 @@ On desktop, it means switching browser tab, minimizing the window, etc.
 On mobile, it means switching to another app, locking the screen, etc.
 When it is `true`, the game will be paused when it loses focus.
 When it is `false`, the game will not be paused when it loses focus.
+
+##### Hide pause UI by default
+{:#hide-pause-ui}
+
+- **Setting id**: `hide-pause-ui`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the pause UI should be hidden by default.
+When it is `true`, the pause UI will be hidden by default.
+When it is `false`, the pause UI will be shown by default.
+To toggle the visibility of the pause UI,
+set [`second-pause`](#second-pause) to `toggle-ui` and hit the pause button when the game is paused.
 
 ##### Function of the pause button while pausing
 {:#second-pause}
