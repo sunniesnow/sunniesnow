@@ -13,7 +13,9 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 				this.allTipPointHeads.set(event.tipPoint, [event]);
 			}
 		}
-		this.allTipPointHeads = Array.from(this.allTipPointHeads.entries().map(([id, events]) => ({id, events})));
+		// First convert to array then map instead of the other way around
+		// because Safari and Firefox do not support Iterator.
+		this.allTipPointHeads = Array.from(this.allTipPointHeads.entries()).map(([id, events]) => ({id, events}));
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(
 				this.allTipPointHeads,
