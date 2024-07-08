@@ -1,3 +1,10 @@
+@media (prefers-color-scheme: dark) {
+	body, select, button[type="button"], input[type="text"], input[type="number"], input[type="file"]::file-selector-button {
+		background-color: black;
+		color: white;
+	}
+}
+
 #help {
 	float: right;
 }
