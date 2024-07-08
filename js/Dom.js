@@ -174,6 +174,7 @@ Sunniesnow.Dom = {
 			hideFxInFront: this.readCheckbox('hide-fx-in-front'),
 			hideFxPerfect: this.readCheckbox('hide-fx-perfect'),
 			hideFxHoldStart: this.readCheckbox('hide-fx-hold-start'),
+			alwaysUpdateFx: this.readCheckbox('always-update-fx'),
 			touchEffects: this.readCheckbox('touch-effects'),
 			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
 			hideTipPoints: this.readCheckbox('hide-tip-points'),
@@ -314,6 +315,7 @@ Sunniesnow.Dom = {
 		this.writeCheckbox('hide-fx-in-front', d('hideFxInFront'));
 		this.writeCheckbox('hide-fx-perfect', d('hideFxPerfect'));
 		this.writeCheckbox('hide-fx-hold-start', d('hideFxHoldStart'));
+		this.writeCheckbox('always-update-fx', d('alwaysUpdateFx'));
 		this.writeCheckbox('touch-effects', d('touchEffects'));
 		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
 		this.writeCheckbox('hide-tip-points', d('hideTipPoints'));

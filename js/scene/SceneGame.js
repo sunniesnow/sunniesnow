@@ -69,10 +69,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.updateBoards(delta);
 		if (!Sunniesnow.Music.pausing) {
 			Sunniesnow.game.level.update();
-			// The reason why fxBoard is not updated during pausing is because
-			// in Lyrica, fx stops when pausing.
-			// While I don't like this design, I'll make it this way.
-			this.fxBoard.update(delta);
 			if (Sunniesnow.game.level.finished) {
 				this.gotoResult();
 			}
@@ -120,6 +116,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.uiNotesBoard.update(delta);
 		if (!Sunniesnow.game.settings.hideTipPoints) {
 			this.tipPointsBoard.update(delta);
+		}
+		if (Sunniesnow.game.settings.alwaysUpdateFx || !Sunniesnow.Music.pausing) {
+			this.fxBoard.update(delta);
 		}
 	}
 

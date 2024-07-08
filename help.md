@@ -531,6 +531,7 @@ Enable simultaneity hints for flick notes.
 #### FX options
 
 ##### Hide FX in front of notes
+{:#hide-fx-in-front}
 
 - **Setting id**: `hide-fx-in-front`.
 - **Possible values**: `true`, `false`.
@@ -541,6 +542,7 @@ When it is `true`, the FX in front of notes will not be displayed.
 For the default skin, this has no effect.
 
 ##### Hide FX of perfect judgement
+{:#hide-fx-perfect}
 
 - **Setting id**: `hide-fx-perfect`.
 - **Possible values**: `true`, `false`.
@@ -549,12 +551,26 @@ This setting is used to hide the FX of perfect judgement.
 When it is `true`, the FX of perfect judgement will not be displayed.
 
 ##### Hide FX of start of hold notes
+{:#hide-fx-hold-start}
 
 - **Setting id**: `hide-fx-hold-start`.
 - **Possible values**: `true`, `false`.
 
 This setting is used to hide the FX of the start of hold notes.
 When it is `true`, the FX of the start of hold notes will not be displayed.
+
+##### Always update FX even when pausing
+{:#always-update-fx}
+
+- **Setting id**: `always-update-fx`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the FX should be updated even when the game is paused.
+If it does not update, the FX will stop animating and be stuck at the current frame.
+When it is `true`, the FX will always be updated even
+whether the game is playing or pausing.
+When it is `false`, the FX will not be updated when the game is paused
+and only be updated when the game is playing.
 
 #### Miscellaneous
 
