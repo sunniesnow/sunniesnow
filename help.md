@@ -689,6 +689,9 @@ When it is `true`, you can adjust the progress of the game when autoplaying.
 When it is `false`, the progress of the game will not be adjustable when autoplaying.
 
 To adjust the progress, drag the progress bar at the bottom of the screen.
+Use <kbd>ArrowLeft</kbd> and <kbd>ArrowRight</kbd> to adjust the progress by one second.
+Use <kbd>,</kbd> and <kbd>.</kbd> to adjust the progress by $1/60$ seconds.
+Use <kbd>[</kbd> and <kbd>]</kbd> to forward or rewind the progress continuously.
 
 #### Chart offset
 
