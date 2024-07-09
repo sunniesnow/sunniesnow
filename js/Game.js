@@ -34,6 +34,7 @@ Sunniesnow.Game = class Game {
 	mainTicker(delta) {
 		if (Sunniesnow.Loader.loadingComplete) {
 			if (!this.sceneInitialized) {
+				document.activeElement.blur();
 				this.initLevel();
 				this.initScene();
 			}

@@ -37,7 +37,9 @@ Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
 	theOnTrigger() {
 		if (!Sunniesnow.Music.pausing || Sunniesnow.game.level.finished) {
 			Sunniesnow.Music.togglePausing();
-			this.pauseBoard.hiddenByPauseButton = Sunniesnow.game.settings.hidePauseUi;
+			if (this.pauseBoard) {
+				this.pauseBoard.hiddenByPauseButton = Sunniesnow.game.settings.hidePauseUi;
+			}
 			return;
 		}
 		switch (Sunniesnow.game.settings.secondPause) {
@@ -47,7 +49,9 @@ Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
 			case 'disabled':
 				break;
 			case 'toggle-ui':
-				this.pauseBoard.hiddenByPauseButton = !this.pauseBoard.hiddenByPauseButton;
+				if (this.pauseBoard) {
+					this.pauseBoard.hiddenByPauseButton = !this.pauseBoard.hiddenByPauseButton;
+				}
 				break;
 		}
 	}

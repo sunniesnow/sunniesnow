@@ -1,7 +1,10 @@
 Sunniesnow.Touch = class Touch {
-	constructor(id, type, time, pageX, pageY, options = {}) {
+	constructor(id, type, time, pageX, pageY, ctrlKey, shiftKey, altKey, options = {}) {
 		this.id = id;
 		this.type = type;
+		this.ctrlKey = ctrlKey;
+		this.shiftKey = shiftKey;
+		this.altKey = altKey;
 		switch (type) {
 			case 'mouse':
 				this.wholeScreen = Sunniesnow.game.settings.mouseWholeScreen;
@@ -51,15 +54,15 @@ Sunniesnow.Touch = class Touch {
 		return Math.hypot(...this.totalMovement());
 	}
 
-	static key(key, time, x, y) {
-		return new this(Sunniesnow.TouchManager.keyId(key), 'key', time, x, y, {key});
+	static key(key, time, x, y, ctrlKey, shiftKey, altKey) {
+		return new this(Sunniesnow.TouchManager.keyId(key), 'key', time, x, y, ctrlKey, shiftKey, altKey, {key});
 	}
 
-	static mouseButton(button, time, x, y) {
-		return new this(Sunniesnow.TouchManager.mouseButtonId(button), 'mouse', time, x, y, {button});
+	static mouseButton(button, time, x, y, ctrlKey, shiftKey, altKey) {
+		return new this(Sunniesnow.TouchManager.mouseButtonId(button), 'mouse', time, x, y, ctrlKey, shiftKey, altKey, {button});
 	}
 
-	static domTouch(identifier, time, x, y) {
-		return new this(Sunniesnow.TouchManager.touchId(identifier), 'touch', time, x, y, {identifier});
+	static domTouch(identifier, time, x, y, ctrlKey, shiftKey, altKey) {
+		return new this(Sunniesnow.TouchManager.touchId(identifier), 'touch', time, x, y, ctrlKey, shiftKey, altKey, {identifier});
 	}
 };

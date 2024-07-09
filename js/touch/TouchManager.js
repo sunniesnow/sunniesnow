@@ -1,6 +1,6 @@
 Sunniesnow.TouchManager = {
 
-	// format: {id: {id:, history: [{time:, x:, y:, canvasX:, canvasY:}, ...]}, ...}
+	// format: {id: Touch, ...}
 	touches: {},
 
 	startListeners: [],
@@ -86,7 +86,7 @@ Sunniesnow.TouchManager = {
 			return;
 		}
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
-		const touch = Sunniesnow.Touch.key(event.key, time, this.mousePageX, this.mousePageY);
+		const touch = Sunniesnow.Touch.key(event.key, time, this.mousePageX, this.mousePageY, event.ctrlKey, event.shiftKey, event.altKey);
 		this.touches[id] = touch;
 		this.onStart(touch);
 	},
@@ -124,7 +124,7 @@ Sunniesnow.TouchManager = {
 		document.activeElement.blur(); // see preventKeyEventIfShould
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const id = this.mouseButtonId(event.button);
-		const touch = Sunniesnow.Touch.mouseButton(event.button, time, this.mousePageX, this.mousePageY);
+		const touch = Sunniesnow.Touch.mouseButton(event.button, time, this.mousePageX, this.mousePageY, event.ctrlKey, event.shiftKey, event.altKey);
 		this.touches[id] = touch;
 		this.onStart(touch);
 	},
@@ -177,7 +177,7 @@ Sunniesnow.TouchManager = {
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		for (const domTouch of event.changedTouches) {
 			const id = this.touchId(domTouch.identifier);
-			const touch = Sunniesnow.Touch.domTouch(domTouch.identifier, time, domTouch.pageX, domTouch.pageY);
+			const touch = Sunniesnow.Touch.domTouch(domTouch.identifier, time, domTouch.pageX, domTouch.pageY, event.ctrlKey, event.shiftKey, event.altKey);
 			this.touches[id] = touch;
 			this.onStart(touch);
 		}
