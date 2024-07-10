@@ -1271,6 +1271,8 @@ or the power consumption is **not** certain.
 
 If it is `true`, the game will be in debug mode.
 The game will show more information on UI in debug mode.
+You can also use <kbd>Control</kbd> + click to pin a point on the screen
+and use <kbd>Alt</kbd> + click to unpin a pinned point on the screen.
 
 ##### Hide debug UI except in pause
 {:#hide-debug-except-pause}

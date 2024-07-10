@@ -3,11 +3,13 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	static async load() {
 		this.touchGeometry = this.createTouchGeometry();
 		this.touchAreaGeometry = this.createTouchAreaGeometry();
+		this.pinnedPointGeometry = this.createPinnedPointGeometry();
 	}
 
 	constructor() {
 		super();
 		this.touches = {};
+		this.pinnedPoints = [];
 		this.touchAreas = [];
 		this.earlyLateTexts = [];
 		this.addTouchListeners();
@@ -43,6 +45,19 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		return graphics.geometry;
 	}
 
+	static createPinnedPointGeometry() {
+		this.pinnedPointRadius = Sunniesnow.game.settings.width / 90;
+		this.pinnedPointThickness = Sunniesnow.game.settings.width / 360;
+		const graphics = new PIXI.Graphics();
+		graphics.lineStyle(this.pinnedPointThickness, 0xff00ff, 0.5);
+		graphics.moveTo(0, -this.pinnedPointRadius);
+		graphics.lineTo(0, this.pinnedPointRadius);
+		graphics.moveTo(-this.pinnedPointRadius, 0);
+		graphics.lineTo(this.pinnedPointRadius, 0);
+		graphics.finishPoly();
+		return graphics.geometry;
+	}
+
 	update(delta) {
 		if (Sunniesnow.game.settings.hideDebugExceptPause) {
 			this.visible = Sunniesnow.Music.pausing;
@@ -52,6 +67,15 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	touchStart(touch) {
+		this.addTouchUi(touch);
+		if (this.visible && touch.altKey) {
+			this.unpinPoint(touch);
+			return true;
+		}
+		return false;
+	}
+
+	addTouchUi(touch) {
 		const id = touch.id;
 		const touchUi = this.touches[id] = new PIXI.Graphics(this.constructor.touchGeometry);
 		const text = touchUi.text = new PIXI.Text('', {
@@ -61,17 +85,57 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		});
 		text.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
 		touchUi.addChild(text);
-		touchUi.alpha = 0.4;
+		text.alpha = 0.5;
 		this.addChild(touchUi);
 	}
 
+	pinPoint(touch) {
+		const pinnedPoint = new PIXI.Graphics(this.constructor.pinnedPointGeometry);
+		const {x, y, canvasX, canvasY} = touch.end();
+		pinnedPoint.x = canvasX;
+		pinnedPoint.y = canvasY;
+		this.addChild(pinnedPoint);
+		const text = new PIXI.Text(`(${x.toFixed(1)},${y.toFixed(1)})`, {
+			fontSize: Sunniesnow.game.settings.width / 90,
+			fill: '#ff00ff',
+			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
+		});
+		text.alpha = 0.5;
+		pinnedPoint.addChild(text);
+		this.pinnedPoints.push(pinnedPoint);
+	}
+
+	unpinPoint(touch) {
+		let nearest = null;
+		let minDistance = Infinity;
+		const {canvasX: x, canvasY: y} = touch.start();
+		this.pinnedPoints.forEach(pinnedPoint => {
+			const distance = Math.hypot(pinnedPoint.x - x, pinnedPoint.y - y);
+			if (distance < minDistance) {
+				minDistance = distance;
+				nearest = pinnedPoint;
+			}
+		});
+		if (minDistance < this.constructor.pinnedPointRadius) {
+			this.removeChild(nearest);
+			nearest.destroy({children: true});
+			this.pinnedPoints.splice(this.pinnedPoints.indexOf(nearest), 1);
+		}
+	}
+
 	touchMove(touch) {
+		this.moveTouchUi(touch);
+		return false;
+	}
+
+	moveTouchUi(touch) {
 		const touchUi = this.touches[touch.id];
 		if (!touchUi) {
 			return;
 		}
-		const {x, y} = touch.end();
-		[touchUi.x, touchUi.y] = Sunniesnow.Config.chartMapping(x, y);
+		const {x, y, canvasX, canvasY} = touch.end();
+		touchUi.x = canvasX;
+		touchUi.y = canvasY;
 		touchUi.text.text = `${touch.id}(${x.toFixed(1)},${y.toFixed(1)})`;
 		if (touchUi.x + touchUi.width > Sunniesnow.game.settings.width) {
 			touchUi.text.anchor.x = 1;
@@ -83,6 +147,15 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	touchEnd(touch) {
+		this.removeTouchUi(touch);
+		if (this.visible && touch.ctrlKey) {
+			this.pinPoint(touch);
+			return true;
+		}
+		return false;
+	}
+
+	removeTouchUi(touch) {
 		const touchUi = this.touches[touch.id];
 		if (!touchUi) {
 			return;
