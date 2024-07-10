@@ -1,3 +1,6 @@
+---
+---
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -8,6 +11,7 @@
 <script src="js/utils/Utils.js"></script>
 <script src="js/ScriptsLoader.js"></script>
 <script type="module">
+	Sunniesnow.environment = '{{ jekyll.environment }}';
 	await Sunniesnow.ScriptsLoader.runAllScripts();
 	Sunniesnow.Dom.triggerPreprocess();
 	document.getElementById('loading').remove();
