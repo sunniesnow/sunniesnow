@@ -15,10 +15,11 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 		this.graphics.x = this.x1;
 		this.graphics.y = this.y1;
 		this.addChild(this.graphics);
+
+		this.firstActive = false;
 	}
 
-	updateFadingIn(progress, relativeTime) {
-		super.updateFadingIn(progress, relativeTime);
+	drawShape(progress) {
 		this.graphics.clear();
 		this.graphics.lineStyle(Sunniesnow.DoubleLine.radius / 12, 0xf9f9e9);
 		Sunniesnow.Utils.drawDashedLine(
@@ -32,12 +33,34 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 		);
 	}
 
+	updateFadingIn(progress, relativeTime) {
+		super.updateFadingIn(progress, relativeTime);
+		this.drawShape(progress);
+		this.firstActive = false;
+	}
+
 	updateActive(progress, relativeTime) {
 		super.updateActive(progress, relativeTime);
+		if (!this.firstActive) {
+			this.drawShape(1);
+			this.firstActive = true;
+		}
+	}
+
+	updateHolding(progress, relativeTime) {
+		super.updateHolding(progress, relativeTime);
+		if (!this.firstActive) {
+			this.drawShape(1);
+			this.firstActive = true;
+		}
 	}
 
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
 		this.graphics.alpha = (1 - progress)**2;
+		if (!this.firstActive) {
+			this.drawShape(1);
+			this.firstActive = true;
+		}
 	}
 };
