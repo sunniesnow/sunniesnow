@@ -204,6 +204,9 @@ Sunniesnow.Dom = {
 			pauseBlur: this.readCheckbox('pause-blur'),
 			hidePauseUi: this.readCheckbox('hide-pause-ui'),
 			secondPause: this.readRadio('second-pause'),
+			contextMenuPlay: this.readCheckbox('context-menu-play'),
+			contextMenuPause: this.readCheckbox('context-menu-pause'),
+			contextMenuNoModifier: this.readCheckbox('context-menu-no-modifier'),
 
 			// control settings
 			enableKeyboard: this.readCheckbox('enable-keyboard'),
@@ -342,6 +345,9 @@ Sunniesnow.Dom = {
 		this.writeCheckbox('pause-blur', d('pauseBlur'));
 		this.writeCheckbox('hide-pause-ui', d('hidePauseUi'));
 		this.writeRadio('second-pause', d('secondPause'));
+		this.writeCheckbox('context-menu-play', d('contextMenuPlay'));
+		this.writeCheckbox('context-menu-pause', d('contextMenuPause'));
+		this.writeCheckbox('context-menu-no-modifier', d('contextMenuNoModifier'));
 
 		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));
 		this.writeCheckbox('keyboard-whole-screen', d('keyboardWholeScreen'));
@@ -858,12 +864,14 @@ Sunniesnow.Dom = {
 		const item = document.createElement('span');
 		item.classList.add('pinned-coordinates-item');
 		item.addEventListener('contextmenu', event => {
-			if (event.ctrlKey || event.altKey) {
+			const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
+			if (ctrlKey || event.altKey) {
 				event.preventDefault();
 			}
 		});
 		item.addEventListener('mousedown', event => {
-			if (event.ctrlKey && event.button === 2) {
+			const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
+			if (ctrlKey && event.button === 2) {
 				event.preventDefault();
 				this.removePinnedCoordinates(this.pinnedCoordinatesItemToPoint.get(item));
 				return;

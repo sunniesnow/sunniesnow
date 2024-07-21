@@ -885,6 +885,47 @@ when the game is already paused.
 This setting does **not** affect the function of the pause button
 when the level is finished.
 
+#### Context menu
+
+These settings are used to set the condition for the context menu (right-click menu)
+of the game canvas to be enabled.
+When the context menu is enabled, you can right-click the game canvas
+to show the context menu.
+
+##### Enable when playing
+{:#context-menu-play}
+
+- **Setting id**: `context-menu-play`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the context menu should be enabled when playing.
+When it is `true`, the context menu will be enabled when playing.
+When it is `false`, the context menu will be disabled when playing.
+
+##### Enable when pausing or finished
+{:#context-menu-pause}
+
+- **Setting id**: `context-menu-pause`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the context menu should be enabled when pausing or finished.
+When it is `true`, the context menu will be enabled when pausing or finished.
+When it is `false`, the context menu will be disabled when pausing or finished.
+
+##### Disable when holding <kbd>Control</kbd> or <kbd>Alt</kbd>
+{:#context-menu-no-modifier}
+
+- **Setting id**: `context-menu-no-modifier`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the context menu should be disabled
+when holding <kbd>Control</kbd>
+(<kbd>Command</kbd> on macOS) or <kbd>Alt</kbd>.
+When it is `true`, the context menu will be disabled in this case.
+When it is `false`, the context menu will not be disabled in this case.
+This setting has higher priority than [`context-menu-play`](#context-menu-play)
+and [`context-menu-pause`](#context-menu-pause).
+
 ### Control settings
 
 Although Lyrica is a mobile rhythm game,
@@ -1271,8 +1312,21 @@ or the power consumption is **not** certain.
 
 If it is `true`, the game will be in debug mode.
 The game will show more information on UI in debug mode.
-You can also use <kbd>Control</kbd> + click to pin a point on the screen
-and use <kbd>Alt</kbd> + click to unpin a pinned point on the screen.
+
+You can pin points on the screen or remove pinned points
+(replace the <kbd>Control</kbd> key below with the <kbd>Command</kbd> key on macOS):
+
+- <kbd>Control</kbd> + click on the game canvas: pin a point.
+- <kbd>Control</kbd> + right click on a pinned point,
+on the game canvas or on the shown coordinates below the game canvas:
+remove the pinned point.
+- <kbd>Alt</kbd> + click on a pinned point on the game canvas:
+drag the pinned point.
+- <kbd>Alt</kbd> + right click on a pinned point,
+on the game canvas or on the shown coordinates below the game canvas:
+enter coordinates to set the position of the pinned point.
+
+You can also pin a new point by entering the coordinates in the text box below the game canvas.
 
 ##### Hide debug UI except in pause
 {:#hide-debug-except-pause}

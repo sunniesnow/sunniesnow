@@ -58,11 +58,16 @@ Sunniesnow.Game = class Game {
 
 	addCanvasListeners() {
 		this.canvasContextMenuListener = event => {
-			if (!Sunniesnow.Music.pausing && !this.level.finished) {
+			const modifier = (navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey) || event.altKey;
+			const pausing = Sunniesnow.Music.pausing || this.level.finished;
+			let condition = this.settings.contextMenuPause && pausing;
+			condition ||= this.settings.contextMenuPlay && !pausing;
+			condition &&= !(this.settings.contextMenuNoModifier && modifier);
+			if (condition) {
+				Sunniesnow.TouchManager.clear();
+			} else {
 				event.preventDefault();
-				return;
 			}
-			Sunniesnow.TouchManager.clear();
 		};
 		this.canvas.addEventListener('contextmenu', this.canvasContextMenuListener);
 		Sunniesnow.Fullscreen.addListenerToCanvas();
