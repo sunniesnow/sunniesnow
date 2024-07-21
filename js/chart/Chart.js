@@ -25,7 +25,7 @@ Sunniesnow.Chart = class Chart {
 
 	constructor(data) {
 		if (!data) {
-			Sunniesnow.Utils.error('There is no chart');
+			Sunniesnow.Logs.error('There is no chart');
 		}
 		this.data = data;
 		this.readMeta();
@@ -38,7 +38,7 @@ Sunniesnow.Chart = class Chart {
 				this[field] = this.data[field];
 			} else {
 				this[field] = Sunniesnow.Chart.META_FIELDS[field];
-				Sunniesnow.Utils.warn(`Missing \`${field}\` in chart`);
+				Sunniesnow.Logs.warn(`Missing \`${field}\` in chart`);
 			}
 		}
 	}
@@ -66,7 +66,7 @@ Sunniesnow.Chart = class Chart {
 			this.events.push(event);
 		}
 		if (this.events.length === 0) {
-			Sunniesnow.Utils.error('There are no events in the chart in the specified range');
+			Sunniesnow.Logs.error('There are no events in the chart in the specified range');
 		}
 		this.events.sort((a, b) => a.time - b.time);
 		for (let i = 0; i < this.events.length - 1; i++) {
@@ -84,7 +84,7 @@ Sunniesnow.Chart = class Chart {
 		for (const field of Sunniesnow.Chart.EVENT_FIELDS) {
 			result[field] = eventData[field];
 			if (!Object.hasOwn(result, field)) {
-				Sunniesnow.Utils.warn(`Missing \`${field}\` in event`);
+				Sunniesnow.Logs.warn(`Missing \`${field}\` in event`);
 				return null;
 			}
 		}

@@ -20,7 +20,7 @@ Sunniesnow.Fullscreen = {
 
 	enter() {
 		if (typeof navigator.standalone === 'boolean' && !navigator.standalone) {
-			Sunniesnow.Utils.warn(
+			Sunniesnow.Logs.warn(
 				'Consider ' +
 				'<a href="https://support.apple.com/guide/iphone/bookmark-favorite-webpages-iph42ab2f3a7/ios#iph4f9a47bbc">adding to home screen</a>' +
 				' to have a better experience on iOS.'
@@ -37,7 +37,7 @@ Sunniesnow.Fullscreen = {
 		if (typeof promise?.then === 'function') {
 			promise.catch(reason => {
 				this.entering = false;
-				Sunniesnow.Utils.warn('Failed to request fullscreen: ' + reason, reason);
+				Sunniesnow.Logs.warn('Failed to request fullscreen: ' + reason, reason);
 			});
 		} else {
 			this.entering = false;
@@ -57,7 +57,7 @@ Sunniesnow.Fullscreen = {
 		if (typeof promise?.then === 'function') {
 			promise.catch(reason => {
 				this.quitting = false;
-				Sunniesnow.Utils.warn('Failed to exit fullscreen: ' + reason, reason);
+				Sunniesnow.Logs.warn('Failed to exit fullscreen: ' + reason, reason);
 			});
 		} else {
 			this.quitting = false;

@@ -13,7 +13,7 @@ Sunniesnow.Event = class Event {
 		if (eventClass?.prototype instanceof Sunniesnow.Event) {
 			for (const property of eventClass.PROPERTIES.required) {
 				if (!Object.hasOwn(properties, property)) {
-					Sunniesnow.Utils.warn(`Missing property \`${property}\` in ${type} event`);
+					Sunniesnow.Logs.warn(`Missing property \`${property}\` in ${type} event`);
 					return null;
 				}
 			}
@@ -23,21 +23,21 @@ Sunniesnow.Event = class Event {
 			}
 			return result;
 		} else {
-			Sunniesnow.Utils.warn(`Unknown event type \`${type}\``);
+			Sunniesnow.Logs.warn(`Unknown event type \`${type}\``);
 		}
 	}
 
 	static check(eventData) {
 		if (!eventData || typeof eventData !== 'object') {
-			Sunniesnow.Utils.warn('Found an event that is not an object');
+			Sunniesnow.Logs.warn('Found an event that is not an object');
 			return false;
 		}
 		if (typeof eventData.time !== 'number') {
-			Sunniesnow.Utils.warn('Found an event that does not have a time');
+			Sunniesnow.Logs.warn('Found an event that does not have a time');
 			return false;
 		}
 		if (typeof eventData.type !== 'string') {
-			Sunniesnow.Utils.warn('Found an event that does not have a type');
+			Sunniesnow.Logs.warn('Found an event that does not have a type');
 			return false;
 		}
 		return true;
@@ -48,7 +48,7 @@ Sunniesnow.Event = class Event {
 		properties = Object.assign({}, properties);
 		for (const property of this.constructor.PROPERTIES.required) {
 			if (!Object.hasOwn(properties, property)) {
-				Sunniesnow.Utils.error(`Missing property \`${property}\` in ${this.constructor.TYPE_NAME} event`);
+				Sunniesnow.Logs.error(`Missing property \`${property}\` in ${this.constructor.TYPE_NAME} event`);
 			}
 			this[property] = properties[property];
 			delete properties[property];
@@ -62,7 +62,7 @@ Sunniesnow.Event = class Event {
 			}
 		}
 		for (const property in properties) {
-			Sunniesnow.Utils.warn(`Unknown property \`${property}\` in ${this.constructor.TYPE_NAME} event`);
+			Sunniesnow.Logs.warn(`Unknown property \`${property}\` in ${this.constructor.TYPE_NAME} event`);
 		}
 		if (this.duration) {
 			this.duration /= Sunniesnow.game.settings.gameSpeed;
@@ -97,7 +97,7 @@ Sunniesnow.Event = class Event {
 	assertType(property, expected) {
 		const type = typeof this[property];
 		if (type !== expected) {
-			Sunniesnow.Utils.warn(`Property \`${property}\` in ${this.constructor.TYPE_NAME} event must be ${expected}, but got ${this[property]}: ${type}`);
+			Sunniesnow.Logs.warn(`Property \`${property}\` in ${this.constructor.TYPE_NAME} event must be ${expected}, but got ${this[property]}: ${type}`);
 			return false;
 		}
 		return true;

@@ -33,7 +33,7 @@ Sunniesnow.Level = class Level {
 			}
 		}
 		if (this.unhitNotes.length === 0) {
-			Sunniesnow.Utils.error('No notes in the chart');
+			Sunniesnow.Logs.error('No notes in the chart');
 		}
 		if (Sunniesnow.game.progressAdjustable) {
 			this.allNotes = this.unhitNotes.slice();

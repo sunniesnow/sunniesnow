@@ -49,7 +49,7 @@ Sunniesnow.Audio = class Audio {
 		try {
 			audioBuffer = await Sunniesnow.Assets.audioDecode(arrayBuffer, this.context);
 		} catch (audioDecodeError) {
-			Sunniesnow.Utils.error(`Failed to decode audio data, ${audioDecodeError}`, audioDecodeError);
+			Sunniesnow.Logs.error(`Failed to decode audio data, ${audioDecodeError}`, audioDecodeError);
 		}
 		return new this(audioBuffer, volume, playbackRate);
 	}

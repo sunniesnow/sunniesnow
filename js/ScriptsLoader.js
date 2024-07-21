@@ -180,9 +180,13 @@ Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
 	'utils/Fullscreen',
 	'utils/Assets',
 
+	'dom/Settings',
+	'dom/Logs',
+	'dom/MiscDom',
+	'dom/PinnedCoordinates',
+
 	'Config',
 	'Plugin',
-	'Dom',
 	'Loader',
 	'Game',
 

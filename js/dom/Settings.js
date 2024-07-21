@@ -1,4 +1,4 @@
-Sunniesnow.Dom = {
+Sunniesnow.Settings = {
 
 	// The uploads that reads user input instead of local storage.
 	// We maintain this because we cannot write file to <input type="file">.
@@ -411,7 +411,7 @@ Sunniesnow.Dom = {
 				}
 			}
 		} else if (pluginOnline) {
-			Sunniesnow.Utils.warn('plugin-online settings are ignored because plugin settings are not set');
+			Sunniesnow.Logs.warn('plugin-online settings are ignored because plugin settings are not set');
 		}
 
 		for (const property in settings) {
@@ -428,7 +428,7 @@ Sunniesnow.Dom = {
 		try {
 			localStorage.setItem('chartOffsets', JSON.stringify(chartOffsets));
 		} catch (e) {
-			Sunniesnow.Utils.warn(`Failed to save chart offset: ${e.message ?? e}`);
+			Sunniesnow.Logs.warn(`Failed to save chart offset: ${e.message ?? e}`);
 		}
 	},
 
@@ -484,7 +484,7 @@ Sunniesnow.Dom = {
 		try {
 			localStorage.setItem('settings', JSON.stringify(settings));
 		} catch (e) {
-			Sunniesnow.Utils.warn(`Failed to save settings: ${e.message ? e.message : e}`);
+			Sunniesnow.Logs.warn(`Failed to save settings: ${e.message ? e.message : e}`);
 		}
 	},
 
@@ -495,7 +495,7 @@ Sunniesnow.Dom = {
 	exportSavedSettings() {
 		const text = localStorage.getItem('settings');
 		if (!text) {
-			Sunniesnow.Utils.warn('No saved settings to export');
+			Sunniesnow.Logs.warn('No saved settings to export');
 			return;
 		}
 		Sunniesnow.Utils.downloadText(text, 'settings.json', 'application/json');
@@ -504,7 +504,7 @@ Sunniesnow.Dom = {
 	exportSavedChartOffsets() {
 		const text = localStorage.getItem('chartOffsets');
 		if (!text) {
-			Sunniesnow.Utils.warn('No saved chart offsets to export');
+			Sunniesnow.Logs.warn('No saved chart offsets to export');
 			return;
 		}
 		Sunniesnow.Utils.downloadText(text, 'chart-offsets.json', 'application/json');
@@ -520,7 +520,7 @@ Sunniesnow.Dom = {
 			localStorage.setItem('settings', await file.text());
 			importSuccess = true;
 		} catch (e) {
-			Sunniesnow.Utils.warn(`Failed to import settings: ${e.message ?? e}`);
+			Sunniesnow.Logs.warn(`Failed to import settings: ${e.message ?? e}`);
 		}
 		if (importSuccess) {
 			this.writeSavedSettings();
@@ -538,10 +538,9 @@ Sunniesnow.Dom = {
 		try {
 			localStorage.setItem('chartOffsets', JSON.stringify(chartOffsets));
 		} catch (e) {
-			Sunniesnow.Utils.warn(`Failed to import chart offsets: ${e.message ?? e}`);
+			Sunniesnow.Logs.warn(`Failed to import chart offsets: ${e.message ?? e}`);
 		}
 	},
-
 
 	readCheckbox(id) {
 		return document.getElementById(id).checked;
@@ -734,214 +733,6 @@ Sunniesnow.Dom = {
 				document.getElementById(`plugin-${pluginId}-downloading`).innerHTML = '';
 			}
 		}
-	},
-
-	addEventListeners() {
-		const levelFileOnline = document.getElementById('level-file-online')
-		levelFileOnline.addEventListener('keydown', event => {
-			if (event.key === 'Enter') {
-				Sunniesnow.Loader.triggerLoadChart();
-			}
-		});
-		levelFileOnline.addEventListener('input', event => {
-			Sunniesnow.Loader.interruptLevelLoad();
-		});
-		document.getElementById('level-file-button').addEventListener('click', event => {
-			Sunniesnow.Loader.triggerLoadChart();
-		});
-		document.getElementById('level-file-upload').addEventListener('change', event => {
-			Sunniesnow.Dom.markManual('level-file-upload');
-			Sunniesnow.Loader.triggerLoadChart();
-		});
-		['background-upload', 'fx-upload', 'skin-upload', 'se-upload'].forEach(elementId => {
-			document.getElementById(elementId).addEventListener('change', event => {
-				Sunniesnow.Dom.markManual(elementId);
-			});
-		});
-	},
-
-	async preprocess() {
-		this.addScrollbarToAndroidWebView();
-		this.adjustCustomJudgementWindowsTable();
-		this.setDeviceDependentDefaults();
-		await this.writeSavedSettings();
-		this.setTextInputs();
-		this.associateDomElements();
-		this.initPinnedCoordiates();
-		this.addEventListeners();
-	},
-
-	async triggerPreprocess() {
-		const script = document.createElement('script');
-		script.textContent = 'Sunniesnow.Preprocess.run();';
-		document.body.appendChild(script);
-		await Sunniesnow.Utils.untilLoaded(document.body);
-		script.remove();
-	},
-
-	async offsetWizard() {
-		this.writeRadio('level-file', 'online');
-		this.writeValue('level-file-online', 'offset-wizard');
-		await Sunniesnow.Loader.loadChart();
-		Sunniesnow.Game.run();
-		Object.assign(Sunniesnow.game.settings, {
-			volumeSe: 0,
-			autoplay: false,
-			chartOffset: 0
-		});
-	},
-
-	// https://github.com/pixijs/pixijs/issues/10020
-	addScrollbarToAndroidWebView() {
-		if (!Sunniesnow.Utils.isAndroidWebView()) {
-			return;
-		}
-		document.getElementById('main-wrapper').classList.add('force-scrollbar');
-	},
-
-	adjustCustomJudgementWindowsTable() {
-		const wrapper = document.getElementById('judgement-windows-custom-wrapper');
-		const table = document.getElementById('judgement-windows-custom-table');
-		const observer = new ResizeObserver(entries => {
-			for (const entry of entries) {
-				const height = entry.contentBoxSize?.[0]?.blockSize;
-				if (!height) {
-					continue;
-				}
-				wrapper.style.paddingBottom = `${height}px`;
-			}
-		});
-		observer.observe(table);
-
-		const radio = document.getElementById('judgement-windows-custom');
-		const radios = document.getElementsByName(radio.name);
-		const listener = () => (wrapper.style.display = radio.checked ? '' : 'none');
-		for (const otherRadio of radios) {
-			otherRadio.addEventListener("change", listener);
-		}
-		listener();
-	},
-
-	initPinnedCoordiates() {
-		this.pinnedCoordinatesParent = document.getElementById('pinned-coordinates');
-		this.pinnedCoordinatesPointToItem = new WeakMap();
-		this.pinnedCoordinatesItemToPoint = new WeakMap();
-		this.pinnedCoordinatesInput = document.getElementById('pinned-coordinates-input');
-		this.pinnedCoordinatesInput.addEventListener('keydown', event => {
-			if (event.key === 'Escape') {
-				event.preventDefault();
-				this.stopEdittingPinnedCoordinates();
-				return;
-			}
-			if (event.key !== 'Enter') {
-				return;
-			}
-			event.preventDefault();
-			event.stopPropagation();
-			const debugBoard = Sunniesnow.game?.scene?.debugBoard;
-			if (!debugBoard) {
-				Sunniesnow.Utils.warn('Debug UI is not available');
-				return;
-			}
-			const string = this.pinnedCoordinatesInput.value;
-			const regex = /^[,\s\(]*([+\-]?\d+(?:\.\d+)?)[,\s]+([+\-]?\d+(?:\.\d+)?)[,\s\)]*$/;
-			const match = string.match(regex);
-			if (!match) {
-				Sunniesnow.Utils.warn('Invalid coordinates');
-				return;
-			}
-			const x = Number(match[1]);
-			const y = Number(match[2]);
-			if (this.edittingPoint) {
-				debugBoard.movePinnedPointTo(this.edittingPoint, x, y);
-				this.stopEdittingPinnedCoordinates(this.edittingPoint);
-			} else {
-				debugBoard.pinPointByCoordinates(x, y);
-			}
-			this.pinnedCoordinatesInput.value = '';
-		});
-	},
-
-	addPinnedCoordinates(point) {
-		const item = document.createElement('span');
-		item.classList.add('pinned-coordinates-item');
-		item.addEventListener('contextmenu', event => {
-			const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
-			if (ctrlKey || event.altKey) {
-				event.preventDefault();
-			}
-		});
-		item.addEventListener('mousedown', event => {
-			const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
-			if (ctrlKey && event.button === 2) {
-				event.preventDefault();
-				this.removePinnedCoordinates(this.pinnedCoordinatesItemToPoint.get(item));
-				return;
-			}
-			if (event.altKey && event.button === 2) {
-				event.preventDefault();
-				this.editPinnedCoordinates(this.pinnedCoordinatesItemToPoint.get(item));
-			}
-		});
-		this.pinnedCoordinatesParent.appendChild(item);
-		this.pinnedCoordinatesPointToItem.set(point, item);
-		this.pinnedCoordinatesItemToPoint.set(item, point);
-		this.updatePinnedCoordinates(point);
-	},
-
-	updatePinnedCoordinates(point) {
-		const item = this.pinnedCoordinatesPointToItem.get(point);
-		item.innerText = point.text.text + ' ';
-	},
-
-	removePinnedCoordinates(point) {
-		if (this.edittingPoint === point) {
-			this.stopEdittingPinnedCoordinates();
-		}
-		const item = this.pinnedCoordinatesPointToItem.get(point);
-		item.remove();
-		this.pinnedCoordinatesPointToItem.delete(point);
-		this.pinnedCoordinatesItemToPoint.delete(item);
-	},
-
-	removeAllPinnedCoordinates() {
-		this.pinnedCoordinatesParent.innerHTML = '';
-	},
-
-	startMovingPinnedCoordinates(point) {
-		const item = this.pinnedCoordinatesPointToItem.get(point);
-		item.classList.add('moving');
-	},
-
-	stopMovingPinnedCoordinates(point) {
-		const item = this.pinnedCoordinatesPointToItem.get(point);
-		item.classList.remove('moving');
-	},
-
-	editPinnedCoordinates(point) {
-		if (this.edittingPoint) {
-			this.stopEdittingPinnedCoordinates();
-		}
-		point.alpha = 1;
-		const item = this.pinnedCoordinatesPointToItem.get(point);
-		item.classList.add('editing');
-		this.edittingPoint = point;
-		this.pinnedCoordinatesInput.focus();
-	},
-
-	stopEdittingPinnedCoordinates() {
-		if (!this.edittingPoint) {
-			return;
-		}
-		this.edittingPoint.alpha = 0.5;
-		const item = this.pinnedCoordinatesPointToItem.get(this.edittingPoint);
-		item.classList.remove('editing');
-		this.edittingPoint = null;
-		this.pinnedCoordinatesInput.blur();
-	},
-
-	clearPinnedCoordinates() {
-		this.stopEdittingPinnedCoordinates();
-		this.pinnedCoordinatesParent.innerHTML = '';
 	}
+
 };

@@ -1,18 +1,18 @@
 Sunniesnow.Game = class Game {
 	static run() {
 		if (Sunniesnow.Loader.loadingChart) {
-			Sunniesnow.Utils.warn('Waiting for level file to load')
+			Sunniesnow.Logs.warn('Waiting for level file to load')
 			Sunniesnow.Loader.addChartLoadListener(() => this.run());
 			return;
 		}
 		if (Sunniesnow.game) {
 			if (!Sunniesnow.Loader.loadingComplete) {
-				Sunniesnow.Utils.warn('Still loading');
+				Sunniesnow.Logs.warn('Still loading');
 				return;
 			}
 			Sunniesnow.game.terminate();
 		}
-		Sunniesnow.Utils.clearWarningsAndErrors();
+		Sunniesnow.Logs.clearWarningsAndErrors();
 		Sunniesnow.game = new this();
 		Sunniesnow.Loader.load();
 		Sunniesnow.game.start();
@@ -28,7 +28,7 @@ Sunniesnow.Game = class Game {
 	}
 
 	clearDom() {
-		Sunniesnow.Dom.clearDownloadingProgresses();
+		Sunniesnow.Settings.clearDownloadingProgresses();
 	}
 
 	mainTicker(delta) {

@@ -794,15 +794,15 @@ description: Sunniesnow is a web rhythm game
 		<legend>Settings</legend>
 		<div>
 			Delete saved settings:
-			<button type="button" id="delete-settings" onclick="Sunniesnow.Dom.deleteSavedSettings();">Delete</button>
+			<button type="button" id="delete-settings" onclick="Sunniesnow.Settings.deleteSavedSettings();">Delete</button>
 		</div>
 		<div>
 			Export saved settings:
-			<button type="button" id="export-settings" onclick="Sunniesnow.Dom.exportSavedSettings();">Export</button>
+			<button type="button" id="export-settings" onclick="Sunniesnow.Settings.exportSavedSettings();">Export</button>
 		</div>
 		<div>
 			Import saved settings:
-			<input type="file" id="import-settings" onchange="Sunniesnow.Dom.importSettings();">
+			<input type="file" id="import-settings" onchange="Sunniesnow.Settings.importSettings();">
 		</div>
 	</fieldset>
 
@@ -810,19 +810,19 @@ description: Sunniesnow is a web rhythm game
 		<legend>Offsets</legend>
 		<div>
 			Delete saved chart offsets:
-			<button type="button" id="delete-chart-offsets" onclick="Sunniesnow.Dom.deleteSavedChartOffsets();">Delete</button>
+			<button type="button" id="delete-chart-offsets" onclick="Sunniesnow.Settings.deleteSavedChartOffsets();">Delete</button>
 		</div>
 		<div>
 			Export saved chart offsets:
-			<button type="button" id="export-chart-offsets" onclick="Sunniesnow.Dom.exportSavedChartOffsets();">Export</button>
+			<button type="button" id="export-chart-offsets" onclick="Sunniesnow.Settings.exportSavedChartOffsets();">Export</button>
 		</div>
 		<div>
 			Import saved chart offsets:
-			<input type="file" id="import-chart-offsets" onchange="Sunniesnow.Dom.importChartOffsets();">
+			<input type="file" id="import-chart-offsets" onchange="Sunniesnow.Settings.importChartOffsets();">
 		</div>
 		<div>
 			Play the Offset Wizard:
-			<button type="button" id="offset-wizard" onclick="Sunniesnow.Dom.offsetWizard();">Start</button>
+			<button type="button" id="offset-wizard" onclick="Sunniesnow.MiscDom.offsetWizard();">Start</button>
 		</div>
 	</fieldset>
 

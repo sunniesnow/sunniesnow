@@ -6,9 +6,20 @@ Sunniesnow.Preprocess = {
 		}
 	},
 
+	async preprocess() {
+		Sunniesnow.MiscDom.addScrollbarToAndroidWebView();
+		Sunniesnow.MiscDom.adjustCustomJudgementWindowsTable();
+		Sunniesnow.Settings.setDeviceDependentDefaults();
+		await Sunniesnow.Settings.writeSavedSettings();
+		Sunniesnow.Settings.setTextInputs();
+		Sunniesnow.Settings.associateDomElements();
+		Sunniesnow.PinnedCoordinates.init();
+		Sunniesnow.MiscDom.addEventListeners();
+	},
+
 	async run() {
 		Sunniesnow.Patches.apply();
-		await Sunniesnow.Dom.preprocess();
+		await this.preprocess();
 		this.readUrlParams();
 		await this.registerServiceWorker();
 	},
@@ -22,7 +33,7 @@ Sunniesnow.Preprocess = {
 				delete params[key];
 			}
 		}
-		Sunniesnow.Dom.writeSettings(params);
+		Sunniesnow.Settings.writeSettings(params);
 		for (const key in processedParams) {
 			this.EXTRA_URL_PARAMS[key].call(this, processedParams[key]);
 		}
@@ -31,7 +42,7 @@ Sunniesnow.Preprocess = {
 	async registerServiceWorker() {
 		const sw = navigator.serviceWorker;
 		if (!sw) {
-			Sunniesnow.Utils.warn('Service worker is not supported on this browser')
+			Sunniesnow.Logs.warn('Service worker is not supported on this browser')
 			return;
 		}
 		try {
@@ -41,7 +52,7 @@ Sunniesnow.Preprocess = {
 				Sunniesnow.serviceWorkerRegistration = await sw.register('/game/service-worker.js', {scope: '/game/'});
 			}
 		} catch (error) {
-			Sunniesnow.Utils.warn(`Failed to register service worker: ${error}`, error);
+			Sunniesnow.Logs.warn(`Failed to register service worker: ${error}`, error);
 		}
 	}
 

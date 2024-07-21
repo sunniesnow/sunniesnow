@@ -46,7 +46,7 @@ Sunniesnow.Loader = {
 	},
 
 	interruptLevelLoad() {
-		Sunniesnow.Dom.clearToFill();
+		Sunniesnow.Settings.clearToFill();
 		Sunniesnow.Fetcher.interrupt();
 	},
 	
@@ -55,16 +55,16 @@ Sunniesnow.Loader = {
 		let sourceContents;
 		let sourceType;
 		if (force) {
-			sourceType = Sunniesnow.Dom.readRadio('level-file');
+			sourceType = Sunniesnow.Settings.readRadio('level-file');
 		} else {
-			sourceType = Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Dom.readRadio('level-file');
+			sourceType = Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Settings.readRadio('level-file');
 		}
 		switch (sourceType) {
 			case 'online':
 				if (force) {
-					sourceContents = Sunniesnow.Dom.readValue('level-file-online');
+					sourceContents = Sunniesnow.Settings.readValue('level-file-online');
 				} else {
-					sourceContents = Sunniesnow.game?.settings.levelFileOnline ?? Sunniesnow.Dom.readValue('level-file-online');
+					sourceContents = Sunniesnow.game?.settings.levelFileOnline ?? Sunniesnow.Settings.readValue('level-file-online');
 				}
 				if (!force && this.loaded.chart.source === 'online' && this.loaded.chart.sourceContents === sourceContents) {
 					return;
@@ -78,17 +78,17 @@ Sunniesnow.Loader = {
 				} catch (e) {
 					this.loaded.chart.source = null;
 					this.loaded.chart.sourceContents = null;
-					Sunniesnow.Utils.error(`Failed to load level ${sourceContents}: ${e.message ?? e}`, e);
+					Sunniesnow.Logs.error(`Failed to load level ${sourceContents}: ${e.message ?? e}`, e);
 				}
 				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Dom.writeSavedChartOffset(sourceContents);
+					Sunniesnow.Settings.writeSavedChartOffset(sourceContents);
 				}
 				break;
 			case 'upload':
 				if (force) {
-					sourceContents = Sunniesnow.Dom.actualLevelFileUpload();
+					sourceContents = Sunniesnow.Settings.actualLevelFileUpload();
 				} else {
-					sourceContents = Sunniesnow.game?.settings.levelFileUpload ?? Sunniesnow.Dom.actualLevelFileUpload();
+					sourceContents = Sunniesnow.game?.settings.levelFileUpload ?? Sunniesnow.Settings.actualLevelFileUpload();
 				}
 				if (!force && this.loaded.chart.source === 'upload' && this.loaded.chart.sourceContents === sourceContents) {
 					return;
@@ -99,14 +99,14 @@ Sunniesnow.Loader = {
 				break;
 		}
 		if (!file) {
-			Sunniesnow.Utils.warn('No chart to load');
+			Sunniesnow.Logs.warn('No chart to load');
 			return;
 		}
 		let zip;
 		try {
 			zip = await JSZip.loadAsync(file);
 		} catch (e) {
-			Sunniesnow.Utils.warn('Failed to load chart: cannot read as zip', e);
+			Sunniesnow.Logs.warn('Failed to load chart: cannot read as zip', e);
 			return;
 		}
 		for (const filename in zip.files) {
@@ -117,37 +117,37 @@ Sunniesnow.Loader = {
 			const type = mime.getType(filename);
 			if (type?.startsWith('audio')) {
 				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Dom.fillMusicSelect(filename);
+					Sunniesnow.Settings.fillMusicSelect(filename);
 				}
 				this.loaded.chart.music[filename] = await zipObject.async('arraybuffer');
 			} else if (type?.startsWith('image')) {
 				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Dom.fillBackgroundSelect(filename);
+					Sunniesnow.Settings.fillBackgroundSelect(filename);
 				}
 				const blob = new Blob([await zipObject.async('blob')], {type});
 				this.loaded.chart.backgrounds[filename] = blob;
 			} else if (type?.endsWith('json')) {
 				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Dom.fillChartSelect(filename);
+					Sunniesnow.Settings.fillChartSelect(filename);
 				}
 				this.loaded.chart.charts[filename] = JSON.parse(await zipObject.async('string'));
 			} else if (Sunniesnow.Utils.needsDisplayTextFile(filename)) {
 				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Dom.fillLevelReadme(filename, await zipObject.async('string'));
+					Sunniesnow.Settings.fillLevelReadme(filename, await zipObject.async('string'));
 				}
 			} else {
-				Sunniesnow.Utils.warn(`Cannot determine type of ${filename}`)
+				Sunniesnow.Logs.warn(`Cannot determine type of ${filename}`)
 			}
 		}
 		if (Sunniesnow.Utils.isBrowser()) {
-			await Sunniesnow.Dom.untilSelectsLoaded();
-			Sunniesnow.Dom.tryAvoidingNoBackground();
+			await Sunniesnow.Settings.untilSelectsLoaded();
+			Sunniesnow.Settings.tryAvoidingNoBackground();
 		}
 		if (Sunniesnow.game?.settings) {
 			if (Sunniesnow.Utils.isBrowser()) {
-				Sunniesnow.game.settings.musicSelect = Sunniesnow.Dom.readValue('music-select');
-				Sunniesnow.game.settings.chartSelect = Sunniesnow.Dom.readValue('chart-select');
-				Sunniesnow.game.settings.backgroundFromLevel ||= Sunniesnow.Dom.readValue('background-from-level');
+				Sunniesnow.game.settings.musicSelect = Sunniesnow.Settings.readValue('music-select');
+				Sunniesnow.game.settings.chartSelect = Sunniesnow.Settings.readValue('chart-select');
+				Sunniesnow.game.settings.backgroundFromLevel ||= Sunniesnow.Settings.readValue('background-from-level');
 			} else {
 				Sunniesnow.game.settings.musicSelect ||= Object.keys(this.loaded.chart.music)[0];
 				Sunniesnow.game.settings.chartSelect ||= Object.keys(this.loaded.chart.charts)[0];
@@ -173,9 +173,9 @@ Sunniesnow.Loader = {
 		if (!Sunniesnow.Utils.isBrowser()) {
 			return;
 		}
-		Sunniesnow.Dom.clearSelect('music-select');
-		Sunniesnow.Dom.clearSelect('chart-select');
-		Sunniesnow.Dom.clearSelect('background-from-level');
+		Sunniesnow.Settings.clearSelect('music-select');
+		Sunniesnow.Settings.clearSelect('chart-select');
+		Sunniesnow.Settings.clearSelect('background-from-level');
 		document.getElementById('level-readme').innerHTML = '';
 	},
 
@@ -192,14 +192,14 @@ Sunniesnow.Loader = {
 			case 'from-level':
 				blob = this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel];
 				if (!blob) {
-					Sunniesnow.Utils.warn('No background provided');
+					Sunniesnow.Logs.warn('No background provided');
 					return;
 				}
 				break;
 			case 'upload':
 				blob = Sunniesnow.game.settings.backgroundUpload;
 				if (!blob) {
-					Sunniesnow.Utils.warn('No background provided');
+					Sunniesnow.Logs.warn('No background provided');
 					return;
 				}
 				break;
@@ -251,7 +251,7 @@ Sunniesnow.Loader = {
 				try {
 					return await Sunniesnow.Fetcher.blob(Sunniesnow.Utils.url(prefix, online, '.ssp'), downloading);
 				} catch (e) {
-					Sunniesnow.Utils.warn(`Failed to download plugin ${id}: ${e.message ?? e}`, e);
+					Sunniesnow.Logs.warn(`Failed to download plugin ${id}: ${e.message ?? e}`, e);
 					return null;
 				}
 			case 'upload':
@@ -355,7 +355,7 @@ Sunniesnow.Loader = {
 		this.modulesQueue.push(() => Sunniesnow[name].load().then(
 			() => this.loadingModulesProgress++
 		).catch(
-			reason => Sunniesnow.Utils.error(`Failed to load Sunniesnow.${name}: ${reason}`, reason)
+			reason => Sunniesnow.Logs.error(`Failed to load Sunniesnow.${name}: ${reason}`, reason)
 		));
 		this.targetLoadingModulesProgress++;
 	},
@@ -381,7 +381,7 @@ Sunniesnow.Loader = {
 			try {
 				await Sunniesnow.Plugin.loadPlugin(id);
 			} catch (e) {
-				Sunniesnow.Utils.warn(`Failed to load plugin ${id}: ${e.message ?? e}`, e);
+				Sunniesnow.Logs.warn(`Failed to load plugin ${id}: ${e.message ?? e}`, e);
 			}
 			this.loadingPluginsProgress++;
 		}
@@ -414,18 +414,18 @@ Sunniesnow.Loader = {
 		if (Sunniesnow.Utils.isBrowser()) {
 			element = document.getElementById('loading-progress');
 			element.style.display = '';
-			Sunniesnow.Dom.readSettings();
+			Sunniesnow.Settings.readSettings();
 			Sunniesnow.game.progressAdjustable = Sunniesnow.game.settings.progressAdjustable && Sunniesnow.game.settings.autoplay;
 		}
 		this.loadingComplete = false;
 		if (Sunniesnow.game.settings.levelFile === 'online' && this.loaded.chart.sourceContents !== Sunniesnow.game.settings.levelFileOnline) {
-			Sunniesnow.Utils.warn('Level file not loaded, waiting');
+			Sunniesnow.Logs.warn('Level file not loaded, waiting');
 			await this.loadChart()
 		}
 		if (Sunniesnow.Utils.isBrowser()) {
-			Sunniesnow.Dom.saveSettings();
+			Sunniesnow.Settings.saveSettings();
 			if (this.loaded.chart.source === 'online') {
-				Sunniesnow.Dom.saveChartOffset(this.loaded.chart.sourceContents);
+				Sunniesnow.Settings.saveChartOffset(this.loaded.chart.sourceContents);
 			}
 		}
 		this.loadingChartComplete = true;
@@ -453,31 +453,31 @@ Sunniesnow.Loader = {
 
 	async deleteOnlineCaches() {
 		if (!window.caches) {
-			Sunniesnow.Utils.warn('Caches are not available');
+			Sunniesnow.Logs.warn('Caches are not available');
 			return;
 		}
 		if (!await caches.delete('online-v1')) {
-			Sunniesnow.Utils.warn('No caches of online resources to delete');
+			Sunniesnow.Logs.warn('No caches of online resources to delete');
 		}
 	},
 
 	async deleteSiteCaches() {
 		if (!window.caches) {
-			Sunniesnow.Utils.warn('Caches are not available');
+			Sunniesnow.Logs.warn('Caches are not available');
 			return;
 		}
 		if (!await caches.delete('site-v1')) {
-			Sunniesnow.Utils.warn('No caches of site resources to delete');
+			Sunniesnow.Logs.warn('No caches of site resources to delete');
 		}
 	},
 
 	async deleteExternalCaches() {
 		if (!window.caches) {
-			Sunniesnow.Utils.warn('Caches are not available');
+			Sunniesnow.Logs.warn('Caches are not available');
 			return;
 		}
 		if (!await caches.delete('external-v1')) {
-			Sunniesnow.Utils.warn('No caches of external resources to delete');
+			Sunniesnow.Logs.warn('No caches of external resources to delete');
 		}
 	}
 

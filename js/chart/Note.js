@@ -14,7 +14,7 @@ Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 		try {
 			Sunniesnow[this.constructor.SE_CLASS].hit(this.id, when);
 		} catch (e) {
-			Sunniesnow.Utils.warn(`Failed to play hit SE for ${this.constructor.TYPE_NAME} ${this.id}: ${e}`, e);
+			Sunniesnow.Logs.warn(`Failed to play hit SE for ${this.constructor.TYPE_NAME} ${this.id}: ${e}`, e);
 		}
 	}
 
@@ -22,7 +22,7 @@ Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 		try {
 			Sunniesnow[this.constructor.SE_CLASS].release(this.id, when);
 		} catch (e) {
-			Sunniesnow.Utils.warn(`Failed to play release SE for ${this.constructor.TYPE_NAME} ${this.id}: ${e}`, e);
+			Sunniesnow.Logs.warn(`Failed to play release SE for ${this.constructor.TYPE_NAME} ${this.id}: ${e}`, e);
 		}
 	}
 

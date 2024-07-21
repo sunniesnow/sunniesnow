@@ -89,7 +89,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		this.pinnedPoints = [];
 		this.earlyLateTexts = [];
 		this.touchAreas = [];
-		Sunniesnow.Dom.clearPinnedCoordinates();
+		Sunniesnow.PinnedCoordinates.clear();
 	}
 
 	touchStart(touch) {
@@ -146,7 +146,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		pinnedPoint.text = text;
 		pinnedPoint.addChild(text);
 		this.pinnedPoints.push(pinnedPoint);
-		Sunniesnow.Dom.addPinnedCoordinates(pinnedPoint);
+		Sunniesnow.PinnedCoordinates.add(pinnedPoint);
 		this.movePinnedPointTo(pinnedPoint, x, y);
 		return pinnedPoint;
 	}
@@ -164,7 +164,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		point.movingTouch = touch;
 		point.alpha = 1;
 		this.movingPointsOfTouches.set(touch, point);
-		Sunniesnow.Dom.startMovingPinnedCoordinates(point);
+		Sunniesnow.PinnedCoordinates.startMoving(point);
 	}
 
 	movePinnedPointTo(point, x, y) {
@@ -180,7 +180,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			text.anchor.x = 0;
 			text.x = this.constructor.touchRadius;
 		}
-		Sunniesnow.Dom.updatePinnedCoordinates(point);
+		Sunniesnow.PinnedCoordinates.update(point);
 	}
 
 	updatePinnedPoints(delta) {
@@ -199,7 +199,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			this.removeChild(point);
 			point.destroy({children: true});
 			this.pinnedPoints.splice(this.pinnedPoints.indexOf(point), 1);
-			Sunniesnow.Dom.removePinnedCoordinates(point);
+			Sunniesnow.PinnedCoordinates.remove(point);
 			return true;
 		}
 		return false;
@@ -254,14 +254,14 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		point.alpha = 0.5;
 		this.movingPointsOfTouches.delete(touch);
 		point.movingTouch = null;
-		Sunniesnow.Dom.stopMovingPinnedCoordinates(point);
+		Sunniesnow.PinnedCoordinates.stopMoving(point);
 		return true;
 	}
 
 	tryEditingPoint(touch) {
 		const point = this.findTouchedPoint(touch);
 		if (point) {
-			Sunniesnow.Dom.editPinnedCoordinates(point);
+			Sunniesnow.PinnedCoordinates.edit(point);
 			return true;
 		}
 		return false;

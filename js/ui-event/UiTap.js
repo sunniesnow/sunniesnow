@@ -26,7 +26,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 					//'HuaWenFangSong'
 				);
 			} catch (e) {
-				Sunniesnow.Utils.warn(`Failed to load font for note texts: ${e.message ?? e}`, e);
+				Sunniesnow.Logs.warn(`Failed to load font for note texts: ${e.message ?? e}`, e);
 			}
 		}
 	}

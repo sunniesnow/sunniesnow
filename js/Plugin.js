@@ -51,7 +51,7 @@ Sunniesnow.Plugin = class Plugin {
 		try {
 			zip = await JSZip.loadAsync(this.blob);
 		} catch (e) {
-			Sunniesnow.Utils.warn(`Failed to load plugin ${this.id}: cannot read as zip`, e);
+			Sunniesnow.Logs.warn(`Failed to load plugin ${this.id}: cannot read as zip`, e);
 			return;
 		}
 		if (Sunniesnow.Utils.isBrowser()) {
@@ -112,7 +112,7 @@ Sunniesnow.Plugin = class Plugin {
 		if (!this.applied) {
 			const blob = this.blobs['main.js'];
 			if (!blob) {
-				Sunniesnow.Utils.warn(`Plugin ${this.id} does not have a main.js`);
+				Sunniesnow.Logs.warn(`Plugin ${this.id} does not have a main.js`);
 				this.constructor.now = null;
 				return;
 			}
@@ -166,9 +166,9 @@ Sunniesnow.Plugin = class Plugin {
 			n = this.additionalTotal ||= 0;
 		}
 		document.getElementById('plugin-list').appendChild(this.html(n));
-		Sunniesnow.Dom.associateRadio(`plugin-${n}-online-radio`, `plugin-${n}-online`);
-		Sunniesnow.Dom.associateRadio(`plugin-${n}-upload-radio`, `plugin-${n}-upload`);
-		Sunniesnow.Dom.setTextInput(`plugin-${n}-online`);
+		Sunniesnow.Settings.associateRadio(`plugin-${n}-online-radio`, `plugin-${n}-online`);
+		Sunniesnow.Settings.associateRadio(`plugin-${n}-upload-radio`, `plugin-${n}-upload`);
+		Sunniesnow.Settings.setTextInput(`plugin-${n}-online`);
 		this.additionalTotal = Math.max(this.additionalTotal || 0, n) + 1;
 	}
 

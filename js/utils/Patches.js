@@ -63,7 +63,7 @@ Sunniesnow.Patches = {
 					let result = this.webkitFullscreenElement || this.mozFullScreenElement || this.msFullscreenElement;
 					result ||= this.webkitCurrentFullScreenElement || this.mozCurrentFullScreenElement || this.msCurrentFullScreenElement;
 					if (result === undefined) {
-						Sunniesnow.Utils.warn('fullscreenElement is not supported on this browser');
+						Sunniesnow.Logs.warn('fullscreenElement is not supported on this browser');
 					}
 					return result;
 				}
