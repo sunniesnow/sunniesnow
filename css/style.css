@@ -63,3 +63,13 @@
 		}
 	}
 }
+
+.pinned-coordinates-item {
+	&.moving {
+		color: red;
+	}
+
+	&.editing {
+		color: orange;
+	}
+}

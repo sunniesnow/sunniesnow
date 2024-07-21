@@ -126,6 +126,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		super.terminate();
 		this.pauseBoard.destroy({children: true});
 		this.pauseButton.destroy({children: true});
+		if (Sunniesnow.game.settings.debug) {
+			this.debugBoard.clear();
+		}
 	}
 
 	retry() {

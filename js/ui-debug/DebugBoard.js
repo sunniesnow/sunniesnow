@@ -13,17 +13,16 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		this.touchAreas = [];
 		this.earlyLateTexts = [];
 		this.addTouchListeners();
+		this.movingPointsOfTouches = new WeakMap();
 	}
 
 	addTouchListeners() {
 		Sunniesnow.TouchManager.addStartListener(this.touchStartListener = this.touchStart.bind(this), 200)
-		Sunniesnow.TouchManager.addMoveListener(this.touchMoveListener = this.touchMove.bind(this), 200);
 		Sunniesnow.TouchManager.addEndListener(this.touchEndListener = this.touchEnd.bind(this), 200);
 	}
 
 	removeTouchListeners() {
 		Sunniesnow.TouchManager.removeStartListener(this.touchStartListener);
-		Sunniesnow.TouchManager.removeMoveListener(this.touchMoveListener);
 		Sunniesnow.TouchManager.removeEndListener(this.touchEndListener);
 	}
 
@@ -49,7 +48,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		this.pinnedPointRadius = Sunniesnow.game.settings.width / 90;
 		this.pinnedPointThickness = Sunniesnow.game.settings.width / 360;
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.pinnedPointThickness, 0xff00ff, 0.5);
+		graphics.lineStyle(this.pinnedPointThickness, 0xff00ff);
 		graphics.moveTo(0, -this.pinnedPointRadius);
 		graphics.lineTo(0, this.pinnedPointRadius);
 		graphics.moveTo(-this.pinnedPointRadius, 0);
@@ -62,15 +61,54 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		if (Sunniesnow.game.settings.hideDebugExceptPause) {
 			this.visible = Sunniesnow.Music.pausing;
 		}
+		this.updateTouches(delta);
+		this.updatePinnedPoints(delta);
 		this.updateEarlyLateTexts(delta);
 		this.updateTouchAreas(delta);
 	}
 
+	clear() {
+		this.removeTouchListeners();
+		for (const touchUi of Object.values(this.touches)) {
+			touchUi.destroy({children: true});
+			this.removeChild(touchUi);
+		}
+		for (const point of this.pinnedPoints) {
+			point.destroy({children: true});
+			this.removeChild(point);
+		}
+		for (const earlyLateText of this.earlyLateTexts) {
+			earlyLateText.destroy();
+			this.removeChild(earlyLateText);
+		}
+		for (const touchArea of this.touchAreas) {
+			touchArea.destroy();
+			this.removeChild(touchArea);
+		}
+		this.touches = {};
+		this.pinnedPoints = [];
+		this.earlyLateTexts = [];
+		this.touchAreas = [];
+		Sunniesnow.Dom.clearPinnedCoordinates();
+	}
+
 	touchStart(touch) {
 		this.addTouchUi(touch);
-		if (this.visible && touch.altKey) {
-			this.unpinPoint(touch);
+		if (!this.visible) {
+			return false;
+		}
+		if (touch.ctrlKey && touch.button === 0) { // ctrl + left click
+			this.pinPoint(touch);
 			return true;
+		}
+		if (touch.ctrlKey && touch.button === 2) { // ctrl + right click
+			return this.unpinPoint(touch);
+		}
+		if (touch.altKey && touch.button === 0) { // alt + left click
+			return this.tryStartingMovingPoint(touch);
+		}
+		if (touch.altKey && touch.button === 2) { // alt + right click
+			return this.tryEditingPoint(touch);
 		}
 		return false;
 	}
@@ -78,6 +116,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	addTouchUi(touch) {
 		const id = touch.id;
 		const touchUi = this.touches[id] = new PIXI.Graphics(this.constructor.touchGeometry);
+		touchUi.touch = touch;
 		const text = touchUi.text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 90,
 			fill: '#ff00ff',
@@ -90,22 +129,83 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	pinPoint(touch) {
+		const {x, y} = touch.end();
+		const pinnedPoint = this.pinPointByCoordinates(x, y);
+		this.startMovingPoint(touch, pinnedPoint);
+	}
+
+	pinPointByCoordinates(x, y) {
 		const pinnedPoint = new PIXI.Graphics(this.constructor.pinnedPointGeometry);
-		const {x, y, canvasX, canvasY} = touch.end();
-		pinnedPoint.x = canvasX;
-		pinnedPoint.y = canvasY;
+		pinnedPoint.alpha = 0.5;
 		this.addChild(pinnedPoint);
-		const text = new PIXI.Text(`(${x.toFixed(1)},${y.toFixed(1)})`, {
+		const text = new PIXI.Text('', {
 			fontSize: Sunniesnow.game.settings.width / 90,
 			fill: '#ff00ff',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 		});
-		text.alpha = 0.5;
+		pinnedPoint.text = text;
 		pinnedPoint.addChild(text);
 		this.pinnedPoints.push(pinnedPoint);
+		Sunniesnow.Dom.addPinnedCoordinates(pinnedPoint);
+		this.movePinnedPointTo(pinnedPoint, x, y);
+		return pinnedPoint;
+	}
+
+	tryStartingMovingPoint(touch) {
+		const point = this.findTouchedPoint(touch);
+		if (point) {
+			this.startMovingPoint(touch, point);
+			return true;
+		}
+		return false;
+	}
+
+	startMovingPoint(touch, point) {
+		point.movingTouch = touch;
+		point.alpha = 1;
+		this.movingPointsOfTouches.set(touch, point);
+		Sunniesnow.Dom.startMovingPinnedCoordinates(point);
+	}
+
+	movePinnedPointTo(point, x, y) {
+		const [canvasX, canvasY] = Sunniesnow.Config.chartMapping(x, y);
+		point.x = canvasX;
+		point.y = canvasY;
+		const text = point.text;
+		text.text = `(${x.toFixed(1)},${y.toFixed(1)})`;
+		if (canvasX + text.width > Sunniesnow.game.settings.width) {
+			text.anchor.x = 1;
+			text.x = -this.constructor.touchRadius;
+		} else {
+			text.anchor.x = 0;
+			text.x = this.constructor.touchRadius;
+		}
+		Sunniesnow.Dom.updatePinnedCoordinates(point);
+	}
+
+	updatePinnedPoints(delta) {
+		for (const point of this.pinnedPoints) {
+			if (!point.movingTouch) {
+				continue;
+			}
+			const {x, y} = point.movingTouch.end();
+			this.movePinnedPointTo(point, x, y);
+		}
 	}
 
 	unpinPoint(touch) {
+		const point = this.findTouchedPoint(touch);
+		if (point) {
+			this.removeChild(point);
+			point.destroy({children: true});
+			this.pinnedPoints.splice(this.pinnedPoints.indexOf(point), 1);
+			Sunniesnow.Dom.removePinnedCoordinates(point);
+			return true;
+		}
+		return false;
+	}
+
+	findTouchedPoint(touch) {
 		let nearest = null;
 		let minDistance = Infinity;
 		const {canvasX: x, canvasY: y} = touch.start();
@@ -116,40 +216,52 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 				nearest = pinnedPoint;
 			}
 		});
-		if (minDistance < this.constructor.pinnedPointRadius) {
-			this.removeChild(nearest);
-			nearest.destroy({children: true});
-			this.pinnedPoints.splice(this.pinnedPoints.indexOf(nearest), 1);
-		}
+		return minDistance < this.constructor.pinnedPointRadius ? nearest : null;
 	}
 
-	touchMove(touch) {
-		this.moveTouchUi(touch);
-		return false;
-	}
-
-	moveTouchUi(touch) {
-		const touchUi = this.touches[touch.id];
-		if (!touchUi) {
-			return;
-		}
-		const {x, y, canvasX, canvasY} = touch.end();
-		touchUi.x = canvasX;
-		touchUi.y = canvasY;
-		touchUi.text.text = `${touch.id}(${x.toFixed(1)},${y.toFixed(1)})`;
-		if (touchUi.x + touchUi.width > Sunniesnow.game.settings.width) {
-			touchUi.text.anchor.x = 1;
-			touchUi.text.x = -this.constructor.touchRadius;
-		} else {
-			touchUi.text.anchor.x = 0;
-			touchUi.text.x = this.constructor.touchRadius;
+	updateTouches(delta) {
+		for (const [id, touchUi] of Object.entries(this.touches)) {
+			const {x, y, canvasX, canvasY} = touchUi.touch.end();
+			touchUi.x = canvasX;
+			touchUi.y = canvasY;
+			touchUi.text.text = `${id}(${x.toFixed(1)},${y.toFixed(1)})`;
+			if (touchUi.x + touchUi.width > Sunniesnow.game.settings.width) {
+				touchUi.text.anchor.x = 1;
+				touchUi.text.x = -this.constructor.touchRadius;
+			} else {
+				touchUi.text.anchor.x = 0;
+				touchUi.text.x = this.constructor.touchRadius;
+			}
 		}
 	}
 
 	touchEnd(touch) {
 		this.removeTouchUi(touch);
-		if (this.visible && touch.ctrlKey) {
-			this.pinPoint(touch);
+		if (!this.visible) {
+			return false;
+		}
+		if (touch.altKey || touch.ctrlKey && touch.button === 0) { // alt + left click
+			return this.endMovingPoint(touch);
+		}
+		return false;
+	}
+
+	endMovingPoint(touch) {
+		if (!this.movingPointsOfTouches.has(touch)) {
+			return false;
+		}
+		const point = this.movingPointsOfTouches.get(touch);
+		point.alpha = 0.5;
+		this.movingPointsOfTouches.delete(touch);
+		point.movingTouch = null;
+		Sunniesnow.Dom.stopMovingPinnedCoordinates(point);
+		return true;
+	}
+
+	tryEditingPoint(touch) {
+		const point = this.findTouchedPoint(touch);
+		if (point) {
+			Sunniesnow.Dom.editPinnedCoordinates(point);
 			return true;
 		}
 		return false;

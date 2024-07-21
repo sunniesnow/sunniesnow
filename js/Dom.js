@@ -712,6 +712,7 @@ Sunniesnow.Dom = {
 		this.associateRange('background-blur', 'background-blur-value');
 		this.associateRange('background-brightness', 'background-brightness-value');
 		this.associateCheckbox('autoplay', 'progress-adjustable');
+		this.associateCheckbox('debug', 'hide-debug-except-pause');
 	},
 
 	clearDownloadingProgresses() {
@@ -758,6 +759,7 @@ Sunniesnow.Dom = {
 		await this.writeSavedSettings();
 		this.setTextInputs();
 		this.associateDomElements();
+		this.initPinnedCoordiates();
 		this.addEventListeners();
 	},
 
@@ -810,5 +812,126 @@ Sunniesnow.Dom = {
 			otherRadio.addEventListener("change", listener);
 		}
 		listener();
+	},
+
+	initPinnedCoordiates() {
+		this.pinnedCoordinatesParent = document.getElementById('pinned-coordinates');
+		this.pinnedCoordinatesPointToItem = new WeakMap();
+		this.pinnedCoordinatesItemToPoint = new WeakMap();
+		this.pinnedCoordinatesInput = document.getElementById('pinned-coordinates-input');
+		this.pinnedCoordinatesInput.addEventListener('keydown', event => {
+			if (event.key === 'Escape') {
+				event.preventDefault();
+				this.stopEdittingPinnedCoordinates();
+				return;
+			}
+			if (event.key !== 'Enter') {
+				return;
+			}
+			event.preventDefault();
+			event.stopPropagation();
+			const debugBoard = Sunniesnow.game?.scene?.debugBoard;
+			if (!debugBoard) {
+				Sunniesnow.Utils.warn('Debug UI is not available');
+				return;
+			}
+			const string = this.pinnedCoordinatesInput.value;
+			const regex = /^[,\s\(]*([+\-]?\d+(?:\.\d+)?)[,\s]+([+\-]?\d+(?:\.\d+)?)[,\s\)]*$/;
+			const match = string.match(regex);
+			if (!match) {
+				Sunniesnow.Utils.warn('Invalid coordinates');
+				return;
+			}
+			const x = Number(match[1]);
+			const y = Number(match[2]);
+			if (this.edittingPoint) {
+				debugBoard.movePinnedPointTo(this.edittingPoint, x, y);
+				this.stopEdittingPinnedCoordinates(this.edittingPoint);
+			} else {
+				debugBoard.pinPointByCoordinates(x, y);
+			}
+			this.pinnedCoordinatesInput.value = '';
+		});
+	},
+
+	addPinnedCoordinates(point) {
+		const item = document.createElement('span');
+		item.classList.add('pinned-coordinates-item');
+		item.addEventListener('contextmenu', event => {
+			if (event.ctrlKey || event.altKey) {
+				event.preventDefault();
+			}
+		});
+		item.addEventListener('mousedown', event => {
+			if (event.ctrlKey && event.button === 2) {
+				event.preventDefault();
+				this.removePinnedCoordinates(this.pinnedCoordinatesItemToPoint.get(item));
+				return;
+			}
+			if (event.altKey && event.button === 2) {
+				event.preventDefault();
+				this.editPinnedCoordinates(this.pinnedCoordinatesItemToPoint.get(item));
+			}
+		});
+		this.pinnedCoordinatesParent.appendChild(item);
+		this.pinnedCoordinatesPointToItem.set(point, item);
+		this.pinnedCoordinatesItemToPoint.set(item, point);
+		this.updatePinnedCoordinates(point);
+	},
+
+	updatePinnedCoordinates(point) {
+		const item = this.pinnedCoordinatesPointToItem.get(point);
+		item.innerText = point.text.text + ' ';
+	},
+
+	removePinnedCoordinates(point) {
+		if (this.edittingPoint === point) {
+			this.stopEdittingPinnedCoordinates();
+		}
+		const item = this.pinnedCoordinatesPointToItem.get(point);
+		item.remove();
+		this.pinnedCoordinatesPointToItem.delete(point);
+		this.pinnedCoordinatesItemToPoint.delete(item);
+	},
+
+	removeAllPinnedCoordinates() {
+		this.pinnedCoordinatesParent.innerHTML = '';
+	},
+
+	startMovingPinnedCoordinates(point) {
+		const item = this.pinnedCoordinatesPointToItem.get(point);
+		item.classList.add('moving');
+	},
+
+	stopMovingPinnedCoordinates(point) {
+		const item = this.pinnedCoordinatesPointToItem.get(point);
+		item.classList.remove('moving');
+	},
+
+	editPinnedCoordinates(point) {
+		if (this.edittingPoint) {
+			this.stopEdittingPinnedCoordinates();
+		}
+		point.alpha = 1;
+		const item = this.pinnedCoordinatesPointToItem.get(point);
+		item.classList.add('editing');
+		this.edittingPoint = point;
+		this.pinnedCoordinatesInput.focus();
+	},
+
+	stopEdittingPinnedCoordinates() {
+		if (!this.edittingPoint) {
+			return;
+		}
+		this.edittingPoint.alpha = 0.5;
+		const item = this.pinnedCoordinatesPointToItem.get(this.edittingPoint);
+		item.classList.remove('editing');
+		this.edittingPoint = null;
+		this.pinnedCoordinatesInput.blur();
+	},
+
+	clearPinnedCoordinates() {
+		this.stopEdittingPinnedCoordinates();
+		this.pinnedCoordinatesParent.innerHTML = '';
 	}
 };
