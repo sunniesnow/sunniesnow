@@ -6,8 +6,8 @@ Sunniesnow.ProgressControl = {
 	STEP_REWIND_KEY: ',',
 	SEEK_FORWARD_KEY: 'ArrowRight',
 	SEEK_REWIND_KEY: 'ArrowLeft',
-	STEP_DURATION: 1/60,
-	SEEK_DURATION: 1,
+	STEP_DURATION: 1/30,
+	SEEK_DURATION: 2,
 
 	init(scene) {
 		this.touchHeight = Sunniesnow.game.settings.height / 10;
