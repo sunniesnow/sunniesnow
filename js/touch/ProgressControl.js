@@ -102,7 +102,7 @@ Sunniesnow.ProgressControl = {
 			return;
 		}
 		this.status = 'dragging';
-		this.scene.pauseBoard.hiddenByPauseButton = true;
+		Sunniesnow.game.hidePauseUi = true;
 	},
 
 	endDragging() {
@@ -110,7 +110,7 @@ Sunniesnow.ProgressControl = {
 			return;
 		}
 		this.status = 'none';
-		this.scene.pauseBoard.hiddenByPauseButton = Sunniesnow.game.settings.hidePauseUi;
+		Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;
 	},
 
 	updateDragging() {
@@ -137,7 +137,7 @@ Sunniesnow.ProgressControl = {
 		}
 		this.status = 'none';
 		Sunniesnow.Music.pause();
-		this.scene.pauseBoard.hiddenByPauseButton = Sunniesnow.game.settings.hidePauseUi;
+		Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;
 	},
 
 	updateForwarding() {
@@ -159,7 +159,7 @@ Sunniesnow.ProgressControl = {
 			return;
 		}
 		this.status = 'none';
-		this.scene.pauseBoard.hiddenByPauseButton = Sunniesnow.game.settings.hidePauseUi;
+		Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;
 	},
 
 	updateRewinding() {
@@ -167,7 +167,7 @@ Sunniesnow.ProgressControl = {
 			return;
 		}
 		this.scene.adjustProgress(Sunniesnow.Music.currentTime - 1/Sunniesnow.game.app.ticker.FPS, 'pause');
-		this.scene.pauseBoard.hiddenByPauseButton = true;
+		Sunniesnow.game.hidePauseUi = true;
 	},
 
 	stepForward() {

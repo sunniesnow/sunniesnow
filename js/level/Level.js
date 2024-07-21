@@ -212,9 +212,16 @@ Sunniesnow.Level = class Level {
 	}
 
 	finishIfFinished() {
-		if (this.unhitNotes.length === 0 && this.holdingNotes.length === 0) {
-			this.finish();
+		if (this.unhitNotes.length !== 0 || this.holdingNotes.length !== 0) {
+			return;
 		}
+		if (!Sunniesnow.game.settings.pauseFinish || this.lastPause) {
+			this.finish();
+			return;
+		}
+		this.lastPause = true;
+		Sunniesnow.Music.pause();
+		Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;
 	}
 
 	touchEnd(touch) {

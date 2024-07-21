@@ -203,6 +203,7 @@ Sunniesnow.Dom = {
 			pauseFullscreen: this.readCheckbox('pause-fullscreen'),
 			pauseBlur: this.readCheckbox('pause-blur'),
 			hidePauseUi: this.readCheckbox('hide-pause-ui'),
+			pauseFinish: this.readCheckbox('pause-finish'),
 			secondPause: this.readRadio('second-pause'),
 			contextMenuPlay: this.readCheckbox('context-menu-play'),
 			contextMenuPause: this.readCheckbox('context-menu-pause'),
@@ -344,6 +345,7 @@ Sunniesnow.Dom = {
 		this.writeCheckbox('pause-fullscreen', d('pauseFullscreen'));
 		this.writeCheckbox('pause-blur', d('pauseBlur'));
 		this.writeCheckbox('hide-pause-ui', d('hidePauseUi'));
+		this.writeCheckbox('pause-finish', d('pauseFinish'));
 		this.writeRadio('second-pause', d('secondPause'));
 		this.writeCheckbox('context-menu-play', d('contextMenuPlay'));
 		this.writeCheckbox('context-menu-pause', d('contextMenuPause'));

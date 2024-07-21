@@ -158,6 +158,7 @@ Sunniesnow.Game = class Game {
 		if (this.settings.touchEffects) {
 			this.app.stage.addChild(Sunniesnow.TouchManager.touchEffectsBoard);
 		}
+		this.hidePauseUi = this.settings.hidePauseUi;
 		this.goto(new Sunniesnow.SceneGame());
 		this.sceneInitialized = true;
 	}

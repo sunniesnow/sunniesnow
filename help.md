@@ -868,6 +868,18 @@ When it is `false`, the pause UI will be shown by default.
 To toggle the visibility of the pause UI,
 set [`second-pause`](#second-pause) to `toggle-ui` and hit the pause button when the game is paused.
 
+##### Pause when the level is about to finish
+{:#pause-finish}
+
+- **Setting id**: `pause-finish`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the game should be paused when the level is about to finish
+(when every note has a judgement).
+When it is `true`, the game will be paused when the level is about to finish.
+When you resume here, the game will then actually finish.
+When it is `false`, the level will directly finish when it is about to finish.
+
 ##### Function of the pause button while pausing
 {:#second-pause}
 

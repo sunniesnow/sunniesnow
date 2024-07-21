@@ -4,7 +4,6 @@ Sunniesnow.PauseBoard = class PauseBoard extends PIXI.Container {
 		this.sceneGame = sceneGame;
 		this.populate();
 		this.visible = false;
-		this.hiddenByPauseButton = false;
 	}
 
 	populate() {
@@ -28,7 +27,7 @@ Sunniesnow.PauseBoard = class PauseBoard extends PIXI.Container {
 	}
 
 	update(delta) {
-		this.visible = Sunniesnow.Music.pausing && !this.hiddenByPauseButton;
+		this.visible = Sunniesnow.Music.pausing && !Sunniesnow.game.hidePauseUi;
 	}
 
 };
