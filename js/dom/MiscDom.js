@@ -22,6 +22,70 @@ Sunniesnow.MiscDom = {
 				Sunniesnow.Settings.markManual(elementId);
 			});
 		});
+		document.getElementById('refresh').addEventListener('click', event => {
+			location.reload(true);
+		});
+		document.getElementById('delete-settings').addEventListener('click', event => {
+			Sunniesnow.Settings.deleteSavedSettings();
+		});
+		document.getElementById('export-settings').addEventListener('click', event => {
+			Sunniesnow.Settings.exportSavedSettings();
+		});
+		document.getElementById('import-settings').addEventListener('change', event => {
+			Sunniesnow.Settings.importSettings();
+		});
+		document.getElementById('delete-chart-offsets').addEventListener('click', event => {
+			Sunniesnow.Settings.deleteSavedChartOffsets();
+		});
+		document.getElementById('export-chart-offsets').addEventListener('click', event => {
+			Sunniesnow.Settings.exportSavedChartOffsets();
+		});
+		document.getElementById('import-chart-offsets').addEventListener('change', event => {
+			Sunniesnow.Settings.importChartOffsets();
+		});
+		document.getElementById('offset-wizard').addEventListener('click', event => {
+			Sunniesnow.MiscDom.offsetWizard();
+		});
+		document.getElementById('delete-online-caches').addEventListener('click', event => {
+			Sunniesnow.Loader.deleteOnlineCaches();
+		});
+		document.getElementById('delete-site-caches').addEventListener('click', event => {
+			Sunniesnow.Loader.deleteSiteCaches();
+		});
+		document.getElementById('delete-external-caches').addEventListener('click', event => {
+			Sunniesnow.Loader.deleteExternalCaches();
+		});
+		['game-start', 'start-button'].forEach(elementId => {
+			document.getElementById(elementId).addEventListener('click', event => {
+				Sunniesnow.Game.run();
+			});
+		});
+		['game-stop', 'stop-button'].forEach(elementId => {
+			document.getElementById(elementId).addEventListener('click', event => {
+				Sunniesnow.game?.terminate();
+			});
+		});
+		document.getElementById('game-pause').addEventListener('click', event => {
+			Sunniesnow.game?.pause();
+		});
+		document.getElementById('game-resume').addEventListener('click', event => {
+			Sunniesnow.game?.resume();
+		});
+		document.getElementById('game-retry').addEventListener('click', event => {
+			Sunniesnow.game?.retry();
+		});
+		document.getElementById('game-fullscreen').addEventListener('click', event => {
+			Sunniesnow.Fullscreen.toggle();
+		});
+		document.getElementById('game-toggle-pause-ui').addEventListener('click', event => {
+			if (!Sunniesnow.game) {
+				return;
+			}
+			Sunniesnow.game.hidePauseUi = !Sunniesnow.game.hidePauseUi;
+		});
+		document.getElementById('logs-clear').addEventListener('click', event => {
+			Sunniesnow.Logs.clearWarningsAndErrors();
+		});
 	},
 
 	async triggerPreprocess() {

@@ -36,13 +36,12 @@ Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
 
 	theOnTrigger() {
 		if (!Sunniesnow.Music.pausing || Sunniesnow.game.level.finished) {
-			Sunniesnow.Music.togglePausing();
-			Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;
+			Sunniesnow.game.togglePausing();
 			return;
 		}
 		switch (Sunniesnow.game.settings.secondPause) {
 			case 'resume':
-				Sunniesnow.Music.resume();
+				Sunniesnow.game.resume();
 				break;
 			case 'disabled':
 				break;

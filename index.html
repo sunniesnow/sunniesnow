@@ -786,7 +786,7 @@ description: Sunniesnow is a web rhythm game
 	<fieldset>
 		<legend>Webpage</legend>
 		<div>
-			<button type="button" id="refresh" onclick="location.reload(true);">Refresh</button>
+			<button type="button" id="refresh">Refresh</button>
 		</div>
 	</fieldset>
 
@@ -794,15 +794,15 @@ description: Sunniesnow is a web rhythm game
 		<legend>Settings</legend>
 		<div>
 			Delete saved settings:
-			<button type="button" id="delete-settings" onclick="Sunniesnow.Settings.deleteSavedSettings();">Delete</button>
+			<button type="button" id="delete-settings">Delete</button>
 		</div>
 		<div>
 			Export saved settings:
-			<button type="button" id="export-settings" onclick="Sunniesnow.Settings.exportSavedSettings();">Export</button>
+			<button type="button" id="export-settings">Export</button>
 		</div>
 		<div>
 			Import saved settings:
-			<input type="file" id="import-settings" onchange="Sunniesnow.Settings.importSettings();">
+			<input type="file" id="import-settings">
 		</div>
 	</fieldset>
 
@@ -810,19 +810,19 @@ description: Sunniesnow is a web rhythm game
 		<legend>Offsets</legend>
 		<div>
 			Delete saved chart offsets:
-			<button type="button" id="delete-chart-offsets" onclick="Sunniesnow.Settings.deleteSavedChartOffsets();">Delete</button>
+			<button type="button" id="delete-chart-offsets">Delete</button>
 		</div>
 		<div>
 			Export saved chart offsets:
-			<button type="button" id="export-chart-offsets" onclick="Sunniesnow.Settings.exportSavedChartOffsets();">Export</button>
+			<button type="button" id="export-chart-offsets">Export</button>
 		</div>
 		<div>
 			Import saved chart offsets:
-			<input type="file" id="import-chart-offsets" onchange="Sunniesnow.Settings.importChartOffsets();">
+			<input type="file" id="import-chart-offsets">
 		</div>
 		<div>
 			Play the Offset Wizard:
-			<button type="button" id="offset-wizard" onclick="Sunniesnow.MiscDom.offsetWizard();">Start</button>
+			<button type="button" id="offset-wizard">Start</button>
 		</div>
 	</fieldset>
 
@@ -831,17 +831,25 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			Delete caches of online resources:
-			<button type="button" id="delete-online-caches" onclick="Sunniesnow.Loader.deleteOnlineCaches();">Delete</button>
+			<button type="button" id="delete-online-caches">Delete</button>
 		</div>
 		
 		<div>
 			Delete caches of site resources:
-			<button type="button" id="delete-site-caches" onclick="Sunniesnow.Loader.deleteSiteCaches();">Delete</button>
+			<button type="button" id="delete-site-caches">Delete</button>
 		</div>
 
 		<div>
 			Delete caches of external resources:
-			<button type="button" id="delete-external-caches" onclick="Sunniesnow.Loader.deleteExternalCaches();">Delete</button>
+			<button type="button" id="delete-external-caches">Delete</button>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Logs</legend>
+
+		<div>
+			<button type="button" id="logs-clear">Clear</button>
 		</div>
 	</fieldset>
 
@@ -849,17 +857,22 @@ description: Sunniesnow is a web rhythm game
 		<legend>Game</legend>
 
 		<div>
-			<button type="button" id="game-start" onclick="Sunniesnow.Game.run();">Start</button>
+			<button type="button" id="game-start">Start</button>
+			<button type="button" id="game-stop">Stop</button>
 		</div>
 
 		<div>
-			<button type="button" id="game-stop" onclick="Sunniesnow.game?.terminate();">Stop</button>
+			<button type="button" id="game-pause">Pause</button>
+			<button type="button" id="game-resume">Resume</button>
+			<button type="button" id="game-retry">Retry</button>
+			<button type="button" id="game-fullscreen">Fullscreen</button>
+			<button type="button" id="game-toggle-pause-ui">Toggle pause UI</button>
 		</div>
 	</fieldset>
 </details>
 
-<button type="button" id="start-button" onclick="Sunniesnow.Game.run();">Start</button>
-<button type="button" id="stop-button" onclick="Sunniesnow.game?.terminate();">Stop</button>
+<button type="button" id="start-button">Start</button>
+<button type="button" id="stop-button">Stop</button>
 <a href="help.html" target="_blank" id="help">Help</a>
 
 <div id="loading-progress"></div>

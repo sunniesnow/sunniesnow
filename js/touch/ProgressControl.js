@@ -136,8 +136,7 @@ Sunniesnow.ProgressControl = {
 			return;
 		}
 		this.status = 'none';
-		Sunniesnow.Music.pause();
-		Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;
+		Sunniesnow.game.pause();
 	},
 
 	updateForwarding() {

@@ -88,7 +88,7 @@ Sunniesnow.Game = class Game {
 				return;
 			}
 			if (!this.level?.finished && this.sceneInitialized) {
-				Sunniesnow.Music.pause();
+				this.pause();
 			}
 		};
 		if (this.settings.pauseFullscreen) {
@@ -205,6 +205,28 @@ Sunniesnow.Game = class Game {
 			this.app.destroy();
 		} catch (error) {
 			console.error(error);
+		}
+	}
+
+	pause() {
+		Sunniesnow.Music.pause();
+		this.hidePauseUi = this.settings.hidePauseUi;
+	}
+
+	resume() {
+		Sunniesnow.Music.resume();
+	}
+
+	togglePausing() {
+		Sunniesnow.Music.togglePausing();
+		this.hidePauseUi = this.settings.hidePauseUi;
+	}
+
+	retry() {
+		if (this.scene instanceof Sunniesnow.SceneGame) {
+			this.scene.retry();
+		} else if (this.scene instanceof Sunniesnow.SceneResult) {
+			this.scene.gotoGame();
 		}
 	}
 };

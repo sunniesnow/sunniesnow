@@ -220,8 +220,7 @@ Sunniesnow.Level = class Level {
 			return;
 		}
 		this.lastPause = true;
-		Sunniesnow.Music.pause();
-		Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;
+		Sunniesnow.game.pause();
 	}
 
 	touchEnd(touch) {
