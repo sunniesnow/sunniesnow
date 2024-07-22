@@ -199,6 +199,7 @@ Sunniesnow.Settings = {
 			end: this.readValue('end'),
 			resumePreparationTime: this.readValue('resume-preparation-time'),
 			beginningPreparationTime: this.readValue('beginning-preparation-time'),
+			pauseDoubleTime: this.readValue('pause-double-time'),
 			notesPriorityOverPause: this.readCheckbox('notes-priority-over-pause'),
 			pauseFullscreen: this.readCheckbox('pause-fullscreen'),
 			pauseBlur: this.readCheckbox('pause-blur'),
@@ -341,6 +342,7 @@ Sunniesnow.Settings = {
 		this.writeValue('end', d('end'));
 		this.writeValue('resume-preparation-time', d('resumePreparationTime'));
 		this.writeValue('beginning-preparation-time', d('beginningPreparationTime'));
+		this.writeValue('pause-double-time', d('pauseDoubleTime'));
 		this.writeCheckbox('notes-priority-over-pause', d('notesPriorityOverPause'));
 		this.writeCheckbox('pause-fullscreen', d('pauseFullscreen'));
 		this.writeCheckbox('pause-blur', d('pauseBlur'));

@@ -35,8 +35,19 @@ Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
 	}
 
 	theOnTrigger() {
-		if (!Sunniesnow.Music.pausing || Sunniesnow.game.level.finished) {
+		if (Sunniesnow.game.level.finished) {
 			Sunniesnow.game.togglePausing();
+			return;
+		}
+		if (!Sunniesnow.Music.pausing) {
+			if (!Sunniesnow.game.settings.pauseDoubleTime) {
+				Sunniesnow.game.togglePausing();
+			} else if (this.doubleTapElapsed <= Sunniesnow.game.settings.pauseDoubleTime) {
+				this.doubleTapElapsed = null;
+				Sunniesnow.game.togglePausing();
+			} else {
+				this.doubleTapElapsed = 0;
+			}
 			return;
 		}
 		switch (Sunniesnow.game.settings.secondPause) {
@@ -48,6 +59,12 @@ Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
 			case 'toggle-ui':
 				Sunniesnow.game.hidePauseUi = !Sunniesnow.game.hidePauseUi;
 				break;
+		}
+	}
+
+	update(delta) {
+		if (this.doubleTapElapsed >= 0) {
+			this.doubleTapElapsed += delta / PIXI.settings.TARGET_FPMS / 1000;
 		}
 	}
 

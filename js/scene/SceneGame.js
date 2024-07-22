@@ -155,6 +155,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.topCenterHud.update(delta, this.getUiText('hudTopCenter'));
 		this.progressBar.update(delta);
 		this.pauseBoard.update(delta);
+		this.pauseButton.update(delta);
 	}
 
 	getUiText(ui) {

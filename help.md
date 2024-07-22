@@ -823,6 +823,20 @@ or the start position defined by [`start`](#start)
 
 #### Pause
 
+##### Tap pause button twice in
+{:#pause-double-time}
+
+- **Setting id**: `pause-double-time`.
+- **Possible values**: Any number greater than or equal to 0.
+
+This setting is used to set the time window in which
+you should tap the pause button twice during a level to pause the game.
+If the value is set to `0`, the game will be paused immediately when you tap the pause button once.
+
+The game always pauses immediately when you tap the pause button once
+when the level has finished (when the game is in the results scene)
+regardless of the value of this setting.
+
 ##### Notes have priority over the pause button
 {:#notes-priority-over-pause}
 
