@@ -177,13 +177,15 @@ Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
 	'utils/PixiPatches',
 	'utils/Patches',
 	'utils/Fetcher',
-	'utils/Fullscreen',
 	'utils/Assets',
 
 	'dom/Settings',
+	'dom/Fullscreen',
 	'dom/Logs',
 	'dom/MiscDom',
 	'dom/PinnedCoordinates',
+	'dom/Popup',
+	'dom/SpinUp',
 
 	'Config',
 	'Plugin',

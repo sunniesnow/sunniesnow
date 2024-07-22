@@ -599,25 +599,6 @@ description: Sunniesnow is a web rhythm game
 			<label for="second-pause-radio">Toggle pause UI</label>
 		</div>
 	</fieldset>
-
-	<fieldset>
-		<legend>Context menu</legend>
-
-		<div>
-			<input type="checkbox" id="context-menu-play">
-			<label for="context-menu-play">Enable when playing</label>
-		</div>
-
-		<div>
-			<input type="checkbox" id="context-menu-pause" checked>
-			<label for="context-menu-pause">Enable when pausing or finished</label>
-		</div>
-
-		<div>
-			<input type="checkbox" id="context-menu-no-modifier" checked>
-			<label for="context-menu-no-modifier">Disable when holding <kbd>Control</kbd> or <kbd>Alt</kbd></label>
-		</div>
-	</fieldset>
 </details>
 
 <details>
@@ -705,7 +686,7 @@ description: Sunniesnow is a web rhythm game
 	<summary>System settings</summary>
 
 	<fieldset>
-		<legend>Resolution</legend>
+		<legend>Interface</legend>
 
 		<div>
 			Width:
@@ -715,6 +696,11 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			Height:
 			<input type="number" id="height" min="1" value="1080">
+		</div>
+
+		<div>
+			<input type="checkbox" id="popup">
+			<label for="popup">Show in popup window</label>
 		</div>
 	</fieldset>
 
@@ -738,6 +724,25 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<input type="checkbox" id="avoid-downloading-fonts">
 			<label for="avoid-downloading-fonts">Avoid downloading fonts</label>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Context menu</legend>
+
+		<div>
+			<input type="checkbox" id="context-menu-play">
+			<label for="context-menu-play">Enable when playing</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="context-menu-pause" checked>
+			<label for="context-menu-pause">Enable when pausing or finished</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="context-menu-no-modifier" checked>
+			<label for="context-menu-no-modifier">Disable when holding <kbd>Control</kbd> or <kbd>Alt</kbd></label>
 		</div>
 	</fieldset>
 
@@ -773,19 +778,12 @@ description: Sunniesnow is a web rhythm game
 			<label for="antialias">Antialias</label>
 		</div>
 		
-		Power preference:
-		
 		<div>
+			Power preference:
 			<input type="radio" id="power-preference-default-radio" name="power-preference" value="default" checked>
 			<label for="power-preference-default-radio">Default</label>
-		</div>
-		
-		<div>
 			<input type="radio" id="power-preference-low-power-radio" name="power-preference" value="low-power">
 			<label for="power-preference-low-power-radio">Low power</label>
-		</div>
-		
-		<div>
 			<input type="radio" id="power-preference-high-performance-radio" name="power-preference" value="high-performance">
 			<label for="power-preference-high-performance-radio">High performance</label>
 		</div>

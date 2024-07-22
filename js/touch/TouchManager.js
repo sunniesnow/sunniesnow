@@ -306,16 +306,16 @@ Sunniesnow.TouchManager = {
 			this.preventKeyEventIfShould(event);
 			this.keyUp(event);
 		}
-		document.addEventListener('keydown', this.keyDownListener);
-		document.addEventListener('keyup', this.keyUpListener);
+		Sunniesnow.game.document.addEventListener('keydown', this.keyDownListener);
+		Sunniesnow.game.document.addEventListener('keyup', this.keyUpListener);
 	},
 
 	removeDomKeyListeners() {
 		if (!this.keyDownListener) {
 			return;
 		}
-		document.removeEventListener('keydown', this.keyDownListener);
-		document.removeEventListener('keyup', this.keyUpListener);
+		Sunniesnow.game.document?.removeEventListener('keydown', this.keyDownListener);
+		Sunniesnow.game.document?.removeEventListener('keyup', this.keyUpListener);
 	},
 
 	addDomMouseListeners() {
@@ -337,18 +337,18 @@ Sunniesnow.TouchManager = {
 			}
 			this.mouseUp(event);
 		}
-		document.addEventListener('mousedown', this.mouseDownListener);
-		document.addEventListener('mousemove', this.mouseMoveListener);
-		document.addEventListener('mouseup', this.mouseUpListener);
+		Sunniesnow.game.document.addEventListener('mousedown', this.mouseDownListener);
+		Sunniesnow.game.document.addEventListener('mousemove', this.mouseMoveListener);
+		Sunniesnow.game.document.addEventListener('mouseup', this.mouseUpListener);
 	},
 
 	removeDomMouseListeners() {
 		if (!this.mouseDownListener) {
 			return;
 		}
-		document.removeEventListener('mousedown', this.mouseDownListener);
-		document.removeEventListener('mousemove', this.mouseMoveListener);
-		document.removeEventListener('mouseup', this.mouseUpListener);
+		Sunniesnow.game.document?.removeEventListener('mousedown', this.mouseDownListener);
+		Sunniesnow.game.document?.removeEventListener('mousemove', this.mouseMoveListener);
+		Sunniesnow.game.document?.removeEventListener('mouseup', this.mouseUpListener);
 	},
 
 	async load() {

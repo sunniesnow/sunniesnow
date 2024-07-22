@@ -23,14 +23,10 @@ Sunniesnow.Logs = {
 			document.getElementById('errors').appendChild(div);
 		}
 		console.error(msg);
+		console.error(e);
 		Sunniesnow.Loader.loadingChart = false;
 		Sunniesnow.Loader.loadingComplete = true;
 		Sunniesnow.game?.terminate();
-		if (e) {
-			throw(e);
-		} else {
-			throw(new Error(msg));
-		}
 	},
 
 	clearWarningsAndErrors() {

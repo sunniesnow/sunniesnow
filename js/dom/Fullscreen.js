@@ -53,7 +53,7 @@ Sunniesnow.Fullscreen = {
 			this.is = false;
 			return;
 		}
-		const promise = document.exitFullscreen();
+		const promise = Sunniesnow.game.document.exitFullscreen();
 		if (typeof promise?.then === 'function') {
 			promise.catch(reason => {
 				this.quitting = false;
@@ -68,7 +68,7 @@ Sunniesnow.Fullscreen = {
 	addListenerToCanvas() {
 		this.canvasFullscreenChangeListener = event => {
 			this.entering = this.quitting = false;
-			this.should = this.is = !!document.fullscreenElement;
+			this.should = this.is = !!Sunniesnow.game.document.fullscreenElement;
 		};
 		Sunniesnow.game.canvas.addEventListener('fullscreenchange', this.canvasFullscreenChangeListener);
 	},

@@ -932,47 +932,6 @@ when the game is already paused.
 This setting does **not** affect the function of the pause button
 when the level is finished.
 
-#### Context menu
-
-These settings are used to set the condition for the context menu (right-click menu)
-of the game canvas to be enabled.
-When the context menu is enabled, you can right-click the game canvas
-to show the context menu.
-
-##### Enable when playing
-{:#context-menu-play}
-
-- **Setting id**: `context-menu-play`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to set whether the context menu should be enabled when playing.
-When it is `true`, the context menu will be enabled when playing.
-When it is `false`, the context menu will be disabled when playing.
-
-##### Enable when pausing or finished
-{:#context-menu-pause}
-
-- **Setting id**: `context-menu-pause`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to set whether the context menu should be enabled when pausing or finished.
-When it is `true`, the context menu will be enabled when pausing or finished.
-When it is `false`, the context menu will be disabled when pausing or finished.
-
-##### Disable when holding <kbd>Control</kbd> or <kbd>Alt</kbd>
-{:#context-menu-no-modifier}
-
-- **Setting id**: `context-menu-no-modifier`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to set whether the context menu should be disabled
-when holding <kbd>Control</kbd>
-(<kbd>Command</kbd> on macOS) or <kbd>Alt</kbd>.
-When it is `true`, the context menu will be disabled in this case.
-When it is `false`, the context menu will not be disabled in this case.
-This setting has higher priority than [`context-menu-play`](#context-menu-play)
-and [`context-menu-pause`](#context-menu-pause).
-
 ### Control settings
 
 Although Lyrica is a mobile rhythm game,
@@ -1180,7 +1139,7 @@ This setting is only useful when [`enable-touchscreen`](#enable-touchscreen) is 
 
 ### System settings
 
-#### Resolution
+#### Interface
 
 The default values of the following settings are dependent on your device.
 Actually, the screen resolution of your screen.
@@ -1203,6 +1162,17 @@ This setting is used to set the width of the game canvas.
 - **Possible values**: Any positive integer.
 
 This setting is used to set the height of the game canvas.
+
+##### Show in popup window
+{:#popup}
+
+- **Setting id**: `popup`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the game should be shown in a popup window.
+When it is `true`, the game will be shown in a popup window,
+and the game canvas of the current webpage will be hidden.
+When it is `false`, the game will be shown in the current webpage.
 
 #### Fullscreen
 
@@ -1248,6 +1218,47 @@ you can exit fullscreen mode when you hit <kbd>Escape</kbd> or <kbd>F11</kbd> on
 If it is `true`, the game will not download any fonts.
 This is useful when your network is slow
 because downloading fonts may take a long time.
+
+#### Context menu
+
+These settings are used to set the condition for the context menu (right-click menu)
+of the game canvas to be enabled.
+When the context menu is enabled, you can right-click the game canvas
+to show the context menu.
+
+##### Enable when playing
+{:#context-menu-play}
+
+- **Setting id**: `context-menu-play`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the context menu should be enabled when playing.
+When it is `true`, the context menu will be enabled when playing.
+When it is `false`, the context menu will be disabled when playing.
+
+##### Enable when pausing or finished
+{:#context-menu-pause}
+
+- **Setting id**: `context-menu-pause`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the context menu should be enabled when pausing or finished.
+When it is `true`, the context menu will be enabled when pausing or finished.
+When it is `false`, the context menu will be disabled when pausing or finished.
+
+##### Disable when holding <kbd>Control</kbd> or <kbd>Alt</kbd>
+{:#context-menu-no-modifier}
+
+- **Setting id**: `context-menu-no-modifier`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the context menu should be disabled
+when holding <kbd>Control</kbd>
+(<kbd>Command</kbd> on macOS) or <kbd>Alt</kbd>.
+When it is `true`, the context menu will be disabled in this case.
+When it is `false`, the context menu will not be disabled in this case.
+This setting has higher priority than [`context-menu-play`](#context-menu-play)
+and [`context-menu-pause`](#context-menu-pause).
 
 #### Plugins
 {:#plugin}

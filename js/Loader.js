@@ -265,6 +265,7 @@ Sunniesnow.Loader = {
 		this.loadingModulesProgress = 0;
 		this.targetLoadingModulesProgress = 0;
 		this.modulesQueue = [];
+		this.loadDom();
 		this.loadAudioAndChart();
 		this.loadTouch();
 		this.loadUiComponents();
@@ -278,6 +279,10 @@ Sunniesnow.Loader = {
 			await this.modulesQueue.shift()();
 		}
 		this.loadingModulesComplete = true;
+	},
+
+	loadDom() {
+		this.loadModule('SpinUp');
 	},
 
 	loadAudioAndChart() {

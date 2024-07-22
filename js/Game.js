@@ -15,20 +15,6 @@ Sunniesnow.Game = class Game {
 		Sunniesnow.Logs.clearWarningsAndErrors();
 		Sunniesnow.game = new this();
 		Sunniesnow.Loader.load();
-		Sunniesnow.game.start();
-		Sunniesnow.game.app.ticker.add(Sunniesnow.game.mainTicker.bind(Sunniesnow.game));
-	}
-
-	start() {
-		this.initPixiApp();
-		this.initCanvas();
-		if (Sunniesnow.Utils.isBrowser()) {
-			this.addWindowListeners();
-		}
-	}
-
-	clearDom() {
-		Sunniesnow.Settings.clearDownloadingProgresses();
 	}
 
 	mainTicker(delta) {
@@ -44,105 +30,6 @@ Sunniesnow.Game = class Game {
 		}
 	}
 
-	initCanvas() {
-		this.canvas = this.app.view;
-		this.canvas.id = 'main-canvas';
-		if (!Sunniesnow.Utils.isBrowser()) {
-			return;
-		}
-		this.addCanvasListeners();
-		if (this.settings.fullscreenOnStart) {
-			Sunniesnow.Fullscreen.set(true);
-		}
-	}
-
-	addCanvasListeners() {
-		this.canvasContextMenuListener = event => {
-			const modifier = (navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey) || event.altKey;
-			const pausing = Sunniesnow.Music.pausing || this.level.finished;
-			let condition = this.settings.contextMenuPause && pausing;
-			condition ||= this.settings.contextMenuPlay && !pausing;
-			condition &&= !(this.settings.contextMenuNoModifier && modifier);
-			if (condition) {
-				Sunniesnow.TouchManager.clear();
-			} else {
-				event.preventDefault();
-			}
-		};
-		this.canvas.addEventListener('contextmenu', this.canvasContextMenuListener);
-		Sunniesnow.Fullscreen.addListenerToCanvas();
-	}
-
-	removeCanvasListeners() {
-		if (!this.canvasContextMenuListener) {
-			return;
-		}
-		this.canvas.removeEventListener('contextmenu', this.canvasContextMenuListener);
-		Sunniesnow.Fullscreen.removeListenerFromCanvas();
-	}
-
-	addWindowListeners() {
-		this.blurListener = event => {
-			Sunniesnow.TouchManager.clear();
-			if (Sunniesnow.Fullscreen.entering || Sunniesnow.Fullscreen.quitting) {
-				return;
-			}
-			if (!this.level?.finished && this.sceneInitialized) {
-				this.pause();
-			}
-		};
-		if (this.settings.pauseFullscreen) {
-			document.addEventListener('fullscreenchange', this.blurListener, true);
-		}
-		if (this.settings.pauseBlur) {
-			window.addEventListener('blur', this.blurListener);
-			document.addEventListener('visibilitychange', this.blurListener);
-			document.addEventListener('pagehide', this.blurListener);
-		}
-	}
-
-	removeWindowListeners() {
-		if (!this.blurListener) {
-			return;
-		}
-		if (this.settings.pauseFullscreen) {
-			document.removeEventListener('fullscreenchange', this.blurListener);
-		}
-		if (this.settings.pauseBlur) {
-			window.removeEventListener('blur', this.blurListener);
-			document.removeEventListener('visibilitychange', this.blurListener);
-			document.removeEventListener('pagehide', this.blurListener);
-		}
-	}
-
-	initPixiApp() {
-		this.app = new PIXI.Application({
-			hello: this.settings.debug,
-			width: this.settings.width,
-			height: this.settings.height,
-			backgroundColor: 'black',
-			eventFeatures: {
-				click: false,
-				globalMove: false,
-				move: false,
-				wheel: false
-			},
-			forceCanvas: this.settings.renderer === 'canvas',
-			antialias: this.settings.antialias,
-			powerPreference: this.settings.powerPreference,
-			autoStart: Sunniesnow.Utils.isBrowser()
-		});
-		if (Sunniesnow.Utils.isBrowser()) {
-			document.getElementById('main-canvas').replaceWith(this.app.view);
-		}
-		/*if (this.settings.renderer === 'canvas') {
-			this.maxTextureSize = Infinity
-		} else {
-			const gl = this.app.renderer.gl;
-			this.maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-		}*/
-	}
-
 	initLevel() {
 		this.level = new Sunniesnow.Level();
 	}
@@ -153,7 +40,7 @@ Sunniesnow.Game = class Game {
 
 	initScene() {
 		if (Sunniesnow.Utils.isBrowser()) {
-			this.clearDom();
+			Sunniesnow.Settings.clearDownloadingProgresses();
 		}
 		if (this.settings.touchEffects) {
 			this.app.stage.addChild(Sunniesnow.TouchManager.touchEffectsBoard);
@@ -195,8 +82,8 @@ Sunniesnow.Game = class Game {
 		Sunniesnow.Fullscreen.set(false);
 		Sunniesnow.Audio.stopAll();
 		Sunniesnow.TouchManager.terminate();
-		this.removeCanvasListeners();
-		this.removeWindowListeners();
+		Sunniesnow.SpinUp.terminate();
+		Sunniesnow.Popup.close();
 		if (!this.app) {
 			return;
 		}

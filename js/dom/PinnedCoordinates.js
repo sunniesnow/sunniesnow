@@ -53,7 +53,8 @@ Sunniesnow.PinnedCoordinates = {
 			const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 			if (ctrlKey && event.button === 2) {
 				event.preventDefault();
-				this.remove(this.itemToPoint.get(item));
+				const point = this.itemToPoint.get(item);
+				point.parent.unpinPoint(point);
 				return;
 			}
 			if (event.altKey && event.button === 2) {

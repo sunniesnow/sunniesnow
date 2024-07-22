@@ -102,7 +102,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			return true;
 		}
 		if (touch.ctrlKey && touch.button === 2) { // ctrl + right click
-			return this.unpinPoint(touch);
+			return this.tryUnpinningPoint(touch);
 		}
 		if (touch.altKey && touch.button === 0) { // alt + left click
 			return this.tryStartingMovingPoint(touch);
@@ -193,13 +193,17 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		}
 	}
 
-	unpinPoint(touch) {
+	unpinPoint(point) {
+		this.removeChild(point);
+		point.destroy({children: true});
+		this.pinnedPoints.splice(this.pinnedPoints.indexOf(point), 1);
+		Sunniesnow.PinnedCoordinates.remove(point);
+	}
+
+	tryUnpinningPoint(touch) {
 		const point = this.findTouchedPoint(touch);
 		if (point) {
-			this.removeChild(point);
-			point.destroy({children: true});
-			this.pinnedPoints.splice(this.pinnedPoints.indexOf(point), 1);
-			Sunniesnow.PinnedCoordinates.remove(point);
+			this.unpinPoint(point);
 			return true;
 		}
 		return false;

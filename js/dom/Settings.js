@@ -208,9 +208,6 @@ Sunniesnow.Settings = {
 			hidePauseUi: this.readCheckbox('hide-pause-ui'),
 			pauseFinish: this.readCheckbox('pause-finish'),
 			secondPause: this.readRadio('second-pause'),
-			contextMenuPlay: this.readCheckbox('context-menu-play'),
-			contextMenuPause: this.readCheckbox('context-menu-pause'),
-			contextMenuNoModifier: this.readCheckbox('context-menu-no-modifier'),
 
 			// control settings
 			enableKeyboard: this.readCheckbox('enable-keyboard'),
@@ -230,9 +227,13 @@ Sunniesnow.Settings = {
 			// system settings
 			width: this.readValue('width'),
 			height: this.readValue('height'),
+			popup: this.readCheckbox('popup'),
 			fullscreenOnStart: this.readCheckbox('fullscreen-on-start'),
 			floatAsFullscreen: this.readCheckbox('float-as-fullscreen'),
 			avoidDownloadingFonts: this.readCheckbox('avoid-downloading-fonts'),
+			contextMenuPlay: this.readCheckbox('context-menu-play'),
+			contextMenuPause: this.readCheckbox('context-menu-pause'),
+			contextMenuNoModifier: this.readCheckbox('context-menu-no-modifier'),
 			renderer: this.readRadio('renderer'),
 			antialias: this.readCheckbox('antialias'),
 			powerPreference: this.readRadio('power-preference'),
@@ -353,9 +354,6 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('hide-pause-ui', d('hidePauseUi'));
 		this.writeCheckbox('pause-finish', d('pauseFinish'));
 		this.writeRadio('second-pause', d('secondPause'));
-		this.writeCheckbox('context-menu-play', d('contextMenuPlay'));
-		this.writeCheckbox('context-menu-pause', d('contextMenuPause'));
-		this.writeCheckbox('context-menu-no-modifier', d('contextMenuNoModifier'));
 
 		this.writeCheckbox('enable-keyboard', d('enableKeyboard'));
 		this.writeCheckbox('keyboard-whole-screen', d('keyboardWholeScreen'));
@@ -371,23 +369,18 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('touchscreen-whole-screen', d('touchscreenWholeScreen'));
 		this.writeCheckbox('touch-pause', d('touchPause'));
 
-		const width = d('width');
-		const height = d('height');
-		this.writeValue('width', width);
-		this.writeValue('height', height);
-		const canvas = document.getElementById('main-canvas');
-		if (width) {
-			canvas.width = width;
-		}
-		if (height) {
-			canvas.height = height;
-		}
+		this.writeValue('width', d('width'));
+		this.writeValue('height', d('height'));
+		this.writeCheckbox('popup', d('popup'));
 		this.writeRadio('renderer', d('renderer'));
 		this.writeCheckbox('antialias', d('antialias'));
 		this.writeRadio('power-preference', d('powerPreference'));
 		this.writeCheckbox('fullscreen-on-start', d('fullscreenOnStart'));
 		this.writeCheckbox('float-as-fullscreen', d('floatAsFullscreen'));
 		this.writeCheckbox('avoid-downloading-fonts', d('avoidDownloadingFonts'));
+		this.writeCheckbox('context-menu-play', d('contextMenuPlay'));
+		this.writeCheckbox('context-menu-pause', d('contextMenuPause'));
+		this.writeCheckbox('context-menu-no-modifier', d('contextMenuNoModifier'));
 		this.writeCheckbox('debug', d('debug'));
 		this.writeCheckbox('hide-debug-except-pause', d('hideDebugExceptPause'));
 		this.writeCheckbox('suppress-warnings', d('suppressWarnings'));
