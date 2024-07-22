@@ -130,7 +130,7 @@ Sunniesnow.MiscDom = {
 		});
 		observer.observe(table);
 
-		const radio = document.getElementById('judgement-windows-custom');
+		const radio = document.getElementById('judgement-windows-custom-radio');
 		const radios = document.getElementsByName(radio.name);
 		const listener = () => (wrapper.style.display = radio.checked ? '' : 'none');
 		for (const otherRadio of radios) {

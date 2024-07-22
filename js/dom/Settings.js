@@ -187,6 +187,8 @@ Sunniesnow.Settings = {
 			volumeMusic: this.readValue('volume-music'),
 			seWithMusic: this.readCheckbox('se-with-music'),
 			delay: this.readValue('delay') / 1000,
+			latencyHint: this.readRadio('latency-hint'),
+			latencyHintValue: this.readValue('latency-hint-value') / 1000,
 
 			// game settings
 			autoplay: this.readCheckbox('autoplay'),
@@ -331,6 +333,8 @@ Sunniesnow.Settings = {
 		this.writeValue('volume-music', d('volumeMusic'));
 		this.writeCheckbox('se-with-music', d('seWithMusic'));
 		this.writeValue('delay', d('delay') * 1000);
+		this.writeRadio('latency-hint', d('latencyHint'));
+		this.writeValue('latency-hint-value', d('latencyHintValue') * 1000);
 
 		this.writeCheckbox('autoplay', d('autoplay'));
 		this.writeCheckbox('progress-adjustable', d('progressAdjustable'));
@@ -712,6 +716,7 @@ Sunniesnow.Settings = {
 		this.associateRadio('fx-upload-radio', 'fx-upload');
 		this.associateRadio('se-online-radio', 'se-online');
 		this.associateRadio('se-upload-radio', 'se-upload');
+		this.associateRadio('latency-hint-value-radio', 'latency-hint-value');
 		this.associateRadio('renderer-webgl-radio', 'antialias');
 		this.associateRadio('renderer-webgl-radio', 'power-preference-default-radio');
 		this.associateRadio('renderer-webgl-radio', 'power-preference-low-power-radio');

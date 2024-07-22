@@ -675,6 +675,23 @@ This setting is used to adjust video-audio sync.
 It does not affect judgements, however.
 To adjust judgements, you may want to use the [`offset`](#offset) setting.
 
+#### Latency hint
+
+- **Setting id**: `latency-hint`.
+- **Possible values**: `"balanced"`, `"interactive"`, `"playback"`, `"value"`.
+
+The type of playback as a balance between audio output latency and power consumption.
+See [here](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/AudioContext#latencyhint){:target="_blank"}
+for the meaning of each options.
+
+##### Value
+{:#latency-hint-value}
+
+- **Setting id**: `latency-hint-value`.
+- **Possible values**: Any number greater than or equal to 0.
+
+This is **only** useful when [`latency-hint`](#latency-hint) is set to `"value"`.
+
 ### Game settings
 
 #### Autoplay
@@ -704,10 +721,14 @@ It is only useful when [`autoplay`](#autoplay) is `true`.
 When it is `true`, you can adjust the progress of the game when autoplaying.
 When it is `false`, the progress of the game will not be adjustable when autoplaying.
 
+{% katexmm %}
+
 To adjust the progress, drag the progress bar at the bottom of the screen.
 Use <kbd>ArrowLeft</kbd> and <kbd>ArrowRight</kbd> to adjust the progress by $2$ seconds.
 Use <kbd>,</kbd> and <kbd>.</kbd> to adjust the progress by $1/30$ seconds.
 Use <kbd>[</kbd> and <kbd>]</kbd> to forward or rewind the progress continuously.
+
+{% endkatexmm %}
 
 #### Chart offset
 
@@ -1496,6 +1517,12 @@ and you want to play the new version of the game.
 After you delete the caches of external resources,
 the game will try to retrieve the external resources from the server again.
 
+### Logs
+
+#### Clear
+
+Clear the logs.
+
 ### Game
 
 #### Start
@@ -1515,6 +1542,33 @@ Memory is released, so you cannot resume the game after you stop it.
 
 If you want to start the game again,
 you can hit [*Start*](#game-start) button again.
+
+#### Pause
+{:#game-pause}
+
+This button is used to pause the game.
+This is not affected by [`pause-double-time`](#pause-double-time)
+or [`second-pause`](#second-pause).
+
+#### Resume
+{:#game-resume}
+
+This button is used to resume the game after it is paused.
+
+#### Retry
+{:#game-retry}
+
+This button is used to retry the game after it is finished.
+
+#### Fullscreen
+
+This button is used to toggle fullscreen mode.
+
+#### Toggle pause UI
+{:#game-toggle-pause-ui}
+
+This button is used to toggle the visibility of the pause UI (the three big buttons)
+when the game is paused.
 
 ## Differences between different offsets
 

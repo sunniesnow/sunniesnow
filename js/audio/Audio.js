@@ -1,7 +1,17 @@
 Sunniesnow.Audio = class Audio {
 	static async load() {
-		// The offline audio context is dummy and will not be used in the main loop
-		this.context = Sunniesnow.Utils.isBrowser() ? new AudioContext() : new OfflineAudioContext(2, 44100, 44100);
+		if (Sunniesnow.Utils.isBrowser()) {
+			let latencyHint;
+			if (Sunniesnow.game.settings.latencyHint === 'value') {
+				latencyHint = Sunniesnow.game.settings.latencyHintValue;
+			} else {
+				latencyHint = Sunniesnow.game.settings.latencyHint;
+			}
+			this.context = new AudioContext({latencyHint});
+		} else {
+			// The offline audio context is dummy and will not be used in the main loop
+			this.context = new OfflineAudioContext(2, 44100, 44100);
+		}
 		this.playingAudios = [];
 	}
 

@@ -43,28 +43,28 @@ description: Sunniesnow is a web rhythm game
 		<legend>Judgement time windows</legend>
 
 		<div>
-			<input type="radio" id="judgement-windows-loose" name="judgement-windows" value="loose" checked>
-			<label for="judgement-windows-loose">Loose</label>
+			<input type="radio" id="judgement-windows-loose-radio" name="judgement-windows" value="loose" checked>
+			<label for="judgement-windows-loose-radio">Loose</label>
 		</div>
 
 		<div>
-			<input type="radio" id="judgement-windows-medium" name="judgement-windows" value="medium">
-			<label for="judgement-windows-medium">Medium</label>
+			<input type="radio" id="judgement-windows-medium-radio" name="judgement-windows" value="medium">
+			<label for="judgement-windows-medium-radio">Medium</label>
 		</div>
 
 		<div>
-			<input type="radio" id="judgement-windows-strict" name="judgement-windows" value="strict">
-			<label for="judgement-windows-strict">Strict</label>
+			<input type="radio" id="judgement-windows-strict-radio" name="judgement-windows" value="strict">
+			<label for="judgement-windows-strict-radio">Strict</label>
 		</div>
 
 		<div>
-			<input type="radio" id="judgement-windows-rigorous" name="judgement-windows" value="rigorous">
-			<label for="judgement-windows-rigorous">Rigorous</label>
+			<input type="radio" id="judgement-windows-rigorous-radio" name="judgement-windows" value="rigorous">
+			<label for="judgement-windows-rigorous-radio">Rigorous</label>
 		</div>
 
 		<div>
-			<input type="radio" id="judgement-windows-custom" name="judgement-windows" value="custom">
-			<label for="judgement-windows-custom">Custom</label>
+			<input type="radio" id="judgement-windows-custom-radio" name="judgement-windows" value="custom">
+			<label for="judgement-windows-custom-radio">Custom</label>
 			<div id="judgement-windows-custom-wrapper">
 				<table id="judgement-windows-custom-table">
 					<thead>
@@ -81,39 +81,39 @@ description: Sunniesnow is a web rhythm game
 					<tbody>
 						<tr>
 							<th>tap</th>
-							<td><input type="number" id="judgement-windows-custom-tap-early-bad" value="-400"></td>
-							<td><input type="number" id="judgement-windows-custom-tap-early-good" value="-300"></td>
-							<td><input type="number" id="judgement-windows-custom-tap-early-perfect" value="-110"></td>
-							<td><input type="number" id="judgement-windows-custom-tap-late-perfect" value="150"></td>
-							<td><input type="number" id="judgement-windows-custom-tap-late-good" value="300"></td>
-							<td><input type="number" id="judgement-windows-custom-tap-late-bad" value="400"></td>
+							<td><input type="number" id="judgement-windows-custom-tap-early-bad" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-tap-early-good" value="-300" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-tap-early-perfect" value="-110" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-tap-late-perfect" value="150" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-tap-late-good" value="300" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-tap-late-bad" value="400" step="10"></td>
 						</tr>
 						<tr>
 							<th>drag</th>
-							<td><input type="number" id="judgement-windows-custom-drag-early-bad" value="-400"></td>
-							<td><input type="number" id="judgement-windows-custom-drag-early-good" value="-400"></td>
-							<td><input type="number" id="judgement-windows-custom-drag-early-perfect" value="-400"></td>
-							<td><input type="number" id="judgement-windows-custom-drag-late-perfect" value="400"></td>
-							<td><input type="number" id="judgement-windows-custom-drag-late-good" value="400"></td>
-							<td><input type="number" id="judgement-windows-custom-drag-late-bad" value="400"></td>
+							<td><input type="number" id="judgement-windows-custom-drag-early-bad" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-drag-early-good" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-drag-early-perfect" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-drag-late-perfect" value="400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-drag-late-good" value="400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-drag-late-bad" value="400" step="10"></td>
 						</tr>
 						<tr>
 							<th>flick</th>
-							<td><input type="number" id="judgement-windows-custom-flick-early-bad" value="-400"></td>
-							<td><input type="number" id="judgement-windows-custom-flick-early-good" value="-400"></td>
-							<td><input type="number" id="judgement-windows-custom-flick-early-perfect" value="-300"></td>
-							<td><input type="number" id="judgement-windows-custom-flick-late-perfect" value="150"></td>
-							<td><input type="number" id="judgement-windows-custom-flick-late-good" value="300"></td>
-							<td><input type="number" id="judgement-windows-custom-flick-late-bad" value="400"></td>
+							<td><input type="number" id="judgement-windows-custom-flick-early-bad" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-flick-early-good" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-flick-early-perfect" value="-300" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-flick-late-perfect" value="150" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-flick-late-good" value="300" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-flick-late-bad" value="400" step="10"></td>
 						</tr>
 						<tr>
 							<th>hold (<em>start</em>)</th>
-							<td><input type="number" id="judgement-windows-custom-hold-early-bad" value="-400"></td>
-							<td><input type="number" id="judgement-windows-custom-hold-early-good" value="-400"></td>
-							<td><input type="number" id="judgement-windows-custom-hold-early-perfect" value="-400"></td>
-							<td><input type="number" id="judgement-windows-custom-hold-late-perfect" value="400"></td>
-							<td><input type="number" id="judgement-windows-custom-hold-late-good" value="400"></td>
-							<td><input type="number" id="judgement-windows-custom-hold-late-bad" value="400"></td>
+							<td><input type="number" id="judgement-windows-custom-hold-early-bad" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-hold-early-good" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-hold-early-perfect" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-hold-late-perfect" value="400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-hold-late-good" value="400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-hold-late-bad" value="400" step="10"></td>
 						</tr>
 						<tr>
 							<th>hold (<em>end</em>)</th>
@@ -139,7 +139,7 @@ description: Sunniesnow is a web rhythm game
 		<legend>Offset</legend>
 
 		<div>
-			<input type="number" id="offset" value="0">ms
+			<input type="number" id="offset" value="0" step="10">ms
 		</div>
 	</fieldset>
 
@@ -177,7 +177,7 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			Angle range:
-			<input type="number" id="flick-angle-range" value="45" min="0" max="180" step="1"> degrees
+			<input type="number" id="flick-angle-range" value="45" min="0" max="180" step="5"> degrees
 		</div>
 	</fieldset>
 </details>
@@ -450,7 +450,32 @@ description: Sunniesnow is a web rhythm game
 		<legend>Delay</legend>
 
 		<div>
-			<input type="number" id="delay" value="0">ms
+			<input type="number" id="delay" value="0" step="10">ms
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Latency hint</legend>
+
+		<div>
+			<input type="radio" name="latency-hint" value="balanced" id="latency-hint-balanced-radio">
+			<label for="latency-hint-balanced-radio">Balanced</label>
+		</div>
+
+		<div>
+			<input type="radio" name="latency-hint" value="interactive" id="latency-hint-interactive-radio" checked>
+			<label for="latency-hint-interactive-radio">Interactive</label>
+		</div>
+
+		<div>
+			<input type="radio" name="latency-hint" value="playback" id="latency-hint-playback-radio">
+			<label for="latency-hint-playback-radio">Playback</label>
+		</div>
+
+		<div>
+			<input type="radio" name="latency-hint" value="value" id="latency-hint-value-radio">
+			<label for="latency-hint-value-radio">Value:</label>
+			<input type="number" id="latency-hint-value" value="10" step="10" min="0">ms
 		</div>
 	</fieldset>
 </details>
@@ -476,7 +501,7 @@ description: Sunniesnow is a web rhythm game
 		<legend>Chart offset</legend>
 
 		<div>
-			<input type="number" id="chart-offset" value="0">ms
+			<input type="number" id="chart-offset" value="0" step="10">ms
 		</div>
 	</fieldset>
 
@@ -521,12 +546,12 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			Resume preparation time:
-			<input type="number" id="resume-preparation-time" min="0" value="1">s
+			<input type="number" id="resume-preparation-time" min="0" value="1" step="0.5">s
 		</div>
 
 		<div>
 			Beginning preparation time:
-			<input type="number" id="beginning-preparation-time" min="0" value="1">s
+			<input type="number" id="beginning-preparation-time" min="0" value="1" step="0.5">s
 		</div>
 	</fieldset>
 
@@ -535,7 +560,7 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			Tap pause button twice in
-			<input type="number" id="pause-double-time" min="0" value="0">s
+			<input type="number" id="pause-double-time" min="0" value="0" step="0.5">s
 			to pause (zero for single tap)
 		</div>
 
@@ -566,12 +591,12 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			Function of the pause button while pausing:
-			<input type="radio" name="second-pause" value="disabled" id="second-pause-disabled">
-			<label for="second-pause">Disabled</label>
-			<input type="radio" name="second-pause" value="resume" id="second-pause-resume" checked>
-			<label for="second-pause">Resume</label>
-			<input type="radio" name="second-pause" value="toggle-ui" id="second-pause-toggle-ui">
-			<label for="second-pause">Toggle pause UI</label>
+			<input type="radio" name="second-pause" value="disabled" id="second-pause-disabled-radio">
+			<label for="second-pause-radio">Disabled</label>
+			<input type="radio" name="second-pause" value="resume" id="second-pause-resume-radio" checked>
+			<label for="second-pause-radio">Resume</label>
+			<input type="radio" name="second-pause" value="toggle-ui" id="second-pause-toggle-ui-radio">
+			<label for="second-pause-radio">Toggle pause UI</label>
 		</div>
 	</fieldset>
 
