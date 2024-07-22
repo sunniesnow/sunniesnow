@@ -76,6 +76,7 @@ Sunniesnow.Game = class Game {
 	}
 
 	terminate() {
+		this.terminating = true;
 		if (this.scene) {
 			this.scene.terminate();
 		}

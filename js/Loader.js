@@ -357,11 +357,17 @@ Sunniesnow.Loader = {
 	},
 
 	loadModule(name) {
-		this.modulesQueue.push(() => Sunniesnow[name].load().then(
-			() => this.loadingModulesProgress++
-		).catch(
-			reason => Sunniesnow.Logs.error(`Failed to load Sunniesnow.${name}: ${reason}`, reason)
-		));
+		this.modulesQueue.push(async () => {
+			if (Sunniesnow.game.terminating) {
+				return;
+			}
+			try {
+				await Sunniesnow[name].load();
+			} catch (e) {
+				Sunniesnow.Logs.error(`Failed to load Sunniesnow.${name}: ${e}`, e);
+			}
+			this.loadingModulesProgress++;
+		});
 		this.targetLoadingModulesProgress++;
 	},
 

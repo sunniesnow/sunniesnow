@@ -57,13 +57,13 @@ Sunniesnow.ScriptsLoader = {
 };
 
 Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
-	'jszip@3.10.1/dist/jszip.min.js',
+	`jszip@3.10.1/dist/jszip${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
 	`pixi.js-legacy@7.4.2/dist/pixi-legacy${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
 	'mime@3.0.0/lite/+esm',
 	'marked@5.1.1/marked.min.js',
-	'dompurify@3.0.5/dist/purify.min.js',
+	`dompurify@3.0.5/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
 	'audio-decode@2.1.4/+esm'
-].map(path => `${Sunniesnow.ScriptsLoader.CDN_PREFIX}${path}`),
+].map(path => `${Sunniesnow.ScriptsLoader.CDN_PREFIX}${path}`);
 
 Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'audio/Audio',

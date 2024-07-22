@@ -45,6 +45,10 @@ Sunniesnow.Assets = {
 	},
 
 	async audioDecode(arrayBuffer, context) {
+		if (Sunniesnow.Utils.isBrowser() && !window.WebAssembly) {
+			Sunniesnow.Logs.warn('WebAssembly is disabled; using browser native audio decoder');
+			return await context.decodeAudioData(arrayBuffer);
+		}
 		const audioBuffer = await audioDecode(arrayBuffer);
 		const result = context.createBuffer(audioBuffer.numberOfChannels, audioBuffer.length, audioBuffer.sampleRate);
 		// https://github.com/audiojs/audio-decode/pull/35#issuecomment-1656137481
