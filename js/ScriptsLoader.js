@@ -88,6 +88,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'button/ButtonResultRetry',
 	'button/ButtonResultFullscreen',
 
+	'ui/LoadingProgress',
 	'ui/UiComponent',
 	'ui/Background',
 	'ui/TopCenterHud',
@@ -168,6 +169,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui-nonevent/double-line/DoubleLinesBoard',
 
 	'scene/Scene',
+	'scene/SceneLoading',
 	'scene/SceneGame',
 	'scene/SceneResult',
 ];

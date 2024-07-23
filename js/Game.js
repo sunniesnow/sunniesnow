@@ -18,16 +18,38 @@ Sunniesnow.Game = class Game {
 	}
 
 	mainTicker(delta) {
-		if (Sunniesnow.Loader.loadingComplete) {
-			if (!this.sceneInitialized) {
-				document.activeElement.blur();
-				this.initLevel();
-				this.initScene();
-			}
-			this.update(delta);
-		} else {
-			Sunniesnow.Loader.updateLoading();
+		if (!this.sceneInitialized) {
+			this.initScene();
 		}
+		this.update(delta);
+	}
+
+	async initPixiApp() {
+		// Application init will be async in PIXI v8
+		// https://pixijs.com/8.x/guides/migrations/v8#async-initialisation
+		this.app = new PIXI.Application({
+			hello: this.settings.debug,
+			width: this.settings.width,
+			height: this.settings.height,
+			backgroundColor: 'black',
+			eventFeatures: {
+				click: false,
+				globalMove: false,
+				move: false,
+				wheel: false
+			},
+			forceCanvas: this.settings.renderer === 'canvas',
+			antialias: this.settings.antialias,
+			powerPreference: this.settings.powerPreference,
+			autoStart: Sunniesnow.Utils.isBrowser()
+		});
+		/*if (this.settings.renderer === 'canvas') {
+			this.maxTextureSize = Infinity
+		} else {
+			const gl = this.app.renderer.gl;
+			this.maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+		}*/
+		this.app.ticker.add(this.mainTicker.bind(this));
 	}
 
 	initLevel() {
@@ -39,20 +61,17 @@ Sunniesnow.Game = class Game {
 	}
 
 	initScene() {
-		if (Sunniesnow.Utils.isBrowser()) {
-			Sunniesnow.Settings.clearDownloadingProgresses();
-		}
-		if (this.settings.touchEffects) {
-			this.app.stage.addChild(Sunniesnow.TouchManager.touchEffectsBoard);
-		}
-		this.hidePauseUi = this.settings.hidePauseUi;
-		this.goto(new Sunniesnow.SceneGame());
+		this.goto(new Sunniesnow.SceneLoading());
 		this.sceneInitialized = true;
 	}
 
 	updateModules(delta) {
-		Sunniesnow.Music.update();
-		Sunniesnow.TouchManager.update(delta);
+		if (Sunniesnow.Music.loaded) {
+			Sunniesnow.Music.update();
+		}
+		if (Sunniesnow.TouchManager.loaded) {
+			Sunniesnow.TouchManager.update(delta);
+		}
 	}
 
 	update(delta) {

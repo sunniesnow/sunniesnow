@@ -9,11 +9,11 @@
 	float: right;
 }
 
-#warnings {
+.warning {
 	color: orange;
 }
 
-#errors {
+.error {
 	color: red;
 }
 

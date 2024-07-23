@@ -5,8 +5,9 @@ Sunniesnow.Logs = {
 		}
 		if (Sunniesnow.Utils.isBrowser() && !Sunniesnow.game?.settings.suppressWarnings) {
 			const div = document.createElement('div');
+			div.classList.add('warning');
 			div.innerHTML = msg;
-			document.getElementById('warnings').appendChild(div);
+			document.getElementById('logs').appendChild(div);
 		}
 		console.warn(msg);
 		if (e) {
@@ -19,8 +20,9 @@ Sunniesnow.Logs = {
 	error(msg, e) {
 		if (Sunniesnow.Utils.isBrowser()) {
 			const div = document.createElement('div');
+			div.classList.add('error');
 			div.innerHTML = msg;
-			document.getElementById('errors').appendChild(div);
+			document.getElementById('logs').appendChild(div);
 		}
 		console.error(msg);
 		console.error(e);
@@ -30,8 +32,7 @@ Sunniesnow.Logs = {
 	},
 
 	clearWarningsAndErrors() {
-		document.getElementById('warnings').innerHTML = '';
-		document.getElementById('errors').innerHTML = '';
+		document.getElementById('logs').innerHTML = '';
 	}
 
 };

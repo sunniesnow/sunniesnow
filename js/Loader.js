@@ -357,12 +357,15 @@ Sunniesnow.Loader = {
 	},
 
 	loadModule(name) {
+		Sunniesnow[name].loaded = false;
 		this.modulesQueue.push(async () => {
 			if (Sunniesnow.game.terminating) {
 				return;
 			}
+			this.currentlyLoadingModule = name;
 			try {
 				await Sunniesnow[name].load();
+				Sunniesnow[name].loaded = true;
 			} catch (e) {
 				Sunniesnow.Logs.error(`Failed to load Sunniesnow.${name}: ${e}`, e);
 			}
@@ -372,15 +375,7 @@ Sunniesnow.Loader = {
 	},
 
 	updateLoadingModules() {
-		if (Sunniesnow.Utils.isBrowser()) {
-			const element = document.getElementById('loading-progress');
-			element.textContent = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}`;
-		} else {
-			if (this.lastLoadingModulesProgress !== this.loadingModulesProgress) {
-				Sunniesnow.record.print(`Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress}\n`);
-				this.lastLoadingModulesProgress = this.loadingModulesProgress;
-			}
-		}
+		this.loadingText = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress} (${this.currentlyLoadingModule})`;
 	},
 
 	async loadPlugins() {
@@ -408,16 +403,14 @@ Sunniesnow.Loader = {
 			}
 			return;
 		}
-		const element = document.getElementById('loading-progress');
-		element.textContent = `Loading plugins: ${this.loadingPluginsProgress}/${this.targetLoadingPluginsProgress}`;
+		this.loadingText = `Loading plugins: ${this.loadingPluginsProgress}/${this.targetLoadingPluginsProgress}`;
 	},
 
 	updateLoadingChart() {
 		if (!Sunniesnow.Utils.isBrowser()) {
 			return;
 		}
-		const element = document.getElementById('loading-progress');
-		element.textContent = 'Loading chart';
+		this.loadingText = 'Loading level';
 	},
 
 	async load() {
@@ -459,6 +452,15 @@ Sunniesnow.Loader = {
 			this.updateLoadingPlugins();
 		} else {
 			this.updateLoadingChart();
+		}
+		if (Sunniesnow.Utils.isBrowser()) {
+			const element = document.getElementById('loading-progress');
+			element.textContent = this.loadingText;
+		} else {
+			if (this.lastLoadingText !== this.loadingText) {
+				Sunniesnow.record.print(this.loadingText + '\n');
+				this.lastLoadingText = this.loadingText;
+			}
 		}
 	},
 

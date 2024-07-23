@@ -1,6 +1,7 @@
 Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	start() {
 		super.start();
+		Sunniesnow.game.initLevel();
 		this.populateUiAndBoards();
 		this.populateAudio();
 		if (Sunniesnow.game.progressAdjustable) {

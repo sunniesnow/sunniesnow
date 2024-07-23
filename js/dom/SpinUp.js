@@ -1,6 +1,6 @@
 Sunniesnow.SpinUp = {
 	async load() {
-		await this.initPixiApp();
+		await Sunniesnow.game.initPixiApp();
 		await this.initCanvas();
 		if (Sunniesnow.Utils.isBrowser()) {
 			this.addWindowListeners();
@@ -85,34 +85,6 @@ Sunniesnow.SpinUp = {
 			Sunniesnow.game.document.removeEventListener('visibilitychange', this.blurListener);
 			Sunniesnow.game.document.removeEventListener('pagehide', this.blurListener);
 		}
-	},
-
-	async initPixiApp() {
-		// Application init will be async in PIXI v8
-		// https://pixijs.com/8.x/guides/migrations/v8#async-initialisation
-		Sunniesnow.game.app = new PIXI.Application({
-			hello: Sunniesnow.game.settings.debug,
-			width: Sunniesnow.game.settings.width,
-			height: Sunniesnow.game.settings.height,
-			backgroundColor: 'black',
-			eventFeatures: {
-				click: false,
-				globalMove: false,
-				move: false,
-				wheel: false
-			},
-			forceCanvas: Sunniesnow.game.settings.renderer === 'canvas',
-			antialias: Sunniesnow.game.settings.antialias,
-			powerPreference: Sunniesnow.game.settings.powerPreference,
-			autoStart: Sunniesnow.Utils.isBrowser()
-		});
-		/*if (Sunniesnow.game.settings.renderer === 'canvas') {
-			Sunniesnow.game.maxTextureSize = Infinity
-		} else {
-			const gl = Sunniesnow.game.app.renderer.gl;
-			Sunniesnow.game.maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-		}*/
-		Sunniesnow.game.app.ticker.add(Sunniesnow.game.mainTicker.bind(Sunniesnow.game));
 	},
 
 	terminate() {
