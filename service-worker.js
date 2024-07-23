@@ -8,7 +8,11 @@ const SITE_RESOURCES = [
 	'/game/css/style.css',
 	'/game/json/manifest.json',
 	'/game/index.html',
+	'/game/help.html',
 	'/game/',
+	'/game/popup/',
+	'/game/popup/index.html',
+	'/game/popup/style.css',
 	'/favicon.ico',
 	'/favicon.svg',
 ];

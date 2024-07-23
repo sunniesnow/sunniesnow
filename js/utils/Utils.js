@@ -91,13 +91,14 @@ Sunniesnow.Utils = {
 		const rect = canvas.getBoundingClientRect();
 		rect.x += window.scrollX;
 		rect.y += window.scrollY;
-		const scale = Math.max(
-			canvas.width / canvas.offsetWidth,
-			canvas.height / canvas.offsetHeight
-		);
+		let scaleX = canvas.width / canvas.offsetWidth;
+		let scaleY = canvas.height / canvas.offsetHeight;
+		if (canvas.ownerDocument.fullscreenElement === canvas) {
+			scaleX = scaleY = Math.max(scaleX, scaleY);
+		}
 		return [
-			(pageX - rect.x - rect.width/2) * scale + canvas.width/2,
-			(pageY - rect.y - rect.height/2) * scale + canvas.height/2
+			(pageX - rect.x - rect.width/2) * scaleX + canvas.width/2,
+			(pageY - rect.y - rect.height/2) * scaleY + canvas.height/2
 		];
 	},
 
