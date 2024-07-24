@@ -323,12 +323,14 @@ Sunniesnow.Utils = {
 	},
 
 	until(condition, interval = 100) {
+		let time = 0;
 		const poll = (resolve, reject) => {
-			if (condition()) {
+			if (condition(time)) {
 				resolve();
 			} else {
 				setTimeout(() => poll(resolve), interval);
 			}
+			time += interval;
 		};
 		return new Promise(poll);
 	},

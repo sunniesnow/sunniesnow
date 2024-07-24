@@ -2,14 +2,18 @@ Sunniesnow.SceneLoading = class SceneLoading extends Sunniesnow.Scene {
 
 	start() {
 		super.start();
-		this.ui = new Sunniesnow.LoadingProgress();
-		this.addChild(this.ui);
+		if (Sunniesnow.Utils.isBrowser()) {
+			this.ui = new Sunniesnow.LoadingProgress();
+			this.addChild(this.ui);
+		}
 	}
 
 	update() {
 		super.update();
 		Sunniesnow.Loader.updateLoading();
-		this.ui.update();
+		if (Sunniesnow.Utils.isBrowser()) {
+			this.ui.update();
+		}
 		if (Sunniesnow.Loader.loadingComplete) {
 			Sunniesnow.game.goto(new Sunniesnow.SceneGame());
 		}
