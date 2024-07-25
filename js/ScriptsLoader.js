@@ -90,6 +90,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'interaction/TouchEffectBase',
 	'interaction/TouchEffect',
 	'interaction/TouchEffectsBoard',
+	'interaction/EventInfoTip',
 
 	'ui/LoadingProgress',
 	'ui/UiComponent',

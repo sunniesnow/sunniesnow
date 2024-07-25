@@ -3,9 +3,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		super.start();
 		this.populateUiAndBoards();
 		this.populateAudio();
-		if (Sunniesnow.game.progressAdjustable) {
-			Sunniesnow.ProgressControl.init(this);
-		}
+		this.initInteraction();
 	}
 
 	populateUiAndBoards() {
@@ -49,6 +47,15 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.seWithMusic = new Sunniesnow.SeWithMusic();
 		}
 		Sunniesnow.Music.playFromBeginning();
+	}
+
+	initInteraction() {
+		if (Sunniesnow.game.progressAdjustable) {
+			Sunniesnow.ProgressControl.init(this);
+		}
+		if (Sunniesnow.game.settings.debug) {
+			Sunniesnow.EventInfoTip.init(this.uiNotesBoard, this.uiBgNotesBoard, this.uiBgPatternBoard);
+		}
 	}
 
 	update(delta) {

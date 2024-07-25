@@ -45,6 +45,7 @@ Sunniesnow.Event = class Event {
 
 	constructor(time, properties) {
 		this.time = time;
+		this.data = {type: this.constructor.TYPE_NAME, time, properties};
 		properties = Object.assign({}, properties);
 		for (const property of this.constructor.PROPERTIES.required) {
 			if (!Object.hasOwn(properties, property)) {

@@ -12,6 +12,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		this.pinnedPoints = [];
 		this.touchAreas = [];
 		this.earlyLateTexts = [];
+		this.eventInfoTipHighlights = [];
 		this.addTouchListeners();
 		this.movingPointsOfTouches = new WeakMap();
 	}
@@ -65,6 +66,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		this.updatePinnedPoints(delta);
 		this.updateEarlyLateTexts(delta);
 		this.updateTouchAreas(delta);
+		this.updateEventInfoTipHighlights(delta);
 	}
 
 	clear() {
@@ -327,6 +329,31 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 				touchArea.destroy();
 				this.removeChild(touchArea);
 				this.touchAreas.splice(i, 1);
+			} else {
+				i++;
+			}
+		}
+	}
+
+	addEventInfoTipHighlight(uiEvent) {
+		const graphics = new PIXI.Graphics();
+		graphics.beginFill(0xff00ff, 0.5);
+		graphics.drawRect(0, 0, Sunniesnow.game.settings.width, Sunniesnow.game.settings.height);
+		graphics.endFill();
+		graphics.mask = uiEvent;
+		graphics.life = 1;
+		this.addChild(graphics);
+		this.eventInfoTipHighlights.push(graphics);
+	}
+
+	updateEventInfoTipHighlights(delta) {
+		for (let i = 0; i < this.eventInfoTipHighlights.length;) {
+			const highlight = this.eventInfoTipHighlights[i];
+			highlight.life -= delta/15;
+			if (!highlight.mask.parent || highlight.life <= 0) {
+				highlight.destroy();
+				this.removeChild(highlight);
+				this.eventInfoTipHighlights.splice(i, 1);
 			} else {
 				i++;
 			}
