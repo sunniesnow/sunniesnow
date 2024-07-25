@@ -14,6 +14,7 @@ Sunniesnow.Chart = class Chart {
 	
 	static async load() {
 		Sunniesnow.game.chart = new this(Sunniesnow.Loader.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
+		await Sunniesnow.game.chart.readSscharterInfo();
 		Sunniesnow.Music.start = Math.min(
 			Sunniesnow.game.settings.start * Sunniesnow.Music.duration,
 			Sunniesnow.game.settings.speed === 0 ? Infinity : Sunniesnow.game.chart.events[0].appearTime()
@@ -41,6 +42,13 @@ Sunniesnow.Chart = class Chart {
 				Sunniesnow.Logs.warn(`Missing \`${field}\` in chart`);
 			}
 		}
+	}
+	
+	async readSscharterInfo() {
+		if (!this.data.sscharter) {
+			return;
+		}
+		await Sunniesnow.Sscharter.connect(this.data.sscharter);
 	}
 
 	readEvents() {

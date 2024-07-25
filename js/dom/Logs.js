@@ -3,11 +3,8 @@ Sunniesnow.Logs = {
 		if (Sunniesnow.record?.suppressWarnings) {
 			return;
 		}
-		if (Sunniesnow.Utils.isBrowser() && !Sunniesnow.game?.settings.suppressWarnings) {
-			const div = document.createElement('div');
-			div.classList.add('warning');
-			div.innerHTML = msg;
-			document.getElementById('logs').appendChild(div);
+		if (!Sunniesnow.game?.settings.suppressWarnings) {
+			this.add(msg, 'warning');
 		}
 		console.warn(msg);
 		if (e) {
@@ -18,12 +15,7 @@ Sunniesnow.Logs = {
 	},
 
 	error(msg, e) {
-		if (Sunniesnow.Utils.isBrowser()) {
-			const div = document.createElement('div');
-			div.classList.add('error');
-			div.innerHTML = msg;
-			document.getElementById('logs').appendChild(div);
-		}
+		this.add(msg, 'error');
 		console.error(msg);
 		console.error(e);
 		Sunniesnow.Loader.loadingChart = false;
@@ -31,8 +23,23 @@ Sunniesnow.Logs = {
 		Sunniesnow.game?.terminate();
 	},
 
-	clearWarningsAndErrors() {
+	info(msg) {
+		this.add(msg, 'info');
+		console.info(msg);
+	},
+
+	clear() {
 		document.getElementById('logs').innerHTML = '';
+	},
+
+	add(msg, className) {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
+		const div = document.createElement('div');
+		div.classList.add(className);
+		div.innerHTML = msg;
+		document.getElementById('logs').appendChild(div);
 	}
 
 };

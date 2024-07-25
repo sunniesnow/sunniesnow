@@ -9,12 +9,16 @@
 	float: right;
 }
 
-.warning {
-	color: orange;
-}
-
-.error {
-	color: red;
+#logs {
+	.warning {
+		color: orange;
+	}
+	.error {
+		color: red;
+	}
+	.info {
+		color: green;
+	}
 }
 
 #main-canvas {

@@ -12,7 +12,7 @@ Sunniesnow.Game = class Game {
 			}
 			Sunniesnow.game.terminate();
 		}
-		Sunniesnow.Logs.clearWarningsAndErrors();
+		Sunniesnow.Logs.clear();
 		Sunniesnow.game = new this();
 		Sunniesnow.Loader.load();
 	}
@@ -104,6 +104,7 @@ Sunniesnow.Game = class Game {
 		Sunniesnow.TouchManager.terminate();
 		Sunniesnow.SpinUp.terminate();
 		Sunniesnow.Popup.close();
+		Sunniesnow.Sscharter.disconnect();
 		if (!this.app) {
 			return;
 		}

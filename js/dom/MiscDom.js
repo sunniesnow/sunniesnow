@@ -84,7 +84,7 @@ Sunniesnow.MiscDom = {
 			Sunniesnow.game.hidePauseUi = !Sunniesnow.game.hidePauseUi;
 		});
 		document.getElementById('logs-clear').addEventListener('click', event => {
-			Sunniesnow.Logs.clearWarningsAndErrors();
+			Sunniesnow.Logs.clear();
 		});
 	},
 

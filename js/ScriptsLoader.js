@@ -189,6 +189,8 @@ Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
 	'dom/Popup',
 	'dom/SpinUp',
 
+	'external/Sscharter',
+
 	'Config',
 	'Plugin',
 	'Loader',
