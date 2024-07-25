@@ -1,7 +1,6 @@
 Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	start() {
 		super.start();
-		Sunniesnow.game.initLevel();
 		this.populateUiAndBoards();
 		this.populateAudio();
 		if (Sunniesnow.game.progressAdjustable) {
@@ -10,10 +9,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	populateUiAndBoards() {
-		if (Sunniesnow.game.settings.debug) {
-			this.debugHud = new Sunniesnow.DebugHud();
-			this.debugBoard = new Sunniesnow.DebugBoard();
-		}
 		this.background = new Sunniesnow.Background();
 		this.progressBar = new Sunniesnow.ProgressBar();
 		this.uiBgPatternBoard = new Sunniesnow.UiBgPatternBoard();
@@ -28,7 +23,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.tipPointsBoard = new Sunniesnow.TipPointsBoard();
 		}
 		this.fxBoard = new Sunniesnow.FxBoard();
-		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard, this.debugBoard);
+		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard);
 		this.addChild(this.background);
 		this.addChild(this.progressBar);
 		this.addChild(this.uiBgPatternBoard);
@@ -47,10 +42,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.addChild(this.fxBoard.front);
 		}
 		this.addChild(this.pauseBoard);
-		if (Sunniesnow.game.settings.debug) {
-			this.addChild(this.debugHud);
-			this.addChild(this.debugBoard);
-		}
 	}
 
 	populateAudio() {
@@ -73,14 +64,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			if (Sunniesnow.game.level.finished) {
 				this.gotoResult();
 			}
-		}
-		if (Sunniesnow.game.settings.debug) {
-			this.debugHud.update(delta, {
-				FPS: Sunniesnow.game.app.ticker.FPS,
-				Time: Sunniesnow.Music.currentTime,
-				Progress: Sunniesnow.Music.progress
-			});
-			this.debugBoard.update(delta);
 		}
 	}
 
@@ -127,9 +110,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		super.terminate();
 		this.pauseBoard.destroy({children: true});
 		this.pauseButton.destroy({children: true});
-		if (Sunniesnow.game.settings.debug) {
-			this.debugBoard.clear();
-		}
 	}
 
 	retry() {

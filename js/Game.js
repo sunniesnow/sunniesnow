@@ -72,6 +72,13 @@ Sunniesnow.Game = class Game {
 		if (Sunniesnow.TouchManager.loaded) {
 			Sunniesnow.TouchManager.update(delta);
 		}
+		this.touchEffectsBoard?.update(delta);
+		this.debugHud?.update(delta, {
+			FPS: this.app.ticker.FPS,
+			Time: Sunniesnow.Music.currentTime,
+			Progress: Sunniesnow.Music.progress
+		});
+		this.debugBoard?.update(delta);
 	}
 
 	update(delta) {
@@ -136,5 +143,20 @@ Sunniesnow.Game = class Game {
 		} else if (this.scene instanceof Sunniesnow.SceneResult) {
 			this.scene.gotoGame();
 		}
+	}
+
+	initInteraction() {
+		if (this.settings.touchEffects) {
+			this.touchEffectsBoard = new Sunniesnow.TouchEffectsBoard();
+			this.app.stage.addChild(this.touchEffectsBoard);
+		}
+		if (this.settings.debug) {
+			this.debugHud = new Sunniesnow.DebugHud();
+			this.debugBoard = new Sunniesnow.DebugBoard();
+			this.app.stage.addChild(this.debugHud);
+			this.app.stage.addChild(this.debugBoard);
+		}
+		this.initLevel();
+		this.hidePauseUi = this.settings.hidePauseUi;
 	}
 };

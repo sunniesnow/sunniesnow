@@ -1,10 +1,9 @@
 Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 
-	constructor(event, fxBoard, debugBoard) {
+	constructor(event, fxBoard) {
 		super(event);
 		this.levelNote = event.levelNote;
 		this.fxBoard = fxBoard;
-		this.debugBoard = debugBoard;
 		this.addEventListeners();
 	}
 
@@ -14,7 +13,7 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 			const judgementWindows = Sunniesnow.Config.appropriateJudgementWindows();
 			const earlyBad = judgementWindows[this.levelNote.type].bad[0];
 			if (!this.touchAreaCreated && relativeTime >= earlyBad) {
-				this.debugBoard.createTouchArea(this);
+				Sunniesnow.game.debugBoard.createTouchArea(this);
 				this.touchAreaCreated = true;
 			}
 		}
@@ -33,7 +32,7 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 		}
 		this.levelNote.addEventListener('miss', this.listenerForFx);
 		if (!Sunniesnow.game.settings.autoplay && Sunniesnow.game.settings.debug) {
-			this.listenerForDebug = event => this.debugBoard.createEarlyLateText(this);
+			this.listenerForDebug = event => Sunniesnow.game.debugBoard.createEarlyLateText(this);
 			const type = this.levelNote instanceof Sunniesnow.LevelDrag ? 'release' : 'hit'
 			this.levelNote.addEventListener(type, this.listenerForDebug);
 		}

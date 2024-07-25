@@ -86,8 +86,8 @@ Sunniesnow.Event = class Event {
 		return this.endTime() + (this.uiClass().FADING_OUT_DURATION || 0);
 	}
 
-	newUiEvent(fxBoard, debugBoard) {
-		return new (this.uiClass())(this, fxBoard, debugBoard);
+	newUiEvent(fxBoard) {
+		return new (this.uiClass())(this, fxBoard);
 	}
 
 	checkProperties() {

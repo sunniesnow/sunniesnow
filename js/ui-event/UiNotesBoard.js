@@ -1,6 +1,6 @@
 Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 
-	constructor(fxBoard, debugBoard) {
+	constructor(fxBoard) {
 		super();
 		this.allEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.Note);
 		this.allEvents.sort((a, b) => a.appearTime() - b.appearTime());
@@ -9,7 +9,6 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 		}
 		this.clear();
 		this.fxBoard = fxBoard;
-		this.debugBoard = debugBoard;
 	}
 
 	clear() {
@@ -35,7 +34,7 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 				break;
 			}
 			this.unappearedEvents.shift();
-			const uiEvent = event.newUiEvent(this.fxBoard, this.debugBoard);
+			const uiEvent = event.newUiEvent(this.fxBoard);
 			Sunniesnow.game.settings.reverseNoteOrder ? this.addChildAt(uiEvent, 0) : this.addChild(uiEvent);
 			this.uiEvents.push(uiEvent);
 		}
@@ -56,7 +55,7 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 		this.removeAll();
 		let currentEvents = this.timeline[Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)].events;
 		currentEvents = Sunniesnow.game.settings.reverseNoteOrder ? currentEvents.reverse() : currentEvents.slice();
-		this.uiEvents = currentEvents.map(event => event.newUiEvent(this.fxBoard, this.debugBoard));
+		this.uiEvents = currentEvents.map(event => event.newUiEvent(this.fxBoard));
 		this.uiEvents.forEach(uiEvent => this.addChild(uiEvent));
 	}
 };

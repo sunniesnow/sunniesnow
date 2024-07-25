@@ -25,9 +25,6 @@ Sunniesnow.SceneLoading = class SceneLoading extends Sunniesnow.Scene {
 			document.activeElement.blur();
 			Sunniesnow.Settings.clearDownloadingProgresses();
 		}
-		if (Sunniesnow.game.settings.touchEffects) {
-			Sunniesnow.game.app.stage.addChild(Sunniesnow.TouchManager.touchEffectsBoard);
-		}
-		Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;
+		Sunniesnow.game.initInteraction();
 	}
 };

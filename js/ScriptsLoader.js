@@ -75,10 +75,6 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'audio/SeDrag',
 	'audio/SeWithMusic',
 
-	'touch/ProgressControl',
-	'touch/TouchEffectBase',
-	'touch/TouchEffect',
-	'touch/TouchEffectsBoard',
 	'touch/Touch',
 	'touch/TouchManager',
 
@@ -87,6 +83,13 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'button/ButtonPause',
 	'button/ButtonResultRetry',
 	'button/ButtonResultFullscreen',
+
+	'interaction/Level',
+	'interaction/ProgressControl',
+	'interaction/DebugBoard',
+	'interaction/TouchEffectBase',
+	'interaction/TouchEffect',
+	'interaction/TouchEffectsBoard',
 
 	'ui/LoadingProgress',
 	'ui/UiComponent',
@@ -97,6 +100,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui/ProgressBar',
 	'ui/Result',
 	'ui/ResultAdditionalInfo',
+	'ui/DebugHud',
 
 	'ui-pause/PauseBackground',
 	'ui-pause/ButtonResume',
@@ -104,8 +108,6 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui-pause/ButtonFullscreen',
 	'ui-pause/PauseBoard',
 
-	'ui-debug/DebugHud',
-	'ui-debug/DebugBoard',
 	'ui-event/UiNotesBoard',
 	'ui-event/UiBgNotesBoard',
 	'ui-event/UiBgPatternBoard',
@@ -134,12 +136,11 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'fx/FxHold',
 	'fx/FxDrag',
 
-	'level/Level',
-	'level/LevelNote',
-	'level/LevelTap',
-	'level/LevelFlick',
-	'level/LevelHold',
-	'level/LevelDrag',
+	'level-event/LevelNote',
+	'level-event/LevelTap',
+	'level-event/LevelFlick',
+	'level-event/LevelHold',
+	'level-event/LevelDrag',
 
 	'chart/Chart',
 	'chart/Event',

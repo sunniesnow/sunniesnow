@@ -16,7 +16,7 @@ Sunniesnow.PinnedCoordinates = {
 			}
 			event.preventDefault();
 			event.stopPropagation();
-			const debugBoard = Sunniesnow.game?.scene?.debugBoard;
+			const debugBoard = Sunniesnow.game?.debugBoard;
 			if (!debugBoard) {
 				Sunniesnow.Logs.warn('Debug UI is not available');
 				return;

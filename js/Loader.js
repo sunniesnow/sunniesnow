@@ -269,7 +269,7 @@ Sunniesnow.Loader = {
 		this.loadAudioAndChart();
 		this.loadTouch();
 		this.loadUiComponents();
-		this.loadUiDebug();
+		this.loadInteraction();
 		this.loadUiPause();
 		this.loadButtons();
 		this.loadUiEvents();
@@ -296,7 +296,6 @@ Sunniesnow.Loader = {
 	},
 
 	loadTouch() {
-		this.loadModule('TouchEffect');
 		this.loadModule('TouchManager');
 	},
 
@@ -310,8 +309,9 @@ Sunniesnow.Loader = {
 		this.loadModule('ResultAdditionalInfo');
 	},
 
-	loadUiDebug() {
+	loadInteraction() {
 		this.loadModule('DebugBoard');
+		this.loadModule('TouchEffect');
 	},
 
 	loadUiPause() {

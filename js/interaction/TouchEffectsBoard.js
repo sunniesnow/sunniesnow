@@ -3,6 +3,7 @@ Sunniesnow.TouchEffectsBoard = class TouchEffectsBoard extends PIXI.Container {
 	constructor() {
 		super();
 		this.presentTouchEffects = [];
+		this.addListeners();
 	}
 
 	clear() {
@@ -11,6 +12,11 @@ Sunniesnow.TouchEffectsBoard = class TouchEffectsBoard extends PIXI.Container {
 			touchEffect.destroy({children: true});
 			this.removeChild(touchEffect);
 		}
+	}
+
+	addListeners() {
+		this.startListener = this.addTouchEffect.bind(this);
+		Sunniesnow.TouchManager.addStartListener(this.startListener, 200);
 	}
 
 	update(delta) {
@@ -28,5 +34,6 @@ Sunniesnow.TouchEffectsBoard = class TouchEffectsBoard extends PIXI.Container {
 		const touchEffect = new Sunniesnow.TouchEffect(touch);
 		this.addChild(touchEffect);
 		this.presentTouchEffects.push(touchEffect);
+		return false;
 	}
 };
