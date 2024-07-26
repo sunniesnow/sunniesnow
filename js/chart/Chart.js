@@ -31,6 +31,7 @@ Sunniesnow.Chart = class Chart {
 		this.data = data;
 		this.readMeta();
 		this.readEvents();
+		this.eventsPostProcess();
 	}
 
 	readMeta() {
@@ -73,18 +74,6 @@ Sunniesnow.Chart = class Chart {
 			event.id = this.events.length;
 			this.events.push(event);
 		}
-		if (this.events.length === 0) {
-			Sunniesnow.Logs.error('There are no events in the chart in the specified range');
-		}
-		this.events.sort((a, b) => a.time - b.time);
-		for (let i = 0; i < this.events.length - 1; i++) {
-			const event1 = this.events[i];
-			const event2 = this.events[i + 1];
-			if (event1.time === event2.time) {
-				event1.simultaneousEvents.push(event2);
-				event2.simultaneousEvents = event1.simultaneousEvents;
-			}
-		}
 	}
 
 	readEventMeta(eventData) {
@@ -102,6 +91,24 @@ Sunniesnow.Chart = class Chart {
 	endTime() {
 		const index = this.events.findLastIndex(event => event instanceof Sunniesnow.Note);
 		return this.events[index].endTime();
+	}
+
+	eventsPostProcess() {
+		if (this.events.length === 0) {
+			Sunniesnow.Logs.error('There are no events in the chart in the specified range');
+		}
+		this.events.sort((a, b) => a.time - b.time);
+		for (let i = 0; i < this.events.length - 1; i++) {
+			const event1 = this.events[i];
+			const event2 = this.events[i + 1];
+			if (event1.time === event2.time) {
+				event1.simultaneousEvents.push(event2);
+				event2.simultaneousEvents = event1.simultaneousEvents;
+			}
+		}
+		const sortedByEnd = this.events.filter(event => event instanceof Sunniesnow.Note);
+		sortedByEnd.sort((a, b) => a.endTime() - b.endTime());
+		sortedByEnd.forEach((note, i) => note.comboIndex = i + 1);
 	}
 
 };

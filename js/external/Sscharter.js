@@ -26,6 +26,7 @@ Sunniesnow.Sscharter = {
 
 	addListeners() {
 		this.socket.addEventListener('error', event => {
+			this.socket = null;
 			Sunniesnow.Logs.error('Connection to sscharter closed due to error', event);
 		});
 		this.socket.addEventListener('message', event => {
@@ -56,5 +57,12 @@ Sunniesnow.Sscharter = {
 		this.socket.close();
 		this.socket = null;
 		Sunniesnow.Logs.info('Disconnected from sscharter');
+	},
+
+	sendEventInfoTip(event) {
+		if (!this.socket) {
+			return;
+		}
+		this.socket.send(JSON.stringify({type: 'eventInfoTip', id: event.id, chart: Sunniesnow.game.settings.chartSelect}));
 	}
 };

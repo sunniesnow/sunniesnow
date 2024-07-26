@@ -87,7 +87,13 @@ Sunniesnow.EventInfoTip = {
 	},
 
 	showInfoTip(uiEvent) {
-		Sunniesnow.Logs.info(JSON.stringify(uiEvent.event.data));
+		const event = uiEvent.event;
+		let head = `ev${event.id}`
+		if (event.comboIndex) {
+			head += ` (cb${event.comboIndex})`;
+		}
+		Sunniesnow.Logs.info(`${head}: ${JSON.stringify(event.data)}`);
 		Sunniesnow.game.debugBoard.addEventInfoTipHighlight(uiEvent);
+		Sunniesnow.Sscharter.sendEventInfoTip(event);
 	}
 };
