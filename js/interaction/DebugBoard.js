@@ -1,18 +1,22 @@
 Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	static async load() {
+		this.mainColor = 0xff00ff;
 		this.touchGeometry = this.createTouchGeometry();
 		this.touchAreaGeometry = this.createTouchAreaGeometry();
 		this.pinnedPointGeometry = this.createPinnedPointGeometry();
+		this.eventInfoTipHighlightLifeTime = 15; // frames
+		this.touchUiLifeTime = 15; // frames
 	}
 
 	constructor() {
 		super();
 		this.touches = {};
+		this.endedTouches = new Set();
 		this.pinnedPoints = [];
 		this.touchAreas = [];
 		this.earlyLateTexts = [];
-		this.eventInfoTipHighlights = [];
+		this.eventInfoTipHighlights = new Set();
 		this.addTouchListeners();
 		this.movingPointsOfTouches = new WeakMap();
 	}
@@ -30,7 +34,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	static createTouchGeometry() {
 		this.touchRadius = Sunniesnow.game.settings.width / 180;
 		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0xff00ff, 0.5);
+		graphics.beginFill(this.mainColor, 0.5);
 		graphics.drawCircle(0, 0, this.touchRadius);
 		graphics.endFill();
 		return graphics.geometry;
@@ -39,7 +43,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	static createTouchAreaGeometry() {
 		const radius = Sunniesnow.Config.noteRadius() * Sunniesnow.game.settings.noteHitSize;
 		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0xff00ff, 0.1);
+		graphics.beginFill(this.mainColor, 0.1);
 		graphics.drawRect(-radius, -radius, radius*2, radius*2);
 		graphics.endFill();
 		return graphics.geometry;
@@ -49,7 +53,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		this.pinnedPointRadius = Sunniesnow.game.settings.width / 90;
 		this.pinnedPointThickness = Sunniesnow.game.settings.width / 360;
 		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.pinnedPointThickness, 0xff00ff);
+		graphics.lineStyle(this.pinnedPointThickness, this.mainColor);
 		graphics.moveTo(0, -this.pinnedPointRadius);
 		graphics.lineTo(0, this.pinnedPointRadius);
 		graphics.moveTo(-this.pinnedPointRadius, 0);
@@ -239,10 +243,18 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 				touchUi.text.x = this.constructor.touchRadius;
 			}
 		}
+		for (const touchUi of this.endedTouches) {
+			touchUi.alpha -= 0.5 * delta / this.constructor.touchUiLifeTime;
+			if (touchUi.alpha <= 0) {
+				touchUi.destroy({children: true});
+				this.endedTouches.delete(touchUi);
+				this.removeChild(touchUi);
+			}
+		}
 	}
 
 	touchEnd(touch) {
-		this.removeTouchUi(touch);
+		this.endTouch(touch);
 		if (!this.visible) {
 			return false;
 		}
@@ -250,6 +262,16 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			return this.endMovingPoint(touch);
 		}
 		return false;
+	}
+
+	endTouch(touch) {
+		const touchUi = this.touches[touch.id];
+		delete this.touches[touch.id];
+		if (!touchUi) {
+			return;
+		}
+		touchUi.alpha = 0.5;
+		this.endedTouches.add(touchUi);
 	}
 
 	endMovingPoint(touch) {
@@ -271,16 +293,6 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			return true;
 		}
 		return false;
-	}
-
-	removeTouchUi(touch) {
-		const touchUi = this.touches[touch.id];
-		if (!touchUi) {
-			return;
-		}
-		touchUi.destroy({children: true});
-		this.removeChild(touchUi);
-		delete this.touches[touch.id];
 	}
 
 	createEarlyLateText(uiNote) {
@@ -336,27 +348,25 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	addEventInfoTipHighlight(uiEvent) {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0xff00ff, 0.5);
-		graphics.drawRect(0, 0, Sunniesnow.game.settings.width, Sunniesnow.game.settings.height);
-		graphics.endFill();
-		graphics.mask = uiEvent;
-		graphics.life = 1;
-		this.addChild(graphics);
-		this.eventInfoTipHighlights.push(graphics);
+		const filter = new PIXI.ColorMatrixFilter();
+		(uiEvent.filters ||= []).push(filter);
+		const highlight = {uiEvent, life: 1, filter};
+		this.eventInfoTipHighlights.add(highlight);
 	}
 
 	updateEventInfoTipHighlights(delta) {
-		for (let i = 0; i < this.eventInfoTipHighlights.length;) {
-			const highlight = this.eventInfoTipHighlights[i];
-			highlight.life -= delta/15;
-			if (!highlight.mask.parent || highlight.life <= 0) {
-				highlight.destroy();
-				this.removeChild(highlight);
-				this.eventInfoTipHighlights.splice(i, 1);
-			} else {
-				i++;
+		for (const highlight of this.eventInfoTipHighlights) {
+			const uiEvent = highlight.uiEvent;
+			highlight.life -= delta / this.constructor.eventInfoTipHighlightLifeTime;
+			if (!uiEvent.parent || highlight.life <= 0) {
+				uiEvent.filters.splice(uiEvent.filters.indexOf(highlight.filter), 1);
+				this.eventInfoTipHighlights.delete(highlight);
+				this.removeChild(uiEvent);
+				continue;
 			}
+			Sunniesnow.Utils.colorMatrixInterpolate(
+				this.constructor.mainColor, highlight.life, highlight.filter.matrix
+			);
 		}
 	}
 };

@@ -32,7 +32,7 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 				// do nothing
 				break;
 			case 'fadingIn':
-				this.updateFadingIn((relativeTime + this.activeDuration) / this.constructor.FADING_IN_DURATION + 1, relativeTime);
+				this.updateFadingIn((relativeTime + this.activeDuration) / this.fadingInDuration() + 1, relativeTime);
 				break;
 			case 'active':
 				this.updateActive(relativeTime / this.activeDuration + 1, relativeTime);
@@ -42,7 +42,7 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 				break;
 			case 'fadingOut':
 				const releaseRelativeTime = this.levelNote ? this.levelNote.releaseRelativeTime : this.event.duration || 0;
-				this.updateFadingOut((relativeTime - releaseRelativeTime) / this.constructor.FADING_OUT_DURATION, relativeTime);
+				this.updateFadingOut((relativeTime - releaseRelativeTime) / this.fadingOutDuration(), relativeTime);
 				break;
 			case 'finished':
 				// do nothing
@@ -50,11 +50,19 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 		}
 	}
 
+	fadingOutDuration() {
+		return this.constructor.FADING_OUT_DURATION;
+	}
+
+	fadingInDuration() {
+		return this.constructor.FADING_IN_DURATION;
+	}
+
 	getStateByRelativeTime(relativeTime) {
 		if (this.levelNote) {
 			if (this.levelNote.hitRelativeTime !== null) {
 				if (this.levelNote.releaseRelativeTime !== null) {
-					if (relativeTime >= this.levelNote.releaseRelativeTime + this.constructor.FADING_OUT_DURATION) {
+					if (relativeTime >= this.levelNote.releaseRelativeTime + this.fadingOutDuration()) {
 						return 'finished';
 					} else if (relativeTime >= this.levelNote.releaseRelativeTime) {
 						return 'fadingOut';
@@ -69,7 +77,7 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 			}
 		} else {
 			const releaseRelativeTime = this.event.duration || 0;
-			if (relativeTime >= releaseRelativeTime + this.constructor.FADING_OUT_DURATION) {
+			if (relativeTime >= releaseRelativeTime + this.fadingOutDuration()) {
 				return 'finished';
 			} else if (relativeTime >= releaseRelativeTime) {
 				return 'fadingOut';
@@ -79,7 +87,7 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 		}
 		if (relativeTime >= -this.activeDuration) {
 			return 'active';
-		} else if (relativeTime >= -this.constructor.FADING_IN_DURATION - this.activeDuration) {
+		} else if (relativeTime >= -this.fadingInDuration() - this.activeDuration) {
 			return 'fadingIn';
 		} else {
 			return 'ready';

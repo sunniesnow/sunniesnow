@@ -10,6 +10,8 @@
 }
 
 #logs {
+	max-height: 100px;
+	overflow-y: auto;
 	.warning {
 		color: orange;
 	}

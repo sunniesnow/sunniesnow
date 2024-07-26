@@ -111,10 +111,11 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		return text;
 	}
 
+	fadingOutDuration() {
+		return this.event.text ? super.fadingOutDuration() : 0;
+	}
+
 	updateTextFadingOut(progress) {
-		if (!this.text.text) {
-			return;
-		}
 		if (this.levelNote.judgement === 'miss' || this.levelNote.judgement === 'bad') {
 			this.text.scale.set(1 - progress);
 			return;

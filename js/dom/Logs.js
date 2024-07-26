@@ -39,7 +39,12 @@ Sunniesnow.Logs = {
 		const div = document.createElement('div');
 		div.classList.add(className);
 		div.innerHTML = msg;
-		document.getElementById('logs').appendChild(div);
+		const logsDom = document.getElementById('logs');
+		const scrollToBottom = logsDom.scrollTop + logsDom.offsetHeight >= logsDom.scrollHeight;
+		logsDom.appendChild(div);
+		if (scrollToBottom) {
+			logsDom.scrollTop = logsDom.scrollHeight;
+		}
 	}
 
 };

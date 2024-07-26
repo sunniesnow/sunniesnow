@@ -538,5 +538,33 @@ Sunniesnow.Utils = {
 
 	average(array, fn = e => e) {
 		return array.reduce((sum, e) => sum + fn(e), 0) / array.length;
+	},
+
+	colorMatrixInterpolate(topColor, alpha, outArray) {
+		const r = (topColor >> 16) / 0xff;
+		const g = (topColor >> 8 & 0xff) / 0xff;
+		const b = (topColor & 0xff) / 0xff;
+		const a = alpha;
+		outArray[0] = 1-a;
+		outArray[1] = 0;
+		outArray[2] = 0;
+		outArray[3] = 0;
+		outArray[4] = r*a;
+		outArray[5] = 0;
+		outArray[6] = 1-a;
+		outArray[7] = 0;
+		outArray[8] = 0;
+		outArray[9] = g*a;
+		outArray[10] = 0;
+		outArray[11] = 0;
+		outArray[12] = 1-a;
+		outArray[13] = 0;
+		outArray[14] = b*a;
+		outArray[15] = 0;
+		outArray[16] = 0;
+		outArray[17] = 0;
+		outArray[18] = 1;
+		outArray[19] = 0;
 	}
+	
 };
