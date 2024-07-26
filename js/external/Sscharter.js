@@ -46,6 +46,7 @@ Sunniesnow.Sscharter = {
 		Sunniesnow.Logs.info('Chart update is received from sscharter');
 		Sunniesnow.Loader.triggerLoadChart();
 		if (this.liveRestart) {
+			Sunniesnow.game.window.focus();
 			Sunniesnow.Game.run();
 		}
 	},
