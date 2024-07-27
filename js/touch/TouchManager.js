@@ -170,6 +170,7 @@ Sunniesnow.TouchManager = {
 			return;
 		}
 		document.activeElement.blur(); // see preventKeyEventIfShould
+		Sunniesnow.game.window.focus(); // In VSCode Simple Browser, this acquires focus lock
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		for (const domTouch of event.changedTouches) {
