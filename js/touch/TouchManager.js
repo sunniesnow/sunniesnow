@@ -292,9 +292,10 @@ Sunniesnow.TouchManager = {
 	addDomKeyListeners() {
 		this.keyDownListener = event => {
 			this.preventKeyEventIfShould(event);
-			if (document.activeElement.tagName !== 'INPUT') {
-				this.keyDown(event);
+			if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+				return;
 			}
+			this.keyDown(event);
 		}
 		this.keyUpListener = event => {
 			this.preventKeyEventIfShould(event);
@@ -314,11 +315,9 @@ Sunniesnow.TouchManager = {
 
 	addDomMouseListeners() {
 		this.mouseDownListener = event => {
-			if (Sunniesnow.Utils.inScreenPage(event.pageX, event.pageY, Sunniesnow.game.canvas)) {
-				event.preventDefault();
-				this.mouseDown(event);
-			}
-		}
+			event.preventDefault();
+			this.mouseDown(event);
+	}
 		this.mouseMoveListener = event => {
 			if (Sunniesnow.Utils.inScreenPage(event.pageX, event.pageY, Sunniesnow.game.canvas)) {
 				event.preventDefault();
@@ -331,7 +330,7 @@ Sunniesnow.TouchManager = {
 			}
 			this.mouseUp(event);
 		}
-		Sunniesnow.game.document.addEventListener('mousedown', this.mouseDownListener);
+		Sunniesnow.game.canvas.addEventListener('mousedown', this.mouseDownListener);
 		Sunniesnow.game.document.addEventListener('mousemove', this.mouseMoveListener);
 		Sunniesnow.game.document.addEventListener('mouseup', this.mouseUpListener);
 	},
@@ -340,7 +339,7 @@ Sunniesnow.TouchManager = {
 		if (!this.mouseDownListener) {
 			return;
 		}
-		Sunniesnow.game.document?.removeEventListener('mousedown', this.mouseDownListener);
+		Sunniesnow.game.canvas?.removeEventListener('mousedown', this.mouseDownListener);
 		Sunniesnow.game.document?.removeEventListener('mousemove', this.mouseMoveListener);
 		Sunniesnow.game.document?.removeEventListener('mouseup', this.mouseUpListener);
 	},

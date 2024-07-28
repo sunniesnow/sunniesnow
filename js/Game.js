@@ -121,6 +121,7 @@ Sunniesnow.Game = class Game {
 		} catch (err) {
 			Sunniesnow.Logs.error(`Failed to stop game: ${err.message ?? err}`, err);
 		}
+		Sunniesnow.game = null;
 	}
 
 	pause() {

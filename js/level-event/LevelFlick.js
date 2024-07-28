@@ -17,12 +17,10 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 			this.judgement = this.slow ? 'miss' : 'bad';
 			return;
 		}
-		if (!Sunniesnow.game.settings.directionInsensitiveFlick) {
-			const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
-			if (!Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
-				this.judgement = 'bad';
-				return;
-			}
+		const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
+		if (!Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
+			this.judgement = 'bad';
+			return;
 		}
 		this.judgement = this.getJudgementByRelativeTime(this.hitRelativeTime);
 	}
@@ -59,7 +57,7 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		}
 		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
 		let condition = rho >= this.minFlickDistance();
-		if (condition && !Sunniesnow.game.settings.directionInsensitiveFlick) {
+		if (condition) {
 			const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
 			condition = Sunniesnow.Utils.between(angle, ...this.angleRange());
 		}

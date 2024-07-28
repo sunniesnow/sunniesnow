@@ -86,6 +86,30 @@ Sunniesnow.MiscDom = {
 		document.getElementById('logs-clear').addEventListener('click', event => {
 			Sunniesnow.Logs.clear();
 		});
+		document.getElementById('vconsole-setup').addEventListener('click', event => {
+			if (Sunniesnow.vConsole) {
+				Sunniesnow.vConsole.showSwitch();
+			} else {
+				Sunniesnow.vConsole = new VConsole({onReady: () => {
+					Sunniesnow.Logs.info('vConsole is created');
+				}});
+			}
+		});
+		document.getElementById('vconsole-hide').addEventListener('click', event => {
+			if (Sunniesnow.vConsole) {
+				Sunniesnow.vConsole.hideSwitch();
+			} else {
+				Sunniesnow.Logs.warn('vConsole does not exist');
+			}
+		});
+		document.getElementById('vconsole-destroy').addEventListener('click', event => {
+			if (Sunniesnow.vConsole) {
+				Sunniesnow.vConsole.destroy();
+				Sunniesnow.vConsole = null;
+			} else {
+				Sunniesnow.Logs.warn('vConsole does not exist');
+			}
+		});
 	},
 
 	async triggerPreprocess() {
