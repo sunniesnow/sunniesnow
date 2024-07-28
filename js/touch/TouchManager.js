@@ -45,6 +45,8 @@ Sunniesnow.TouchManager = {
 	},
 
 	onStart(touch) {
+		document.activeElement.blur(); // see preventKeyEventIfShould
+		Sunniesnow.game.window.focus(); // In VSCode Simple Browser, this acquires focus lock
 		this.callListeners(this.startListeners, touch)
 	},
 
@@ -116,7 +118,6 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreMouse(event)) {
 			return;
 		}
-		document.activeElement.blur(); // see preventKeyEventIfShould
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const id = this.mouseButtonId(event.button);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
@@ -169,8 +170,6 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreTouch(event)) {
 			return;
 		}
-		document.activeElement.blur(); // see preventKeyEventIfShould
-		Sunniesnow.game.window.focus(); // In VSCode Simple Browser, this acquires focus lock
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		for (const domTouch of event.changedTouches) {
