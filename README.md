@@ -13,10 +13,19 @@ A web rhythm game.
 git clone --recursive https://github.com/sunniesnow/sunniesnow.github.io.git
 cd sunniesnow.github.io
 bundle install # and resolve all errors if there are any
-bundle exec jekyll serve
+JEKYLL_ENVIRONMENT=production bundle exec jekyll serve --host 0.0.0.0 --port 4000
 ```
 
 Now, visit http://localhost:4000/game/ to see the game.
+
+You can also build the static files by running `bundle exec jekyll build`.
+You can see the built files in the `_site` directory.
+
+## Use in Node.js
+
+I do not think anyone would want to do this,
+but [sunniesnow-record](https://github.com/sunniesnow/sunniesnow-record) does this.
+Look at its source codes for reference.
 
 ## License notice
 
@@ -42,6 +51,6 @@ The open-source projects used by Sunniesnow:
 - [Noto fonts](https://fonts.google.com/noto/use) (OFL-1.1),
 - [vConsole](https://github.com/Tencent/vConsole) (MIT).
 
-Sunniesnow does not contain any files from the above projects
-but uses them by letting the client browser download needed files
-from CDN sources.
+Sunniesnow's source codes do not contain any files from the above projects.
+Sunniesnow uses them by letting the client download needed files
+from public CDN sources.

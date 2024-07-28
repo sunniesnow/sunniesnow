@@ -5,7 +5,11 @@ Sunniesnow.Preprocess = {
 			Sunniesnow.Game.run();
 		},
 		vscodeBrowserReqId(value) {
-			// do nothing
+			// Do nothing.
+			// Do not populate Sunniesnow.vscodeBrowserReqId here because
+			// this file itself may be cached by VS Code simple browser
+			// and because Sunniesnow.ScriptsLoader needs it before Sunniesnow.Preprocess.run().
+			// Sunniesnow.vscodeBrowserReqId is populated in _head.html instead.
 		}
 	},
 

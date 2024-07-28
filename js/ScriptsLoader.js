@@ -54,7 +54,7 @@ Sunniesnow.ScriptsLoader = {
 		// VS Code use this search parameter to bust the cache for the main webpage,
 		// but the caches for the resources that it request are not busted.
 		// Here is the workaround.
-		// Will service worker be blown up? I don't know.
+		// Will service worker be blown up? I do not know.
 		if (Sunniesnow.vscodeBrowserReqId) {
 			path += `?vscodeBrowserReqId=${Sunniesnow.vscodeBrowserReqId}`;
 		}
