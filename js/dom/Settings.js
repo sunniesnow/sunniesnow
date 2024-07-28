@@ -414,7 +414,7 @@ Sunniesnow.Settings = {
 		}
 
 		for (const property in settings) {
-			console.warn(`Unknown settings item ${property}`);
+			Sunniesnow.Logs.warn(`Unknown settings item ${property}`);
 		}
 	},
 

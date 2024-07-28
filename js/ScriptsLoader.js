@@ -28,12 +28,12 @@ Sunniesnow.ScriptsLoader = {
 
 	async scriptContents(scriptPaths) {
 		return Promise.all(scriptPaths.map(async scriptPath => {
-			return [await fetch(scriptPath).then(r => r.text()), scriptPath];
+			return [await this.fetchText(scriptPath), scriptPath];
 		}));
 	},
 
 	async runScript(scriptPath) {
-		const script = await fetch(scriptPath).then(response => response.text());
+		const script = await this.fetchText(scriptPath);
 		this.runScriptFromString(script, scriptPath)
 	},
 
@@ -42,10 +42,23 @@ Sunniesnow.ScriptsLoader = {
 			const moduleName = Sunniesnow.Utils.slugToCamel(scriptPath.match(/\/([^/]+)@/)[1]);
 			globalThis[moduleName] = (await import(scriptPath)).default;
 		} else {
-			const script = await fetch(scriptPath).then(response => response.text());
+			const script = await this.fetchText(scriptPath);
 			// use indirect eval to run in global scope
 			eval?.(script + `\n//# sourceURL=${scriptPath}`);
 		}
+	},
+
+	async fetchText(path) {
+		// https://github.com/microsoft/vscode/issues/205105
+		// https://github.com/microsoft/vscode/blob/7e805145f76dea04d774cb14b7bc85366c02e79d/extensions/simple-browser/preview-src/index.ts#L96-L98
+		// VS Code use this search parameter to bust the cache for the main webpage,
+		// but the caches for the resources that it request are not busted.
+		// Here is the workaround.
+		// Will service worker be blown up? I don't know.
+		if (Sunniesnow.vscodeBrowserReqId) {
+			path += `?vscodeBrowserReqId=${Sunniesnow.vscodeBrowserReqId}`;
+		}
+		return await (await fetch(path)).text();
 	},
 
 	runScriptFromString(scriptString, scriptPath) {
@@ -62,7 +75,8 @@ Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 	'mime@3.0.0/lite/+esm',
 	'marked@5.1.1/marked.min.js',
 	`dompurify@3.0.5/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	'audio-decode@2.1.4/+esm'
+	'audio-decode@2.1.4/+esm',
+	`vconsole@3.15.1/dist/vconsole.min.js`
 ].map(path => `${Sunniesnow.ScriptsLoader.CDN_PREFIX}${path}`);
 
 Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [

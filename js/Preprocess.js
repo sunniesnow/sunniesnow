@@ -3,6 +3,9 @@ Sunniesnow.Preprocess = {
 	EXTRA_URL_PARAMS: {
 		instantStart(value) {
 			Sunniesnow.Game.run();
+		},
+		vscodeBrowserReqId(value) {
+			// do nothing
 		}
 	},
 

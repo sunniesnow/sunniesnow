@@ -28,7 +28,6 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		try {
 			return await Sunniesnow.Assets.loadTexture(url);
 		} catch (err) {
-			console.error(err);
 			const result = PIXI.Texture.WHITE;
 			Sunniesnow.Logs.warn(`Failed to load background: ${err.message ?? err}`, err);
 			return result;

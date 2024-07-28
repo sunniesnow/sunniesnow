@@ -118,8 +118,8 @@ Sunniesnow.Game = class Game {
 		try {
 			this.app.stop();
 			this.app.destroy();
-		} catch (error) {
-			console.error(error);
+		} catch (err) {
+			Sunniesnow.Logs.error(`Failed to stop game: ${err.message ?? err}`, err);
 		}
 	}
 

@@ -565,6 +565,28 @@ Sunniesnow.Utils = {
 		outArray[17] = 0;
 		outArray[18] = 1;
 		outArray[19] = 0;
-	}
+	},
 	
+	dirname(path) {
+		return path.replace(/\/[^/]*$/, '');
+	},
+	
+	isPrivate(hostname) {
+		if (hostname === 'localhost') {
+			return true;
+		}
+		if (/10\.\d+\.\d+\.\d+/.test(hostname)) {
+			return true;
+		}
+		if (/192\.168\.\d+\.\d+/.test(hostname)) {
+			return true;
+		}
+		if (/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+/.test(hostname)) {
+			return true;
+		}
+		if (/127\.\d+\.\d+\.\d+/.test(hostname)) {
+			return true;
+		}
+		return false;
+	}
 };

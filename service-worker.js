@@ -1,4 +1,5 @@
 self.Sunniesnow = {};
+importScripts('js/utils/Utils.js');
 importScripts('js/ScriptsLoader.js');
 const {CDN_PREFIX, CDN_SCRIPTS, SITE_SCRIPTS} = Sunniesnow.ScriptsLoader;
 
@@ -36,47 +37,31 @@ self.addEventListener('activate', event => {
 	))));
 });
 
-self.addEventListener('fetch', event => event.respondWith(caches.match(event.request).then(response => {
-	if (response) {
-		return response;
-	}
-	return fetch(event.request).then(fetched => {
-		const url = new URL(event.request.url);
-		let cacheKey;
-		if (url.host === ONLINE_HOST) {
-			cacheKey = ONLINE_STORAGE_NAME;
-		} else if (url.href.startsWith(CDN_PREFIX) || SITE_RESOURCES.includes(url.pathname) || url.pathname.startsWith(dirname(location.pathname))) {
-			cacheKey = SITE_STORAGE_NAME;
-		} else if (!isPrivate(url.hostname)) {
-			cacheKey = EXTERNAL_STORAGE_NAME;
+self.addEventListener('fetch', event => {
+	let request = event.request;
+	const url = new URL(request.url);
+	// These are for busting caches for VS Code simple browser, not for service worker.
+	url.searchParams.delete('vscodeBrowserReqId');
+	url.searchParams.delete('fuckCache');
+	request = new Request(url.href, request);
+	event.respondWith(caches.match(request).then(response => {
+		if (response) {
+			return response;
 		}
-		if (cacheKey) {
-			const clone = fetched.clone();
-			caches.open(cacheKey).then(cache => cache.put(event.request, clone));
-		}
-		return fetched;
-	});
-})));
-
-function dirname(path) {
-	return path.replace(/\/[^/]*$/, '');
-}
-
-function isPrivate(hostname) {
-	if (hostname === 'localhost') {
-		return true;
-	}
-	if (/10\.\d+\.\d+\.\d+/.test(hostname)) {
-		return true;
-	}
-	if (/192\.168\.\d+\.\d+/.test(hostname)) {
-		return true;
-	}
-	if (/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+/.test(hostname)) {
-		return true;
-	}
-	if (/127\.\d+\.\d+\.\d+/.test(hostname)) {
-		return true;
-	}
-	return false;
-}
+		return fetch(request).then(fetched => {
+			let cacheKey;
+			if (url.host === ONLINE_HOST) {
+				cacheKey = ONLINE_STORAGE_NAME;
+			} else if (url.href.startsWith(CDN_PREFIX) || SITE_RESOURCES.includes(url.pathname) || url.pathname.startsWith(Sunniesnow.Utils.dirname(location.pathname))) {
+				cacheKey = SITE_STORAGE_NAME;
+			} else if (!Sunniesnow.Utils.isPrivate(url.hostname)) {
+				cacheKey = EXTERNAL_STORAGE_NAME;
+			}
+			if (cacheKey) {
+				const clonedResponse = fetched.clone();
+				caches.open(cacheKey).then(cache => cache.put(request, clonedResponse));
+			}
+			return fetched;
+		});
+	}))
+});

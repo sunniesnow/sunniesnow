@@ -592,11 +592,11 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			Function of the pause button while pausing:
 			<input type="radio" name="second-pause" value="disabled" id="second-pause-disabled-radio">
-			<label for="second-pause-radio">Disabled</label>
+			<label for="second-pause-disabled-radio">Disabled</label>
 			<input type="radio" name="second-pause" value="resume" id="second-pause-resume-radio" checked>
-			<label for="second-pause-radio">Resume</label>
+			<label for="second-pause-resume-radio">Resume</label>
 			<input type="radio" name="second-pause" value="toggle-ui" id="second-pause-toggle-ui-radio">
-			<label for="second-pause-radio">Toggle pause UI</label>
+			<label for="second-pause-toggle-ui-radio">Toggle pause UI</label>
 		</div>
 	</fieldset>
 </details>
@@ -883,6 +883,14 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
+		<legend>Debug</legend>
+
+		<div>
+			<button type="button" id="vconsole-setup" onclick="Sunniesnow.vConsole ??= new VConsole();">VConsole</button>
+		</div>
+	</fieldset>
+
+	<fieldset>
 		<legend>Game</legend>
 
 		<div>
@@ -913,15 +921,6 @@ description: Sunniesnow is a web rhythm game
 <input type="text" id="pinned-coordinates-input" placeholder="x,y">
 <span id="pinned-coordinates"></span>
 </div>
-
-<!--<textarea id="javascript-input"></textarea>
-<button type="button" id="javascript-run" onclick="runJavascript();">Run</button>
-<script>
-const javascriptInput = document.getElementById('javascript-input');
-function runJavascript() {
-	eval(javascriptInput.value);
-}
-</script>-->
 
 <details>
 	<summary>Level README</summary>

@@ -1,12 +1,19 @@
+{% capture affix %}{% if jekyll.environment == 'development' %}?fuckCache={{ "now" | date: "%s%L" }}{% endif %}{% endcapture %}
+{% comment %}
+	You think this is too hacky?
+	Tell me about it, but I copied it from VS Code:
+	https://github.com/microsoft/vscode/blob/7e805145f76dea04d774cb14b7bc85366c02e79d/extensions/simple-browser/preview-src/index.ts#L96-L98
+{% endcomment %}
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<link rel="manifest" href="json/manifest.json">
-<link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="json/manifest.json{{ affix }}">
+<link rel="stylesheet" href="css/style.css{{ affix }}">
 
-<script>window.Sunniesnow = {};</script>
-<script src="js/utils/Utils.js"></script>
-<script src="js/ScriptsLoader.js"></script>
+<script>window.Sunniesnow = {vscodeBrowserReqId: location.search.match(/^\?.*vscodeBrowserReqId=(\d+)/)?.[1]};</script>
+<script src="js/utils/Utils.js{{ affix }}"></script>
+<script src="js/ScriptsLoader.js{{ affix }}"></script>
 <script type="module">
 	Sunniesnow.environment = '{{ jekyll.environment }}';
 	await Sunniesnow.ScriptsLoader.runAllScripts();
