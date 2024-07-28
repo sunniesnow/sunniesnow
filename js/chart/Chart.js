@@ -58,22 +58,22 @@ Sunniesnow.Chart = class Chart {
 		const start = Sunniesnow.game.settings.start * duration - Sunniesnow.game.settings.resumePreparationTime;
 		const end = Sunniesnow.game.settings.end * duration;
 		const offset = Sunniesnow.game.settings.chartOffset;
-		for (const eventData of this.data.events) {
+		this.data.events.forEach((eventData, id) => {
 			if (!Sunniesnow.Event.check(eventData)) {
-				continue;
+				return;
 			}
 			const {type, time, properties} = this.readEventMeta(eventData);
 			const reducedTime = (time + offset) / Sunniesnow.game.settings.gameSpeed;
 			if (!Sunniesnow.Utils.between(reducedTime, start, end)) {
-				continue;
+				return;
 			}
 			const event = Sunniesnow.Event.newFromType(type, reducedTime, properties);
 			if (!event) {
-				continue;
+				return;
 			}
-			event.id = this.events.length;
+			event.id = id;
 			this.events.push(event);
-		}
+		});
 	}
 
 	readEventMeta(eventData) {
