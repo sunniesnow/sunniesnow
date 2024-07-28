@@ -38,17 +38,17 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-	let request = event.request;
-	const url = new URL(request.url);
+	const oldRequest = event.request;
+	const url = new URL(oldRequest.url);
 	// These are for busting caches for VS Code simple browser, not for service worker.
 	url.searchParams.delete('vscodeBrowserReqId');
 	url.searchParams.delete('fuckCache');
-	request = new Request(url.href, request);
+	const request = new Request(url.href, oldRequest);
 	event.respondWith(caches.match(request).then(response => {
 		if (response) {
 			return response;
 		}
-		return fetch(request).then(fetched => {
+		return fetch(oldRequest).then(fetched => {
 			let cacheKey;
 			if (url.host === ONLINE_HOST) {
 				cacheKey = ONLINE_STORAGE_NAME;
