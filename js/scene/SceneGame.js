@@ -13,7 +13,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.topLeftHud = new Sunniesnow.TopLeftHud();
 		this.topRightHud = new Sunniesnow.TopRightHud();
 		this.topCenterHud = new Sunniesnow.TopCenterHud();
-		this.pauseBoard = new Sunniesnow.PauseBoard(this);
+		this.pauseBoard = new Sunniesnow.PauseBoard();
 		this.pauseButton = new Sunniesnow.ButtonPause(this.pauseBoard);
 		this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard();
 		this.doubleLinesBoard = new Sunniesnow.DoubleLinesBoard();
@@ -170,6 +170,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	// method: seek | play | pause
 	adjustProgress(time, method = 'seek') {
 		Sunniesnow.Music[method](time);
+		if (Sunniesnow.game.level.finished) {
+			return;
+		}
 		this.uiBgPatternBoard.adjustProgress(time);
 		this.uiBgNotesBoard.adjustProgress(time);
 		this.doubleLinesBoard.adjustProgress(time);

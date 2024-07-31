@@ -47,6 +47,13 @@ Sunniesnow.TouchManager = {
 	onStart(touch) {
 		document.activeElement.blur(); // see preventKeyEventIfShould
 		Sunniesnow.game.window.focus(); // In VSCode Simple Browser, this acquires focus lock
+		const existingTouch = this.touches[touch.id];
+		if (existingTouch) {
+			existingTouch.history.push(touch.start());
+			this.onMove(existingTouch);
+			return;
+		}
+		this.touches[touch.id] = touch;
 		this.callListeners(this.startListeners, touch)
 	},
 
@@ -77,14 +84,9 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreKey(event)) {
 			return;
 		}
-		const id = this.keyId(event.key);
-		if (this.touches[id]) { // this keydown event is fired by holding a key
-			return;
-		}
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		const touch = Sunniesnow.Touch.key(event.key, time, this.mousePageX, this.mousePageY, ctrlKey, event.shiftKey, event.altKey);
-		this.touches[id] = touch;
 		this.onStart(touch);
 	},
 
@@ -119,10 +121,8 @@ Sunniesnow.TouchManager = {
 			return;
 		}
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
-		const id = this.mouseButtonId(event.button);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		const touch = Sunniesnow.Touch.mouseButton(event.button, time, this.mousePageX, this.mousePageY, ctrlKey, event.shiftKey, event.altKey);
-		this.touches[id] = touch;
 		this.onStart(touch);
 	},
 
@@ -173,9 +173,7 @@ Sunniesnow.TouchManager = {
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		for (const domTouch of event.changedTouches) {
-			const id = this.touchId(domTouch.identifier);
 			const touch = Sunniesnow.Touch.domTouch(domTouch.identifier, time, domTouch.pageX, domTouch.pageY, ctrlKey, event.shiftKey, event.altKey);
-			this.touches[id] = touch;
 			this.onStart(touch);
 		}
 	},

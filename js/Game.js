@@ -103,9 +103,8 @@ Sunniesnow.Game = class Game {
 
 	terminate() {
 		this.terminating = true;
-		if (this.scene) {
-			this.scene.terminate();
-		}
+		this.scene?.terminate();
+		Sunniesnow.PinnedCoordinates.clear();
 		Sunniesnow.Fullscreen.set(false);
 		Sunniesnow.Audio.stopAll();
 		Sunniesnow.TouchManager.terminate();
