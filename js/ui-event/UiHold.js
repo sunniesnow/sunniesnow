@@ -103,6 +103,11 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 		this.note.scale.set(1.1 - Math.cos(phase) * 0.1);
 	}
 
+	// Why did I choose to inherit UiTap???
+	fadingOutDuration() {
+		return this.constructor.FADING_OUT_DURATION;
+	}
+
 	updateFadingOut(progress, relativeTime) {
 		Sunniesnow.UiNote.prototype.updateFadingOut.call(this, progress, relativeTime);
 		Sunniesnow.UiTap.prototype.updateTextFadingOut.call(this, progress, relativeTime);

@@ -27,7 +27,7 @@ Sunniesnow.Sscharter = {
 	addListeners() {
 		this.socket.addEventListener('error', event => {
 			this.socket = null;
-			Sunniesnow.Logs.error('Connection to sscharter closed due to error', event);
+			Sunniesnow.Logs.warn(`Connection to sscharter closed due to error`, event);
 		});
 		this.socket.addEventListener('message', event => {
 			const data = JSON.parse(event.data);
