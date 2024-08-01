@@ -2,8 +2,7 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 
 	constructor(fxBoard) {
 		super();
-		this.allEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.Note);
-		this.allEvents.sort((a, b) => a.appearTime() - b.appearTime());
+		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.Note);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime() - Sunniesnow.Config.uiPreparationTime, e => e.disappearTime());
 		}

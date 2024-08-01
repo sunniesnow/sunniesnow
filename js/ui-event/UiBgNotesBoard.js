@@ -1,8 +1,7 @@
 Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 	constructor() {
 		super();
-		this.allEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.BgNote);
-		this.allEvents.sort((a, b) => a.appearTime() - b.appearTime());
+		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.BgNote);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(
 				this.allEvents,

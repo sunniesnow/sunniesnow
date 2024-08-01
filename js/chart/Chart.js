@@ -17,7 +17,7 @@ Sunniesnow.Chart = class Chart {
 		await Sunniesnow.game.chart.readSscharterInfo();
 		Sunniesnow.Music.start = Math.min(
 			Sunniesnow.game.settings.start * Sunniesnow.Music.duration,
-			Sunniesnow.game.settings.speed === 0 ? Infinity : Sunniesnow.game.chart.events[0].appearTime()
+			Sunniesnow.game.settings.speed === 0 ? Infinity : Sunniesnow.game.chart.eventsSortedByAppearTime[0].appearTime()
 		) - Sunniesnow.game.settings.beginningPreparationTime;
 		if (!Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Audio.loadOfflineAudioContext();
@@ -106,9 +106,9 @@ Sunniesnow.Chart = class Chart {
 				event2.simultaneousEvents = event1.simultaneousEvents;
 			}
 		}
-		const sortedByEnd = this.events.filter(event => event instanceof Sunniesnow.Note);
-		sortedByEnd.sort((a, b) => a.endTime() - b.endTime());
-		sortedByEnd.forEach((note, i) => note.comboIndex = i + 1);
+		this.eventsSortedByAppearTime = this.events.toSorted((a, b) => a.appearTime() - b.appearTime());
+		this.eventsSortedByEndTime = this.events.toSorted((a, b) => a.endTime() - b.endTime());
+		this.eventsSortedByEndTime.filter(event => event instanceof Sunniesnow.Note).forEach((note, i) => note.comboIndex = i + 1);
 	}
 
 };
