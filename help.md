@@ -1137,6 +1137,35 @@ and it does **not** affect other scenes such as the pause menu and the results s
 
 This setting is only useful when [`enable-touchscreen`](#enable-touchscreen) is `true`.
 
+### Charting helper settings
+
+#### Sscharter
+
+##### Enable sscharter integration
+{:#sscharter}
+
+- **Setting id**: `sscharter`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the sscharter integration should be enabled.
+When it is `true`, the sscharter integration will be enabled.
+When it is `false`, the sscharter integration will be disabled.
+When sscharter integration is enabled,
+the game will try to connect to the sscharter server
+if the currently loaded level is served by sscharter
+without the `--production` flag.
+
+##### Live restart
+{:#sscharter-live-restart}
+
+- **Setting id**: `sscharter-live-restart`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the game should restart when the level file is updated by sscharter.
+When it is `true`, the game will restart when the level is updated by sscharter.
+When it is `false`, the game will not restart when the level is updated by sscharter.
+This setting is only useful when [`sscharter`](#sscharter) is `true`.
+
 ### System settings
 
 #### Interface

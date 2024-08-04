@@ -46,7 +46,7 @@ Sunniesnow.Chart = class Chart {
 	}
 	
 	async readSscharterInfo() {
-		if (!this.data.sscharter) {
+		if (!this.data.sscharter || !Sunniesnow.game.settings.sscharter) {
 			return;
 		}
 		await Sunniesnow.Sscharter.connect(this.data.sscharter);
