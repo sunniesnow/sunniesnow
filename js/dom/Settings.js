@@ -224,6 +224,10 @@ Sunniesnow.Settings = {
 			touchscreenWholeScreen: this.readCheckbox('touchscreen-whole-screen'),
 			touchPause: this.readCheckbox('touch-pause'),
 
+			// charting helper settings
+			sscharter: this.readCheckbox('sscharter'),
+			sscharterLiveRestart: this.readCheckbox('sscharter-live-restart'),
+
 			// system settings
 			width: this.readValue('width'),
 			height: this.readValue('height'),
@@ -368,6 +372,9 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('enable-touchscreen', d('enableTouchscreen'));
 		this.writeCheckbox('touchscreen-whole-screen', d('touchscreenWholeScreen'));
 		this.writeCheckbox('touch-pause', d('touchPause'));
+
+		this.writeCheckbox('sscharter', d('sscharter'));
+		this.writeCheckbox('sscharter-live-restart', d('sscharterLiveRestart'));
 
 		this.writeValue('width', d('width'));
 		this.writeValue('height', d('height'));
@@ -720,6 +727,7 @@ Sunniesnow.Settings = {
 		this.associateRange('background-brightness', 'background-brightness-value');
 		this.associateCheckbox('autoplay', 'progress-adjustable');
 		this.associateCheckbox('debug', 'hide-debug-except-pause');
+		this.associateCheckbox('sscharter', 'sscharter-live-restart');
 	},
 
 	clearDownloadingProgresses() {

@@ -3,10 +3,9 @@ Sunniesnow.Sscharter = {
 		if (!Sunniesnow.Utils.isValidUrl(Sunniesnow.Loader.loaded.chart.sourceContents)) {
 			return;
 		}
-		const {version, port, liveRestart} = data;
+		const {version, port} = data;
 		this.version = version;
 		this.port = port;
-		this.liveRestart = liveRestart;
 		this.host = new URL(Sunniesnow.Loader.loaded.chart.sourceContents).hostname;
 		this.url = `ws://${this.host}:${this.port}`;
 		this.socket = new WebSocket(this.url);
@@ -45,7 +44,7 @@ Sunniesnow.Sscharter = {
 	onUpdate(data) {
 		Sunniesnow.Logs.info('Chart update is received from sscharter');
 		Sunniesnow.Loader.triggerLoadChart();
-		if (this.liveRestart) {
+		if (Sunniesnow.game.settings.sscharterLiveRestart) {
 			Sunniesnow.game.window.focus();
 			Sunniesnow.Game.run();
 		}
