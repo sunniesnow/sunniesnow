@@ -14,19 +14,19 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	static SAMPLE_BLUR_RADIUS = 10; // unit: raster
 
 	static async load() {
-		this.fontSize = Sunniesnow.game.settings.height / 30;
+		this.fontSize = Sunniesnow.Config.HEIGHT / 30;
 		this.textStyle = {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.fontSize,
 			lineHeight: this.fontSize,
 			fill: this.COLOR
 		};
-		this.samplesDiagramHeight = Sunniesnow.game.settings.height / 4;
+		this.samplesDiagramHeight = Sunniesnow.Config.HEIGHT / 4;
 	}
 
 	constructor() {
 		super(() => this.trigger(), 50);
-		this.hitRect = new PIXI.Rectangle(0, 0, Sunniesnow.game.settings.width, Sunniesnow.game.settings.height);
+		this.hitRect = new PIXI.Rectangle(0, 0, Sunniesnow.Config.WIDTH, Sunniesnow.Config.HEIGHT);
 	}
 
 	populate() {
@@ -63,7 +63,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.sdText.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
 
 		const textWidth = Math.max(this.meanText.width, this.sdText.width);
-		const diagramWidth = Sunniesnow.game.settings.width - textWidth;
+		const diagramWidth = Sunniesnow.Config.WIDTH - textWidth;
 		this.samplesDiagram = new PIXI.Graphics();
 		const unit = this.constructor.samplesDiagramHeight / 4;
 		const thin = unit / 50;
@@ -122,13 +122,13 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.zeroText2 = new PIXI.Text('0', {...this.constructor.textStyle});
 		this.zeroText2.anchor = new PIXI.ObservablePoint(null, null, 0.5, 1);
 
-		const width = Sunniesnow.game.settings.width;
-		const height = Sunniesnow.game.settings.height - this.constructor.samplesDiagramHeight;
+		const width = Sunniesnow.Config.WIDTH;
+		const height = Sunniesnow.Config.HEIGHT - this.constructor.samplesDiagramHeight;
 		const unit = width / 6;
 		this.meanText2.x = width / 2;
-		this.meanText2.y = Sunniesnow.game.settings.height;
+		this.meanText2.y = Sunniesnow.Config.HEIGHT;
 		this.sdText2.x = width / 2 + unit;
-		this.sdText2.y = Sunniesnow.game.settings.height;
+		this.sdText2.y = Sunniesnow.Config.HEIGHT;
 
 		this.distributionDiagram = new PIXI.Graphics();
 		this.distributionDiagram.x = width / 2;
@@ -144,7 +144,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.distributionDiagram.moveTo(zeroX, 0);
 		this.distributionDiagram.lineTo(zeroX, height);
 		this.zeroText2.x = zeroX + width/2;
-		this.zeroText2.y = Sunniesnow.game.settings.height;
+		this.zeroText2.y = Sunniesnow.Config.HEIGHT;
 
 		const rasterCount = this.constructor.DISTRIBUTION_RASTER_COUNT;
 		const raster = width / rasterCount;
@@ -185,7 +185,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	createText() {
 		const style = {...this.constructor.textStyle};
 		const text = this.getTextContents();
-		style.fontSize = style.lineHeight = (Sunniesnow.game.settings.height - this.constructor.samplesDiagramHeight) / Sunniesnow.Utils.countLines(text);
+		style.fontSize = style.lineHeight = (Sunniesnow.Config.HEIGHT - this.constructor.samplesDiagramHeight) / Sunniesnow.Utils.countLines(text);
 		this.text = new PIXI.Text(text, style);
 		this.text.y = this.constructor.samplesDiagramHeight;
 		this.allContents.addChild(this.text);
@@ -194,7 +194,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	createRightText() {
 		this.rightText = new PIXI.Text(this.getRightTextContents(), {...this.constructor.textStyle, align: 'right'});
 		this.rightText.anchor = new PIXI.ObservablePoint(null, null, 1, 0);
-		this.rightText.x = Sunniesnow.game.settings.width;
+		this.rightText.x = Sunniesnow.Config.WIDTH;
 		this.rightText.y = this.constructor.samplesDiagramHeight;
 		this.allContents.addChild(this.rightText);
 	}
@@ -237,7 +237,7 @@ Mean μ = ${Math.round(this.sampleMean * 1000)}ms
 SD σ = ${Math.round(this.sampleSd * 1000)}ms
 
 `;
-		const judgementWindows = Sunniesnow.Config.appropriateJudgementWindows();
+		const judgementWindows = Sunniesnow.Config.JUDGEMENT_WINDOWS;
 		for (const noteType of ['tap', 'drag', 'flick', 'hold']) {
 			result += `${noteType}: `;
 			let intervals = [];

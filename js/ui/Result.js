@@ -36,7 +36,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 
 	static createTitleGeometry() {
 		this.titleWidth = this.statsRadius * 4 + this.statsSeperation * 3;
-		this.titleHeight = Sunniesnow.game.settings.width / 22.5;
+		this.titleHeight = Sunniesnow.Config.WIDTH / 22.5;
 		const graphics = new PIXI.Graphics();
 		graphics.beginFill(this.mainColor);
 		graphics.arc(0, 0, this.titleHeight /2, Math.PI/2, -Math.PI/2);
@@ -67,7 +67,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	}
 
 	static createStatsGeometry() {
-		this.statsRadius = Sunniesnow.game.settings.width / 18.5;
+		this.statsRadius = Sunniesnow.Config.WIDTH / 18.5;
 		this.statsSeperation = this.statsRadius / 4;
 		const graphics = new PIXI.Graphics();
 		graphics.lineStyle(this.statsRadius / 15, this.mainColor, 1, 1);
@@ -80,7 +80,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	}
 
 	static createComboGeometry() {
-		this.comboRadius = Sunniesnow.game.settings.width / 14;
+		this.comboRadius = Sunniesnow.Config.WIDTH / 14;
 		const graphics = new PIXI.Graphics();
 		graphics.lineStyle(this.comboRadius / 15, this.mainColor, 1, 1);
 		graphics.beginFill(this.mainColor, 1);
@@ -100,7 +100,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	}
 
 	static createRankFrameGeometry() {
-		this.rankRadius = Sunniesnow.game.settings.width / 8;
+		this.rankRadius = Sunniesnow.Config.WIDTH / 8;
 		const innerRadius = this.rankRadius * 5/6;
 		const graphics = new PIXI.Graphics();
 		graphics.lineStyle(this.rankRadius / 15, this.mainColor, 1, 0);
@@ -161,8 +161,8 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	}
 
 	static createScoreGeometry() {
-		const w = this.scoreWidth = Sunniesnow.game.settings.width / 5;
-		const h = this.scoreHeight = Sunniesnow.game.settings.width / 17.5;
+		const w = this.scoreWidth = Sunniesnow.Config.WIDTH / 5;
+		const h = this.scoreHeight = Sunniesnow.Config.WIDTH / 17.5;
 		const path = [
 			w/2, h/2,
 			-w/2, h/2,
@@ -182,8 +182,8 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 	}
 
 	static createAccuracyGeometry() {
-		const w = this.accuracyWidth = Sunniesnow.game.settings.width / 8;
-		const h = this.accuracyHeight = Sunniesnow.game.settings.width / 25;
+		const w = this.accuracyWidth = Sunniesnow.Config.WIDTH / 8;
+		const h = this.accuracyHeight = Sunniesnow.Config.WIDTH / 25;
 		const path = [
 			w / 2, h / 2,
 			-w / 2, h / 2,
@@ -227,8 +227,8 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.title = new PIXI.Container();
 		this.title.addChild(this.titleBackground);
 		this.title.addChild(this.titleText);
-		this.title.x = Sunniesnow.game.settings.width / 5;
-		this.title.y = Sunniesnow.game.settings.height / 4.5;
+		this.title.x = Sunniesnow.Config.WIDTH / 5;
+		this.title.y = Sunniesnow.Config.HEIGHT / 4.5;
 		this.addChild(this.title);
 	}
 
@@ -298,7 +298,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.statsAndCombo.addChild(this.stats.miss);
 		this.statsAndCombo.addChild(this.combo);
 		this.statsAndCombo.x = this.title.x;
-		this.statsAndCombo.y = Sunniesnow.game.settings.height * 2/3;
+		this.statsAndCombo.y = Sunniesnow.Config.HEIGHT * 2/3;
 		this.addChild(this.statsAndCombo);
 	}
 
@@ -364,8 +364,8 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		});
 		this.rankText.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
 		this.rank.addChild(this.rankText);
-		this.rank.x = Sunniesnow.game.settings.width * 0.7;
-		this.rank.y = Sunniesnow.game.settings.height * 0.35;
+		this.rank.x = Sunniesnow.Config.WIDTH * 0.7;
+		this.rank.y = Sunniesnow.Config.HEIGHT * 0.35;
 		this.addChild(this.rank);
 	}
 
@@ -382,7 +382,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 		this.score.addChild(this.scoreBackground);
 		this.score.addChild(this.scoreText);
 		this.score.x = this.rank.x;
-		this.score.y = Sunniesnow.game.settings.height * 2/3;
+		this.score.y = Sunniesnow.Config.HEIGHT * 2/3;
 		this.addChild(this.score);
 	}
 

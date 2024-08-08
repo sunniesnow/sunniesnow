@@ -27,10 +27,10 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 
 	// the distance of touch spot moving to be regarded as a flick
 	minFlickDistance() {
-		return Sunniesnow.Config.radius * Sunniesnow.game.settings.minFlickDistance;
+		return Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.minFlickDistance;
 	}
 	maxFlickDistance() {
-		return Sunniesnow.Config.radius * Sunniesnow.game.settings.maxFlickDistance;
+		return Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.maxFlickDistance;
 	}
 	
 	// the angle range

@@ -4,30 +4,27 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 	static FADING_OUT_DURATION = 1/3
 
 	static async load() {
-		this.radius = Sunniesnow.Config.noteRadius();
+		this.radius = Sunniesnow.Config.NOTE_RADIUS;
 	}
 
 	populate() {
-		this.dx = this.x2 - this.x1;
-		this.dy = this.y2 - this.y1;
-
 		this.graphics = new PIXI.Graphics();
-		this.graphics.x = this.x1;
-		this.graphics.y = this.y1;
 		this.addChild(this.graphics);
-
-		this.firstActive = false;
 	}
 
 	drawShape(progress) {
+		const dx = this.x2 - this.x1;
+		const dy = this.y2 - this.y1;
+		this.graphics.x = this.x1;
+		this.graphics.y = this.y1;
 		this.graphics.clear();
 		this.graphics.lineStyle(Sunniesnow.DoubleLine.radius / 12, 0xf9f9e9);
 		Sunniesnow.Utils.drawDashedLine(
 			this.graphics,
-			(1-progress) * this.dx / 2,
-			(1-progress) * this.dy / 2,
-			(1+progress) * this.dx / 2,
-			(1+progress) * this.dy / 2,
+			(1-progress) * dx / 2,
+			(1-progress) * dy / 2,
+			(1+progress) * dx / 2,
+			(1+progress) * dy / 2,
 			this.constructor.radius / 4,
 			this.constructor.radius / 4
 		);
@@ -41,7 +38,7 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 
 	updateActive(progress, relativeTime) {
 		super.updateActive(progress, relativeTime);
-		if (!this.firstActive) {
+		if (!this.firstActive || Sunniesnow.game.settings.scroll) {
 			this.drawShape(1);
 			this.firstActive = true;
 		}
@@ -49,18 +46,18 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 
 	updateHolding(progress, relativeTime) {
 		super.updateHolding(progress, relativeTime);
-		if (!this.firstActive) {
+		if (!this.firstHolding) {
 			this.drawShape(1);
-			this.firstActive = true;
+			this.firstHolding = true;
 		}
 	}
 
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
 		this.graphics.alpha = (1 - progress)**2;
-		if (!this.firstActive) {
+		if (!this.firstHolding) {
 			this.drawShape(1);
-			this.firstActive = true;
+			this.firstHolding = true;
 		}
 	}
 };

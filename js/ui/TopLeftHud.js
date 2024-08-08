@@ -2,11 +2,11 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 
 	static async load() {
 		this.backgroundGeometry = this.createBackgroundGeometry();
-		this.textMaxWidth = Sunniesnow.game.settings.width / 60 * 13;
+		this.textMaxWidth = Sunniesnow.Config.WIDTH / 60 * 13;
 	}
 
 	static createBackgroundGeometry() {
-		const unit = Sunniesnow.game.settings.width / 60;
+		const unit = Sunniesnow.Config.WIDTH / 60;
 		const path1 = [
 			20 * unit, 2 * unit,
 			19 * unit, 3 * unit,
@@ -54,12 +54,12 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 
 	populateText() {
 		this.text = new PIXI.Text('', {
-			fontSize: Sunniesnow.game.settings.width / 45,
+			fontSize: Sunniesnow.Config.WIDTH / 45,
 			fill: 'white',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC'
 		});
-		this.text.x = Sunniesnow.game.settings.width / 15;
-		this.text.y = Sunniesnow.game.settings.width / 30;
+		this.text.x = Sunniesnow.Config.WIDTH / 15;
+		this.text.y = Sunniesnow.Config.WIDTH / 30;
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
 		this.addChild(this.text);
 	}

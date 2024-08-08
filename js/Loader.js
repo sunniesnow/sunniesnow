@@ -72,7 +72,7 @@ Sunniesnow.Loader = {
 				this.clearChart();
 				this.loaded.chart.source = 'online';
 				this.loaded.chart.sourceContents = sourceContents;
-				const url = Sunniesnow.Utils.url(Sunniesnow.Config.chartPrefix, sourceContents, '.ssc');
+				const url = Sunniesnow.Utils.url(Sunniesnow.Config.CHART_PREFIX, sourceContents, '.ssc');
 				try {
 					file = await Sunniesnow.Fetcher.blob(url, 'level-file-downloading');
 				} catch (e) {
@@ -186,7 +186,7 @@ Sunniesnow.Loader = {
 				return null;
 			case 'online':
 				return Sunniesnow.Utils.url(
-					Sunniesnow.Config.backgroundPrefix,
+					Sunniesnow.Config.BACKGROUND_PREFIX,
 					Sunniesnow.game.settings.backgroundOnline
 				);
 			case 'from-level':
@@ -212,28 +212,28 @@ Sunniesnow.Loader = {
 		switch (id) {
 			case 'skin':
 				source = Sunniesnow.game.settings.skin;
-				prefix = Sunniesnow.Config.skinPrefix;
+				prefix = Sunniesnow.Config.SKIN_PREFIX;
 				online = Sunniesnow.game.settings.skinOnline;
 				upload = Sunniesnow.game.settings.skinUpload;
 				downloading = 'skin-downloading';
 				break;
 			case 'fx':
 				source = Sunniesnow.game.settings.fx;
-				prefix = Sunniesnow.Config.fxPrefix;
+				prefix = Sunniesnow.Config.FX_PREFIX;
 				online = Sunniesnow.game.settings.fxOnline;
 				upload = Sunniesnow.game.settings.fxUpload;
 				downloading = 'fx-downloading';
 				break;
 			case 'se':
 				source = Sunniesnow.game.settings.se;
-				prefix = Sunniesnow.Config.sePrefix;
+				prefix = Sunniesnow.Config.SE_PREFIX;
 				online = Sunniesnow.game.settings.seOnline;
 				upload = Sunniesnow.game.settings.seUpload;
 				downloading = 'se-downloading';
 				break;
 			default:
 				source = Sunniesnow.game.settings.plugin[id];
-				prefix = Sunniesnow.Config.pluginPrefix;
+				prefix = Sunniesnow.Config.PLUGIN_PREFIX;
 				online = Sunniesnow.game.settings.pluginOnline[id];
 				upload = Sunniesnow.game.settings.pluginUpload[id];
 				downloading = `plugin-${id}-downloading`;
@@ -265,6 +265,7 @@ Sunniesnow.Loader = {
 		this.loadingModulesProgress = 0;
 		this.targetLoadingModulesProgress = 0;
 		this.modulesQueue = [];
+		this.loadMeta();
 		this.loadDom();
 		this.loadAudioAndChart();
 		this.loadTouch();
@@ -279,6 +280,10 @@ Sunniesnow.Loader = {
 			await this.modulesQueue.shift()();
 		}
 		this.loadingModulesComplete = true;
+	},
+
+	loadMeta() {
+		this.loadModule('Config');
 	},
 
 	loadDom() {
@@ -354,6 +359,7 @@ Sunniesnow.Loader = {
 	loadUiNonevents() {
 		this.loadModule('TipPoint');
 		this.loadModule('DoubleLine');
+		this.loadModule('JudgementLine');
 	},
 
 	loadModule(name) {

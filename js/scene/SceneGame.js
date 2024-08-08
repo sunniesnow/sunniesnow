@@ -22,6 +22,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 		this.fxBoard = new Sunniesnow.FxBoard();
 		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard);
+		if (Sunniesnow.game.settings.scroll) {
+			this.judgementLine = new Sunniesnow.JudgementLine();
+		}
 		this.addChild(this.background);
 		this.addChild(this.progressBar);
 		this.addChild(this.uiBgPatternBoard);
@@ -30,6 +33,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.addChild(this.topCenterHud);
 		this.addChild(this.pauseButton);
 		this.addChild(this.fxBoard);
+		if (Sunniesnow.game.settings.scroll) {
+			this.addChild(this.judgementLine);
+		}
 		this.addChild(this.uiBgNotesBoard);
 		this.addChild(this.doubleLinesBoard);
 		this.addChild(this.uiNotesBoard);
@@ -117,6 +123,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		super.terminate();
 		this.pauseBoard.destroy({children: true});
 		this.pauseButton.destroy({children: true});
+		this.judgementLine?.destroy({children: true});
 	}
 
 	retry() {
@@ -144,6 +151,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.progressBar.update(delta);
 		this.pauseBoard.update(delta);
 		this.pauseButton.update(delta);
+		if (Sunniesnow.game.settings.scroll) {
+			this.judgementLine.update(delta);
+		}
 	}
 
 	getUiText(ui) {

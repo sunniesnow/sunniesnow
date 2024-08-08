@@ -4,7 +4,7 @@ Sunniesnow.TouchEffect = class TouchEffect extends Sunniesnow.TouchEffectBase {
 		if (!Sunniesnow.game.settings.touchEffects) {
 			return;
 		}
-		this.radius = Sunniesnow.Config.noteRadius() * 3;
+		this.radius = Sunniesnow.Config.NOTE_RADIUS * 3;
 		this.initialScale = 1/3;
 		this.life = 30; // frames
 		this.innerStop = 0.8; // inner radius / radius

@@ -175,6 +175,8 @@ Sunniesnow.Settings = {
 			hideFxPerfect: this.readCheckbox('hide-fx-perfect'),
 			hideFxHoldStart: this.readCheckbox('hide-fx-hold-start'),
 			alwaysUpdateFx: this.readCheckbox('always-update-fx'),
+			scrollJudgementLine: this.readValue('scroll-judgement-line'),
+			scrollDistance: this.readValue('scroll-distance'),
 			touchEffects: this.readCheckbox('touch-effects'),
 			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
 			hideTipPoints: this.readCheckbox('hide-tip-points'),
@@ -191,6 +193,7 @@ Sunniesnow.Settings = {
 			latencyHintValue: this.readValue('latency-hint-value') / 1000,
 
 			// game settings
+			scroll: this.readCheckbox('scroll'),
 			autoplay: this.readCheckbox('autoplay'),
 			progressAdjustable: this.readCheckbox('progress-adjustable'),
 			chartOffset: this.readValue('chart-offset') / 1000,
@@ -328,6 +331,8 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('hide-fx-perfect', d('hideFxPerfect'));
 		this.writeCheckbox('hide-fx-hold-start', d('hideFxHoldStart'));
 		this.writeCheckbox('always-update-fx', d('alwaysUpdateFx'));
+		this.writeValue('scroll-judgement-line', d('scrollJudgementLine'));
+		this.writeValue('scroll-distance', d('scrollDistance'));
 		this.writeCheckbox('touch-effects', d('touchEffects'));
 		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
 		this.writeCheckbox('hide-tip-points', d('hideTipPoints'));
@@ -341,6 +346,7 @@ Sunniesnow.Settings = {
 		this.writeRadio('latency-hint', d('latencyHint'));
 		this.writeValue('latency-hint-value', d('latencyHintValue') * 1000);
 
+		this.writeCheckbox('scroll', d('scroll'));
 		this.writeCheckbox('autoplay', d('autoplay'));
 		this.writeCheckbox('progress-adjustable', d('progressAdjustable'));
 		this.writeValue('chart-offset', d('chartOffset'));
@@ -728,6 +734,8 @@ Sunniesnow.Settings = {
 		this.associateCheckbox('autoplay', 'progress-adjustable');
 		this.associateCheckbox('debug', 'hide-debug-except-pause');
 		this.associateCheckbox('sscharter', 'sscharter-live-restart');
+		this.associateCheckbox('scroll', 'scroll-judgement-line');
+		this.associateCheckbox('scroll', 'scroll-distance');
 	},
 
 	clearDownloadingProgresses() {

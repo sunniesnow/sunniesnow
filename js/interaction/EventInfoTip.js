@@ -56,7 +56,7 @@ Sunniesnow.EventInfoTip = {
 				nearest = uiEvent;
 			}
 		}
-		if (minDistance < Sunniesnow.Config.noteRadius()) {
+		if (minDistance < Sunniesnow.Config.NOTE_RADIUS) {
 			return nearest;
 		}
 		return null;
@@ -76,7 +76,7 @@ Sunniesnow.EventInfoTip = {
 				nearest = uiEvent;
 			}
 		}
-		if (minDistance < Sunniesnow.Config.noteRadius()) {
+		if (minDistance < Sunniesnow.Config.NOTE_RADIUS) {
 			return nearest;
 		}
 		return null;

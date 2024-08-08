@@ -5,7 +5,7 @@ Sunniesnow.ButtonResume = class ButtonResume extends Sunniesnow.Button {
 	}
 
 	static createGeometry() {
-		this.radius = Sunniesnow.game.settings.width / 10;
+		this.radius = Sunniesnow.Config.WIDTH / 10;
 		const graphics = new PIXI.Graphics();
 		graphics.lineStyle(this.radius / 15, 0xfbfbff, 1, 1);
 		graphics.beginFill(0xebfbff, 1);
@@ -28,8 +28,8 @@ Sunniesnow.ButtonResume = class ButtonResume extends Sunniesnow.Button {
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
 		this.addChild(this.background);
 		this.addChild(this.text);
-		this.x = Sunniesnow.game.settings.width / 4;
-		this.y = Sunniesnow.game.settings.height / 2;
+		this.x = Sunniesnow.Config.WIDTH / 4;
+		this.y = Sunniesnow.Config.HEIGHT / 2;
 	}
 
 };

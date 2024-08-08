@@ -4,7 +4,7 @@ Sunniesnow.ButtonPause = class ButtonPause extends Sunniesnow.ButtonPauseBase {
 	}
 
 	static createGeometry() {
-		const radius = Sunniesnow.game.settings.width / 45;
+		const radius = Sunniesnow.Config.WIDTH / 45;
 		const graphics = new PIXI.Graphics();
 		graphics.beginFill('white');
 		graphics.drawRect(-radius/2, -radius/2, radius/3, radius);
@@ -20,8 +20,8 @@ Sunniesnow.ButtonPause = class ButtonPause extends Sunniesnow.ButtonPauseBase {
 	populate() {
 		super.populate();
 		this.graphics = new PIXI.Graphics(this.constructor.geometry);
-		this.graphics.x = Sunniesnow.game.settings.width / 30;
-		this.graphics.y = Sunniesnow.game.settings.width / 30;
+		this.graphics.x = Sunniesnow.Config.WIDTH / 30;
+		this.graphics.y = Sunniesnow.Config.WIDTH / 30;
 		this.addChild(this.graphics);
 	}
 

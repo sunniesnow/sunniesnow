@@ -10,7 +10,7 @@ Sunniesnow.ProgressControl = {
 	SEEK_DURATION: 2,
 
 	init(scene) {
-		this.touchHeight = Sunniesnow.game.settings.height / 10;
+		this.touchHeight = Sunniesnow.Config.HEIGHT / 10;
 		this.scene = scene;
 		this.clear();
 		this.addDraggingListeners();
@@ -73,7 +73,7 @@ Sunniesnow.ProgressControl = {
 
 	addDraggingListeners() {
 		this.dragStartListener = touch => {
-			if (touch.start().canvasY < Sunniesnow.game.settings.height - this.touchHeight) {
+			if (touch.start().canvasY < Sunniesnow.Config.HEIGHT - this.touchHeight) {
 				return false;
 			}
 			this.draggingTouches.push(touch);
@@ -118,7 +118,7 @@ Sunniesnow.ProgressControl = {
 			return;
 		}
 		const x = Sunniesnow.Utils.average(this.draggingTouches, touch => touch.end().canvasX);
-		this.scene.adjustProgress(x / Sunniesnow.game.settings.width * Sunniesnow.Music.duration, 'pause');
+		this.scene.adjustProgress(x / Sunniesnow.Config.WIDTH * Sunniesnow.Music.duration, 'pause');
 	},
 
 	beginForwarding() {

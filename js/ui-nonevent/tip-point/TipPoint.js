@@ -33,8 +33,17 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		if (Sunniesnow.game.settings.hideTipPoints) {
 			return;
 		}
-		this.radius = Sunniesnow.Config.noteRadius() / 3;
+		this.radius = Sunniesnow.Config.NOTE_RADIUS / 3;
 		this.tipPointGeometry = this.createTipPointGeometry();
+		if (Sunniesnow.game.settings.scroll) {
+			this.ACTIVE_DURATION = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
+			this.REMNANT_DURATION = this.calculateRemnantDuration();
+		}
+	}
+
+	static calculateRemnantDuration() {
+		const edge = Sunniesnow.Config.SCROLL_SPEED > 0 ? Sunniesnow.Config.HEIGHT : 0;
+		return edge - Sunniesnow.Config.SCROLL_END_Y / Sunniesnow.Config.SCROLL_SPEED;
 	}
 
 	static createTipPointGeometry() {
@@ -60,6 +69,10 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 			this.createTrail();
 		}
 		this.createTipPoint();
+		if (Sunniesnow.game.settings.scroll) {
+			this.checkpoints.forEach(checkpoint => checkpoint.y = Sunniesnow.Config.SCROLL_END_Y);
+			this.createConnections();
+		}
 	}
 
 	createTipPoint() {
@@ -83,10 +96,42 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.addChild(this.trail);
 	}
 
+	createConnections() {
+		this.connections = new PIXI.Graphics();
+		this.connections.lineStyle(Sunniesnow.Config.WIDTH / 200, 0x8f8f7f, 0.5);
+		this.connections.moveTo(this.checkpoints[0].x, 0);
+		for (const {x, time} of this.checkpoints.slice(1)) {
+			this.connections.lineTo(
+				x,
+				(this.startTime - time) * Sunniesnow.Config.SCROLL_SPEED
+			);
+		}
+		this.connections.y = Sunniesnow.Config.SCROLL_END_Y;
+		this.addChild(this.connections);
+	}
+
+	update(time) {
+		super.update(time);
+		if (!Sunniesnow.game.settings.scroll) {
+			return;
+		}
+		this.connections.y = Sunniesnow.Config.SCROLL_END_Y + (time - this.startTime) * Sunniesnow.Config.SCROLL_SPEED;
+	}
+
+	updateActive(time) {
+		super.updateActive(time);
+		this.tipPoint.visible = false;
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.trail.visible = true;
+		}
+	}
+
 	updateZoomingIn(time) {
 		super.updateZoomingIn(time);
+		this.tipPoint.visible = true;
 		const sinceStart = time - this.startTime;
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.trail.visible = true;
 			this.trailShader.uniforms.uAlpha = 1;
 			this.updateTrail(time);
 		}
@@ -96,9 +141,11 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 
 	updateZoomingOut(time) {
 		super.updateZoomingOut(time);
+		this.tipPoint.visible = true;
 		const sinceEnd = time - this.endTime;
 		const alpha = 1 - sinceEnd / this.constructor.ZOOMING_OUT_DURATION;
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.trail.visible = true;
 			this.trailShader.uniforms.uAlpha = alpha;
 			this.updateTrail(time);
 		}
@@ -108,12 +155,22 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 
 	updateHolding(time) {
 		super.updateHolding(time);
+		this.tipPoint.visible = true;
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.trail.visible = true;
 			this.trailShader.uniforms.uAlpha = 1;
 			this.updateTrail(time);
 		}
 		this.tipPoint.scale.set(1);
 		this.updateTipPoint(time);
+	}
+
+	updateRemnant(time) {
+		super.updateRemnant(time);
+		this.tipPoint.visible = false;
+		if (Sunniesnow.game.settings.renderer === 'webgl') {
+			this.trail.visible = false;
+		}
 	}
 
 	updateTrail(time) {

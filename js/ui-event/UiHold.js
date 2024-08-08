@@ -1,12 +1,15 @@
-Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
+Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 
 	static async load() {
-		this.radius = Sunniesnow.Config.noteRadius();
+		this.radius = Sunniesnow.Config.NOTE_RADIUS;
 		this.haloRadius = this.radius * 1.5;
-		this.circleRadius = this.radius * 4;
-		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
-		this.geometry = this.createGeometry(0x29a9b9, 0xe8f8b8);
+		this.geometry = Sunniesnow.UiTap.createGeometry.call(this, 0x29a9b9, 0xe8f8b8);
 		this.haloGeometry = this.createHaloGeometry();
+		if (Sunniesnow.game.settings.scroll) {
+			return;
+		}
+		this.circleRadius = this.radius * 4;
+		this.circleGeometry = Sunniesnow.UiTap.createCircleGeometry.call(this, 0xccfcfc);
 	}
 
 	static createHaloGeometry() {
@@ -19,14 +22,27 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	
 	populate() {
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
-		this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
 		this.text = Sunniesnow.UiTap.prototype.createText.call(this);
-		this.addChild(this.circle);
+		if (Sunniesnow.game.settings.scroll) {
+			this.createBar();
+		} else {
+			this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
+			this.addChild(this.circle);
+		}
 		this.note = new PIXI.Container();
 		this.createHalo();
 		this.note.addChild(this.noteBody);
 		this.note.addChild(this.text);
 		this.addChild(this.note);
+	}
+
+	createBar() {
+		this.bar = new PIXI.Graphics();
+		this.bar.beginFill(0xd3e373);
+		this.bar.drawRect(-this.constructor.radius / 4, -1, this.constructor.radius / 2, 1);
+		this.bar.endFill();
+		this.bar.scale.y = this.event.duration * Sunniesnow.Config.SCROLL_SPEED;
+		this.addChild(this.bar);
 	}
 
 	createHalo() {
@@ -42,15 +58,21 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 
 	updateFadingIn(progress, relativeTime) {
-		Sunniesnow.UiNote.prototype.updateFadingIn.call(this, progress, relativeTime);
+		super.updateFadingIn(progress, relativeTime);
 		this.note.scale.set(progress);
+		if (Sunniesnow.game.settings.scroll) {
+			return;
+		}
 		this.circle.scale.set(1 - (progress-1)**2);
 		this.circle.alpha = progress / 3;
 	}
 
 	updateActive(progress, relativeTime) {
-		Sunniesnow.UiNote.prototype.updateActive.call(this, progress, relativeTime);
+		super.updateActive(progress, relativeTime);
 		this.note.scale.set(1);
+		if (Sunniesnow.game.settings.scroll) {
+			return;
+		}
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
 		if (progress <= 1) {
 			this.circle.visible = true;
@@ -62,10 +84,17 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 	}
 
 	updateHolding(progress, relativeTime) {
-		Sunniesnow.UiNote.prototype.updateHolding.call(this, progress, relativeTime);
-		this.circle.visible = false;
+		super.updateHolding(progress, relativeTime);
 		this.rotateHaloMask(progress);
 		this.swellBounce(progress);
+		if (Sunniesnow.game.settings.scroll) {
+			this.bar.scale.y = (this.event.duration - relativeTime) * Sunniesnow.Config.SCROLL_SPEED;
+			if (this.bar.scale.y < 0) {
+				this.bar.scale.y = 0;
+			}
+			return;
+		}
+		this.circle.visible = false;
 	}
 
 	rotateHaloMask(progress) {
@@ -103,16 +132,15 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiTap {
 		this.note.scale.set(1.1 - Math.cos(phase) * 0.1);
 	}
 
-	// Why did I choose to inherit UiTap???
-	fadingOutDuration() {
-		return this.constructor.FADING_OUT_DURATION;
-	}
-
 	updateFadingOut(progress, relativeTime) {
-		Sunniesnow.UiNote.prototype.updateFadingOut.call(this, progress, relativeTime);
+		super.updateFadingOut(progress, relativeTime);
 		Sunniesnow.UiTap.prototype.updateTextFadingOut.call(this, progress, relativeTime);
 		progress *= 2;
-		this.circle.visible = false;
+		if (Sunniesnow.game.settings.scroll) {
+			this.bar.visible = false;
+		} else {
+			this.circle.visible = false;
+		}
 		this.halo.visible = false;
 		if (this.levelNote.judgement === 'miss') {
 			this.noteBody.visible = false;

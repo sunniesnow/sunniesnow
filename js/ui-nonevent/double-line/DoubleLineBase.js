@@ -9,6 +9,9 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 		this.event2 = event2;
 		[this.x1, this.y1] = Sunniesnow.Config.chartMapping(event1.x, event1.y);
 		[this.x2, this.y2] = Sunniesnow.Config.chartMapping(event2.x, event2.y);
+		if (Sunniesnow.game.settings.scroll) {
+			this.y1 = this.y2 = Sunniesnow.Config.SCROLL_START_Y;
+		}
 		this.levelNote1 = event1.levelNote;
 		this.levelNote2 = event2.levelNote;
 		this.activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
@@ -86,11 +89,23 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 	}
 
 	updateFadingOut(progress, relativeTime) {
+		if (!Sunniesnow.game.settings.scroll || !Sunniesnow.game.settings.autoplay) {
+			return;
+		}
+		this.y1 = this.y2 = Sunniesnow.Config.SCROLL_END_Y;
 	}
 
 	updateActive(progress, relativeTime) {
+		if (!Sunniesnow.game.settings.scroll) {
+			return;
+		}
+		this.y1 = this.y2 = Sunniesnow.Config.scrollY(progress);
 	}
 
 	updateHolding(relativeTime) {
+		if (!Sunniesnow.game.settings.scroll || !Sunniesnow.game.settings.autoplay) {
+			return;
+		}
+		this.y1 = this.y2 = Sunniesnow.Config.SCROLL_END_Y;
 	}
 };

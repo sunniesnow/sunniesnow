@@ -26,7 +26,7 @@ Sunniesnow.Utils = {
 
 	mirrorAndReversePath(path) {
 		for (let i = 0; i < path.length; i += 2) {
-			path[i] = Sunniesnow.game.settings.width - path[i];
+			path[i] = Sunniesnow.Config.WIDTH - path[i];
 		}
 		for (let i = 0; i < path.length / 2; i += 2) {
 			const x = path[i];
@@ -273,7 +273,7 @@ Sunniesnow.Utils = {
 	},
 
 	inScreen(x, y) {
-		return Sunniesnow.Utils.between(x, 0, Sunniesnow.game.settings.width) && Sunniesnow.Utils.between(y, 0, Sunniesnow.game.settings.height);
+		return Sunniesnow.Utils.between(x, 0, Sunniesnow.Config.WIDTH) && Sunniesnow.Utils.between(y, 0, Sunniesnow.Config.HEIGHT);
 	},
 
 	inScreenPage(x, y, canvas) {

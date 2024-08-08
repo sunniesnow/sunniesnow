@@ -6,7 +6,7 @@ Sunniesnow.ButtonRetry = class ButtonRetry extends Sunniesnow.ButtonResume {
 
 	populate() {
 		super.populate();
-		this.x = Sunniesnow.game.settings.width / 2;
+		this.x = Sunniesnow.Config.WIDTH / 2;
 	}
 
 };

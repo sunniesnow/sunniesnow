@@ -16,8 +16,8 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 				Sunniesnow.Logs.warn(`Failed to load font for big texts: ${e.message ?? e}`, e);
 			}
 		}
-		this.fontSize = Sunniesnow.Config.radius * 10 * Sunniesnow.Config.scale();
-		this.maxWidth = Sunniesnow.Config.minWidth * 0.9 * Sunniesnow.Config.scale();
+		this.fontSize = Sunniesnow.Config.RADIUS * 10 * Sunniesnow.Config.SCALE;
+		this.maxWidth = Sunniesnow.Config.MIN_WIDTH * 0.9 * Sunniesnow.Config.SCALE;
 	}
 
 	populate() {

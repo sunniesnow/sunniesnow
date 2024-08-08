@@ -183,6 +183,8 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui-nonevent/double-line/DoubleLineBase',
 	'ui-nonevent/double-line/DoubleLine',
 	'ui-nonevent/double-line/DoubleLinesBoard',
+	'ui-nonevent/judgement-line/JudgementLineBase',
+	'ui-nonevent/judgement-line/JudgementLine',
 
 	'scene/Scene',
 	'scene/SceneLoading',

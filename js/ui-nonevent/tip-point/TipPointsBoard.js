@@ -1,7 +1,7 @@
 Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	constructor() {
 		super();
-		// [{id, events}, ...], sorted by events[0].time
+		// [{id, events, startTime}, ...], sorted by events[0].time
 		this.allTipPointHeads = new Map();
 		for (const event of Sunniesnow.game.chart.events) {
 			if (event.tipPoint === null || event.tipPoint === undefined) {
@@ -15,12 +15,16 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 		}
 		// First convert to array then map instead of the other way around
 		// because Safari and Firefox do not support Iterator.
-		this.allTipPointHeads = Array.from(this.allTipPointHeads.entries()).map(([id, events]) => ({id, events}));
+		this.allTipPointHeads = Array.from(this.allTipPointHeads.entries()).map(
+			([id, events]) => ({
+				id, events,
+				appearTime: events[0].time - Sunniesnow.TipPoint.ACTIVE_DURATION - Sunniesnow.Config.UI_PREPARATION_TIME,
+				disappearTime: events[events.length - 1].time + Sunniesnow.TipPoint.ZOOMING_OUT_DURATION
+			})
+		);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(
-				this.allTipPointHeads,
-				e => e.events[0].time - Sunniesnow.Config.uiPreparationTime,
-				e => e.events[e.events.length - 1].time + Sunniesnow.TipPoint.ZOOMING_OUT_DURATION
+				this.allTipPointHeads, e => e.appearTime, e => e.disappearTime
 			);
 		}
 		this.clear();
@@ -42,7 +46,7 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	}
 
 	addNewTipPoints(time) {
-		while (this.unappearedTipPointHeads.length > 0 && time >= this.unappearedTipPointHeads[0].events[0].time - Sunniesnow.Config.uiPreparationTime) {
+		while (this.unappearedTipPointHeads.length > 0 && time >= this.unappearedTipPointHeads[0].appearTime) {
 			const {id, events} = this.unappearedTipPointHeads.shift();
 			this.add(id, events);
 		}
@@ -70,7 +74,7 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 
 	adjustProgress(time) {
 		this.unappearedTipPointHeads = this.allTipPointHeads.slice(
-			Sunniesnow.Utils.bisectLeft(this.allTipPointHeads, e => e.events[0].time - Sunniesnow.Config.uiPreparationTime - time)
+			Sunniesnow.Utils.bisectLeft(this.allTipPointHeads, e => e.appearTime - time)
 		);
 		this.removeAll();
 		this.timeline[Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)].events.forEach(

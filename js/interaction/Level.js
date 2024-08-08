@@ -10,7 +10,7 @@ Sunniesnow.Level = class Level {
 	}
 
 	initializeAuxiliaryQuantities() {
-		this.judgementWindows = Sunniesnow.Config.appropriateJudgementWindows();
+		this.judgementWindows = Sunniesnow.Config.JUDGEMENT_WINDOWS;
 		[this.earliestLateBad, this.latestLateBad] = Sunniesnow.Utils.minmax(
 			this.judgementWindows.tap.bad[1],
 			this.judgementWindows.drag.bad[1],
@@ -117,7 +117,7 @@ Sunniesnow.Level = class Level {
 	}
 
 	effectiveHits() {
-		const {perfect, good, bad, miss} = Sunniesnow.game.settings.lyrica5 ? Sunniesnow.Config.accuracies5 : Sunniesnow.Config.accuracies;
+		const {perfect, good, bad, miss} = Sunniesnow.Config.ACCURACIES;
 		return this.perfect * perfect + this.good * good + this.bad * bad + this.miss * miss;
 	}
 
@@ -286,6 +286,14 @@ Sunniesnow.Level = class Level {
 		}
 	}
 
+	distanceAndAngle(x, y, event) {
+		if (Sunniesnow.game.settings.scroll) {
+			return [Math.abs(x - event.x), Math.atan2(y - event.y, x - event.x)];
+		} else {
+			return Sunniesnow.Utils.cartesianToPolar(x - event.x, y - event.y);
+		}
+	}
+
 	// What if a touch can potentially hit different simultaneous notes at this position?
 	// Pick the one that is the nearest!
 	// However, we should avoid hitting drags as possible.
@@ -294,14 +302,14 @@ Sunniesnow.Level = class Level {
 		const {x, y} = touch.start();
 		const events = note.event.simultaneousEvents;
 		// Should we replace Euclidean distance with L-infinity distance?
-		let [distance, angle] = Sunniesnow.Utils.cartesianToPolar(x - note.event.x, y - note.event.y);
+		let [distance, angle] = this.distanceAndAngle(x, y, note.event);
 		for (let i = 0; i < events.length; i++) {
 			const event = events[i];
 			const newNote = event.levelNote;
 			if (!newNote || newNote.hitRelativeTime !== null) {
 				continue;
 			}
-			const [newDistance, newAngle] = Sunniesnow.Utils.cartesianToPolar(x - event.x, y - event.y);
+			const [newDistance, newAngle] = this.distanceAndAngle(x, y, note.event);
 			let condition = (!note.constructor.ONLY_ONE_PER_TOUCH || newDistance < distance) && newNote.constructor.ONLY_ONE_PER_TOUCH;
 			condition ||= !note.constructor.ONLY_ONE_PER_TOUCH && !newNote.constructor.ONLY_ONE_PER_TOUCH && newDistance < distance;
 			if (note.type === 'flick' && newNote.type === 'flick') {

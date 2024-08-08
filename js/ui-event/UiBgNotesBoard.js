@@ -5,7 +5,7 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(
 				this.allEvents,
-				e => e.appearTime() - Sunniesnow.Config.uiPreparationTime,
+				e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME,
 				e => e.disappearTime()
 			);
 		}
@@ -30,7 +30,7 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 		const time = Sunniesnow.Music.currentTime;
 		while (this.unappearedEvents.length > 0) {
 			const event = this.unappearedEvents[0];
-			const shouldStartTime = event.appearTime() - Sunniesnow.Config.uiPreparationTime;
+			const shouldStartTime = event.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME;
 			if (time < shouldStartTime) {
 				break;
 			}
@@ -51,7 +51,7 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 
 	adjustProgress(time) {
 		this.unappearedEvents = this.allEvents.slice(
-			Sunniesnow.Utils.bisectLeft(this.allEvents, event => event.appearTime() - Sunniesnow.Config.uiPreparationTime - time)
+			Sunniesnow.Utils.bisectLeft(this.allEvents, event => event.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME - time)
 		);
 		this.removeAll();
 		let currentEvents = this.timeline[Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)].events;

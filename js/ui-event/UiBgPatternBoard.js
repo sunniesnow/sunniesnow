@@ -30,7 +30,7 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 		const time = Sunniesnow.Music.currentTime;
 		while (this.unappearedEvents.length > 0) {
 			const event = this.unappearedEvents[0];
-			const shouldStartTime = event.appearTime() - Sunniesnow.Config.uiPreparationTime;
+			const shouldStartTime = event.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME;
 			if (time < shouldStartTime) {
 				break;
 			}
@@ -65,7 +65,7 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 		let event = this.allEvents[index - 1];
 		if (!event || event.disappearTime() < time) {
 			event = this.allEvents[index];
-			if (!event || event.appearTime() - Sunniesnow.Config.uiPreparationTime > time) {
+			if (!event || event.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME > time) {
 				event = null;
 			} else {
 				index++;

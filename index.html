@@ -376,6 +376,20 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
+		<legend>Scroll mode</legend>
+
+		<div>
+			Judgement line position:
+			<input type="number" id="scroll-judgement-line" value="0.8" step="0.05">
+		</div>
+
+		<div>
+			Scroll distance:
+			<input type="number" id="scroll-distance" value="1" step="0.1">
+		</div>
+	</fieldset>
+
+	<fieldset>
 		<legend>Miscellaneous</legend>
 
 		<div>
@@ -482,7 +496,16 @@ description: Sunniesnow is a web rhythm game
 
 <details>
 	<summary>Game settings</summary>
-	
+
+	<fieldset>
+		<legend>Scroll mode</legend>
+
+		<div>
+			<input type="checkbox" id="scroll">
+			<label for="scroll">Enable scroll mode</label>
+		</div>
+	</fieldset>
+
 	<fieldset>
 		<legend>Autoplay</legend>
 

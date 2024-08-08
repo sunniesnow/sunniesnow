@@ -1,7 +1,9 @@
 Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 
+	static ACTIVE_DURATION = 0;
 	static ZOOMING_IN_DURATION = 0;
 	static ZOOMING_OUT_DURATION = 0;
+	static REMNANT_DURATION = 0;
 
 	constructor(events) {
 		super();
@@ -13,7 +15,7 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 		});
 		this.startTime = this.checkpoints[0].time;
 		this.endTime = this.checkpoints[this.checkpoints.length - 1].time;
-		// ready -> zoomingIn -> holding -> zoomingOut -> finished
+		// ready -> active -> zoomingIn -> holding -> zoomingOut -> remnant -> finished
 		this.state = 'ready';
 		this.populate();
 	}
@@ -27,6 +29,9 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 	update(time) {
 		this.updateState(time);
 		switch (this.state) {
+			case 'active':
+				this.updateActive(time);
+				break;
 			case 'zoomingIn':
 				this.updateZoomingIn(time);
 				break;
@@ -36,21 +41,30 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 			case 'zoomingOut':
 				this.updateZoomingOut(time);
 				break;
+			case 'remnant':
+				this.updateRemnant(time);
+				break;
 		}
 	}
 
 	updateState(time) {
 		const sinceStart = time - this.startTime;
 		const sinceEnd = time - this.endTime;
-		if (sinceStart < 0) {
+		if (sinceStart < -this.constructor.ACTIVE_DURATION) {
 			this.visible = false;
 			this.state = 'ready';
+		} else if (sinceStart < 0) {
+			this.visible = true;
+			this.state = 'active';
 		} else if (sinceStart < this.constructor.ZOOMING_IN_DURATION) {
 			this.visible = true;
 			this.state = 'zoomingIn';
-		} else if (sinceEnd > this.constructor.ZOOMING_OUT_DURATION) {
+		} else if (sinceEnd > Math.max(this.constructor.REMNANT_DURATION, this.constructor.ZOOMING_OUT_DURATION)) {
 			this.visible = false;
 			this.state = 'finished';
+		} else if (sinceEnd > this.constructor.ZOOMING_OUT_DURATION) {
+			this.visible = true;
+			this.state = 'remnant';
 		} else if (sinceEnd > 0) {
 			this.visible = true;
 			this.state = 'zoomingOut';
@@ -60,6 +74,9 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 		}
 	}
 
+	updateActive(time) {
+	}
+
 	updateZoomingIn(time) {
 	}
 
@@ -67,6 +84,9 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 	}
 
 	updateZoomingOut(time) {
+	}
+
+	updateRemnant(time) {
 	}
 
 };

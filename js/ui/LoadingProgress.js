@@ -11,20 +11,20 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 
 	populateText() {
 		this.text = new PIXI.Text('', {
-			fontSize: Sunniesnow.game.settings.height / 20,
+			fontSize: Sunniesnow.Config.HEIGHT / 20,
 			fill: 'white',
 			align: 'center'
 		});
 		this.text.anchor.set(0.5);
-		this.text.x = Sunniesnow.game.settings.width / 2;
-		this.text.y = Sunniesnow.game.settings.height / 4;
+		this.text.x = Sunniesnow.Config.WIDTH / 2;
+		this.text.y = Sunniesnow.Config.HEIGHT / 4;
 		this.addChild(this.text);
 	}
 
 	populateProgressBar() {
 		this.progressBar = new PIXI.Graphics();
-		this.progressBar.x = Sunniesnow.game.settings.width / 8;
-		this.progressBar.y = Sunniesnow.game.settings.height / 2;
+		this.progressBar.x = Sunniesnow.Config.WIDTH / 8;
+		this.progressBar.y = Sunniesnow.Config.HEIGHT / 2;
 		this.addChild(this.progressBar);
 	}
 
@@ -42,9 +42,9 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 		this.progressBar.beginFill(0xffffff);
 		const [_, numerator, denominator] = Sunniesnow.Loader.loadingText.match(/(\d+)\/(\d+)/) ?? [0, 1, 1];
 		const progress = Number(numerator) / Number(denominator);
-		const width = Sunniesnow.game.settings.width*3/4;
-		const height = Sunniesnow.game.settings.height / 10;
-		const thickness = Sunniesnow.game.settings.height / 100;
+		const width = Sunniesnow.Config.WIDTH*3/4;
+		const height = Sunniesnow.Config.HEIGHT / 10;
+		const thickness = Sunniesnow.Config.HEIGHT / 100;
 		this.progressBar.drawRect(0, 0, width, height);
 		this.progressBar.beginFill(0x000000);
 		const barWidth = (width - 2*thickness) * progress

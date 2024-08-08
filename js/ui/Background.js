@@ -4,8 +4,8 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		const tempTexture = await this.getBackgroundTexture();
 		const tempSprite = new PIXI.Sprite(tempTexture);
 		tempSprite.anchor.set(0.5);
-		const width = Sunniesnow.game.settings.width;
-		const height = Sunniesnow.game.settings.height;
+		const width = Sunniesnow.Config.WIDTH;
+		const height = Sunniesnow.Config.HEIGHT;
 		tempSprite.scale.set(Math.max(width / tempTexture.width, height / tempTexture.height));
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
 			tempSprite.filters = [new PIXI.BlurFilter(Sunniesnow.game.settings.backgroundBlur, 10)];

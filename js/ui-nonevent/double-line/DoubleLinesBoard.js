@@ -23,8 +23,8 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(
 				this.allEvents,
-				e => e.appearTime() - Sunniesnow.Config.uiPreparationTime,
-				e => e.disappearTime()
+				e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME,
+				e => e.endTime() + Sunniesnow.DoubleLine.FADING_OUT_DURATION
 			);
 		}
 		this.clear();
@@ -47,8 +47,8 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 	}
 
 	addNewDoubleLines(time) {
-		// this condition breaks if DoubleLine.FADING_IN_DURATION is larger than FADING_IN_DURATION of note plus Sunniesnow.Config.uiPreparationTime
-		while (this.unappearedEvents.length > 0 && time >= this.unappearedEvents[0].appearTime() - Sunniesnow.Config.uiPreparationTime) {
+		// this condition breaks if DoubleLine.FADING_IN_DURATION is larger than FADING_IN_DURATION of note plus Sunniesnow.Config.UI_PREPARATION_TIME
+		while (this.unappearedEvents.length > 0 && time >= this.unappearedEvents[0].appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME) {
 			const event = this.unappearedEvents.shift();
 			this.add(new Sunniesnow.DoubleLine(event, event.getConnectedNote()));
 		}
@@ -68,7 +68,7 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 
 	adjustProgress(time) {
 		this.unappearedEvents = this.allEvents.slice(
-			Sunniesnow.Utils.bisectLeft(this.allEvents, event => event.appearTime() - Sunniesnow.Config.uiPreparationTime - time)
+			Sunniesnow.Utils.bisectLeft(this.allEvents, event => event.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME - time)
 		);
 		this.removeAll();
 		const currentEvents = this.timeline[Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)].events;

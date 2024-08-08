@@ -38,7 +38,7 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 	}
 
 	endJudgementWindows() {
-		return Sunniesnow.Config.appropriateJudgementWindows().holdEnd;
+		return Sunniesnow.Config.JUDGEMENT_WINDOWS.holdEnd;
 	}
 
 	release(time) {

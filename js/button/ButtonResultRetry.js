@@ -5,7 +5,7 @@ Sunniesnow.ButtonResultRetry = class ButtonResultRetry extends Sunniesnow.Button
 	}
 
 	static createGeometry() {
-		this.radius = Sunniesnow.game.settings.width / 8;
+		this.radius = Sunniesnow.Config.WIDTH / 8;
 		const path = [
 			-this.radius, 0,
 			0, -this.radius,
@@ -34,7 +34,7 @@ Sunniesnow.ButtonResultRetry = class ButtonResultRetry extends Sunniesnow.Button
 		this.text.y = -this.constructor.radius / 2.5;
 		this.addChild(this.background);
 		this.addChild(this.text);
-		this.x = Sunniesnow.game.settings.width * 1/13;
-		this.y = Sunniesnow.game.settings.height * (1 + 1/40);
+		this.x = Sunniesnow.Config.WIDTH * 1/13;
+		this.y = Sunniesnow.Config.HEIGHT * (1 + 1/40);
 	}
 };

@@ -1,7 +1,12 @@
 Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 
-	static FADING_IN_DURATION = 0
-	static FADING_OUT_DURATION = 0
+	static fadingInDuration(event) {
+		return 0;
+	}
+
+	static fadingOutDuration(event) {
+		return 0;
+	}
 
 	// Load assets in this method to avoid loading assets during game.
 	// To be overridden in subclasses.
@@ -51,11 +56,11 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 	}
 
 	fadingOutDuration() {
-		return this.constructor.FADING_OUT_DURATION;
+		return this.constructor.fadingOutDuration(this.event);
 	}
 
 	fadingInDuration() {
-		return this.constructor.FADING_IN_DURATION;
+		return this.constructor.fadingInDuration(this.event);
 	}
 
 	getStateByRelativeTime(relativeTime) {

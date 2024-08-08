@@ -6,7 +6,7 @@ Sunniesnow.ButtonFullscreen = class ButtonFullscreen extends Sunniesnow.ButtonRe
 
 	populate() {
 		super.populate();
-		this.x = Sunniesnow.game.settings.width / 4*3;
+		this.x = Sunniesnow.Config.WIDTH / 4*3;
 	}
 
 };

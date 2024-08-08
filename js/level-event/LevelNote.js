@@ -44,8 +44,12 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		if (touch.wholeScreen) {
 			return true;
 		}
-		const r = Sunniesnow.Config.radius * Sunniesnow.game.settings.noteHitSize;
-		return Math.abs(this.event.x - x) < r && Math.abs(this.event.y - y) < r;
+		const r = Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.noteHitSize;
+		let result = Math.abs(this.event.x - x) < r;
+		if (!Sunniesnow.game.settings.scroll) {
+			result &&= Math.abs(this.event.y - y) < r;
+		}
+		return result;
 	}
 
 	// Hit without processing (see processHit()) or event dispatching
@@ -168,7 +172,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 	}
 
 	judgementWindows() {
-		return Sunniesnow.Config.appropriateJudgementWindows()[this.type];
+		return Sunniesnow.Config.JUDGEMENT_WINDOWS[this.type];
 	}
 
 	earlyPerfect() {

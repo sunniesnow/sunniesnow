@@ -5,7 +5,7 @@ Sunniesnow.UiCheckerboard = class UiCheckerboard extends Sunniesnow.UiBgPattern 
 
 	static createGeometry() {
 		const graphics = new PIXI.Graphics();
-		const unit = Sunniesnow.Config.radius * 2 * Sunniesnow.Config.scale();
+		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
 		const rowCount = 4;
 		const columnCount = 4;
 		for (let i = 0; i < rowCount; i++) {

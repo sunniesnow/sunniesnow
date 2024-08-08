@@ -76,7 +76,7 @@ Sunniesnow.Event = class Event {
 	}
 
 	appearTime() {
-		return this.time - (this.uiClass().FADING_IN_DURATION || 0);
+		return this.time - this.uiClass().fadingInDuration(this);
 	}
 
 	endTime() {
@@ -84,7 +84,7 @@ Sunniesnow.Event = class Event {
 	}
 
 	disappearTime() {
-		return this.endTime() + (this.uiClass().FADING_OUT_DURATION || 0);
+		return this.endTime() + this.uiClass().fadingOutDuration(this);
 	}
 
 	newUiEvent(fxBoard) {

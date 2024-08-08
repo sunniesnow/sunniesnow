@@ -26,15 +26,15 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 
 	populate() {
 		super.populate();
-		this.x = Sunniesnow.game.settings.width / 2;
-		this.y = Sunniesnow.game.settings.width / 18;
+		this.x = Sunniesnow.Config.WIDTH / 2;
+		this.y = Sunniesnow.Config.WIDTH / 18;
 		this.populateText();
 		this.populateLastJudgement();
 	}
 
 	populateText() {
 		this.text = new PIXI.Text('', {
-			fontSize: Sunniesnow.game.settings.width / 30,
+			fontSize: Sunniesnow.Config.WIDTH / 30,
 			fill: 'white',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			align: 'center'
@@ -45,13 +45,13 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 
 	populateLastJudgement() {
 		this.lastJudgement = new PIXI.Text('', {
-			fontSize: Sunniesnow.game.settings.width / 45,
+			fontSize: Sunniesnow.Config.WIDTH / 45,
 			fill: 'yellow',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			align: 'center'
 		});
 		this.earlyLate = new PIXI.Text('', {
-			fontSize: Sunniesnow.game.settings.width / 45,
+			fontSize: Sunniesnow.Config.WIDTH / 45,
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC'
 		});
 		this.lastJudgement.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0);
@@ -120,7 +120,7 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 			this.earlyLate.visible = true;
 			this.earlyLate.text = earlyLate < 0 ? 'Early' : 'Late';
 			this.earlyLate.style.fill = earlyLate < 0 ? 0x4887dc : 0xdc5449;
-			this.earlyLate.x = this.lastJudgement.getLocalBounds().right + Sunniesnow.game.settings.width / 90;
+			this.earlyLate.x = this.lastJudgement.getLocalBounds().right + Sunniesnow.Config.WIDTH / 90;
 		} else {
 			this.earlyLate.visible = false;
 		}

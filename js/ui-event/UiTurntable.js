@@ -5,7 +5,7 @@ Sunniesnow.UiTurntable = class UiTurntable extends Sunniesnow.UiBgPattern {
 
 	static createGeometry() {
 		const graphics = new PIXI.Graphics();
-		const unit = Sunniesnow.Config.radius * 2 * Sunniesnow.Config.scale();
+		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
 		const thickness = unit / 20;
 		graphics.lineStyle(thickness, 0xffffef);
 		graphics.beginFill(0x000000, 0.2)
