@@ -323,6 +323,13 @@ Here is a comparison table between speed values here and speed values in Lyrica:
 
 When the speed is set to zero, the shrinking circles do **not** appear at all.
 
+When [`scroll`](#scroll) is `true`, this setting is the time
+(in seconds) for the note to travel the distance specified by
+[`scroll-distance`](#scroll-distance)
+(which is the height of the canvas set by
+[`height`](#height) multiplied by the value of 
+[`scroll-distance`](#scroll-distance)).
+
 #### Note size
 
 - **Setting id**: `note-size`.
@@ -572,6 +579,31 @@ whether the game is playing or pausing.
 When it is `false`, the FX will not be updated when the game is paused
 and only be updated when the game is playing.
 
+#### Scroll mode
+
+##### Judgement line position
+{:#scroll-judgement-line}
+
+- **Setting id**: `scroll-judgement-line`.
+- **Possible values**: Any number.
+
+This setting is used to set the position of the judgement line in the scroll mode.
+This setting is useless if [`scroll`](#scroll) is `false`.
+The position of the judgement line is at the top of the canvas
+if this setting equals `0`, and at the bottom of the canvas
+if this setting equals `1`.
+
+##### Scroll distance
+{:#scroll-distance}
+
+- **Setting id**: `scroll-distance`.
+- **Possible values**: Any number.
+
+This setting is used to set the distance between the judgement line and the notes in the scroll mode.
+This setting is useless if [`scroll`](#scroll) is `false`.
+The distance is this setting multiplied by the height of the canvas
+(the value of [`height`](#height)).
+
 #### Miscellaneous
 
 ##### Touch effects
@@ -694,6 +726,21 @@ This is **only** useful when [`latency-hint`](#latency-hint) is set to `"value"`
 
 ### Game settings
 
+#### Scroll mode
+
+##### Enable scroll mode
+{:#scroll}
+
+- **Setting id**: `scroll`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to enable or disable the scroll mode.
+In the scroll mode, the notes moves, and the player needs to hit them
+when they reach the judgement line.
+
+When it is `true`, the scroll mode is enabled.
+When it is `false`, the scroll mode is disabled.
+
 #### Autoplay
 {:#autoplay-category}
 
@@ -723,7 +770,7 @@ When it is `false`, the progress of the game will not be adjustable when autopla
 
 {% katexmm %}
 
-To adjust the progress, drag the progress bar at the bottom of the screen.
+To adjust the progress, drag the progress bar at the bottom of the canvas.
 Use <kbd>ArrowLeft</kbd> and <kbd>ArrowRight</kbd> to adjust the progress by $2$ seconds.
 Use <kbd>,</kbd> and <kbd>.</kbd> to adjust the progress by $1/30$ seconds.
 Use <kbd>[</kbd> and <kbd>]</kbd> to forward or rewind the progress continuously.
