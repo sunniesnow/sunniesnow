@@ -26,6 +26,9 @@ Sunniesnow.Patches = {
 	},
 
 	patchRequestFullscreen() {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
 		const e = Element.prototype;
 		e.requestFullscreen ||= e.webkitRequestFullscreen || e.mozRequestFullScreen || e.msRequestFullscreen;
 		e.requestFullscreen ||= e.webkitEnterFullscreen || e.mozEnterFullScreen || e.msEnterFullscreen;
