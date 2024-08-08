@@ -3,6 +3,7 @@ Sunniesnow.Patches = {
 		this.patchHasOwn();
 		this.patchFindLastIndex();
 		this.patchRequestFullscreen();
+		this.patchToSorted();
 		Sunniesnow.PixiPatches.apply();
 	},
 
@@ -69,5 +70,13 @@ Sunniesnow.Patches = {
 				}
 			});
 		}
+	},
+
+	patchToSorted() {
+		Array.prototype.toSorted ||= function (compareFunction) {
+			const result = this.slice();
+			result.sort(compareFunction);
+			return result;
+		};
 	}
 };
