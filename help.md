@@ -1492,6 +1492,11 @@ Even when suppressed, the warnings are still showing in the console.
 Refresh the webpage.
 Specially on Firefox, Bypass all network caches.
 
+#### Set language
+
+Set the language of the webpage.
+It does not affect the language of the game.
+
 ### Settings
 
 #### Delete saved settings
