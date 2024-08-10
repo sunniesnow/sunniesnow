@@ -5,66 +5,57 @@ head: _head.html
 description: Sunniesnow is a web rhythm game
 ---
 
-<div id="main-wrapper">
-
 <h1>Sunniesnow</h1>
 <div id="loading">Loading site resources...</div>
 
+<div id="main-wrapper" style="display: none;">
+
 <fieldset>
-	<legend>Level file</legend>
+	<legend id="level-file-category"></legend>
 
 	<div>
 		<input type="radio" id="level-file-online-radio" name="level-file" value="online" checked>
-		<label for="level-file-online-radio">Online:</label>
 		<input type="text" id="level-file-online" placeholder="sunniesnow-sample">
 		<span id="level-file-downloading"></span>
 	</div>
 
 	<div>
 		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload">
-		<label for="level-file-upload-radio">Upload:</label>
 		<input type="file" id="level-file-upload" accept=".ssc">
 	</div>
 
-	<button type="button" id="level-file-button">Load</button>
+	<button type="button" id="level-file-button"></button>
 </fieldset>
 
 <div>
-	Music:
 	<select id="music-select" disabled></select>
-	Chart:
 	<select id="chart-select" disabled></select>
 </div>
 
 <details>
-	<summary>Judgement settings</summary>
+	<summary id="judgement-settings"></summary>
 
 	<fieldset>
-		<legend>Judgement time windows</legend>
+		<legend id="judgement-windows-category"></legend>
 
 		<div>
 			<input type="radio" id="judgement-windows-loose-radio" name="judgement-windows" value="loose" checked>
-			<label for="judgement-windows-loose-radio">Loose</label>
 		</div>
 
 		<div>
 			<input type="radio" id="judgement-windows-medium-radio" name="judgement-windows" value="medium">
-			<label for="judgement-windows-medium-radio">Medium</label>
 		</div>
 
 		<div>
 			<input type="radio" id="judgement-windows-strict-radio" name="judgement-windows" value="strict">
-			<label for="judgement-windows-strict-radio">Strict</label>
 		</div>
 
 		<div>
 			<input type="radio" id="judgement-windows-rigorous-radio" name="judgement-windows" value="rigorous">
-			<label for="judgement-windows-rigorous-radio">Rigorous</label>
 		</div>
 
 		<div>
 			<input type="radio" id="judgement-windows-custom-radio" name="judgement-windows" value="custom">
-			<label for="judgement-windows-custom-radio">Custom</label>
 			<div id="judgement-windows-custom-wrapper">
 				<table id="judgement-windows-custom-table">
 					<thead>
@@ -128,7 +119,7 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Note hit size</legend>
+		<legend id="note-hit-size-category"></legend>
 		
 		<div>
 			<input type="number" id="note-hit-size" value="3" min="0" step="0.1">
@@ -136,57 +127,51 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Offset</legend>
+		<legend id="offset-category"></legend>
 
 		<div>
-			<input type="number" id="offset" value="0" step="10">ms
+			<input type="number" id="offset" value="0" step="10">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Mechanics</legend>
+		<legend id="mechanics-category"></legend>
 
 		<div>
 			<input type="checkbox" id="lyrica-5" checked>
-			<label for="lyrica-5">Lyrica 5 mechanics</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="no-early-drag">
-			<label for="no-early-drag">Drag notes cannot be hit early</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="locking-hold">
-			<label for="locking-hold">Hold notes lock the position of touch</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Flick windows</legend>
+		<legend id="flick-windows-category"></legend>
 
 		<div>
-			Minimum distance:
 			<input type="number" id="min-flick-distance" value="0.5" min="0" step="0.1">
 		</div>
 
 		<div>
-			Maximum distance:
 			<input type="number" id="max-flick-distance" value="3" min="0" step="0.1">
 		</div>
 
 		<div>
-			Angle range:
-			<input type="number" id="flick-angle-range" value="45" min="0" max="180" step="5"> degrees
+			<input type="number" id="flick-angle-range" value="45" min="0" max="180" step="5">
 		</div>
 	</fieldset>
 </details>
 
 <details>
-	<summary>Visual settings</summary>
+	<summary id="visual-settings"></summary>
 	
 	<fieldset>
-		<legend>Speed</legend>
+		<legend id="speed-category"></legend>
 	
 		<div>
 			<input type="number" id="speed" value="2" min="0" step="0.1">
@@ -194,7 +179,7 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Note size</legend>
+		<legend id="note-size-category"></legend>
 
 		<div>
 			<input type="number" id="note-size" value="1" min="0" step="0.1">
@@ -202,98 +187,85 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Background</legend>
+		<legend id="background-category"></legend>
 
 		<div>
 			<input type="radio" id="background-none-radio" name="background" value="none">
-			<label for="background-none-radio">None</label>
 		</div>
 
 		<div>
 			<input type="radio" id="background-online-radio" name="background" value="online">
-			<label for="background-online-radio">Online:</label>
 			<input type="text" id="background-online" value="default.svg">
 			<span id="background-downloading"></span>
 		</div>
 
 		<div>
 			<input type="radio" id="background-from-level-radio" name="background" value="from-level" checked>
-			<label for="background-from-level-radio">From level file:</label>
 			<select id="background-from-level"></select>
 		</div>
 
 		<div>
 			<input type="radio" id="background-upload-radio" name="background" value="upload">
-			<label for="background-upload-radio">Upload:</label>
 			<input type="file" id="background-upload" accept="image/*">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Background settings</legend>
+		<legend id="background-settings-category"></legend>
 
 		<div>
-			Blur:
 			<input type="range" id="background-blur" value="100" min="0" max="200" step="1">
-			<div id="background-blur-value" style="display: inline;"></div>
+			<output id="background-blur-value" for="background-blur"></output>
 		</div>
 
 		<div>
-			Brightness:
 			<input type="range" id="background-brightness" value="0.5" min="0" max="1" step="0.05">
-			<div id="background-brightness-value" style="display: inline;"></div>
+			<output id="background-brightness-value" for="background-brightness"></output>
 		</div>
 	</fieldset>
 	
 	<fieldset>
-		<legend>FX (note hit special effects)</legend>
+		<legend id="fx-category"></legend>
 
 		<div>
 			<input type="radio" id="fx-default-radio" name="fx" value="default" checked>
-			<label for="fx-default-radio">Default</label>
 		</div>
 	
 		<div>
 			<input type="radio" id="fx-online-radio" name="fx" value="online">
-			<label for="fx-online-radio">Online:</label>
 			<input type="text" id="fx-online" placeholder="empty">
 			<span id="fx-downloading"></span>
 		</div>
 	
 		<div>
 			<input type="radio" id="fx-upload-radio" name="fx" value="upload">
-			<label for="fx-upload-radio">Upload:</label>
 			<input type="file" id="fx-upload" accept=".ssp">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Skin (note style and other UI)</legend>
+		<legend id="skin-category"></legend>
 
 		<div>
 			<input type="radio" id="skin-default-radio" name="skin" value="default" checked>
-			<label for="skin-default-radio">Default</label>
 		</div>
 
 		<div>
 			<input type="radio" id="skin-online-radio" name="skin" value="online">
-			<label for="skin-online-radio">Online:</label>
 			<input type="text" id="skin-online" placeholder="empty">
 			<span id="skin-downloading"></span>
 		</div>
 
 		<div>
 			<input type="radio" id="skin-upload-radio" name="skin" value="upload">
-			<label for="skin-upload-radio">Upload:</label>
 			<input type="file" id="skin-upload" accept=".ssp">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Head-up display</legend>
+		<legend id="hud-category"></legend>
 
 		<div>
-			Top center:
 			<select id="hud-top-center">
 				<option value="none">None</option>
 				<option value="title">Title</option>
@@ -307,7 +279,6 @@ description: Sunniesnow is a web rhythm game
 		</div>
 
 		<div>
-			Top left:
 			<select id="hud-top-left">
 				<option value="none">None</option>
 				<option value="title" selected>Title</option>
@@ -321,7 +292,6 @@ description: Sunniesnow is a web rhythm game
 		</div>
 
 		<div>
-			Top right:
 			<select id="hud-top-right">
 				<option value="none">None</option>
 				<option value="title">Title</option>
@@ -336,192 +306,166 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Simultaneity hints</legend>
+		<legend id="simultaneity-hints-category"></legend>
 
 		<div>
-			Connect these kinds of simultaneous notes:
+			<span id="simultaneity-hints-introducer"></span>
 			<input type="checkbox" id="double-line-tap" checked>
-			<label for="double-line-tap">Tap</label>
 			<input type="checkbox" id="double-line-hold">
-			<label for="double-line-hold">Hold</label>
 			<input type="checkbox" id="double-line-drag">
-			<label for="double-line-drag">Drag</label>
 			<input type="checkbox" id="double-line-flick">
-			<label for="double-line-flick">Flick</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>FX options</legend>
+		<legend id="fx-options-category"></legend>
 
 		<div>
 			<input type="checkbox" id="hide-fx-in-front">
-			<label for="hide-fx-in-front">Hide FX in front of notes</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="hide-fx-perfect">
-			<label for="hide-fx-perfect">Hide FX of perfect judgement</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="hide-fx-hold-start">
-			<label for="hide-fx-hold-start">Hide FX of start of hold notes</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="always-update-fx">
-			<label for="always-update-fx">Always update FX even when pausing</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Scroll mode</legend>
+		<legend id="scroll-visual-category"></legend>
 
 		<div>
-			Judgement line position:
 			<input type="number" id="scroll-judgement-line" value="0.8" step="0.05">
 		</div>
 
 		<div>
-			Scroll distance:
 			<input type="number" id="scroll-distance" value="1" step="0.1">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Miscellaneous</legend>
+		<legend id="misc-visual-category"></legend>
 
 		<div>
 			<input type="checkbox" id="touch-effects">
-			<label for="touch-effects">Touch effects</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="reverse-note-order">
-			<label for="reverse-note-order">Reverse the display order of notes</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="hide-tip-points">
-			<label for="hide-tip-points">Hide tip points</label>
 		</div>
 
 	</fieldset>
 </details>
 
 <details>
-	<summary>Audio settings</summary>
+	<summary id="audio-settings"></summary>
 
 	<fieldset>
-		<legend>SE (note hit sound effects)</legend>
+		<legend id="se-category"></legend>
 
 		<div>
 			<input type="radio" id="se-default-radio" name="se" value="default" checked>
-			<label for="se-default-radio">Default</label>
 		</div>
 
 		<div>
 			<input type="radio" id="se-online-radio" name="se" value="online">
-			<label for="se-online-radio">Online:</label>
 			<input type="text" id="se-online" placeholder="empty">
 			<span id="se-downloading"></span>
 		</div>
 
 		<div>
 			<input type="radio" id="se-upload-radio" name="se" value="upload">
-			<label for="se-upload-radio">Upload:</label>
 			<input type="file" id="se-upload" accept=".ssp">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Volume</legend>
+		<legend id="volume-category"></legend>
 
 		<div>
-			SE:
 			<input type="range" id="volume-se" min="0" max="2" step="0.05" value="1">
-			<div id="volume-se-value" style="display: inline;"></div>
+			<output id="volume-se-value" for="volume-se"></output>
 		</div>
 
 		<div>
-			Music:
 			<input type="range" id="volume-music" min="0" max="2" step="0.05" value="1">
-			<div id="volume-music-value" style="display: inline;"></div>
+			<output id="volume-music-value" for="volume-music"></output>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Play SE with music</legend>
+		<legend id="se-with-music-category"></legend>
 
 		<div>
 			<input type="checkbox" id="se-with-music">
-			<label for="se-with-music">Play SE with music</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Delay</legend>
+		<legend id="delay-category"></legend>
 
 		<div>
-			<input type="number" id="delay" value="0" step="10">ms
+			<input type="number" id="delay" value="0" step="10">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Latency hint</legend>
+		<legend id="latency-hint-category"></legend>
 
 		<div>
 			<input type="radio" name="latency-hint" value="balanced" id="latency-hint-balanced-radio">
-			<label for="latency-hint-balanced-radio">Balanced</label>
 		</div>
 
 		<div>
 			<input type="radio" name="latency-hint" value="interactive" id="latency-hint-interactive-radio" checked>
-			<label for="latency-hint-interactive-radio">Interactive</label>
 		</div>
 
 		<div>
 			<input type="radio" name="latency-hint" value="playback" id="latency-hint-playback-radio">
-			<label for="latency-hint-playback-radio">Playback</label>
 		</div>
 
 		<div>
 			<input type="radio" name="latency-hint" value="value" id="latency-hint-value-radio">
-			<label for="latency-hint-value-radio">Value:</label>
-			<input type="number" id="latency-hint-value" value="10" step="10" min="0">ms
+			<input type="number" id="latency-hint-value" value="10" step="10" min="0">
 		</div>
 	</fieldset>
 </details>
 
 <details>
-	<summary>Game settings</summary>
+	<summary id="game-settings"></summary>
 
 	<fieldset>
-		<legend>Scroll mode</legend>
+		<legend id="scroll-category"></legend>
 
 		<div>
 			<input type="checkbox" id="scroll">
-			<label for="scroll">Enable scroll mode</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Autoplay</legend>
+		<legend id="autoplay-category"></legend>
 
 		<div>
 			<input type="checkbox" id="autoplay">
-			<label for="autoplay">Autoplay</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="progress-adjustable">
-			<label for="progress-adjustable">Progress adjustable</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Chart offset</legend>
+		<legend id="chart-offset-category"></legend>
 
 		<div>
 			<input type="number" id="chart-offset" value="0" step="10">ms
@@ -529,7 +473,7 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Speed (of music)</legend>
+		<legend id="game-speed-category"></legend>
 
 		<div>
 			<input type="number" id="game-speed" min="0.1" step="0.1" value="1">
@@ -537,423 +481,368 @@ description: Sunniesnow is a web rhythm game
 	</fieldset>
 
 	<fieldset>
-		<legend>Mirror</legend>
+		<legend id="mirror-category"></legend>
 
 		<div>
 			<input type="checkbox" id="horizontal-flip">
-			<label for="horizontal-flip">Horizontal flip</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="vertical-flip">
-			<label for="vertical-flip">Vertical flip</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Start and end</legend>
+		<legend id="start-and-end-category"></legend>
 
 		<div>
-			Start:
 			<input type="number" id="start" step="0.01" value="0">
 		</div>
 
 		<div>
-			End:
 			<input type="number" id="end" step="0.01" value="1">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Preparation time</legend>
+		<legend id="preparation-time-category"></legend>
 
 		<div>
-			Resume preparation time:
-			<input type="number" id="resume-preparation-time" min="0" value="1" step="0.5">s
+			<input type="number" id="resume-preparation-time" min="0" value="1" step="0.5">
 		</div>
 
 		<div>
-			Beginning preparation time:
-			<input type="number" id="beginning-preparation-time" min="0" value="1" step="0.5">s
+			<input type="number" id="beginning-preparation-time" min="0" value="1" step="0.5">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Pause</legend>
+		<legend id="pause-category"></legend>
 
 		<div>
-			Tap pause button twice in
-			<input type="number" id="pause-double-time" min="0" value="0" step="0.5">s
-			to pause (zero for single tap)
+			<input type="number" id="pause-double-time" min="0" value="0" step="0.5">
 		</div>
 
 		<div>
 			<input type="checkbox" id="notes-priority-over-pause">
-			<label for="notes-priority-over-pause">Notes have priority over the pause button</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="pause-fullscreen" checked>
-			<label for="pause-fullscreen">Automatically pause when toggling fullscreen</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="pause-blur" checked>
-			<label for="pause-blur">Automatically pause when losing focus</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="hide-pause-ui">
-			<label for="hide-pause-ui">Hide pause UI by default</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="pause-finish">
-			<label for="pause-finish">Pause when the level is about to finish</label>
 		</div>
 
 		<div>
-			Function of the pause button while pausing:
+			<span id="second-pause-introducer"></span>
 			<input type="radio" name="second-pause" value="disabled" id="second-pause-disabled-radio">
-			<label for="second-pause-disabled-radio">Disabled</label>
 			<input type="radio" name="second-pause" value="resume" id="second-pause-resume-radio" checked>
-			<label for="second-pause-resume-radio">Resume</label>
 			<input type="radio" name="second-pause" value="toggle-ui" id="second-pause-toggle-ui-radio">
-			<label for="second-pause-toggle-ui-radio">Toggle pause UI</label>
 		</div>
 	</fieldset>
 </details>
 
 <details>
-	<summary>Control settings</summary>
+	<summary id="control-settings"></summary>
 
 	<fieldset>
-		<legend>Keyboard</legend>
+		<legend id="keyboard-category"></legend>
 
 		<div>
 			<input type="checkbox" id="enable-keyboard" checked>
-			<label for="enable-keyboard">Enable keyboard</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="keyboard-whole-screen">
-			<label for="keyboard-whole-screen">Keyboard keys have whole-screen judgement</label>
 		</div>
 
 		<div>
-			Exclude keys:
 			<input type="text" id="exclude-keys" value="Escape PrintScreen Alt Control Fn Meta F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12">
 		</div>
 
 		<div>
-			Pause keys:
 			<input type="text" id="pause-keys" value="`">
 		</div>
 
 		<div>
 			<input type="checkbox" id="keyboard-pause">
-			<label for="keyboard-pause">Keyboard can press pause button in-game</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Mouse</legend>
+		<legend id="mouse-category"></legend>
 
 		<div>
 			<input type="checkbox" id="enable-mouse" checked>
-			<label for="enable-mouse">Enable mouse buttons</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="mouse-whole-screen">
-			<label for="mouse-whole-screen">Mouse buttons have whole-screen judgement</label>
 		</div>
 
 		<div>
-			Exclude mouse buttons:
 			<input type="text" id="exclude-buttons" value="">
 		</div>
 		
 		<div>
-			Pause mouse buttons:
 			<input type="text" id="pause-buttons" value="">
 		</div>
 
 		<div>
 			<input type="checkbox" id="mouse-pause" checked>
-			<label for="mouse-pause">Mouse can click pause button in-game</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Touchscreen</legend>
+		<legend id="touchscreen-category"></legend>
 
 		<div>
 			<input type="checkbox" id="enable-touchscreen" checked>
-			<label for="enable-touchscreen">Enable touchscreen</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="touchscreen-whole-screen">
-			<label for="touchscreen-whole-screen">Touchscreen has whole-screen judgement</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="touch-pause" checked>
-			<label for="touch-pause">Can touch pause button in-game</label>
 		</div>
 	</fieldset>
 </details>
 
 <details>
-	<summary>Charting helper settings</summary>
+	<summary id="charting-helper-settings"></summary>
 
 	<fieldset>
-		<legend>Sscharter integration</legend>
+		<legend id="sscharter-category"></legend>
 
 		<div>
 			<input type="checkbox" id="sscharter">
-			<label for="sscharter">Enable sschcarter integration</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="sscharter-live-restart">
-			<label for="sscharter-live-restart">Live restart</label>
 		</div>
 	</fieldset>
 </details>
 
 <details>
-	<summary>System settings</summary>
+	<summary id="system-settings"></summary>
 
 	<fieldset>
-		<legend>Interface</legend>
+		<legend id="interface-category"></legend>
 
 		<div>
-			Width:
 			<input type="number" id="width" min="1" value="1920">
 		</div>
 
 		<div>
-			Height:
 			<input type="number" id="height" min="1" value="1080">
 		</div>
 
 		<div>
 			<input type="checkbox" id="popup">
-			<label for="popup">Show in popup window</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Fullscreen</legend>
+		<legend id="fullscreen-category"></legend>
 
 		<div>
 			<input type="checkbox" id="fullscreen-on-start" checked>
-			<label for="fullscreen-on-start">Enter fullscreen on start</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="float-as-fullscreen">
-			<label for="float-as-fullscreen">Float instead of actual fullscreen</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Fonts</legend>
+		<legend id="fonts-category"></legend>
 
 		<div>
 			<input type="checkbox" id="avoid-downloading-fonts">
-			<label for="avoid-downloading-fonts">Avoid downloading fonts</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Context menu</legend>
+		<legend id="context-menu-category"></legend>
 
 		<div>
 			<input type="checkbox" id="context-menu-play">
-			<label for="context-menu-play">Enable when playing</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="context-menu-pause" checked>
-			<label for="context-menu-pause">Enable when pausing or finished</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="context-menu-no-modifier" checked>
-			<label for="context-menu-no-modifier">Disable when holding <kbd>Control</kbd> or <kbd>Alt</kbd></label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Plugins</legend>
+		<legend id="plugins-category"></legend>
 
 		<div id="plugin-list"></div>
 
 		<div>
-			<button type="button" id="plugin-add-button" onclick="Sunniesnow.Plugin.addDomElement()">Add</button>
+			<button type="button" id="plugin-add-button" onclick="Sunniesnow.Plugin.addDomElement()"></button>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Renderer</legend>
+		<legend id="renderer-category"></legend>
 
 		<div>
 			<input type="radio" id="renderer-canvas-radio" name="renderer" value="canvas">
-			<label for="renderer-canvas-radio">Canvas</label>
 		</div>
 		
 		<div>
 			<input type="radio" id="renderer-webgl-radio" name="renderer" value="webgl" checked>
-			<label for="renderer-webgl-radio">WebGL</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>WebGL options</legend>
+		<legend id="webgl-category"></legend>
 		
 		<div>
 			<input type="checkbox" id="antialias" checked>
-			<label for="antialias">Antialias</label>
 		</div>
 		
 		<div>
-			Power preference:
+			<span id="power-preference-introducer"></span>
 			<input type="radio" id="power-preference-default-radio" name="power-preference" value="default" checked>
-			<label for="power-preference-default-radio">Default</label>
 			<input type="radio" id="power-preference-low-power-radio" name="power-preference" value="low-power">
-			<label for="power-preference-low-power-radio">Low power</label>
 			<input type="radio" id="power-preference-high-performance-radio" name="power-preference" value="high-performance">
-			<label for="power-preference-high-performance-radio">High performance</label>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Debug</legend>
+		<legend id="debug-category"></legend>
 
 		<div>
 			<input type="checkbox" id="debug">
-			<label for="debug">Enable debug mode</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="hide-debug-except-pause">
-			<label for="hide-debug-except-pause">Hide debug UI except in pause</label>
 		</div>
 
 		<div>
 			<input type="checkbox" id="suppress-warnings">
-			<label for="suppress-warnings">Suppress warnings</label>
 		</div>
 	</fieldset>
 </details>
 
 <details>
-	<summary>Operations</summary>
+	<summary id="operations-settings"></summary>
 
 	<fieldset>
-		<legend>Webpage</legend>
+		<legend id="webpage-category"></legend>
 		<div>
-			<button type="button" id="refresh">Refresh</button>
+			<button type="button" id="refresh"></button>
+		</div>
+		<div>
+			<select id="lang-select"></select>
+			<button id="lang"></button>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Settings</legend>
+		<legend id="settings-category"></legend>
 		<div>
-			Delete saved settings:
-			<button type="button" id="delete-settings">Delete</button>
+			<button type="button" id="delete-settings"></button>
 		</div>
 		<div>
-			Export saved settings:
-			<button type="button" id="export-settings">Export</button>
+			<button type="button" id="export-settings"></button>
 		</div>
 		<div>
-			Import saved settings:
 			<input type="file" id="import-settings">
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Offsets</legend>
+		<legend id="offsets-category"></legend>
 		<div>
-			Delete saved chart offsets:
-			<button type="button" id="delete-chart-offsets">Delete</button>
+			<button type="button" id="delete-chart-offsets"></button>
 		</div>
 		<div>
-			Export saved chart offsets:
-			<button type="button" id="export-chart-offsets">Export</button>
+			<button type="button" id="export-chart-offsets"></button>
 		</div>
 		<div>
-			Import saved chart offsets:
 			<input type="file" id="import-chart-offsets">
 		</div>
 		<div>
-			Play the Offset Wizard:
-			<button type="button" id="offset-wizard">Start</button>
+			<button type="button" id="offset-wizard"></button>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Service worker</legend>
+		<legend id="service-worker-category"></legend>
 
 		<div>
-			Delete caches of online resources:
-			<button type="button" id="delete-online-caches">Delete</button>
+			<button type="button" id="delete-online-caches"></button>
 		</div>
 		
 		<div>
-			Delete caches of site resources:
-			<button type="button" id="delete-site-caches">Delete</button>
+			<button type="button" id="delete-site-caches"></button>
 		</div>
 
 		<div>
-			Delete caches of external resources:
-			<button type="button" id="delete-external-caches">Delete</button>
+			<button type="button" id="delete-external-caches"></button>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Logs</legend>
+		<legend id="logs-category"></legend>
 
 		<div>
-			<button type="button" id="logs-clear">Clear</button>
+			<button type="button" id="logs-clear"></button>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Debug</legend>
+		<legend id="operations-debug-category"></legend>
 
 		<div>
-			<button type="button" id="vconsole-setup">vConsole</button>
-			<button type="button" id="vconsole-hide">Hide vConsole</button>
-			<button type="button" id="vconsole-destroy">Destroy vConsole</button>
+			<button type="button" id="vconsole-setup"></button>
+			<button type="button" id="vconsole-hide"></button>
+			<button type="button" id="vconsole-destroy"></button>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Game</legend>
+		<legend id="game-category"></legend>
 
 		<div>
-			<button type="button" id="game-start">Start</button>
-			<button type="button" id="game-stop">Stop</button>
+			<button type="button" id="game-start"></button>
+			<button type="button" id="game-stop"></button>
 		</div>
 
 		<div>
-			<button type="button" id="game-pause">Pause</button>
-			<button type="button" id="game-resume">Resume</button>
-			<button type="button" id="game-retry">Retry</button>
-			<button type="button" id="game-fullscreen">Fullscreen</button>
-			<button type="button" id="game-toggle-pause-ui">Toggle pause UI</button>
+			<button type="button" id="game-pause"></button>
+			<button type="button" id="game-resume"></button>
+			<button type="button" id="game-retry"></button>
+			<button type="button" id="game-fullscreen"></button>
+			<button type="button" id="game-toggle-pause-ui"></button>
 		</div>
 	</fieldset>
 </details>
 
-<button type="button" id="start-button">Start</button>
-<button type="button" id="stop-button">Stop</button>
-<a href="help.html" target="_blank" id="help">Help</a>
+<button type="button" id="start-button"></button>
+<button type="button" id="stop-button"></button>
+<a href="help.html" target="_blank" id="help"></a>
 
 <div id="loading-progress"></div>
 <div id="logs"></div>
@@ -966,19 +855,19 @@ description: Sunniesnow is a web rhythm game
 </div>
 
 <details>
-	<summary>Level README</summary>
+	<summary id="level-readme-settings">Level README</summary>
 	<div id="level-readme" class="readme"></div>
 </details>
 <div id="plugins-readme"></div>
 
 <hr>
 
-<div>
-	Last update: {{ "now" | date: "%FT%T%z" }}<br>
-	Source codes: <a href="https://github.com/sunniesnow/sunniesnow" target="_blank">GitHub</a><br>
-	License: <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GPL-3.0</a><br>
-	Author: {{ site.author }} &lt;<a href="mailto:{{ site.author }} <{{ site.email }}>">{{ site.email }}</a>&gt;<br>
-	<a href="https://discord.gg/6ZHRU9teju" target="_blank">Join the Discord server for Sunniesnow!</a>
+<div id="footer">
+	<span id="footer-last-update"></span>{{ "now" | date: "%FT%T%z" }}<br>
+	<span id="footer-source-codes"></span><a href="https://github.com/sunniesnow/sunniesnow" target="_blank">GitHub</a><br>
+	<span id="footer-license"></span><a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GPL-3.0</a><br>
+	<span id="footer-author"></span>{{ site.author }} &lt;<a href="mailto:{{ site.author }} <{{ site.email }}>">{{ site.email }}</a>&gt;<br>
+	<a href="https://discord.gg/6ZHRU9teju" target="_blank" id="footer-discord-invite"></a>
 </div>
 
 </div>

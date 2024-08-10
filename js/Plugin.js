@@ -141,19 +141,17 @@ Sunniesnow.Plugin = class Plugin {
 		result.innerHTML = `
 			<div>
 				<input type="radio" id="plugin-${n}-online-radio" name="plugin-${n}" value="online" checked>
-				<label for="plugin-${n}-online-radio">Online:</label>
 				<input type="text" id="plugin-${n}-online" placeholder="empty">
 				<span id="plugin-${n}-downloading"></span>
 			</div>
 
 			<div>
 				<input type="radio" id="plugin-${n}-upload-radio" name="plugin-${n}" value="upload">
-				<label for="plugin-${n}-upload-radio">Upload:</label>
 				<input type="file" id="plugin-${n}-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual('plugin-${n}-upload');">
 			</div>
 
 			<div>
-				<button type="button" onclick="Sunniesnow.Plugin.deleteDomElement(${n})">Delete</button>
+				<button type="button" id="plugin-${n}-delete" onclick="Sunniesnow.Plugin.deleteDomElement(${n})"></button>
 			</div>
 
 			<hr>
@@ -165,10 +163,13 @@ Sunniesnow.Plugin = class Plugin {
 		if (n === undefined) {
 			n = this.additionalTotal ||= 0;
 		}
-		document.getElementById('plugin-list').appendChild(this.html(n));
+		const node = this.html(n);
+		document.getElementById('plugin-list').appendChild(node);
 		Sunniesnow.Settings.associateRadio(`plugin-${n}-online-radio`, `plugin-${n}-online`);
 		Sunniesnow.Settings.associateRadio(`plugin-${n}-upload-radio`, `plugin-${n}-upload`);
 		Sunniesnow.Settings.setTextInput(`plugin-${n}-online`);
+		Sunniesnow.I18n.applyPlugin(n);
+		Sunniesnow.MiscDom.associateLabels(node);
 		this.additionalTotal = Math.max(this.additionalTotal || 0, n) + 1;
 	}
 

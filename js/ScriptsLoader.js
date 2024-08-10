@@ -199,6 +199,7 @@ Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
 	'utils/Fetcher',
 	'utils/Assets',
 
+	'dom/I18n',
 	'dom/Settings',
 	'dom/Fullscreen',
 	'dom/Logs',

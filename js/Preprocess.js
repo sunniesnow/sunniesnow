@@ -14,14 +14,19 @@ Sunniesnow.Preprocess = {
 	},
 
 	async preprocess() {
+		Sunniesnow.I18n.setLang();
 		Sunniesnow.MiscDom.addScrollbarToAndroidWebView();
 		Sunniesnow.MiscDom.adjustCustomJudgementWindowsTable();
+		Sunniesnow.I18n.apply();
+		Sunniesnow.MiscDom.associateLabels();
+		Sunniesnow.I18n.populateLangOptions();
 		Sunniesnow.Settings.setDeviceDependentDefaults();
 		await Sunniesnow.Settings.writeSavedSettings();
 		Sunniesnow.Settings.setTextInputs();
 		Sunniesnow.Settings.associateDomElements();
 		Sunniesnow.PinnedCoordinates.init();
 		Sunniesnow.MiscDom.addEventListeners();
+		Sunniesnow.MiscDom.removeSiteLoadingNotice();
 	},
 
 	async run() {
