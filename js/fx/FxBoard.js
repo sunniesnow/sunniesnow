@@ -5,6 +5,7 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		if (!Sunniesnow.game.settings.hideFxInFront) {
 			this.front = new PIXI.Container();
 		}
+		this.addLevelEventListeners();
 	}
 
 	clear() {
@@ -16,6 +17,7 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 				this.front.removeChild(fx.front);
 			}
 		}
+		this.addLevelEventListeners();
 	}
 
 	update(delta) {
@@ -29,13 +31,12 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		});
 	}
 
-	addFx(uiNote) {
-		const levelNote = uiNote.levelNote;
+	addFx(levelNote) {
 		const judgement = levelNote.judgement || levelNote.highestJudgement;
 		if (judgement === 'perfect' && Sunniesnow.game.settings.hideFxPerfect) {
 			return;
 		}
-		const fx = uiNote.newFx(uiNote);
+		const fx = levelNote.event.newFx(levelNote);
 		if (Sunniesnow.game.settings.reverseNoteOrder) {
 			this.addChildAt(fx, 0);
 			if (!Sunniesnow.game.settings.hideFxInFront) {
@@ -50,4 +51,34 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		this.presentFx.push(fx);
 	}
 	
+	addLevelEventListeners() {
+		this.listenerForFx = event => {
+			const levelNote = event.levelNote;
+			let condition = levelNote instanceof Sunniesnow.LevelHold && !Sunniesnow.game.settings.hideFxHoldStart
+			condition &&= event.type === 'hit';
+			condition ||= event.type === 'release' || event.type === 'miss';
+			if (condition) {
+				this.addFx(levelNote);
+			}
+		}
+		Sunniesnow.game.level.addEventListener('hit', this.listenerForFx);
+		Sunniesnow.game.level.addEventListener('release', this.listenerForFx);
+		Sunniesnow.game.level.addEventListener('miss', this.listenerForFx);
+	}
+
+	removeLevelEventListeners() {
+		if (!this.listenerForFx) {
+			return;
+		}
+		Sunniesnow.game.level.removeEventListener('hit', this.listenerForFx);
+		Sunniesnow.game.level.removeEventListener('release', this.listenerForFx);
+		Sunniesnow.game.level.removeEventListener('miss', this.listenerForFx);
+		this.listenerForFx = null;
+	}
+
+	destroy(options) {
+		this.removeLevelEventListeners();
+		super.destroy(options);
+	}
+
 };

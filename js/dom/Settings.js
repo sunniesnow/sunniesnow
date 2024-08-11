@@ -180,6 +180,10 @@ Sunniesnow.Settings = {
 			touchEffects: this.readCheckbox('touch-effects'),
 			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
 			hideTipPoints: this.readCheckbox('hide-tip-points'),
+			hideNotes: this.readCheckbox('hide-notes'),
+			hideBgNotes: this.readCheckbox('hide-bg-notes'),
+			hideFx: this.readCheckbox('hide-fx'),
+			hideBgPattern: this.readCheckbox('hide-bg-pattern'),
 
 			// audio settings
 			se: this.readRadio('se'),
@@ -336,6 +340,10 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('touch-effects', d('touchEffects'));
 		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
 		this.writeCheckbox('hide-tip-points', d('hideTipPoints'));
+		this.writeCheckbox('hide-notes', d('hideNotes'));
+		this.writeCheckbox('hide-bg-notes', d('hideBgNotes'));
+		this.writeCheckbox('hide-fx', d('hideFx'));
+		this.writeCheckbox('hide-bg-pattern', d('hideBgPattern'));
 
 		this.writeRadio('se', d('se'));
 		this.writeValue('se-online', d('seOnline'));

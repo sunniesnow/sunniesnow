@@ -50,4 +50,8 @@ Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 		}
 		return null;
 	}
+
+	newFx(levelNote) {
+		return new Sunniesnow[this.constructor.FX_CLASS](levelNote);
+	}
 };

@@ -58,6 +58,7 @@ Sunniesnow.I18n = {
 			fxOptionsCategory: 'FX options',
 			scrollVisualCategory: 'Scroll mode',
 			miscVisualCategory: 'Miscellaneous',
+			hideIntroducer: 'Hide:',
 
 			audioSettings: 'Audio settings',
 			seCategory: 'SE (note hit sound effects)',
@@ -187,6 +188,7 @@ Sunniesnow.I18n = {
 			fxOptionsCategory: 'FX 选项',
 			scrollVisualCategory: '下落式',
 			miscVisualCategory: '杂项',
+			hideIntroducer: '隐藏:',
 
 			audioSettings: '音频设置',
 			seCategory: 'SE (打击音效)',
@@ -331,7 +333,11 @@ Sunniesnow.I18n = {
 			scrollDistance: 'Scroll distance: ',
 			touchEffects: ' Touch effects',
 			reverseNoteOrder: ' Reverse the display order of notes',
-			hideTipPoints: ' Hide tip points',
+			hideTipPoints: ' Tip points',
+			hideNotes: ' Notes',
+			hideBgNotes: ' Background notes',
+			hideFx: ' FX',
+			hideBgPattern: ' Background pattern',
 
 			seDefaultRadio: ' Default',
 			seOnlineRadio: '',
@@ -475,7 +481,11 @@ Sunniesnow.I18n = {
 			scrollDistance: '下落距离: ',
 			touchEffects: ' 触摸效果',
 			reverseNoteOrder: ' 音符显示顺序反转',
-			hideTipPoints: ' 隐藏游标',
+			hideTipPoints: ' 游标',
+			hideNotes: ' 音符',
+			hideBgNotes: ' 墨点',
+			hideFx: ' FX',
+			hideBgPattern: ' 背景图案',
 
 			seDefaultRadio: ' 默认',
 			seOnlineRadio: '',

@@ -9,43 +9,47 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	populateUiAndBoards() {
 		this.background = new Sunniesnow.Background();
 		this.progressBar = new Sunniesnow.ProgressBar();
-		this.uiBgPatternBoard = new Sunniesnow.UiBgPatternBoard();
+		if (!Sunniesnow.game.settings.hideBgPattern) {
+			this.uiBgPatternBoard = new Sunniesnow.UiBgPatternBoard();
+		}
 		this.topLeftHud = new Sunniesnow.TopLeftHud();
 		this.topRightHud = new Sunniesnow.TopRightHud();
 		this.topCenterHud = new Sunniesnow.TopCenterHud();
 		this.pauseBoard = new Sunniesnow.PauseBoard();
 		this.pauseButton = new Sunniesnow.ButtonPause(this.pauseBoard);
-		this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard();
-		this.doubleLinesBoard = new Sunniesnow.DoubleLinesBoard();
+		if (!Sunniesnow.game.settings.hideBgNotes) {
+			this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard();
+		}
 		if (!Sunniesnow.game.settings.hideTipPoints) {
 			this.tipPointsBoard = new Sunniesnow.TipPointsBoard();
 		}
-		this.fxBoard = new Sunniesnow.FxBoard();
-		this.uiNotesBoard = new Sunniesnow.UiNotesBoard(this.fxBoard);
+		if (!Sunniesnow.game.settings.hideFx) {
+			this.fxBoard = new Sunniesnow.FxBoard();
+		}
+		if (!Sunniesnow.game.settings.hideNotes) {
+			this.doubleLinesBoard = new Sunniesnow.DoubleLinesBoard();
+			this.uiNotesBoard = new Sunniesnow.UiNotesBoard();
+		}
 		if (Sunniesnow.game.settings.scroll) {
 			this.judgementLine = new Sunniesnow.JudgementLine();
 		}
-		this.addChild(this.background);
-		this.addChild(this.progressBar);
-		this.addChild(this.uiBgPatternBoard);
-		this.addChild(this.topLeftHud);
-		this.addChild(this.topRightHud);
-		this.addChild(this.topCenterHud);
-		this.addChild(this.pauseButton);
-		this.addChild(this.fxBoard);
-		if (Sunniesnow.game.settings.scroll) {
-			this.addChild(this.judgementLine);
-		}
-		this.addChild(this.uiBgNotesBoard);
-		this.addChild(this.doubleLinesBoard);
-		this.addChild(this.uiNotesBoard);
-		if (!Sunniesnow.game.settings.hideTipPoints) {
-			this.addChild(this.tipPointsBoard);
-		}
+		this.background.addTo(this);
+		this.progressBar.addTo(this);
+		this.uiBgPatternBoard?.addTo(this);
+		this.topLeftHud.addTo(this);
+		this.topRightHud.addTo(this);
+		this.topCenterHud.addTo(this);
+		this.pauseButton.addTo(this);
+		this.fxBoard?.addTo(this);
+		this.judgementLine?.addTo(this);
+		this.uiBgNotesBoard?.addTo(this);
+		this.doubleLinesBoard?.addTo(this);
+		this.uiNotesBoard?.addTo(this);
+		this.tipPointsBoard?.addTo(this);
 		if (!Sunniesnow.game.settings.hideFxInFront) {
-			this.addChild(this.fxBoard.front);
+			this.fxBoard?.front.addTo(this);
 		}
-		this.addChild(this.pauseBoard);
+		this.pauseBoard.addTo(this);
 	}
 
 	populateAudio() {
@@ -107,15 +111,13 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	
 	// except fxBoard
 	updateBoards(delta) {
-		this.uiBgPatternBoard.update(delta);
-		this.uiBgNotesBoard.update(delta);
-		this.doubleLinesBoard.update(delta);
-		this.uiNotesBoard.update(delta);
-		if (!Sunniesnow.game.settings.hideTipPoints) {
-			this.tipPointsBoard.update(delta);
-		}
+		this.uiBgPatternBoard?.update(delta);
+		this.uiBgNotesBoard?.update(delta);
+		this.doubleLinesBoard?.update(delta);
+		this.uiNotesBoard?.update(delta);
+		this.tipPointsBoard?.update(delta);
 		if (Sunniesnow.game.settings.alwaysUpdateFx || !Sunniesnow.Music.pausing) {
-			this.fxBoard.update(delta);
+			this.fxBoard?.update(delta);
 		}
 	}
 
@@ -128,18 +130,15 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	retry() {
 		Sunniesnow.game.level.finish();
+		this.fxBoard?.removeLevelEventListeners();
 		Sunniesnow.game.initLevel();
-		this.uiBgPatternBoard.clear();
-		this.uiBgNotesBoard.clear();
-		this.doubleLinesBoard.clear();
-		this.uiNotesBoard.clear();
-		if (!Sunniesnow.game.settings.hideTipPoints) {
-			this.tipPointsBoard.clear();
-		}
-		this.fxBoard.clear();
-		if (Sunniesnow.game.settings.seWithMusic) {
-			this.seWithMusic.clear();
-		}
+		this.uiBgPatternBoard?.clear();
+		this.uiBgNotesBoard?.clear();
+		this.doubleLinesBoard?.clear();
+		this.uiNotesBoard?.clear();
+		this.tipPointsBoard?.clear();
+		this.fxBoard?.clear();
+		this.seWithMusic?.clear();
 		Sunniesnow.Music.playFromBeginning();
 	}
 
@@ -151,9 +150,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.progressBar.update(delta);
 		this.pauseBoard.update(delta);
 		this.pauseButton.update(delta);
-		if (Sunniesnow.game.settings.scroll) {
-			this.judgementLine.update(delta);
-		}
+		this.judgementLine?.update(delta);
 	}
 
 	getUiText(ui) {
@@ -183,16 +180,12 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		if (Sunniesnow.game.level.finished) {
 			return;
 		}
-		this.uiBgPatternBoard.adjustProgress(time);
-		this.uiBgNotesBoard.adjustProgress(time);
-		this.doubleLinesBoard.adjustProgress(time);
-		this.uiNotesBoard.adjustProgress(time);
-		if (!Sunniesnow.game.settings.hideTipPoints) {
-			this.tipPointsBoard.adjustProgress(time);
-		}
-		if (Sunniesnow.game.settings.seWithMusic) {
-			this.seWithMusic.adjustProgress(time);
-		}
+		this.uiBgPatternBoard?.adjustProgress(time);
+		this.uiBgNotesBoard?.adjustProgress(time);
+		this.doubleLinesBoard?.adjustProgress(time);
+		this.uiNotesBoard?.adjustProgress(time);
+		this.tipPointsBoard?.adjustProgress(time);
+		this.seWithMusic?.adjustProgress(time);
 		Sunniesnow.game.level.adjustProgress(time);
 		if (method === 'pause') {
 			Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;

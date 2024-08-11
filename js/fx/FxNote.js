@@ -3,15 +3,14 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 	static async load() {
 	}
 
-	constructor(uiNote) {
+	constructor(levelNote) {
 		super();
 		this.front = new PIXI.Container();
 		this.state = 'present'; // present -> finished
-		this.uiNote = uiNote;
-		this.x = this.front.x = uiNote.x;
-		this.y = this.front.y = uiNote.y;
-		this.judgement = uiNote.levelNote.judgement || uiNote.levelNote.highestJudgement;
-		this.earlyLate = uiNote.levelNote.earlyLate;
+		this.levelNote = levelNote;
+		[this.x, this.y] = [this.front.x, this.front.y] = Sunniesnow.Config.chartMapping(levelNote.event.x, levelNote.event.y);
+		this.judgement = levelNote.judgement || levelNote.highestJudgement;
+		this.earlyLate = levelNote.earlyLate;
 		this.populate();
 	}
 

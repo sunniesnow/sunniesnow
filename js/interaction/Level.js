@@ -1,5 +1,6 @@
-Sunniesnow.Level = class Level {
+Sunniesnow.Level = class Level extends EventTarget {
 	constructor() {
+		super();
 		this.initializeAuxiliaryQuantities();
 		this.initializeNoteStores();
 		this.notesCount = this.unhitNotes.length;

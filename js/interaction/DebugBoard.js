@@ -31,6 +31,30 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		Sunniesnow.TouchManager.removeEndListener(this.touchEndListener);
 	}
 
+	addLevelListeners() {
+		if (Sunniesnow.game.settings.autoplay) {
+			return;
+		}
+		this.listenerForLevel = event => {
+			const levelNote = event.levelNote;
+			if (event.type !== (levelNote instanceof Sunniesnow.LevelDrag ? 'release' : 'hit')) {
+				return;
+			}
+			this.createEarlyLateText(levelNote);
+		};
+		Sunniesnow.game.level.addEventListener('hit', this.listenerForLevel);
+		Sunniesnow.game.level.addEventListener('release', this.listenerForLevel);
+	}
+
+	removeLevelListeners() {
+		if (!this.listenerForLevel) {
+			return;
+		}
+		Sunniesnow.game.level.removeEventListener('hit', this.listenerForLevel);
+		Sunniesnow.game.level.removeEventListener('release', this.listenerForLevel);
+		this.listenerForLevel = null;
+	}
+
 	static createTouchGeometry() {
 		this.touchRadius = Sunniesnow.Config.WIDTH / 180;
 		const graphics = new PIXI.Graphics();
@@ -299,8 +323,8 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		return false;
 	}
 
-	createEarlyLateText(uiNote) {
-		const text = Math.round(uiNote.levelNote.hitRelativeTime * 1000).toString();
+	createEarlyLateText(levelNote) {
+		const text = Math.round(levelNote.hitRelativeTime * 1000).toString();
 		const earlyLateText = new PIXI.Text(text, {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: Sunniesnow.Config.WIDTH / 36,
@@ -308,8 +332,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			align: 'center'
 		});
 		earlyLateText.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
-		earlyLateText.x = uiNote.x;
-		earlyLateText.y = uiNote.y;
+		[earlyLateText.x, earlyLateText.y] = Sunniesnow.Config.chartMapping(levelNote.event.x, levelNote.event.y);
 		this.addChild(earlyLateText);
 		this.earlyLateTexts.push(earlyLateText);
 	}

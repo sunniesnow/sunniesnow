@@ -43,6 +43,9 @@ Sunniesnow.EventInfoTip = {
 	},
 
 	findTouchedNote(touch) {
+		if (!this.uiNotesBoard) {
+			return null;
+		}
 		let minDistance = Infinity;
 		let nearest = null;
 		const {canvasX: x, canvasY: y} = touch.start();
@@ -63,6 +66,9 @@ Sunniesnow.EventInfoTip = {
 	},
 
 	findTouchedBgNote(touch) {
+		if (!this.uiBgNotesBoard) {
+			return null;
+		}
 		let minDistance = Infinity;
 		let nearest = null;
 		const {canvasX: x, canvasY: y} = touch.start();
@@ -78,12 +84,12 @@ Sunniesnow.EventInfoTip = {
 		}
 		if (minDistance < Sunniesnow.Config.NOTE_RADIUS) {
 			return nearest;
-		}
+		} 
 		return null;
 	},
 
 	findTouchedBgPattern(touch) {
-		return this.uiBgPatternBoard.uiEvents.find(uiEvent => uiEvent.state !== 'ready' && uiEvent.state !== 'finished');
+		return this.uiBgPatternBoard?.uiEvents.find(uiEvent => uiEvent.state !== 'ready' && uiEvent.state !== 'finished');
 	},
 
 	showInfoTip(uiEvent) {

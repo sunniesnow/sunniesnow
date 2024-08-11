@@ -5,6 +5,7 @@ Sunniesnow.PixiPatches = {
 			this.patchLoadSvg();
 			this.patchNodeLoaderParsers();
 		}
+		this.patchAddTo();
 	},
 
 	// https://github.com/pixijs/pixijs/issues/9568#issuecomment-1653126302
@@ -31,5 +32,13 @@ Sunniesnow.PixiPatches = {
 		PIXI.loadNodeTexture.name = 'loadNodeTexture';
 		PIXI.loadNodeFont.name = 'loadNodeFont';
 		PIXI.loadNodeBase64.name = 'loadNodeBase64';
+	},
+
+	// Then I can use child?.addTo(parent) instead of child && parent.addChild(child).
+	patchAddTo() {
+		PIXI.Container.prototype.addTo = function (parent) {
+			parent.addChild(this);
+			return this;
+		}
 	}
 };

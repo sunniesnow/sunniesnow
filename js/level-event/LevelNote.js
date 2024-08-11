@@ -1,5 +1,12 @@
 Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 
+	static NoteEvent = class NoteEvent extends Event {
+		constructor(type, levelNote) {
+			super(type);
+			this.levelNote = levelNote;
+		}
+	}
+
 	constructor(event) {
 		super();
 		this.event = event;
@@ -68,7 +75,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 	hit(touch, time) {
 		this.dryHit(time);
 		this.processHit(touch, time);
-		this.dispatchEvent(new Event('hit'));
+		this.newEvent('hit');
 	}
 
 	processHit(touch, time) {
@@ -105,6 +112,12 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		}
 	}
 
+	newEvent(type) {
+		const event = new this.constructor.NoteEvent(type, this);
+		this.dispatchEvent(event);
+		Sunniesnow.game.level.dispatchEvent(event);
+	}
+
 	release(time) {
 		if (!this.holding) {
 			return;
@@ -117,7 +130,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		}
 		this.processRelease(time);
 		Sunniesnow.game.level.holdingNotes.splice(Sunniesnow.game.level.holdingNotes.indexOf(this), 1);
-		this.dispatchEvent(new Event('release'));
+		this.newEvent('release');
 		Sunniesnow.game.level.onNewJudgement(this);
 	}
 
@@ -135,12 +148,12 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 			this.holding = false;
 			this.processRelease(this.time + edge);
 			Sunniesnow.game.level.holdingNotes.splice(Sunniesnow.game.level.holdingNotes.indexOf(this), 1);
-			this.dispatchEvent(new Event('release'));
+			this.newEvent('release');
 		} else {
 			this.hitRelativeTime = edge;
 			Sunniesnow.game.level.unhitNotes.splice(Sunniesnow.game.level.unhitNotes.indexOf(this), 1);
 			if (judgement === 'miss') {
-				this.dispatchEvent(new Event('miss'));
+				this.newEvent('miss');
 			}
 		}
 		Sunniesnow.game.level.onNewJudgement(this);
