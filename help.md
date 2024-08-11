@@ -622,13 +622,52 @@ This setting is used to enable or disable the touch effects.
 This setting is used to reverse the display order of notes.
 When it is `true`, later notes will be displayed below earlier notes.
 
-##### Hide tip points
+##### Hide
+
+###### Tip points
+{:#hide-tip-points}
 
 - **Setting id**: `hide-tip-points`.
 - **Possible values**: `true`, `false`.
 
 This setting is used to hide the tip points.
 When it is `true`, the tip points will not be displayed.
+
+###### Notes
+{:#hide-notes}
+
+- **Setting id**: `hide-notes`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the notes.
+When it is `true`, the notes and the simultaneity hints will not be displayed.
+
+###### Background notes
+{:#hide-bg-notes}
+
+- **Setting id**: `hide-bg-notes`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the background notes.
+When it is `true`, the background notes will not be displayed.
+
+###### FX
+{:#hide-fx}
+
+- **Setting id**: `hide-fx`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the FX.
+When it is `true`, the FX will not be displayed.
+
+###### Background pattern
+{:#hide-bg-pattern}
+
+- **Setting id**: `hide-bg-pattern`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the background pattern.
+When it is `true`, the background pattern will not be displayed.
 
 ### Audio settings
 
