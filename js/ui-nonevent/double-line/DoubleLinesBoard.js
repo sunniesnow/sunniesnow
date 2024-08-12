@@ -59,6 +59,7 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 		this.addNewDoubleLines(time);
 		for (const child of this.children) {
 			child.update(time - child.event1.time);
+			child.alpha = child.fadingAlpha;
 			if (child.state === 'finished') {
 				child.destroy({children: true});
 				this.removeChild(child);

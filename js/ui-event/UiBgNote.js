@@ -36,6 +36,8 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
+		const fadingProgress = (1 - Sunniesnow.game.settings.fadingStart) / Sunniesnow.game.settings.fadingDuration;
+		this.fadingAlpha = Sunniesnow.Utils.clamp(1 - fadingProgress, 0, 1);
 		this.note.scale.set(1 + (1 - (1 - progress) ** 2) * 0.5);
 		this.note.alpha = 1 - progress;
 	}

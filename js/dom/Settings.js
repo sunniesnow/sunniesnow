@@ -177,15 +177,17 @@ Sunniesnow.Settings = {
 			alwaysUpdateFx: this.readCheckbox('always-update-fx'),
 			scrollJudgementLine: this.readValue('scroll-judgement-line'),
 			scrollDistance: this.readValue('scroll-distance'),
-			touchEffects: this.readCheckbox('touch-effects'),
-			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
-			hideCircles: this.readCheckbox('hide-circles'),
-			circleMovesWithNote: this.readCheckbox('circle-moves-with-note'),
 			hideTipPoints: this.readCheckbox('hide-tip-points'),
 			hideNotes: this.readCheckbox('hide-notes'),
+			hideCircles: this.readCheckbox('hide-circles'),
 			hideBgNotes: this.readCheckbox('hide-bg-notes'),
 			hideFx: this.readCheckbox('hide-fx'),
 			hideBgPattern: this.readCheckbox('hide-bg-pattern'),
+			fadingStart: this.readValue('fading-start'),
+			fadingDuration: this.readValue('fading-duration'),
+			touchEffects: this.readCheckbox('touch-effects'),
+			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
+			circleMovesWithNote: this.readCheckbox('circle-moves-with-note'),
 
 			// audio settings
 			se: this.readRadio('se'),
@@ -339,15 +341,17 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('always-update-fx', d('alwaysUpdateFx'));
 		this.writeValue('scroll-judgement-line', d('scrollJudgementLine'));
 		this.writeValue('scroll-distance', d('scrollDistance'));
-		this.writeCheckbox('touch-effects', d('touchEffects'));
-		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
-		this.writeCheckbox('hide-circles', d('hideCircles'));
-		this.writeCheckbox('circle-moves-with-note', d('circleMovesWithNote'));
 		this.writeCheckbox('hide-tip-points', d('hideTipPoints'));
 		this.writeCheckbox('hide-notes', d('hideNotes'));
+		this.writeCheckbox('hide-circles', d('hideCircles'));
 		this.writeCheckbox('hide-bg-notes', d('hideBgNotes'));
 		this.writeCheckbox('hide-fx', d('hideFx'));
 		this.writeCheckbox('hide-bg-pattern', d('hideBgPattern'));
+		this.writeValue('fading-start', d('fadingStart'));
+		this.writeValue('fading-duration', d('fadingDuration'));
+		this.writeCheckbox('touch-effects', d('touchEffects'));
+		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
+		this.writeCheckbox('circle-moves-with-note', d('circleMovesWithNote'));
 
 		this.writeRadio('se', d('se'));
 		this.writeValue('se-online', d('seOnline'));

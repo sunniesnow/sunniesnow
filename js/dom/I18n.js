@@ -58,6 +58,7 @@ Sunniesnow.I18n = {
 			fxOptionsCategory: 'FX options',
 			scrollVisualCategory: 'Scroll mode',
 			hideCategory: 'Hide',
+			fadingCategory: 'Fading',
 			miscVisualCategory: 'Miscellaneous',
 
 			audioSettings: 'Audio settings',
@@ -188,6 +189,7 @@ Sunniesnow.I18n = {
 			fxOptionsCategory: 'FX 选项',
 			scrollVisualCategory: '下落式',
 			hideCategory: '隐藏',
+			fadingCategory: '下隐',
 			miscVisualCategory: '杂项',
 
 			audioSettings: '音频设置',
@@ -337,6 +339,8 @@ Sunniesnow.I18n = {
 			hideBgNotes: ' Background notes',
 			hideFx: ' FX',
 			hideBgPattern: ' Background pattern',
+			fadingStart: 'Fading start: ',
+			fadingDuration: 'Fading duration: ',
 			touchEffects: ' Touch effects',
 			reverseNoteOrder: ' Reverse the display order of notes',
 			circleMovesWithNote: ' Circles move with notes',
@@ -487,6 +491,8 @@ Sunniesnow.I18n = {
 			hideBgNotes: ' 墨点',
 			hideFx: ' FX',
 			hideBgPattern: ' 背景图案',
+			fadingStart: '下隐开始: ',
+			fadingDuration: '淡出时长: ',
 			touchEffects: ' 触摸效果',
 			reverseNoteOrder: ' 音符显示顺序反转',
 			circleMovesWithNote: ' 缩圈随音符移动',

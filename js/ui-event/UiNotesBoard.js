@@ -51,8 +51,9 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 			this.add(event);
 		}
 		for (const obj of this.uiEvents) {
-			const {uiEvent} = obj;
+			const {uiEvent, container} = obj;
 			uiEvent.update(time - uiEvent.event.time);
+			container.alpha = uiEvent.fadingAlpha;
 			if (uiEvent.state === 'finished') {
 				this.remove(obj);
 			}
