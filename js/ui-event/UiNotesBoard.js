@@ -1,13 +1,12 @@
 Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 
-	constructor(fxBoard) {
+	constructor() {
 		super();
 		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.Note);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME, e => e.disappearTime());
 		}
 		this.clear();
-		this.fxBoard = fxBoard;
 	}
 
 	clear() {
@@ -18,10 +17,26 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 
 	removeAll() {
 		while (this.uiEvents.length > 0) {
-			const uiEvent = this.uiEvents.shift();
-			uiEvent.destroy({children: true});
-			this.removeChild(uiEvent);
+			this.remove(this.uiEvents[0]);
 		}
+	}
+
+	add(event) {
+		const container = new PIXI.Container();
+		const uiEvent = event.newUiEvent();
+		uiEvent.circle?.addTo(container);
+		if (!Sunniesnow.game.settings.hideNotes) {
+			uiEvent.addTo(container);
+		}
+		Sunniesnow.game.settings.reverseNoteOrder ? this.addChildAt(container, 0) : this.addChild(container);
+		this.uiEvents.push({uiEvent, container});
+	}
+
+	remove(obj) {
+		const {container} = obj;
+		container.destroy({children: true});
+		this.removeChild(container);
+		this.uiEvents.splice(this.uiEvents.indexOf(obj), 1);
 	}
 
 	update(delta) {
@@ -33,16 +48,13 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 				break;
 			}
 			this.unappearedEvents.shift();
-			const uiEvent = event.newUiEvent(this.fxBoard);
-			Sunniesnow.game.settings.reverseNoteOrder ? this.addChildAt(uiEvent, 0) : this.addChild(uiEvent);
-			this.uiEvents.push(uiEvent);
+			this.add(event);
 		}
-		for (const uiEvent of this.uiEvents) {
+		for (const obj of this.uiEvents) {
+			const {uiEvent} = obj;
 			uiEvent.update(time - uiEvent.event.time);
 			if (uiEvent.state === 'finished') {
-				uiEvent.destroy({children: true});
-				this.removeChild(uiEvent);
-				this.uiEvents.splice(this.uiEvents.indexOf(uiEvent), 1);
+				this.remove(obj);
 			}
 		}
 	}
@@ -52,9 +64,6 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 			Sunniesnow.Utils.bisectLeft(this.allEvents, event => event.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME - time)
 		);
 		this.removeAll();
-		let currentEvents = this.timeline[Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)].events;
-		currentEvents = Sunniesnow.game.settings.reverseNoteOrder ? currentEvents.reverse() : currentEvents.slice();
-		this.uiEvents = currentEvents.map(event => event.newUiEvent(this.fxBoard));
-		this.uiEvents.forEach(uiEvent => this.addChild(uiEvent));
+		this.timeline[Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)].events.forEach(event => this.add(event));
 	}
 };

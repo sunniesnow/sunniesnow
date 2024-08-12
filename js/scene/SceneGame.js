@@ -28,10 +28,12 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 		if (!Sunniesnow.game.settings.hideNotes) {
 			this.doubleLinesBoard = new Sunniesnow.DoubleLinesBoard();
-			this.uiNotesBoard = new Sunniesnow.UiNotesBoard();
 		}
 		if (Sunniesnow.game.settings.scroll) {
 			this.judgementLine = new Sunniesnow.JudgementLine();
+		}
+		if (!Sunniesnow.game.settings.hideNotes || !Sunniesnow.game.settings.hideCircles) {
+			this.uiNotesBoard = new Sunniesnow.UiNotesBoard();
 		}
 		this.background.addTo(this);
 		this.progressBar.addTo(this);
@@ -74,14 +76,14 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		if (Sunniesnow.game.progressAdjustable) {
 			Sunniesnow.ProgressControl.update(delta);
 		}
-		this.updateUiComponents(delta);
-		this.updateBoards(delta);
 		if (!Sunniesnow.Music.pausing) {
 			Sunniesnow.game.level.update();
 			if (Sunniesnow.game.level.finished) {
 				this.gotoResult();
 			}
 		}
+		this.updateUiComponents(delta);
+		this.updateBoards(delta);
 	}
 
 	gotoResult() {

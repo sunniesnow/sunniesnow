@@ -3,9 +3,6 @@ Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
 	static async load() {
 		this.radius = Sunniesnow.Config.NOTE_RADIUS * 2/3;
 		this.geometry = this.createGeometry();
-		if (Sunniesnow.game.settings.scroll) {
-			return;
-		}
 		this.circleRadius = this.radius * 6;
 		this.circleGeometry = this.createCircleGeometry();
 	}
@@ -36,17 +33,17 @@ Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
 	populate() {
 		super.populate();
 		this.note = new PIXI.Graphics(this.constructor.geometry);
-		if (!Sunniesnow.game.settings.scroll) {
-			this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
-			this.addChild(this.circle);
-		}
 		this.addChild(this.note);
+	}
+
+	populateCircle() {
+		this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
 	}
 
 	updateFadingIn(progress, relativeTime) {
 		super.updateFadingIn(progress, relativeTime);
 		this.note.scale.set(progress);
-		if (Sunniesnow.game.settings.scroll) {
+		if (!this.circle) {
 			return;
 		}
 		this.circle.scale.set(1 - (progress-1)**2);
@@ -56,7 +53,7 @@ Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
 	updateActive(progress, relativeTime) {
 		super.updateActive(progress, relativeTime);
 		this.note.scale.set(1);
-		if (Sunniesnow.game.settings.scroll) {
+		if (!this.circle) {
 			return;
 		}
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;

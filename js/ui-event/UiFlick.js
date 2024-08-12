@@ -3,9 +3,6 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.radius = Sunniesnow.Config.NOTE_RADIUS;
 		this.geometry = Sunniesnow.UiTap.createGeometry.call(this, 0xfe6e4e, 0xffffff);
 		this.arrowGeometry = this.createArrowGeometry();
-		if (Sunniesnow.game.settings.scroll) {
-			return;
-		}
 		this.circleRadius = this.radius * 4;
 		this.circleGeometry = Sunniesnow.UiTap.createCircleGeometry.call(this, 0xccfcfc);
 	}
@@ -37,10 +34,6 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.arrow = new PIXI.Graphics(Sunniesnow.UiFlick.arrowGeometry);
 		this.arrow.transform.rotation = Sunniesnow.Config.chartMappingAngle(this.event.angle);
 		this.text = Sunniesnow.UiTap.prototype.createText.call(this);
-		if (!Sunniesnow.game.settings.scroll) {
-			this.circle = new PIXI.Graphics(Sunniesnow.UiFlick.circleGeometry);
-			this.addChild(this.circle);
-		}
 		this.note = new PIXI.Container();
 		this.note.addChild(this.noteBody);
 		this.note.addChild(this.text);
@@ -48,12 +41,16 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.addChild(this.note);
 	}
 
+	populateCircle() {
+		this.circle = new PIXI.Graphics(Sunniesnow.UiFlick.circleGeometry);
+	}
+
 	updateFadingIn(progress, relativeTime) {
 		super.updateFadingIn(progress, relativeTime);
 		this.note.scale.set(progress);
 		this.arrow.alpha = progress;
 		this.arrow.scale.set(1 + 0.05*Math.cos(relativeTime * 2));
-		if (Sunniesnow.game.settings.scroll) {
+		if (!this.circle) {
 			return;
 		}
 		this.circle.scale.set(1 - (progress - 1) ** 2);
@@ -64,7 +61,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		super.updateActive(progress, relativeTime);
 		this.note.scale.set(1);
 		this.arrow.scale.set(1 + 0.05*Math.cos(relativeTime * 5));
-		if (Sunniesnow.game.settings.scroll) {
+		if (!this.circle) {
 			return;
 		}
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
@@ -81,7 +78,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		super.updateFadingOut(progress, relativeTime);
 		Sunniesnow.UiTap.prototype.updateTextFadingOut.call(this, progress);
 		this.noteBody.visible = false;
-		if (!Sunniesnow.game.settings.scroll) {
+		if (this.circle) {
 			this.circle.visible = false;
 		}
 		progress *= 2;

@@ -7,11 +7,19 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 	}
 
 	static fadingInDuration(event) {
-		return Sunniesnow.game.settings.scroll ? 0 : 1/4;
+		return 1/4; // Sunniesnow.game.settings.scroll ? 0 : 1/4;
 	}
 
 	static fadingOutDuration(event) {
 		return 2/3;
+	}
+
+	updateFadingIn(progress, relativeTime) {
+		super.updateFadingIn(progress, relativeTime);
+		if (!Sunniesnow.game.settings.scroll) {
+			return;
+		}
+		this.y = Sunniesnow.Config.SCROLL_START_Y;
 	}
 
 	updateActive(progress, relativeTime) {

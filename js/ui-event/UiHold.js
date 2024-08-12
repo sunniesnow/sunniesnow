@@ -5,9 +5,6 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 		this.haloRadius = this.radius * 1.5;
 		this.geometry = Sunniesnow.UiTap.createGeometry.call(this, 0x29a9b9, 0xe8f8b8);
 		this.haloGeometry = this.createHaloGeometry();
-		if (Sunniesnow.game.settings.scroll) {
-			return;
-		}
 		this.circleRadius = this.radius * 4;
 		this.circleGeometry = Sunniesnow.UiTap.createCircleGeometry.call(this, 0xccfcfc);
 	}
@@ -25,15 +22,16 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 		this.text = Sunniesnow.UiTap.prototype.createText.call(this);
 		if (Sunniesnow.game.settings.scroll) {
 			this.createBar();
-		} else {
-			this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
-			this.addChild(this.circle);
 		}
 		this.note = new PIXI.Container();
 		this.createHalo();
 		this.note.addChild(this.noteBody);
 		this.note.addChild(this.text);
 		this.addChild(this.note);
+	}
+
+	populateCircle() {
+		this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
 	}
 
 	createBar() {
@@ -60,7 +58,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 	updateFadingIn(progress, relativeTime) {
 		super.updateFadingIn(progress, relativeTime);
 		this.note.scale.set(progress);
-		if (Sunniesnow.game.settings.scroll) {
+		if (!this.circle) {
 			return;
 		}
 		this.circle.scale.set(1 - (progress-1)**2);
@@ -70,7 +68,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 	updateActive(progress, relativeTime) {
 		super.updateActive(progress, relativeTime);
 		this.note.scale.set(1);
-		if (Sunniesnow.game.settings.scroll) {
+		if (!this.circle) {
 			return;
 		}
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
@@ -87,14 +85,15 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 		super.updateHolding(progress, relativeTime);
 		this.rotateHaloMask(progress);
 		this.swellBounce(progress);
-		if (Sunniesnow.game.settings.scroll) {
+		if (this.bar) {
 			this.bar.scale.y = (this.event.duration - relativeTime) * Sunniesnow.Config.SCROLL_SPEED;
 			if (this.bar.scale.y < 0) {
 				this.bar.scale.y = 0;
 			}
-			return;
 		}
-		this.circle.visible = false;
+		if (this.circle) {
+			this.circle.visible = false;
+		}
 	}
 
 	rotateHaloMask(progress) {
@@ -136,9 +135,10 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 		super.updateFadingOut(progress, relativeTime);
 		Sunniesnow.UiTap.prototype.updateTextFadingOut.call(this, progress, relativeTime);
 		progress *= 2;
-		if (Sunniesnow.game.settings.scroll) {
+		if (this.bar) {
 			this.bar.visible = false;
-		} else {
+		}
+		if (this.circle) {
 			this.circle.visible = false;
 		}
 		this.halo.visible = false;

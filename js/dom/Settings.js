@@ -179,6 +179,8 @@ Sunniesnow.Settings = {
 			scrollDistance: this.readValue('scroll-distance'),
 			touchEffects: this.readCheckbox('touch-effects'),
 			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
+			hideCircles: this.readCheckbox('hide-circles'),
+			circleMovesWithNote: this.readCheckbox('circle-moves-with-note'),
 			hideTipPoints: this.readCheckbox('hide-tip-points'),
 			hideNotes: this.readCheckbox('hide-notes'),
 			hideBgNotes: this.readCheckbox('hide-bg-notes'),
@@ -339,6 +341,8 @@ Sunniesnow.Settings = {
 		this.writeValue('scroll-distance', d('scrollDistance'));
 		this.writeCheckbox('touch-effects', d('touchEffects'));
 		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
+		this.writeCheckbox('hide-circles', d('hideCircles'));
+		this.writeCheckbox('circle-moves-with-note', d('circleMovesWithNote'));
 		this.writeCheckbox('hide-tip-points', d('hideTipPoints'));
 		this.writeCheckbox('hide-notes', d('hideNotes'));
 		this.writeCheckbox('hide-bg-notes', d('hideBgNotes'));

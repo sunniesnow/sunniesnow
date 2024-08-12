@@ -604,6 +604,62 @@ This setting is useless if [`scroll`](#scroll) is `false`.
 The distance is this setting multiplied by the height of the canvas
 (the value of [`height`](#height)).
 
+#### Hide
+
+##### Tip points
+{:#hide-tip-points}
+
+- **Setting id**: `hide-tip-points`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the tip points.
+When it is `true`, the tip points will not be displayed.
+
+##### Notes
+{:#hide-notes}
+
+- **Setting id**: `hide-notes`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the notes.
+When it is `true`, the notes and the simultaneity hints will not be displayed.
+
+##### Circles
+{:#hide-circles}
+
+- **Setting id**: `hide-circles`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the circles.
+When it is `true`, the circles will not be displayed.
+
+##### Background notes
+{:#hide-bg-notes}
+
+- **Setting id**: `hide-bg-notes`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the background notes.
+When it is `true`, the background notes will not be displayed.
+
+##### FX
+{:#hide-fx}
+
+- **Setting id**: `hide-fx`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the FX.
+When it is `true`, the FX will not be displayed.
+
+##### Background pattern
+{:#hide-bg-pattern}
+
+- **Setting id**: `hide-bg-pattern`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the background pattern.
+When it is `true`, the background pattern will not be displayed.
+
 #### Miscellaneous
 
 ##### Touch effects
@@ -622,52 +678,16 @@ This setting is used to enable or disable the touch effects.
 This setting is used to reverse the display order of notes.
 When it is `true`, later notes will be displayed below earlier notes.
 
-##### Hide
+##### Circles move with notes
+{:#circle-moves-with-note}
 
-###### Tip points
-{:#hide-tip-points}
-
-- **Setting id**: `hide-tip-points`.
+- **Setting id**: `circle-moves-with-note`.
 - **Possible values**: `true`, `false`.
 
-This setting is used to hide the tip points.
-When it is `true`, the tip points will not be displayed.
-
-###### Notes
-{:#hide-notes}
-
-- **Setting id**: `hide-notes`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to hide the notes.
-When it is `true`, the notes and the simultaneity hints will not be displayed.
-
-###### Background notes
-{:#hide-bg-notes}
-
-- **Setting id**: `hide-bg-notes`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to hide the background notes.
-When it is `true`, the background notes will not be displayed.
-
-###### FX
-{:#hide-fx}
-
-- **Setting id**: `hide-fx`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to hide the FX.
-When it is `true`, the FX will not be displayed.
-
-###### Background pattern
-{:#hide-bg-pattern}
-
-- **Setting id**: `hide-bg-pattern`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to hide the background pattern.
-When it is `true`, the background pattern will not be displayed.
+This setting is used to set whether the circles should move with the notes.
+Currently, this only affects scroll mode (when [`scroll`](#scroll) is `true`).
+When it is `true`, the circles will move with the notes.
+When it is `false`, the circles will not move with the notes.
 
 ### Audio settings
 

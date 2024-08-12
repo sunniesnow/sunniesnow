@@ -2,11 +2,9 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 
 	static async load() {
 		this.radius = Sunniesnow.Config.NOTE_RADIUS;
-		if (!Sunniesnow.game.settings.scroll) {
-			this.circleRadius = this.radius * 4;
-			this.circleGeometry = this.createCircleGeometry(0xccfcfc);
-			this.doubleCircleGeometry = this.createCircleGeometry(0xf9f9e9);
-		}
+		this.circleRadius = this.radius * 4;
+		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
+		this.doubleCircleGeometry = this.createCircleGeometry(0xf9f9e9);
 		this.geometry = this.createGeometry(0x29a9b9, 0xe8f8b8);
 		this.doubleGeometry = this.createGeometry(0x3171d1, 0xe3f3f3);
 		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.NoteBase && e.text)) {
@@ -51,25 +49,16 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 
 	populate() {
 		super.populate();
-		if (this.hasConnectedTap()) {
-			this.noteBody = new PIXI.Graphics(Sunniesnow.UiTap.doubleGeometry);
-			if (!Sunniesnow.game.settings.scroll) {
-				this.circle = new PIXI.Graphics(Sunniesnow.UiTap.doubleCircleGeometry);
-			}
-		} else {
-			this.noteBody = new PIXI.Graphics(Sunniesnow.UiTap.geometry);
-			if (!Sunniesnow.game.settings.scroll) {
-				this.circle = new PIXI.Graphics(Sunniesnow.UiTap.circleGeometry);
-			}
-		}
+		this.noteBody = new PIXI.Graphics(this.hasConnectedTap() ? Sunniesnow.UiTap.doubleGeometry : Sunniesnow.UiTap.geometry);
 		this.text = this.createText();
-		if (!Sunniesnow.game.settings.scroll) {
-			this.addChild(this.circle);
-		}
 		this.note = new PIXI.Container();
 		this.note.addChild(this.noteBody)
 		this.note.addChild(this.text);
 		this.addChild(this.note);
+	}
+
+	populateCircle() {
+		this.circle = new PIXI.Graphics(this.hasConnectedTap() ? Sunniesnow.UiTap.doubleCircleGeometry : Sunniesnow.UiTap.circleGeometry);
 	}
 
 	hasConnectedTap() {
@@ -81,7 +70,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 	updateFadingIn(progress, relativeTime) {
 		super.updateFadingIn(progress, relativeTime);
 		this.note.scale.set(progress);
-		if (Sunniesnow.game.settings.scroll) {
+		if (!this.circle) {
 			return;
 		}
 		this.circle.scale.set(1 - (progress-1)**2);
@@ -91,7 +80,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 	updateActive(progress, relativeTime) {
 		super.updateActive(progress, relativeTime);
 		this.note.scale.set(1);
-		if (Sunniesnow.game.settings.scroll) {
+		if (!this.circle) {
 			return;
 		}
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
@@ -108,7 +97,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		super.updateFadingOut(progress, relativeTime);
 		this.updateTextFadingOut(progress);
 		this.noteBody.visible = false;
-		if (Sunniesnow.game.settings.scroll) {
+		if (!this.circle) {
 			return;
 		}
 		this.circle.visible = false;
