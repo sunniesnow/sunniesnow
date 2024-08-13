@@ -6,7 +6,7 @@ Sunniesnow.ObjectUrl = {
 
 	create(blob) {
 		const url = this.createPersistent(blob);
-		this.timeouts[url] = setTimeout(() => this.revoke(url), Sunniesnow.Config.objectUrlTimeout * 1000);
+		this.timeouts[url] = setTimeout(() => this.revoke(url), Sunniesnow.Config.OBJECT_URL_TIMEOUT * 1000);
 		return url;
 	},
 
