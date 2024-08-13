@@ -352,7 +352,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 			if (j === checkpoints.length) {
 				perpX = y - yP;
 				perpY = xP - x;
-				const perpLength = Sunniesnow.Utils.hypot(perpX, perpY);
+				const perpLength = Math.hypot(perpX, perpY);
 				perpX *= halfThickness / perpLength * thicknessRatio;
 				perpY *= halfThickness / perpLength * thicknessRatio;
 			} else {

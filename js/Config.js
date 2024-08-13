@@ -128,6 +128,7 @@ Sunniesnow.Config = {
 		if (Sunniesnow.game.settings.speed === 0) {
 			fadingProgress = (relativeTime - Math.log(Sunniesnow.game.settings.fadingStart)) / Sunniesnow.game.settings.fadingDuration;
 		} else {
+			progress = Sunniesnow.Utils.clamp(progress, -Infinity, 1);
 			fadingProgress = (progress - Sunniesnow.game.settings.fadingStart) / Sunniesnow.game.settings.fadingDuration;
 		}
 		return Sunniesnow.Utils.clamp(1 - fadingProgress, 0, 1);

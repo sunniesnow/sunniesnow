@@ -51,7 +51,7 @@ Sunniesnow.Utils = {
 	},
 
 	cartesianToPolar(x, y) {
-		return [Sunniesnow.Utils.hypot(x, y), Math.atan2(y, x)];
+		return [Math.hypot(x, y), Math.atan2(y, x)];
 	},
 	
 	between(x, a, b) {
@@ -62,7 +62,7 @@ Sunniesnow.Utils = {
 	drawDashedLine(graphics, x0, y0, x1, y1, dashLength, gapLength) {
 		const dx = x1 - x0;
 		const dy = y1 - y0;
-		const length = Sunniesnow.Utils.hypot(dx, dy);
+		const length = Math.hypot(dx, dy);
 		if (length === 0) {
 			return;
 		}
@@ -103,16 +103,12 @@ Sunniesnow.Utils = {
 	},
 
 	distance(x0, y0, x1, y1) {
-		return Sunniesnow.Utils.hypot(x1 - x0, y1 - y0);
+		return Math.hypot(x1 - x0, y1 - y0);
 	},
 
 	// The L-infinity distance
 	lInfDistance(x0, y0, x1, y1) {
 		return Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0));
-	},
-
-	hypot(x, y) {
-		return Math.sqrt(x*x + y*y);
 	},
 
 	quo(a, b) {

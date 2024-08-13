@@ -301,22 +301,23 @@ Sunniesnow.Level = class Level extends EventTarget {
 	// The function hits the most appropriate note and returns the actually hit note.
 	tryHitNote(note, touch, time) {
 		const {x, y} = touch.start();
-		const events = note.event.simultaneousEvents;
 		// Should we replace Euclidean distance with L-infinity distance?
 		let [distance, angle] = this.distanceAndAngle(x, y, note.event);
-		for (let i = 0; i < events.length; i++) {
-			const event = events[i];
+		for (const event of note.event.simultaneousEvents) {
 			const newNote = event.levelNote;
-			if (!newNote || newNote.hitRelativeTime !== null) {
+			let condition = newNote === note || !newNote;
+			condition ||= newNote.constructor.ONLY_ONE_PER_TOUCH && newNote.hitRelativeTime !== null;
+			condition ||= !newNote.isTappableAt(touch, x, y);
+			if (condition) {
 				continue;
 			}
-			const [newDistance, newAngle] = this.distanceAndAngle(x, y, note.event);
-			let condition = (!note.constructor.ONLY_ONE_PER_TOUCH || newDistance < distance) && newNote.constructor.ONLY_ONE_PER_TOUCH;
+			const [newDistance, newAngle] = this.distanceAndAngle(x, y, newNote.event);
+			condition = (!note.constructor.ONLY_ONE_PER_TOUCH || newDistance < distance) && newNote.constructor.ONLY_ONE_PER_TOUCH;
 			condition ||= !note.constructor.ONLY_ONE_PER_TOUCH && !newNote.constructor.ONLY_ONE_PER_TOUCH && newDistance < distance;
 			if (note.type === 'flick' && newNote.type === 'flick') {
 				condition ||= newDistance === distance && Sunniesnow.Utils.angleDistance(event.angle, newAngle) < Sunniesnow.Utils.angleDistance(note.event.angle, angle);
 			}
-			if (condition && newNote.isTappableAt(touch, x, y)) {
+			if (condition) {
 				note = newNote;
 				distance = newDistance;
 				angle = newAngle;

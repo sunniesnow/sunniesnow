@@ -53,9 +53,9 @@ Sunniesnow.Game = class Game {
 	}
 
 	initLevel() {
-		this.debugBoard.removeLevelListeners();
+		this.debugBoard?.removeLevelListeners();
 		this.level = new Sunniesnow.Level();
-		this.debugBoard.addLevelListeners();
+		this.debugBoard?.addLevelListeners();
 	}
 
 	goto(scene) {
