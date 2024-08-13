@@ -24,8 +24,7 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 
 	updateActive(progress, relativeTime) {
 		super.updateActive(progress, relativeTime);
-		const fadingProgress = (progress - Sunniesnow.game.settings.fadingStart) / Sunniesnow.game.settings.fadingDuration;
-		this.fadingAlpha = Sunniesnow.Utils.clamp(1 - fadingProgress, 0, 1);
+		this.fadingAlpha = Sunniesnow.Config.fadingAlpha(progress, relativeTime);
 		if (Sunniesnow.game.settings.scroll) {
 			this.y = Sunniesnow.Config.scrollY(progress);
 		}
@@ -33,8 +32,7 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 
 	updateHolding(progress, relativeTime) {
 		super.updateHolding(progress, relativeTime);
-		const fadingProgress = (1 - Sunniesnow.game.settings.fadingStart) / Sunniesnow.game.settings.fadingDuration;
-		this.fadingAlpha = Sunniesnow.Utils.clamp(1 - fadingProgress, 0, 1);
+		this.fadingAlpha = Sunniesnow.Config.fadingAlpha();
 		if (Sunniesnow.game.settings.scroll && Sunniesnow.game.settings.autoplay) {
 			this.y = Sunniesnow.Config.SCROLL_END_Y;
 		}

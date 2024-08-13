@@ -90,24 +90,21 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 	}
 
 	updateFadingOut(progress, relativeTime) {
-		const fadingProgress = (1 - Sunniesnow.game.settings.fadingStart) / Sunniesnow.game.settings.fadingDuration;
-		this.fadingAlpha = Sunniesnow.Utils.clamp(1 - fadingProgress, 0, 1);
+		this.fadingAlpha = Sunniesnow.Config.fadingAlpha();
 		if (Sunniesnow.game.settings.scroll && Sunniesnow.game.settings.autoplay) {
 			this.y1 = this.y2 = Sunniesnow.Config.SCROLL_END_Y;
 		}
 	}
 
 	updateActive(progress, relativeTime) {
-		const fadingProgress = (progress - Sunniesnow.game.settings.fadingStart) / Sunniesnow.game.settings.fadingDuration;
-		this.fadingAlpha = Sunniesnow.Utils.clamp(1 - fadingProgress, 0, 1);
+		this.fadingAlpha = Sunniesnow.Config.fadingAlpha(progress, relativeTime);
 		if (Sunniesnow.game.settings.scroll) {
 			this.y1 = this.y2 = Sunniesnow.Config.scrollY(progress);
 		}
 	}
 
 	updateHolding(relativeTime) {
-		const fadingProgress = (1 - Sunniesnow.game.settings.fadingStart) / Sunniesnow.game.settings.fadingDuration;
-		this.fadingAlpha = Sunniesnow.Utils.clamp(1 - fadingProgress, 0, 1);
+		this.fadingAlpha = Sunniesnow.Config.fadingAlpha();
 		if (Sunniesnow.game.settings.scroll && Sunniesnow.game.settings.autoplay) {
 			this.y1 = this.y2 = Sunniesnow.Config.SCROLL_END_Y;
 		}

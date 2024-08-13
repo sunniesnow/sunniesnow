@@ -814,7 +814,7 @@ Sunniesnow.I18n = {
 			end: 'エンド: ',
 			resumePreparationTime: ['引き続き準備期間', 's'],
 			beginningPreparationTime: ['開始準備期間', 's'],
-			pauseDoubleTime: ['', '以内に一時停止ボタンをダブルクリックすると一時停止する (0 はシングルタップ)'],
+			pauseDoubleTime: ['', 's 以内に一時停止ボタンをダブルクリックすると一時停止する (0 はシングルタップ)'],
 			notesPriorityOverPause: ' 一時停止ボタンよりノートが優先される',
 			pauseFullscreen: ' フルスクリーン切り替え時の自動一時停止',
 			pauseBlur: ' フォーカスが外れると自動で一時停止',

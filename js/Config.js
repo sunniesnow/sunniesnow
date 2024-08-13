@@ -123,6 +123,16 @@ Sunniesnow.Config = {
 		return this.SCROLL_START_Y + (this.SCROLL_END_Y - this.SCROLL_START_Y) * progress;
 	},
 
+	fadingAlpha(progress = 1, relativeTime = 0) {
+		let fadingProgress;
+		if (Sunniesnow.game.settings.speed === 0) {
+			fadingProgress = (relativeTime - Math.log(Sunniesnow.game.settings.fadingStart)) / Sunniesnow.game.settings.fadingDuration;
+		} else {
+			fadingProgress = (progress - Sunniesnow.game.settings.fadingStart) / Sunniesnow.game.settings.fadingDuration;
+		}
+		return Sunniesnow.Utils.clamp(1 - fadingProgress, 0, 1);
+	},
+
 	JUDGEMENT_WINDOWS_4: {
 		loose: {
 			tap: {
