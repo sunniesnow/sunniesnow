@@ -16,6 +16,17 @@ Sunniesnow.I18n = {
 
 			judgementSettings: 'Judgement settings',
 			judgementWindowsCategory: 'Judgement time windows',
+			judgementWindowsCustomEarlyBad: 'EB',
+			judgementWindowsCustomEarlyGood: 'EG',
+			judgementWindowsCustomEarlyPerfect: 'EP',
+			judgementWindowsCustomLatePerfect: 'LP',
+			judgementWindowsCustomLateGood: 'LG',
+			judgementWindowsCustomLateBad: 'LB',
+			judgementWindowsCustomTap: 'tap',
+			judgementWindowsCustomDrag: 'drag',
+			judgementWindowsCustomFlick: 'flick',
+			judgementWindowsCustomHold: 'hold (<em>start</em>)',
+			judgementWindowsCustomHoldEnd: 'hold (<em>end</em>)',
 			noteHitSizeCategory: 'Note hit size',
 			offsetCategory: 'Offset',
 			mechanicsCategory: 'Mechanics',
@@ -147,6 +158,17 @@ Sunniesnow.I18n = {
 
 			judgementSettings: '判定设置',
 			judgementWindowsCategory: '判定时间窗',
+			judgementWindowsCustomEarlyBad: 'EB',
+			judgementWindowsCustomEarlyGood: 'EG',
+			judgementWindowsCustomEarlyPerfect: 'EP',
+			judgementWindowsCustomLatePerfect: 'LP',
+			judgementWindowsCustomLateGood: 'LG',
+			judgementWindowsCustomLateBad: 'LB',
+			judgementWindowsCustomTap: 'tap',
+			judgementWindowsCustomDrag: 'drag',
+			judgementWindowsCustomFlick: 'flick',
+			judgementWindowsCustomHold: 'hold (<em>头</em>)',
+			judgementWindowsCustomHoldEnd: 'hold (<em>尾</em>)',
 			noteHitSizeCategory: '音符判定的空间大小',
 			offsetCategory: '判定偏移',
 			mechanicsCategory: '机制',
@@ -282,6 +304,17 @@ Sunniesnow.I18n = {
 
 			judgementSettings: '判定設定',
 			judgementWindowsCategory: '判定幅',
+			judgementWindowsCustomEarlyBad: 'EB',
+			judgementWindowsCustomEarlyGood: 'EG',
+			judgementWindowsCustomEarlyPerfect: 'EP',
+			judgementWindowsCustomLatePerfect: 'LP',
+			judgementWindowsCustomLateGood: 'LG',
+			judgementWindowsCustomLateBad: 'LB',
+			judgementWindowsCustomTap: 'tap',
+			judgementWindowsCustomDrag: 'drag',
+			judgementWindowsCustomFlick: 'flick',
+			judgementWindowsCustomHold: undefined,
+			judgementWindowsCustomHoldEnd: undefined,
 			noteHitSizeCategory: 'ヒットサイズ',
 			offsetCategory: 'オフセット',
 			mechanicsCategory: 'メカニクス',
@@ -1003,3 +1036,17 @@ Sunniesnow.I18n = {
 	}
 
 };
+
+['DIRECT_REPLACEMENTS', 'LABELS', 'PLUGIN_DIRECT_REPLACEMENTS', 'PLUGIN_LABELS'].forEach(key => {
+	const vocab = Sunniesnow.I18n[key];
+	const defaultVocab = vocab['en-US'];
+	for (const lang in vocab) {
+		if (lang === 'en-US') {
+			continue;
+		}
+		const vocabLang = vocab[lang];
+		for (const key in defaultVocab) {
+			vocabLang[key] ??= defaultVocab[key]
+		}
+	}
+});
