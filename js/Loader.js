@@ -270,6 +270,7 @@ Sunniesnow.Loader = {
 		this.loadAudioAndChart();
 		this.loadTouch();
 		this.loadUiComponents();
+		this.loadUiResult();
 		this.loadInteraction();
 		this.loadUiPause();
 		this.loadButtons();
@@ -310,7 +311,17 @@ Sunniesnow.Loader = {
 		this.loadModule('TopCenterHud');
 		this.loadModule('TopLeftHud');
 		this.loadModule('TopRightHud');
+	},
+
+	loadUiResult() {
 		this.loadModule('Result');
+		this.loadModule('ResultStatsAndCombo');
+		this.loadModule('ResultTitle');
+		this.loadModule('ResultDifficulty');
+		this.loadModule('ResultRank');
+		this.loadModule('ResultScore');
+		this.loadModule('ResultAccuracy');
+		this.loadModule('ResultProfile');
 		this.loadModule('ResultAdditionalInfo');
 	},
 

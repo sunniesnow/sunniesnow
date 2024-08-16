@@ -113,8 +113,6 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui/TopLeftHud',
 	'ui/TopRightHud',
 	'ui/ProgressBar',
-	'ui/Result',
-	'ui/ResultAdditionalInfo',
 	'ui/DebugHud',
 
 	'ui-pause/PauseBackground',
@@ -122,6 +120,16 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui-pause/ButtonRetry',
 	'ui-pause/ButtonFullscreen',
 	'ui-pause/PauseBoard',
+
+	'ui-result/Result',
+	'ui-result/ResultStatsAndCombo',
+	'ui-result/ResultTitle',
+	'ui-result/ResultDifficulty',
+	'ui-result/ResultRank',
+	'ui-result/ResultScore',
+	'ui-result/ResultAccuracy',
+	'ui-result/ResultProfile',
+	'ui-result/ResultAdditionalInfo',
 
 	'ui-event/UiNotesBoard',
 	'ui-event/UiBgNotesBoard',
