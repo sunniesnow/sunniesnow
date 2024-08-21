@@ -584,5 +584,29 @@ Sunniesnow.Utils = {
 			return true;
 		}
 		return false;
+	},
+
+	drawRoundRegularPolygon(graphics, x0, y0, radius, circleRadius, sides, rotation) {
+		sides = Math.max(sides || 0, 3);
+		rotation ||= 0;
+		const delta = Math.PI*2 / sides;
+		const points = [];
+		for (let i = 0; i < sides; i++) {
+			const angle = i * delta + rotation;
+			points.push({
+				x: x0 + radius * Math.cos(angle),
+				y: y0 + radius * Math.sin(angle),
+				radius: circleRadius
+			});
+		}
+		graphics.drawRoundedShape(points, circleRadius);
+		return graphics.finishPoly();
+	},
+
+	async sha256(string) {
+		const data = new TextEncoder().encode(string);
+		const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+		const array = Array.from(new Uint8Array(hashBuffer))
+		return array.map(b => b.toString(16).padStart(2, '0')).join('');
 	}
 };

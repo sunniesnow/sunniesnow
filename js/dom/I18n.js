@@ -95,6 +95,10 @@ Sunniesnow.I18n = {
 			mouseCategory: 'Mouse',
 			touchscreenCategory: 'Touchscreen',
 
+			profileSettings: 'Profile settings',
+			nicknameCategory: 'Nickname',
+			avatarCategory: 'Avatar',
+
 			chartingHelperSettings: 'Charting helper settings',
 			sscharterCategory: 'Sscharter integration',
 
@@ -236,6 +240,10 @@ Sunniesnow.I18n = {
 			keyboardCategory: '键盘',
 			mouseCategory: '鼠标',
 			touchscreenCategory: '触屏',
+
+			profileSettings: '个人资料设置',
+			nicknameCategory: '昵称',
+			avatarCategory: '头像',
 
 			chartingHelperSettings: '制谱器辅助设置',
 			sscharterCategory: '连接 sscharter',
@@ -382,6 +390,10 @@ Sunniesnow.I18n = {
 			keyboardCategory: 'キーボード',
 			mouseCategory: 'マウス',
 			touchscreenCategory: 'タッチスクリーン',
+
+			profileSettings: undefined,
+			nicknameCategory: undefined,
+			avatarCategory: undefined,
 
 			chartingHelperSettings: '譜面エディター設定',
 			sscharterCategory: 'sscharter を連結',
@@ -560,6 +572,15 @@ Sunniesnow.I18n = {
 			touchscreenWholeScreen: ' Touchscreen has whole-screen judgement',
 			touchPause: ' Can touch pause button in-game',
 
+			nickname: '',
+			avatarNoneRadio: ' None',
+			avatarOnlineRadio: '',
+			avatarOnline: 'Online: ',
+			avatarUploadRadio: '',
+			avatarUpload: 'Upload: ',
+			avatarGravatarRadio: '',
+			avatarGravatar: 'Gravatar: ',
+
 			sscharter: ' Enable sscharter integration',
 			sscharterLiveRestart: ' Live restart',
 
@@ -711,6 +732,15 @@ Sunniesnow.I18n = {
 			enableTouchscreen: ' 启用触屏',
 			touchscreenWholeScreen: ' 触屏有全屏判定',
 			touchPause: ' 游戏内可触摸暂停',
+
+			nickname: '',
+			avatarNoneRadio: ' 无',
+			avatarOnlineRadio: '',
+			avatarOnline: '在线: ',
+			avatarUploadRadio: '',
+			avatarUpload: '上传: ',
+			avatarGravatarRadio: '',
+			avatarGravatar: 'Gravatar: ',
 
 			sscharter: ' 启用 sscharter 集成',
 			sscharterLiveRestart: ' 关卡更新时即刻重新开始',
@@ -870,6 +900,15 @@ Sunniesnow.I18n = {
 			enableTouchscreen: ' タッチスクリーンを有効にする',
 			touchscreenWholeScreen: ' タッチスクリーンには全画面判定をする',
 			touchPause: ' タッチスクリーンを押してゲーム内で一時停止',
+
+			nickname: undefined,
+			avatarNoneRadio: undefined,
+			avatarOnlineRadio: '',
+			avatarOnline: 'オンライン: ',
+			avatarUploadRadio: '',
+			avatarUpload: 'アップロード: ',
+			avatarGravatarRadio: '',
+			avatarGravatar: 'Gravatar: ',
 
 			sscharter: ' sscharter 連結を有効にする',
 			sscharterLiveRestart: ' レベルアップデート時にリスタートする',

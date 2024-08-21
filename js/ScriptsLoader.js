@@ -39,8 +39,14 @@ Sunniesnow.ScriptsLoader = {
 
 	async runModule(scriptPath) {
 		if (scriptPath.endsWith('+esm')) {
-			const moduleName = Sunniesnow.Utils.slugToCamel(scriptPath.match(/\/([^/]+)@/)[1]);
-			globalThis[moduleName] = (await import(scriptPath)).default;
+			let module = await import(scriptPath);
+			module = module.default ?? module;
+			const moduleName = scriptPath.includes('/@pixi/') ? 'PIXI' : Sunniesnow.Utils.slugToCamel(scriptPath.match(/\/([^/]+)@/)[1]);
+			if (globalThis[moduleName]) {
+				Object.assign(globalThis[moduleName], module);
+			} else {
+				globalThis[moduleName] = module;
+			}
 		} else {
 			const script = await this.fetchText(scriptPath);
 			// use indirect eval to run in global scope
@@ -72,6 +78,8 @@ Sunniesnow.ScriptsLoader = {
 Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 	`jszip@3.10.1/dist/jszip${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
 	`pixi.js-legacy@7.4.2/dist/pixi-legacy${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
+	`@pixi/graphics-extras@7.4.2/dist/graphics-extras${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
+	// `@pixi/devtools@2.0.1/+esm`,
 	'mime@3.0.0/lite/+esm',
 	'marked@5.1.1/marked.min.js',
 	`dompurify@3.0.5/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,

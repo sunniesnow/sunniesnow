@@ -11,11 +11,15 @@
 <link rel="manifest" href="json/manifest.json{{ affix }}">
 <link rel="stylesheet" href="css/style.css{{ affix }}">
 
-<script>window.Sunniesnow = {vscodeBrowserReqId: location.search.match(/^\?.*vscodeBrowserReqId=(\d+)/)?.[1]};</script>
+<script>
+	Sunniesnow = {
+		vscodeBrowserReqId: location.search.match(/^\?.*vscodeBrowserReqId=(\d+)/)?.[1],
+		environment: '{{ jekyll.environment }}'
+	};
+</script>
 <script src="js/utils/Utils.js{{ affix }}"></script>
 <script src="js/ScriptsLoader.js{{ affix }}"></script>
 <script type="module">
-	Sunniesnow.environment = '{{ jekyll.environment }}';
 	await Sunniesnow.ScriptsLoader.runAllScripts();
 	Sunniesnow.MiscDom.triggerPreprocess();
 </script>

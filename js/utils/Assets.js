@@ -1,19 +1,13 @@
 Sunniesnow.Assets = {
 	async loadTexture(url) {
-		let result;
-		if (Sunniesnow.ObjectUrl.urls.has(url)) {
-			let loadParser;
-			if (Sunniesnow.ObjectUrl.types[url] === 'image/svg+xml') {
-				loadParser = 'loadSVG';
-			} else if (Sunniesnow.Utils.isBrowser()) {
-				loadParser = 'loadTextures';
-			} else {
-				loadParser = 'loadNodeTexture';
-			}
-			result = await PIXI.Assets.load({src: url, loadParser});
+		let loadParser;
+		// Reason for using Sunniesnow.ObjectUrl: https://github.com/pixijs/pixijs/issues/9568
+		if (Sunniesnow.ObjectUrl.types[url] === 'image/svg+xml' || PIXI.loadSVG.test(url)) {
+			loadParser = 'loadSVG';
 		} else {
-			result = await PIXI.Assets.load(url);
+			loadParser = Sunniesnow.Utils.isBrowser() ? 'loadTextures' : 'loadNodeTexture';
 		}
+		const result = await PIXI.Assets.load({src: url, loadParser});
 		if (!(result instanceof PIXI.Texture)) {
 			throw new Error('Failed to load texture');
 		}

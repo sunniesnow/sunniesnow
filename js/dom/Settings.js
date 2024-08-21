@@ -235,6 +235,13 @@ Sunniesnow.Settings = {
 			touchscreenWholeScreen: this.readCheckbox('touchscreen-whole-screen'),
 			touchPause: this.readCheckbox('touch-pause'),
 
+			// profile settings
+			nickname: this.readValue('nickname'),
+			avatar: this.readRadio('avatar'),
+			avatarOnline: this.readValue('avatar-online'),
+			avatarUpload: this.readFile('avatar-upload'),
+			avatarGravatar: this.readValue('avatar-gravatar'),
+
 			// charting helper settings
 			sscharter: this.readCheckbox('sscharter'),
 			sscharterLiveRestart: this.readCheckbox('sscharter-live-restart'),
@@ -267,7 +274,7 @@ Sunniesnow.Settings = {
 			return;
 		}
 		const settings = Object.assign({}, this.saved);
-		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
+		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload', 'avatarUpload']) {
 			if (key in this.saved) {
 				this.saved[key] = await Sunniesnow.Utils.base64ToBlob(this.saved[key]);
 				delete settings[key];
@@ -395,6 +402,11 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('touchscreen-whole-screen', d('touchscreenWholeScreen'));
 		this.writeCheckbox('touch-pause', d('touchPause'));
 
+		this.writeValue('nickname', d('nickname'));
+		this.writeRadio('avatar', d('avatar'));
+		this.writeValue('avatar-online', d('avatarOnline'));
+		this.writeValue('avatar-gravatar', d('avatarGravatar'));
+
 		this.writeCheckbox('sscharter', d('sscharter'));
 		this.writeCheckbox('sscharter-live-restart', d('sscharterLiveRestart'));
 
@@ -476,7 +488,7 @@ Sunniesnow.Settings = {
 		if (!this.saved) {
 			return;
 		}
-		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
+		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload', 'avatarUpload']) {
 			if (!this.manual[key] && this.saved[key]) {
 				Sunniesnow.game.settings[key] = this.saved[key];
 			}
@@ -499,7 +511,7 @@ Sunniesnow.Settings = {
 	async saveSettings() {
 		this.saved = Object.assign({}, Sunniesnow.game.settings);
 		const settings = Object.assign({}, this.saved);
-		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload']) {
+		for (const key of ['levelFileUpload', 'backgroundUpload', 'skinUpload', 'fxUpload', 'seUpload', 'avatarUpload']) {
 			if (this.saved[key]) {
 				settings[key] = await Sunniesnow.Utils.blobToBase64(this.saved[key]);
 			}

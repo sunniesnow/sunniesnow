@@ -179,34 +179,6 @@ Sunniesnow.Loader = {
 		document.getElementById('level-readme').innerHTML = '';
 	},
 
-	backgroundUrl() {
-		let blob;
-		switch (Sunniesnow.game.settings.background) {
-			case 'none':
-				return null;
-			case 'online':
-				return Sunniesnow.Utils.url(
-					Sunniesnow.Config.BACKGROUND_PREFIX,
-					Sunniesnow.game.settings.backgroundOnline
-				);
-			case 'from-level':
-				blob = this.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel];
-				if (!blob) {
-					Sunniesnow.Logs.warn('No background provided');
-					return;
-				}
-				break;
-			case 'upload':
-				blob = Sunniesnow.game.settings.backgroundUpload;
-				if (!blob) {
-					Sunniesnow.Logs.warn('No background provided');
-					return;
-				}
-				break;
-		}
-		return Sunniesnow.ObjectUrl.create(blob);
-	},
-	
 	async pluginBlob(id) {
 		let source, prefix, online, upload, downloading;
 		switch (id) {

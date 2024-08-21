@@ -60,7 +60,7 @@ Sunniesnow.Result = class Result extends Sunniesnow.UiComponent {
 
 	populateProfile() {
 		this.profile = new Sunniesnow.ResultProfile();
-		this.profile.x = Sunniesnow.Config.WIDTH / 15;
+		this.profile.x = Sunniesnow.Config.WIDTH / 10;
 		this.profile.y = Sunniesnow.Config.WIDTH / 30;
 		this.addChild(this.profile);
 	}

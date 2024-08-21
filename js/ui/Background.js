@@ -20,8 +20,36 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		);
 	}
 
+	static backgroundUrl() {
+		let blob;
+		switch (Sunniesnow.game.settings.background) {
+			case 'none':
+				return null;
+			case 'online':
+				return Sunniesnow.Utils.url(
+					Sunniesnow.Config.BACKGROUND_PREFIX,
+					Sunniesnow.game.settings.backgroundOnline
+				);
+			case 'from-level':
+				blob = Sunniesnow.Loader.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel];
+				if (!blob) {
+					Sunniesnow.Logs.warn('No background provided');
+					return;
+				}
+				break;
+			case 'upload':
+				blob = Sunniesnow.game.settings.backgroundUpload;
+				if (!blob) {
+					Sunniesnow.Logs.warn('No background provided');
+					return;
+				}
+				break;
+		}
+		return Sunniesnow.ObjectUrl.create(blob);
+	}
+	
 	static async getBackgroundTexture() {
-		const url = Sunniesnow.Loader.backgroundUrl();
+		const url = this.backgroundUrl();
 		if (!url) {
 			return PIXI.Texture.WHITE;
 		}

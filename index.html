@@ -281,11 +281,11 @@ description: Sunniesnow is a web rhythm game
 		<div>
 			<select id="hud-top-left">
 				<option id="hud-top-left-none" value="none">None</option>
-				<option id="hud-top-left-title" value="title">Title</option>
+				<option id="hud-top-left-title" value="title" selected>Title</option>
 				<option id="hud-top-left-difficulty-name" value="difficulty-name">Difficulty name</option>
 				<option id="hud-top-left-difficulty" value="difficulty">Difficulty</option>
 				<option id="hud-top-left-difficulty-and-name" value="difficulty-and-name">Difficulty name and difficulty</option>
-				<option id="hud-top-left-combo" value="combo" selected>Combo</option>
+				<option id="hud-top-left-combo" value="combo">Combo</option>
 				<option id="hud-top-left-score" value="score">Score</option>
 				<option id="hud-top-left-accuracy" value="accuracy">Accuracy</option>
 			</select>
@@ -298,8 +298,8 @@ description: Sunniesnow is a web rhythm game
 				<option id="hud-top-right-difficulty-name" value="difficulty-name">Difficulty name</option>
 				<option id="hud-top-right-difficulty" value="difficulty">Difficulty</option>
 				<option id="hud-top-right-difficulty-and-name" value="difficulty-and-name">Difficulty name and difficulty</option>
-				<option id="hud-top-right-combo" value="combo" selected>Combo</option>
-				<option id="hud-top-right-score" value="score">Score</option>
+				<option id="hud-top-right-combo" value="combo">Combo</option>
+				<option id="hud-top-right-score" value="score" selected>Score</option>
 				<option id="hud-top-right-accuracy" value="accuracy">Accuracy</option>
 			</select>
 		</div>
@@ -652,6 +652,43 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			<input type="checkbox" id="touch-pause" checked>
+		</div>
+	</fieldset>
+</details>
+
+<details>
+	<summary id="profile-settings"></summary>
+
+	<fieldset>
+		<legend id="nickname-category"></legend>
+
+		<div>
+			<input type="text" id="nickname" placeholder="Kat" value="New Poet">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend id="avatar-category"></legend>
+
+		<div>
+			<input type="radio" id="avatar-none-radio" name="avatar" value="none">
+		</div>
+
+		<div>
+			<input type="radio" id="avatar-online-radio" name="avatar" value="online" checked>
+			<input type="text" id="avatar-online" value="default.svg">
+			<span id="avatar-downloading"></span>
+		</div>
+
+		<div>
+			<input type="radio" id="avatar-upload-radio" name="avatar" value="upload">
+			<input type="file" id="avatar-upload" accept="image/*">
+		</div>
+
+		<div>
+			<input type="radio" id="avatar-gravatar-radio" name="avatar" value="gravatar">
+			<input type="email" id="avatar-gravatar" placeholder="email@example.com">
+			<span id="avatar-gravatar-downloading"></span>
 		</div>
 	</fieldset>
 </details>
