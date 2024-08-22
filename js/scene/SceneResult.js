@@ -27,7 +27,6 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 
 	update(delta) {
 		super.update(delta);
-		Sunniesnow.Music.update();
 		this.updateLegacyUis(delta);
 		this.updateUisAndButtons(delta);
 	}

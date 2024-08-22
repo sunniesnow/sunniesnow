@@ -1,5 +1,4 @@
 Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
-	static FADING_OUT_DURATION = 1/4;
 
 	static async load() {
 		this.radius = Sunniesnow.Config.NOTE_RADIUS;
@@ -12,6 +11,10 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.radius, 6, Math.PI/2);
 		graphics.endFill();
 		return graphics.geometry;
+	}
+
+	static fadingOutDuration(event) {
+		return 1/4;
 	}
 
 	populate() {

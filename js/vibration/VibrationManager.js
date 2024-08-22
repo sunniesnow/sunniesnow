@@ -47,7 +47,7 @@ Sunniesnow.VibrationManager = {
 	},
 
 	updateCurrentTime() {
-		Sunniesnow.Music.updateCurrentTime();
+		Sunniesnow.Music.updateCurrentTime(); // This may get called during main loop update. Potential bugs?
 		this.currentTime = Sunniesnow.Music.currentTime * 1000;
 	},
 
@@ -78,7 +78,6 @@ Sunniesnow.VibrationManager = {
 	reschedule() {
 		const currentIndex = Sunniesnow.Utils.bisectRight(this.keyTimes, this.currentTime);
 		this.keyTimes.splice(0, currentIndex+1, this.currentTime, ...(currentIndex%2===0 ? [] : [this.currentTime]));
-		console.log(Sunniesnow.Utils.arrayDifference(this.keyTimes));
 		navigator.vibrate(Sunniesnow.Utils.arrayDifference(this.keyTimes));
 	},
 

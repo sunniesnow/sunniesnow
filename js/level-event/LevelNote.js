@@ -67,7 +67,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		Sunniesnow.game.level.holdingNotes.push(this);
 		Sunniesnow.game.level.holdingNotes.sort((a, b) => a.endTime - b.endTime);
 		const index = Sunniesnow.game.level.unhitNotes.indexOf(this);
-		if (index >= 0) {
+		if (index >= 0) { // this condition may fail when this method is called in Level.prototype.adjustProgress().
 			Sunniesnow.game.level.unhitNotes.splice(index, 1);
 		}
 	}

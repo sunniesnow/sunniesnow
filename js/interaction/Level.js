@@ -305,8 +305,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 		let [distance, angle] = this.distanceAndAngle(x, y, note.event);
 		for (const event of note.event.simultaneousEvents) {
 			const newNote = event.levelNote;
-			let condition = newNote === note || !newNote;
-			condition ||= newNote.constructor.ONLY_ONE_PER_TOUCH && newNote.hitRelativeTime !== null;
+			let condition = newNote === note || !newNote || newNote.hitRelativeTime !== null;
 			condition ||= !newNote.isTappableAt(touch, x, y);
 			if (condition) {
 				continue;

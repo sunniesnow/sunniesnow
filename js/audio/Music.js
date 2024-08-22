@@ -44,7 +44,7 @@ Sunniesnow.Music = {
 
 	seek(time) {
 		if (this.pausing) {
-			this.lastResumeTime = this.currentTime = time;
+			this.lastResumeTime = this.lastPauseTime = this.currentTime = time;
 		} else {
 			this.play(time);
 		}
