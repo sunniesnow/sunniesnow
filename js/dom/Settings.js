@@ -200,6 +200,16 @@ Sunniesnow.Settings = {
 			latencyHint: this.readRadio('latency-hint'),
 			latencyHintValue: this.readValue('latency-hint-value') / 1000,
 
+			// haptic settings
+			vibrationWithMusic: this.readCheckbox('vibration-with-music'),
+			vibrationDelay: this.readValue('vibration-delay') / 1000,
+			tapVibrationTime: this.readValue('tap-vibration-time'),
+			dragVibrationTime: this.readValue('drag-vibration-time'),
+			flickVibrationTime: this.readValue('flick-vibration-time'),
+			holdVibrationTime: this.readValue('hold-vibration-time'),
+			holdVibrationPeriod: this.readValue('hold-vibration-period'),
+			holdVibrationDutyCycle: this.readValue('hold-vibration-duty-cycle'),
+
 			// game settings
 			scroll: this.readCheckbox('scroll'),
 			autoplay: this.readCheckbox('autoplay'),
@@ -368,6 +378,15 @@ Sunniesnow.Settings = {
 		this.writeValue('delay', d('delay') * 1000);
 		this.writeRadio('latency-hint', d('latencyHint'));
 		this.writeValue('latency-hint-value', d('latencyHintValue') * 1000);
+
+		this.writeCheckbox('vibration-with-music', d('vibrationWithMusic'));
+		this.writeValue('vibration-delay', d('vibrationDelay') * 1000);
+		this.writeValue('tap-vibration-time', d('tapVibrationTime'));
+		this.writeValue('drag-vibration-time', d('dragVibrationTime'));
+		this.writeValue('flick-vibration-time', d('flickVibrationTime'));
+		this.writeValue('hold-vibration-time', d('holdVibrationTime'));
+		this.writeValue('hold-vibration-period', d('holdVibrationPeriod'));
+		this.writeValue('hold-vibration-duty-cycle', d('holdVibrationDutyCycle'));
 
 		this.writeCheckbox('scroll', d('scroll'));
 		this.writeCheckbox('autoplay', d('autoplay'));
@@ -764,6 +783,8 @@ Sunniesnow.Settings = {
 		this.associateCheckbox('sscharter', 'sscharter-live-restart');
 		this.associateCheckbox('scroll', 'scroll-judgement-line');
 		this.associateCheckbox('scroll', 'scroll-distance');
+		this.associateCheckbox('vibration-with-music', 'vibration-delay');
+		this.associateRange('hold-vibration-duty-cycle', 'hold-vibration-duty-cycle-value');
 	},
 
 	clearDownloadingProgresses() {

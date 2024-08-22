@@ -23,7 +23,6 @@ Sunniesnow.ScriptsLoader = {
 		for (const [script, scriptPath] of await this.scriptContents(scriptPaths)) {
 			this.runScriptFromString(script, scriptPath);
 		}
-		Sunniesnow.ScriptsLoader.polyfill = this.polyfill;
 	},
 
 	async scriptContents(scriptPaths) {
@@ -201,6 +200,9 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui-nonevent/double-line/DoubleLinesBoard',
 	'ui-nonevent/judgement-line/JudgementLineBase',
 	'ui-nonevent/judgement-line/JudgementLine',
+
+	'vibration/VibrationManager',
+	'vibration/VibrationWithMusic',
 
 	'scene/Scene',
 	'scene/SceneLoading',

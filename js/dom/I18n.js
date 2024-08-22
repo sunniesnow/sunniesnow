@@ -79,6 +79,9 @@ Sunniesnow.I18n = {
 			delayCategory: 'Delay',
 			latencyHintCategory: 'Latency hint',
 
+			hapticSettings: 'Haptic settings',
+			vibrationCategory: 'Vibration',
+
 			gameSettings: 'Game settings',
 			scrollCategory: 'Scroll mode',
 			autoplayCategory: 'Autoplay',
@@ -224,6 +227,9 @@ Sunniesnow.I18n = {
 			seWithMusicCategory: '随音乐播放 SE',
 			delayCategory: '延迟',
 			latencyHintCategory: '延迟指示',
+
+			hapticSettings: '触觉设置',
+			vibrationCategory: '振动',
 
 			gameSettings: '游戏设置',
 			scrollCategory: '下落式',
@@ -374,6 +380,9 @@ Sunniesnow.I18n = {
 			seWithMusicCategory: 'ミュージックと SE を再生',
 			delayCategory: '遅延',
 			latencyHintCategory: 'レイテンシーヒント',
+
+			hapticSettings: undefined,
+			vibrationCategory: undefined,
 
 			gameSettings: 'ゲーム設定',
 			scrollCategory: 'スクロールモード',
@@ -537,6 +546,15 @@ Sunniesnow.I18n = {
 			latencyHintValueRadio: '',
 			latencyHintValue: ['Value: ', 'ms'],
 
+			vibrationWithMusic: ' Vibration with music',
+			vibrationDelay: [' Delay: ', 'ms'],
+			tapVibrationTime: ['Tap vibration time: ', 'ms'],
+			dragVibrationTime: ['Drag vibration time: ', 'ms'],
+			flickVibrationTime: ['Flick vibration time: ', 'ms'],
+			holdVibrationTime: ['Hold vibration time: ', 'ms'],
+			holdVibrationPeriod: ['Hold vibration period: ', 'ms'],
+			holdVibrationDutyCycle: 'Hold vibration duty cycle: ',
+
 			scroll: ' Enable scroll mode',
 			autoplay: ' Autoplay',
 			progressAdjustable: ' Progress adjustable',
@@ -690,13 +708,22 @@ Sunniesnow.I18n = {
 			seUpload: '上传: ',
 			volumeSe: 'SE: ',
 			volumeMusic: '音乐: ',
-			seWithMusic: ' 音乐播放时播放 SE',
+			seWithMusic: ' SE 跟随音乐',
 			delay: ['', 'ms'],
 			latencyHintBalancedRadio: ' 平衡',
 			latencyHintInteractiveRadio: ' 交互',
 			latencyHintPlaybackRadio: ' 回放',
 			latencyHintValueRadio: '',
 			latencyHintValue: ['值: ', 'ms'],
+
+			vibrationWithMusic: ' 振动跟随音乐',
+			vibrationDelay: [' 延迟: ', 'ms'],
+			tapVibrationTime: ['tap 音符振动时间: ', 'ms'],
+			dragVibrationTime: ['drag 音符振动时间: ', 'ms'],
+			flickVibrationTime: ['flick 音符振动时间: ', 'ms'],
+			holdVibrationTime: ['hold 音符振动时间: ', 'ms'],
+			holdVibrationPeriod: ['hold 音符振动周期: ', 'ms'],
+			holdVibrationDutyCycle: 'hold 音符振动占空比: ',
 
 			scroll: ' 启用下落式模式',
 			autoplay: ' 自动游玩',
@@ -865,6 +892,15 @@ Sunniesnow.I18n = {
 			latencyHintPlaybackRadio: ' Playback',
 			latencyHintValueRadio: '',
 			latencyHintValue: ['値: ', 'ms'],
+
+			vibrationWithMusic: undefined,
+			vibrationDelay: undefined,
+			tapVibrationTime: undefined,
+			dragVibrationTime: undefined,
+			flickVibrationTime: undefined,
+			holdVibrationTime: undefined,
+			holdVibrationPeriod: undefined,
+			holdVibrationDutyCycle: undefined,
 
 			scroll: ' スクロールモードを有効にする',
 			autoplay: ' オートプレイ',

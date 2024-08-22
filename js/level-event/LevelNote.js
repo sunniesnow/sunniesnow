@@ -82,6 +82,9 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		if (!Sunniesnow.game.settings.seWithMusic) {
 			this.event.hitSe();
 		}
+		if (!Sunniesnow.game.settings.vibrationWithMusic && this.constructor.ONLY_ONE_PER_TOUCH) {
+			Sunniesnow.VibrationManager.vibrateOnce(this.event.vibrationTime());
+		}
 		this.touch = touch;
 		if (touch && this.constructor.ONLY_ONE_PER_TOUCH) {
 			touch.note = this;
@@ -137,6 +140,9 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 	processRelease(time) {
 		if (!Sunniesnow.game.settings.seWithMusic) {
 			this.event.releaseSe();
+		}
+		if (!Sunniesnow.game.settings.vibrationWithMusic && !this.constructor.ONLY_ONE_PER_TOUCH) {
+			Sunniesnow.VibrationManager.vibrateOnce(this.event.vibrationTime());
 		}
 	}
 

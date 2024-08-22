@@ -13,4 +13,8 @@ Sunniesnow.Flick = class Flick extends Sunniesnow.Note {
 	checkProperties() {
 		return super.checkProperties() && this.assertType("angle", "number");
 	}
+
+	vibrationTime() {
+		return Sunniesnow.game.settings.flickVibrationTime;
+	}
 };

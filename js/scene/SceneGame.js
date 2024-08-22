@@ -3,6 +3,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		super.start();
 		this.populateUiAndBoards();
 		this.populateAudio();
+		this.populateHaptics();
 		this.initInteraction();
 	}
 
@@ -61,6 +62,16 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		Sunniesnow.Music.playFromBeginning();
 	}
 
+	populateHaptics() {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
+		Sunniesnow.VibrationManager.start();
+		if (Sunniesnow.game.settings.vibrationWithMusic) {
+			this.vibrationWithMusic = new Sunniesnow.VibrationWithMusic();
+		}
+	}
+
 	initInteraction() {
 		if (Sunniesnow.game.progressAdjustable) {
 			Sunniesnow.ProgressControl.init(this);
@@ -72,7 +83,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	update(delta) {
 		super.update(delta);
-		this.updateAudio();
+		this.updateAudioAndHaptics();
 		if (Sunniesnow.game.progressAdjustable) {
 			Sunniesnow.ProgressControl.update(delta);
 		}
@@ -105,10 +116,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		Sunniesnow.game.goto(new Sunniesnow.SceneResult(boards));
 	}
 
-	updateAudio() {
-		if (Sunniesnow.game.settings.seWithMusic) {
-			this.seWithMusic.update();
-		}
+	updateAudioAndHaptics() {
+		this.seWithMusic?.update();
+		this.vibrationWithMusic?.update();
 	}
 	
 	// except fxBoard
@@ -125,6 +135,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	terminate() {
 		super.terminate();
+		Sunniesnow.VibrationManager.terminate();
 		this.pauseBoard.destroy({children: true});
 		this.pauseButton.destroy({children: true});
 		this.judgementLine?.destroy({children: true});
@@ -141,6 +152,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.tipPointsBoard?.clear();
 		this.fxBoard?.clear();
 		this.seWithMusic?.clear();
+		this.vibrationWithMusic?.clear();
 		Sunniesnow.Music.playFromBeginning();
 	}
 

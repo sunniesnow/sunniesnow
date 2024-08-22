@@ -26,6 +26,21 @@ Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 		}
 	}
 
+	// in ms
+	vibrationTime() {
+		return 0;
+	}
+
+	// in s
+	vibrationStartTime() {
+		return this.time + Sunniesnow.game.settings.vibrationDelay;
+	}
+
+	// in s
+	vibrationEndTime() {
+		return this.vibrationStartTime() + (this.duration || 0);
+	}
+
 	newLevelNote() {
 		const result = new Sunniesnow[this.constructor.LEVEL_CLASS](this);
 		this.levelNote = result;

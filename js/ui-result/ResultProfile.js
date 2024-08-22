@@ -63,7 +63,7 @@ Sunniesnow.ResultProfile = class ResultProfile extends Sunniesnow.UiComponent {
 		try {
 			return await Sunniesnow.Assets.loadTexture(url);
 		} catch (err) {
-			const result = PIXI.Texture.WHITE;
+			const result = PIXI.Texture.EMPTY;
 			Sunniesnow.Logs.warn(`Failed to load avatar: ${err.message ?? err}`, err);
 			return result;
 		}

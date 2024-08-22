@@ -10,4 +10,7 @@ Sunniesnow.Tap = class Tap extends Sunniesnow.Note {
 	static SE_CLASS = 'SeTap'
 	static TYPE_NAME = 'tap'
 
+	vibrationTime() {
+		return Sunniesnow.game.settings.tapVibrationTime;
+	}
 };

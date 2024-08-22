@@ -55,7 +55,7 @@ Sunniesnow.Music = {
 			return false;
 		}
 		const prep = Sunniesnow.game.level.finished ? 0 : Sunniesnow.game.settings.resumePreparationTime;
-		this.play(Math.max(this.lastResumeTime, this.currentTime - prep));
+		this.play(Math.max(this.lastResumeTime, this.lastPauseTime - prep));
 		return true;
 	},
 
@@ -72,12 +72,13 @@ Sunniesnow.Music = {
 			return;
 		}
 		this.updateCurrentTime();
+		this.lastPauseTime = this.currentTime;
 		this.audio.stop();
 		this.pausing = true;
 	},
 
 	updateCurrentTime() {
-		this.currentTime = this.audio.currentTime() + this.delay();
+		this.currentTime = this.pausing ? this.lastPauseTime : this.audio.currentTime() + this.delay();
 	},
 
 	delay() {

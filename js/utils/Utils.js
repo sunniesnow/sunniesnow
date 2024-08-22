@@ -608,5 +608,13 @@ Sunniesnow.Utils = {
 		const hashBuffer = await crypto.subtle.digest('SHA-256', data);
 		const array = Array.from(new Uint8Array(hashBuffer))
 		return array.map(b => b.toString(16).padStart(2, '0')).join('');
+	},
+
+	arrayDifference(array) {
+		const result = [];
+		for (let i = 0; i < array.length - 1; i++) {
+			result.push(array[i+1] - array[i]);
+		}
+		return result;
 	}
 };

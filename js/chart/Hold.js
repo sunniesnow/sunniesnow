@@ -9,4 +9,8 @@ Sunniesnow.Hold = class Hold extends Sunniesnow.Note {
 	static FX_CLASS = 'FxHold'
 	static SE_CLASS = 'SeHold'
 	static TYPE_NAME = 'hold'
+
+	vibrationTime() {
+		return Sunniesnow.game.settings.holdVibrationTime;
+	}
 };
