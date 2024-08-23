@@ -2,8 +2,9 @@ Sunniesnow.Patches = {
 	apply() {
 		this.patchHasOwn();
 		this.patchFindLastIndex();
-		this.patchRequestFullscreen();
 		this.patchToSorted();
+		this.patchRequestFullscreen();
+		this.patchVibrate();
 		Sunniesnow.PixiPatches.apply();
 	},
 
@@ -73,6 +74,15 @@ Sunniesnow.Patches = {
 				}
 			});
 		}
+	},
+
+	patchVibrate() {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
+		const n = navigator;
+		n.vibrate ||= n.webkitVibrate || n.mozVibrate || n.msVibrate;
+		n.vibrate ||= () => {};
 	},
 
 	patchToSorted() {
