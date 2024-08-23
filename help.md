@@ -95,7 +95,8 @@ There are three tiers of judgement time windows: *strict*, *medium*, and *loose*
 The loose tier is the **same** as the judgement windows of
 [Lyrica](https://lyricagame.wixsite.com/lyricagame){:target="_blank"}.
 Data (data in "hold (*end*)" entries are **ratio** to the duration of the hold,
-and other data are in **milliseconds**):
+and other data are in **milliseconds**
+(the internal values are in seconds)):
 
 | | early bad | early good | early perfect | late perfect | late good | late bad |
 |:--|--:|--:|--:|--:|--:|--:|
@@ -170,7 +171,8 @@ and they will be used to determine the judgement time windows:
 
 All the values are in seconds although they are entered in milliseconds,
 so you need to enter milliseconds in judgement settings UI,
-but you need to enter seconds when using URL parameters.
+but you need to enter seconds when using URL parameters
+because the internal values are in seconds.
 When using custom windows, the windows for drag notes are **not** affected by [`lyrica-5`](#lyrica-5).
 The early bad judgement for hold end is always negative infinity.
 
@@ -193,7 +195,8 @@ This setting does **not** affect the visual size of notes, which is set by [`not
 - **Setting id**: `offset`.
 - **Possible values**: Any number.
 
-This setting specifies the judgement offset in milliseconds.
+This setting specifies the judgement offset in milliseconds
+(the internal value is in seconds).
 The larger the offset,
 the **later** the time at which the player are supposed to hit the notes.
 This setting is intended to fix the latency in the video.
@@ -759,7 +762,8 @@ and will not be affected by the [`delay`](#delay) setting.
 - **Setting id**: `delay`.
 - **Possible values**: Any number.
 
-This setting specifies the desired audio delay for the music in milliseconds.
+This setting specifies the desired audio delay for the music in milliseconds
+(the internal value is in seconds).
 The larger the delay, the later the music will be played.
 This setting is used to adjust video-audio sync.
 
@@ -782,6 +786,96 @@ for the meaning of each options.
 - **Possible values**: Any number greater than or equal to 0.
 
 This is **only** useful when [`latency-hint`](#latency-hint) is set to `"value"`.
+
+### Haptic settings
+
+#### Vibration
+
+Vibration is a haptic feedback of note hits.
+
+##### Vibration with music
+
+- **Setting id**: `vibration-with-music`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the vibration is played with the music or played following the player input.
+This setting is similar to [`se-with-music`](#se-with-music).
+When it is `true`, the vibration is played with the music
+regardless of the player input.
+When it is `false`, the vibration is played following the player input.
+
+##### Vibration delay
+
+- **Setting id**: `vibration-delay`.
+- **Possible values**: Any number.
+
+This setting is used to set the delay of the vibration.
+The larger the delay, the later the vibration will be played.
+This setting is only useful when [`vibration-with-music`](#vibration-with-music) is `true`.
+Although the number input on the webpage is in milliseconds,
+the internal value of this setting is in seconds.
+
+##### Tap vibration time
+
+- **Setting id**: `tap-vibration-time`.
+- **Possible values**: Any number greater than or equal to 0.
+
+This setting is used to set the duration of the vibration of hitting a tap note.
+A value of zero is equivalent to disabling the vibration for tap notes.
+Different from other time-related settings, the internal value of this setting is in milliseconds,
+while other time-related settings are in seconds.
+
+##### Drag vibration time
+
+- **Setting id**: `drag-vibration-time`.
+- **Possible values**: Any number greater than or equal to 0.
+
+This setting is used to set the duration of the vibration of hitting a drag note.
+A value of zero is equivalent to disabling the vibration for drag notes.
+Different from other time-related settings, the internal value of this setting is in milliseconds,
+while other time-related settings are in seconds.
+
+##### Flick vibration time
+
+- **Setting id**: `flick-vibration-time`.
+- **Possible values**: Any number greater than or equal to 0.
+
+This setting is used to set the duration of the vibration of hitting a flick note.
+A value of zero is equivalent to disabling the vibration for flick notes.
+Different from other time-related settings, the internal value of this setting is in milliseconds,
+while other time-related settings are in seconds.
+
+##### Hold vibration time
+
+- **Setting id**: `hold-vibration-time`.
+- **Possible values**: Any number greater than or equal to 0.
+
+This setting is used to set the duration of the vibration of hitting a hold note.
+A value of zero is equivalent to disabling the vibration for hold notes.
+Different from other time-related settings, the internal value of this setting is in milliseconds,
+while other time-related settings are in seconds.
+
+##### Hold vibration period
+
+- **Setting id**: `hold-vibration-period`.
+- **Possible values**: Any number greater than or equal to 0.
+
+The duration of a period of the continuing vibration of holding a hold note.
+While holding a hold note, one vibration occurs every period.
+This setting is **unrelated** to [`hold-vibration-time`](#hold-vibration-time).
+Different from other time-related settings, the internal value of this setting is in milliseconds,
+while other time-related settings are in seconds.
+
+##### Hold vibration duty cycle
+
+- **Setting id**: `hold-vibration-duty-cycle`.
+- **Possible values**: Any number between 0 and 1.
+
+The duty cycle of the vibration of holding a hold note.
+The duty cycle is the ratio of the duration of the vibration to the period,
+so the duration of each vibration during holding a hold note
+is the value of [`hold-vibration-period`](#hold-vibration-period) times the duty cycle.
+This setting is **unrelated** to [`hold-vibration-time`](#hold-vibration-time).
 
 ### Game settings
 
@@ -841,7 +935,8 @@ Use <kbd>[</kbd> and <kbd>]</kbd> to forward or rewind the progress continuously
 - **Setting id**: `chart-offset`.
 - **Possible values**: Any number.
 
-This setting is used to set the offset of the chart in milliseconds.
+This setting is used to set the offset of the chart in milliseconds
+(the internal value is in seconds).
 The time of all events will be shifted by this value.
 The larger the number is, the later the events will be played.
 
@@ -1242,6 +1337,55 @@ This setting **only** affects the main gameplay scene,
 and it does **not** affect other scenes such as the pause menu and the results scene.
 
 This setting is only useful when [`enable-touchscreen`](#enable-touchscreen) is `true`.
+
+### Profile settings
+
+#### Nickname
+
+- **Setting id**: `nickname`.
+- **Possible values**: Any string.
+
+This setting is used to set the nickname of the player.
+The nickname will be displayed in the results scene.
+
+#### Avatar
+
+- **Setting id**: `avatar`.
+- **Possible values**: One of `none`, `online`, `upload`, `gravatar`.
+
+This setting is used to set the avatar of the player.
+The avatar will be displayed in the results scene.
+
+##### Online
+{:#avatar-online}
+
+- **Setting id**: `avatar-online`.
+- **Possible values**: Any string.
+
+You can fill in the identifier of an online avatar to use it here.
+If you want to use an avatar from **outside** the server of Sunniesnow,
+you may also specify the URL of the image you want to use here.
+
+This setting is only **useful** when [`avatar`](#avatar) is set to `online`.
+
+##### Upload
+{:#avatar-upload}
+
+- **Setting id**: `avatar-upload`.
+- **Notice**: This setting cannot be specified through [URL parameters](#url-parameters).
+
+You can upload an image here as the avatar.
+
+This setting is only **useful** when [`avatar`](#avatar) is set to `upload`.
+
+##### Gravatar
+{:#avatar-gravatar}
+
+- **Setting id**: `avatar-gravatar`.
+- **Possible values**: Any string.
+
+You can fill in the email address of your [Gravatar](https://gravatar.com/)
+account to use its avatar here.
 
 ### Charting helper settings
 
