@@ -785,6 +785,9 @@ Sunniesnow.Settings = {
 		this.associateCheckbox('scroll', 'scroll-distance');
 		this.associateCheckbox('vibration-with-music', 'vibration-delay');
 		this.associateRange('hold-vibration-duty-cycle', 'hold-vibration-duty-cycle-value');
+		this.associateRadio('avatar-online-radio', 'avatar-online');
+		this.associateRadio('avatar-upload-radio', 'avatar-upload');
+		this.associateRadio('avatar-gravatar-radio', 'avatar-gravatar');
 	},
 
 	clearDownloadingProgresses() {
