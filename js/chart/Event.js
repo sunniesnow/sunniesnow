@@ -8,7 +8,8 @@ Sunniesnow.Event = class Event {
 	static UI_CLASS = 'UiEvent'
 	static TYPE_NAME = 'event'
 
-	static newFromType(type, time, properties) {
+	// reducedTime: (time + offset) / gameSpeed
+	static newFromType(type, time, reducedTime, properties) {
 		const eventClass = Sunniesnow[Sunniesnow.Utils.upcaseFirst(type)];
 		if (eventClass?.prototype instanceof Sunniesnow.Event) {
 			for (const property of eventClass.PROPERTIES.required) {
@@ -17,7 +18,7 @@ Sunniesnow.Event = class Event {
 					return null;
 				}
 			}
-			const result = new eventClass(time, properties);
+			const result = new eventClass(time, reducedTime, properties);
 			if (!result.checkProperties()) {
 				return null;
 			}
@@ -43,8 +44,8 @@ Sunniesnow.Event = class Event {
 		return true;
 	}
 
-	constructor(time, properties) {
-		this.time = time;
+	constructor(time, reducedTime, properties) {
+		this.time = reducedTime;
 		this.data = {type: this.constructor.TYPE_NAME, time, properties};
 		properties = Object.assign({}, properties);
 		for (const property of this.constructor.PROPERTIES.required) {

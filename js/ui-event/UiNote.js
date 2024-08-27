@@ -5,6 +5,7 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 		this.levelNote = event.levelNote;
 		if (!Sunniesnow.game.settings.hideCircles) {
 			this.populateCircle();
+			this.circle.visible = false;
 			this.circle.x = this.x;
 			this.circle.y = Sunniesnow.game.settings.scroll ? Sunniesnow.Config.SCROLL_END_Y : this.y;
 		}

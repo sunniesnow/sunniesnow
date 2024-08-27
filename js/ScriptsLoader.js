@@ -82,7 +82,7 @@ Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 	'mime@3.0.0/lite/+esm',
 	'marked@5.1.1/marked.min.js',
 	`dompurify@3.0.5/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	'audio-decode@2.1.4/+esm',
+	'audio-decode@2.2.2/+esm',
 	`vconsole@3.15.1/dist/vconsole.min.js`
 ].map(path => `${Sunniesnow.ScriptsLoader.CDN_PREFIX}${path}`);
 

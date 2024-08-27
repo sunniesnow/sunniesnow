@@ -3,6 +3,10 @@ Sunniesnow.Sscharter = {
 		if (!Sunniesnow.Utils.isValidUrl(Sunniesnow.Loader.loaded.chart.sourceContents)) {
 			return;
 		}
+		if (!(typeof data === 'object' && 'version' in data && 'port' in data)) {
+			Sunniesnow.Logs.warn('Invalid sscharter data');
+			return;
+		}
 		const {version, port} = data;
 		this.version = version;
 		this.port = port;

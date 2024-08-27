@@ -6,8 +6,13 @@ Sunniesnow.Chart = class Chart {
 		charter: '',
 		difficultyName: 'Unknown',
 		difficultyColor: '#7f7f7f',
-		difficulty: '',
-		difficultySup: ''
+		difficulty: ''
+	}
+
+	static OPTIONAL_META_FIELDS = {
+		difficultySup: '',
+		sscharter: null,
+		offset: 0
 	}
 
 	static EVENT_FIELDS = ['time', 'type', 'properties']
@@ -43,13 +48,16 @@ Sunniesnow.Chart = class Chart {
 				Sunniesnow.Logs.warn(`Missing \`${field}\` in chart`);
 			}
 		}
+		for (const field in Sunniesnow.Chart.OPTIONAL_META_FIELDS) {
+			this[field] = this.data[field] ?? Sunniesnow.Chart.OPTIONAL_META_FIELDS[field];
+		}
 	}
 	
 	async readSscharterInfo() {
-		if (!this.data.sscharter || !Sunniesnow.game.settings.sscharter) {
+		if (!this.sscharter || !Sunniesnow.game.settings.sscharter) {
 			return;
 		}
-		await Sunniesnow.Sscharter.connect(this.data.sscharter);
+		await Sunniesnow.Sscharter.connect(this.sscharter);
 	}
 
 	readEvents() {
@@ -57,7 +65,7 @@ Sunniesnow.Chart = class Chart {
 		const duration = Sunniesnow.Music.duration;
 		const start = Sunniesnow.game.settings.start * duration - Sunniesnow.game.settings.resumePreparationTime;
 		const end = Sunniesnow.game.settings.end * duration;
-		const offset = Sunniesnow.game.settings.chartOffset;
+		const offset = Sunniesnow.game.settings.chartOffset + this.offset;
 		this.data.events.forEach((eventData, id) => {
 			if (!Sunniesnow.Event.check(eventData)) {
 				return;
@@ -67,7 +75,7 @@ Sunniesnow.Chart = class Chart {
 			if (!Sunniesnow.Utils.between(reducedTime, start, end)) {
 				return;
 			}
-			const event = Sunniesnow.Event.newFromType(type, reducedTime, properties);
+			const event = Sunniesnow.Event.newFromType(type, time, reducedTime, properties);
 			if (!event) {
 				return;
 			}
