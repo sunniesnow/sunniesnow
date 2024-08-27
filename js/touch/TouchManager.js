@@ -80,6 +80,11 @@ Sunniesnow.TouchManager = {
 		this.mousePageY = event.pageY;
 	},
 
+	mouseOut() {
+		const [x, y] = Sunniesnow.Utils.pageToCanvasCoordinates(this.mousePageX, this.mousePageY, Sunniesnow.game.canvas);
+		return x < 0 || y < 0 || x >= Sunniesnow.Config.WIDTH || y >= Sunniesnow.Config.HEIGHT;
+	},
+
 	keyDown(event) {
 		if (this.shouldIgnoreKey(event)) {
 			return;
@@ -289,6 +294,9 @@ Sunniesnow.TouchManager = {
 
 	addDomKeyListeners() {
 		this.keyDownListener = event => {
+			if (this.mouseOut()) {
+				return;
+			}
 			this.preventKeyEventIfShould(event);
 			if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
 				return;
