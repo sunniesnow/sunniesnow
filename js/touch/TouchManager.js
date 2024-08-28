@@ -45,7 +45,7 @@ Sunniesnow.TouchManager = {
 	},
 
 	onStart(touch) {
-		document.activeElement.blur(); // see preventKeyEventIfShould
+		document.activeElement.blur();
 		Sunniesnow.game.window.focus(); // In VSCode Simple Browser, this acquires focus lock
 		const existingTouch = this.touches[touch.id];
 		if (existingTouch) {
@@ -54,25 +54,27 @@ Sunniesnow.TouchManager = {
 			return;
 		}
 		this.touches[touch.id] = touch;
-		this.callListeners(this.startListeners, touch)
+		return this.callListeners(this.startListeners, touch);
 	},
 
 	onMove(touch) {
-		this.callListeners(this.moveListeners, touch)
+		const result = this.callListeners(this.moveListeners, touch);
 		touch.needsUpdating = false;
+		return result;
 	},
 
 	onEnd(touch) {
 		touch.finished = true;
-		this.callListeners(this.endListeners, touch)
+		return this.callListeners(this.endListeners, touch);
 	},
 
 	callListeners(listenerList, touch) {
 		for (const [priority, listener] of listenerList) {
 			if (listener(touch)) {
-				break;
+				return true;
 			}
 		}
+		return false;
 	},
 
 	setMouse(event) {
@@ -92,7 +94,7 @@ Sunniesnow.TouchManager = {
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		const touch = Sunniesnow.Touch.key(event.key, time, this.mousePageX, this.mousePageY, ctrlKey, event.shiftKey, event.altKey);
-		this.onStart(touch);
+		return this.onStart(touch);
 	},
 
 	keyUp(event) {
@@ -128,7 +130,7 @@ Sunniesnow.TouchManager = {
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		const touch = Sunniesnow.Touch.mouseButton(event.button, time, this.mousePageX, this.mousePageY, ctrlKey, event.shiftKey, event.altKey);
-		this.onStart(touch);
+		return this.onStart(touch);
 	},
 
 	mouseMove(event) {
@@ -177,10 +179,12 @@ Sunniesnow.TouchManager = {
 		}
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
+		let result = false;
 		for (const domTouch of event.changedTouches) {
 			const touch = Sunniesnow.Touch.domTouch(domTouch.identifier, time, domTouch.pageX, domTouch.pageY, ctrlKey, event.shiftKey, event.altKey);
-			this.onStart(touch);
+			result ||= this.onStart(touch);
 		}
+		return result;
 	},
 
 	touchMove(event) {
@@ -188,6 +192,7 @@ Sunniesnow.TouchManager = {
 			return;
 		}
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		let result = false;
 		for (const domTouch of event.changedTouches) {
 			const id = this.touchId(domTouch.identifier);
 			const touch = this.touches[id]
@@ -195,8 +200,9 @@ Sunniesnow.TouchManager = {
 				continue;
 			}
 			touch.move(time, domTouch.pageX, domTouch.pageY);
-			this.onMove(touch);
+			result ||= this.onMove(touch);
 		}
+		return result;
 	},
 
 	touchEnd(event) {
@@ -204,6 +210,7 @@ Sunniesnow.TouchManager = {
 			return;
 		}
 		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		let result = false;
 		for (const domTouch of event.changedTouches) {
 			const id = this.touchId(domTouch.identifier);
 			const touch = this.touches[id];
@@ -212,8 +219,9 @@ Sunniesnow.TouchManager = {
 			}
 			delete this.touches[id];
 			touch.move(time, domTouch.pageX, domTouch.pageY);
-			this.onEnd(touch);
+			result ||= this.onEnd(touch);
 		}
+		return result;
 	},
 
 	shouldIgnoreTouch(event) {
@@ -286,26 +294,19 @@ Sunniesnow.TouchManager = {
 		Sunniesnow.game.canvas.removeEventListener('touchend', this.touchEndListener);
 	},
 
-	preventKeyEventIfShould(event) {
-		if (!/^F\d+$/.test(event.key) && document.activeElement.contains(Sunniesnow.game.canvas)) {
-			event.preventDefault();
-		}
-	},
-
 	addDomKeyListeners() {
 		this.keyDownListener = event => {
-			if (this.mouseOut()) {
-				return;
-			}
-			this.preventKeyEventIfShould(event);
 			if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
 				return;
 			}
-			this.keyDown(event);
+			if (this.keyDown(event)) {
+				event.preventDefault();
+			}
 		}
 		this.keyUpListener = event => {
-			this.preventKeyEventIfShould(event);
-			this.keyUp(event);
+			if (this.keyUp(event)) {
+				event.preventDefault();
+			}
 		}
 		Sunniesnow.game.document.addEventListener('keydown', this.keyDownListener);
 		Sunniesnow.game.document.addEventListener('keyup', this.keyUpListener);

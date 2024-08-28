@@ -73,7 +73,7 @@ Sunniesnow.ProgressControl = {
 
 	addDraggingListeners() {
 		this.dragStartListener = touch => {
-			if (touch.start().canvasY < Sunniesnow.Config.HEIGHT - this.touchHeight) {
+			if (!Sunniesnow.Utils.between(touch.start().canvasY, Sunniesnow.Config.HEIGHT - this.touchHeight, Sunniesnow.Config.HEIGHT)) {
 				return false;
 			}
 			this.draggingTouches.push(touch);
