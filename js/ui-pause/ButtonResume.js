@@ -9,10 +9,10 @@ Sunniesnow.ButtonResume = class ButtonResume extends Sunniesnow.Button {
 		const graphics = new PIXI.Graphics();
 		graphics.lineStyle(this.radius / 15, 0xfbfbff, 1, 1);
 		graphics.beginFill(0xebfbff, 1);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.radius, 4, 0);
+		graphics.drawRegularPolygon(0, 0, this.radius, 4, 0);
 		graphics.endFill();
 		graphics.lineStyle(this.radius / 100, 0xaaaaaa, 1, 0);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.radius, 4, 0);
+		graphics.drawRegularPolygon(0, 0, this.radius, 4, 0);
 		return graphics.geometry;
 	}
 

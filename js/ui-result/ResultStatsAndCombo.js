@@ -11,10 +11,10 @@ Sunniesnow.ResultStatsAndCombo = class ResultStatsAndCombo extends Sunniesnow.Ui
 		const graphics = new PIXI.Graphics();
 		graphics.lineStyle(this.statsRadius / 15, Sunniesnow.Result.mainColor, 1, 1);
 		graphics.beginFill(Sunniesnow.Result.mainColor, 1);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.statsRadius, 4, 0);
+		graphics.drawRegularPolygon(0, 0, this.statsRadius, 4, 0);
 		graphics.endFill();
 		graphics.lineStyle(this.statsRadius / 100, Sunniesnow.Result.mainContourColor, 1, 0);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.statsRadius, 4, 0);
+		graphics.drawRegularPolygon(0, 0, this.statsRadius, 4, 0);
 		return graphics.geometry;
 	}
 
@@ -23,10 +23,10 @@ Sunniesnow.ResultStatsAndCombo = class ResultStatsAndCombo extends Sunniesnow.Ui
 		const graphics = new PIXI.Graphics();
 		graphics.lineStyle(this.comboRadius / 15, Sunniesnow.Result.mainColor, 1, 1);
 		graphics.beginFill(Sunniesnow.Result.mainColor, 1);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.comboRadius, 4, 0);
+		graphics.drawRegularPolygon(0, 0, this.comboRadius, 4, 0);
 		graphics.endFill();
 		graphics.lineStyle(this.comboRadius / 100, Sunniesnow.Result.mainContourColor, 1, 0);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.comboRadius, 4, 0);
+		graphics.drawRegularPolygon(0, 0, this.comboRadius, 4, 0);
 		return graphics.geometry;
 	}
 	

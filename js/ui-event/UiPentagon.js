@@ -9,7 +9,7 @@ Sunniesnow.UiPentagon = class UiPentagon extends Sunniesnow.UiBgPattern {
 		const thickness = unit / 20;
 		graphics.lineStyle(thickness, 0xffffef, 1);
 		graphics.beginFill(0x000000, 0.2)
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, unit * 2, 5, -Math.PI/2);
+		graphics.drawRegularPolygon(0, 0, unit * 2, 5);
 		graphics.endFill();
 		graphics.drawCircle(0, 0, thickness / 2);
 		return graphics.geometry;

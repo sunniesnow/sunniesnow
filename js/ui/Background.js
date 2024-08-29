@@ -1,12 +1,12 @@
 Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 
 	static async load() {
-		const tempTexture = await this.getBackgroundTexture();
-		const tempSprite = new PIXI.Sprite(tempTexture);
+		this.originalTexture = await this.getBackgroundTexture();
+		const tempSprite = new PIXI.Sprite(this.originalTexture);
 		tempSprite.anchor.set(0.5);
 		const width = Sunniesnow.Config.WIDTH;
 		const height = Sunniesnow.Config.HEIGHT;
-		tempSprite.scale.set(Math.max(width / tempTexture.width, height / tempTexture.height));
+		tempSprite.scale.set(Math.max(width / this.originalTexture.width, height / this.originalTexture.height));
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
 			tempSprite.filters = [new PIXI.BlurFilter(Sunniesnow.game.settings.backgroundBlur, 10)];
 		}
@@ -18,6 +18,7 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 			wrapper,
 			{region: new PIXI.Rectangle(-width / 2, -height / 2, width, height)}
 		);
+		wrapper.destroy({children: true});
 	}
 
 	static backgroundUrl() {

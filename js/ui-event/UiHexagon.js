@@ -10,11 +10,11 @@ Sunniesnow.UiHexagon = class UiHexagon extends Sunniesnow.UiBgPattern {
 		const thickness = unit / 20;
 		graphics.lineStyle(thickness, 0xffffef, 1, 1);
 		graphics.beginFill(0x000000, 0.2)
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, unit*4/Math.sqrt(3), 6, 0);
+		graphics.drawRegularPolygon(0, 0, unit*4/Math.sqrt(3), 6, Math.PI / 2);
 		graphics.endFill();
 		graphics.lineStyle(unit / 50, 0xffffef, 0.7);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, unit * 2, 6, Math.PI / 2);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, unit*Math.sqrt(3), 6, 0);
+		graphics.drawRegularPolygon(0, 0, unit * 2, 6);
+		graphics.drawRegularPolygon(0, 0, unit*Math.sqrt(3), 6, Math.PI / 2);
 		graphics.lineStyle(thickness, 0xffffef, 1);
 		graphics.drawCircle(0, 0, thickness / 2);
 		return graphics.geometry;

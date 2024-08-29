@@ -18,8 +18,8 @@ Sunniesnow.UiHexagram = class UiHexagram extends Sunniesnow.UiBgPattern {
 		graphics.drawPolygon(polygon);
 		graphics.endFill();
 		graphics.lineStyle(thickness, 0xffffef, 1, 1);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, unit*2, 3, Math.PI/2);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, unit*2, 3, -Math.PI/2);
+		graphics.drawRegularPolygon(0, 0, unit*2, 3);
+		graphics.drawRegularPolygon(0, 0, unit*2, 3, Math.PI);
 		graphics.lineStyle(thickness, 0xffffef, 1);
 		graphics.drawCircle(0, 0, thickness / 2);
 		return graphics.geometry;

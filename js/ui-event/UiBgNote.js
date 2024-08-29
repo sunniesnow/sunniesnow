@@ -8,7 +8,7 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 	static createGeometry() {
 		const graphics = new PIXI.Graphics();
 		graphics.beginFill(0x000000, 0.7);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.radius, 6, Math.PI/2);
+		graphics.drawRegularPolygon(0, 0, this.radius, 6);
 		graphics.endFill();
 		return graphics.geometry;
 	}

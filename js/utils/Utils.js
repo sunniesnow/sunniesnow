@@ -148,21 +148,6 @@ Sunniesnow.Utils = {
 		return result;
 	},
 
-	drawRegularPolygon(graphics, x, y, radius, sides, rotation) {
-		sides = Math.max(sides || 0, 3);
-		rotation ||= 0;
-		const delta = Math.PI*2 / sides;
-		const polygon = [];
-		for (let i = 0; i < sides; i++) {
-			const angle = i * delta + rotation;
-			polygon.push(
-				x + radius * Math.cos(angle),
-				y + radius * Math.sin(angle)
-			);
-		}
-		return graphics.drawPolygon(polygon);
-	},
-
 	clockwiseness(x1, y1, x2, y2, x3, y3) {
 		return Math.sign((y2 - y1) * (x3 - x2) - (y3 - y2) * (x2 - x1));
 	},
@@ -397,8 +382,7 @@ Sunniesnow.Utils = {
 			':' + (Math.abs(timezoneOffset) % 60).toString().padStart(2, '0');
 	},
 
-	downloadText(text, filename, type = 'text/plain') {
-		const url = Sunniesnow.ObjectUrl.createPersistent(new Blob([text], {type}));
+	download(url, filename) {
 		const a = document.createElement('a');
 		a.href = url;
 		a.download = filename;
@@ -406,6 +390,11 @@ Sunniesnow.Utils = {
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
+	},
+
+	downloadText(text, filename, type = 'text/plain') {
+		const url = Sunniesnow.ObjectUrl.createPersistent(new Blob([text], {type}));
+		this.download(url, filename);
 		if (!this.isAndroidWebView()) { // causes bug in Android WebView
 			Sunniesnow.ObjectUrl.revoke(url);
 		}
@@ -584,23 +573,6 @@ Sunniesnow.Utils = {
 			return true;
 		}
 		return false;
-	},
-
-	drawRoundRegularPolygon(graphics, x0, y0, radius, circleRadius, sides, rotation) {
-		sides = Math.max(sides || 0, 3);
-		rotation ||= 0;
-		const delta = Math.PI*2 / sides;
-		const points = [];
-		for (let i = 0; i < sides; i++) {
-			const angle = i * delta + rotation;
-			points.push({
-				x: x0 + radius * Math.cos(angle),
-				y: y0 + radius * Math.sin(angle),
-				radius: circleRadius
-			});
-		}
-		graphics.drawRoundedShape(points, circleRadius);
-		return graphics.finishPoly();
 	},
 
 	async sha256(string) {

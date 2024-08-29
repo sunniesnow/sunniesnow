@@ -114,6 +114,9 @@ Sunniesnow.MiscDom = {
 				Sunniesnow.Logs.warn('vConsole does not exist');
 			}
 		});
+		document.getElementById('cover-generate').addEventListener('click', event => {
+			Sunniesnow.CoverGenerator.download();
+		});
 	},
 
 	async triggerPreprocess() {

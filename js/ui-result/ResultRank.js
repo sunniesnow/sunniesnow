@@ -35,13 +35,13 @@ Sunniesnow.ResultRank = class ResultRank extends Sunniesnow.UiComponent {
 		const innerRadius = this.radius * 5/6;
 		const graphics = new PIXI.Graphics();
 		graphics.lineStyle(this.radius / 15, Sunniesnow.Result.mainColor, 1, 0);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.radius, 4, 0);
+		graphics.drawRegularPolygon(0, 0, this.radius, 4, 0);
 		graphics.lineStyle(this.radius / 30, Sunniesnow.Result.mainColor, 1, 0);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, innerRadius, 4, 0);
+		graphics.drawRegularPolygon(0, 0, innerRadius, 4, 0);
 		graphics.beginFill(0xebfbff, 1);
 		const smallRadius = this.radius / 8;
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, innerRadius - smallRadius, smallRadius, 4, 0);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, -innerRadius + smallRadius, smallRadius, 4, 0);
+		graphics.drawRegularPolygon(0, innerRadius - smallRadius, smallRadius, 4, 0);
+		graphics.drawRegularPolygon(0, -innerRadius + smallRadius, smallRadius, 4, 0);
 		graphics.endFill();
 		return graphics.geometry;
 	}
@@ -49,7 +49,7 @@ Sunniesnow.ResultRank = class ResultRank extends Sunniesnow.UiComponent {
 	static createBackgroundGeometry() {
 		const graphics = new PIXI.Graphics();
 		graphics.beginFill(0x000000, 0.2);
-		Sunniesnow.Utils.drawRegularPolygon(graphics, 0, 0, this.radius, 4, 0);
+		graphics.drawRegularPolygon(0, 0, this.radius, 4, 0);
 		graphics.endFill();
 		return graphics.geometry;
 	}

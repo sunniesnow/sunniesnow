@@ -235,6 +235,14 @@ Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
 
 	...Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS,
 
+	'cover/Cover',
+	'cover/CoverGenerator',
+	'cover/CoverBackground',
+	'cover/CoverThemeImage',
+	'cover/CoverTitle',
+	'cover/CoverDifficulty',
+	'cover/CoverProfile',
+
 	'Preprocess',
 	'ScriptsLoader'
 ];

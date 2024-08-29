@@ -1818,6 +1818,23 @@ the game will try to retrieve the external resources from the server again.
 
 Clear the logs.
 
+### Cover
+
+#### Generate
+{:#cover-generate}
+
+Generates a cover image for the level file.
+This can only be used after the game has started.
+The resolution of the generated image is the same as the dimension set in
+[`width`](#width) and [`height`](#height).
+
+The fields for x and y coordinates and the width are all optional.
+When specified, they will be used to determine which part of the background image
+is used as the theme image of the cover.
+The x and y coordinates are the center of the theme image
+(the origin is the top-left corner of the background image).
+When omitted, the theme image will be the largest square in the center of the background image.
+
 ### Game
 
 #### Start
