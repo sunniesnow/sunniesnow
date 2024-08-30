@@ -20,7 +20,7 @@ Sunniesnow.Audio = class Audio {
 		if (Sunniesnow.record.waitForMusic) {
 			end = Sunniesnow.Music.duration;
 		} else {
-			end = Sunniesnow.game.chart.endTime() + Sunniesnow.record.resultsDuration;
+			end = Sunniesnow.game.chart.endTime() + (Sunniesnow.record.resultsDuration || 0);
 		}
 		this.context = new OfflineAudioContext(
 			this.context.destination.channelCount,

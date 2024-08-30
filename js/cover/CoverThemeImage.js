@@ -12,12 +12,12 @@ Sunniesnow.CoverThemeImage = class CoverThemeImage extends PIXI.Container {
 	calculateDimensions() {
 		const texture = Sunniesnow.Background.originalTexture;
 		this.radius = Math.min(Sunniesnow.Config.WIDTH / 4, Sunniesnow.Config.HEIGHT / 2) * 0.8;
-		const x = Sunniesnow.Utils.isBrowser() && document.getElementById('cover-theme-image-x').value;
-		this.imageAnchorX = x ? parseFloat(x) / texture.width : 0.5;
-		const y = Sunniesnow.Utils.isBrowser() && document.getElementById('cover-theme-image-y').value;
-		this.imageAnchorY = y ? parseFloat(y) / texture.height : 0.5;
-		const width = Sunniesnow.Utils.isBrowser() && document.getElementById('cover-theme-image-width').value || Math.min(texture.width, texture.height);
-		this.imageScale = this.radius*2 / parseFloat(width);
+		const x = Sunniesnow.Utils.isBrowser() ? document.getElementById('cover-theme-image-x').value || null : Sunniesnow.record.coverThemeImageX;
+		this.imageAnchorX = x != null ? parseFloat(x) / texture.width : 0.5;
+		const y = Sunniesnow.Utils.isBrowser() ? document.getElementById('cover-theme-image-y').value || null : Sunniesnow.record.coverThemeImageY;
+		this.imageAnchorY = y != null ? parseFloat(y) / texture.height : 0.5;
+		const width = Sunniesnow.Utils.isBrowser() ? document.getElementById('cover-theme-image-width').value || null : Sunniesnow.record.coverThemeImageWidth;
+		this.imageScale = this.radius*2 / (width != null ? parseFloat(width) : Math.min(texture.width, texture.height));
 	}
 
 	populateImageMask() {

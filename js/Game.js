@@ -110,13 +110,15 @@ Sunniesnow.Game = class Game {
 	terminate() {
 		this.terminating = true;
 		this.scene?.terminate();
-		Sunniesnow.PinnedCoordinates.clear();
-		Sunniesnow.Fullscreen.set(false);
+		if (Sunniesnow.Utils.isBrowser()) {
+			Sunniesnow.PinnedCoordinates.clear();
+			Sunniesnow.Fullscreen.set(false);
+			Sunniesnow.TouchManager.terminate();
+			Sunniesnow.SpinUp.terminate();
+			Sunniesnow.Popup.close();
+			Sunniesnow.Sscharter.disconnect();
+		}
 		Sunniesnow.Audio.stopAll();
-		Sunniesnow.TouchManager.terminate();
-		Sunniesnow.SpinUp.terminate();
-		Sunniesnow.Popup.close();
-		Sunniesnow.Sscharter.disconnect();
 		if (!this.app) {
 			return;
 		}
