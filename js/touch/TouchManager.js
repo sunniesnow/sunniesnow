@@ -182,7 +182,7 @@ Sunniesnow.TouchManager = {
 		let result = false;
 		for (const domTouch of event.changedTouches) {
 			const touch = Sunniesnow.Touch.domTouch(domTouch.identifier, time, domTouch.pageX, domTouch.pageY, ctrlKey, event.shiftKey, event.altKey);
-			result ||= this.onStart(touch);
+			result = this.onStart(touch) || result;
 		}
 		return result;
 	},
@@ -200,7 +200,7 @@ Sunniesnow.TouchManager = {
 				continue;
 			}
 			touch.move(time, domTouch.pageX, domTouch.pageY);
-			result ||= this.onMove(touch);
+			result = this.onMove(touch) || result;
 		}
 		return result;
 	},
@@ -219,7 +219,7 @@ Sunniesnow.TouchManager = {
 			}
 			delete this.touches[id];
 			touch.move(time, domTouch.pageX, domTouch.pageY);
-			result ||= this.onEnd(touch);
+			result = this.onEnd(touch) || result;
 		}
 		return result;
 	},
