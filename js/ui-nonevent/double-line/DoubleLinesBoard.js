@@ -57,14 +57,15 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 	update(delta) {
 		const time = Sunniesnow.Music.currentTime;
 		this.addNewDoubleLines(time);
-		for (const child of this.children) {
+		Sunniesnow.Utils.eachWithRedoingIf(this.children, child => {
 			child.update(time - child.event1.time);
 			child.alpha = child.fadingAlpha;
 			if (child.state === 'finished') {
 				child.destroy({children: true});
 				this.removeChild(child);
+				return true;
 			}
-		}
+		});
 	}
 
 	adjustProgress(time) {

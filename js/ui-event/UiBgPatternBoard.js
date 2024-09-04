@@ -37,14 +37,15 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 			this.unappearedEvents.shift();
 			this.uiEvents.push(event.newUiEvent());
 		}
-		for (const uiEvent of this.uiEvents) {
+		Sunniesnow.Utils.eachWithRedoingIf(this.uiEvents, (uiEvent, i) => {
 			uiEvent.update(time - uiEvent.event.time);
 			if (uiEvent.state === 'finished') {
 				uiEvent.destroy({children: true});
 				this.removeChild(uiEvent);
-				this.uiEvents.splice(this.uiEvents.indexOf(uiEvent), 1);
+				this.uiEvents.splice(i, 1);
+				return true;
 			}
-		}
+		});
 		// only one bg pattern is allowed to be displayed at the same time
 		const index = this.uiEvents.findLastIndex(uiEvent => uiEvent.state !== 'ready');
 		if (index > 0) {

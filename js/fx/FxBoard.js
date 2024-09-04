@@ -21,12 +21,13 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 	}
 
 	update(delta) {
-		this.presentFx.forEach((fx) => {
+		Sunniesnow.Utils.eachWithRedoingIf(this.presentFx, (fx, i) => {
 			fx.update(delta);
 			if (fx.state == 'finished') {
 				fx.destroy({children: true});
 				this.removeChild(fx);
-				this.presentFx.splice(this.presentFx.indexOf(fx), 1);
+				this.presentFx.splice(i, 1);
+				return true;
 			}
 		});
 	}

@@ -363,17 +363,15 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	updateTouchAreas(delta) {
-		for (let i = 0; i < this.touchAreas.length;) {
-			const touchArea = this.touchAreas[i];
+		Sunniesnow.Utils.eachWithRedoingIf(this.touchAreas, (touchArea, i) => {
 			const state = touchArea.uiNote.state;
 			if (!touchArea.uiNote.parent || state === 'fadingOut' || state === 'finished') {
 				touchArea.destroy();
 				this.removeChild(touchArea);
 				this.touchAreas.splice(i, 1);
-			} else {
-				i++;
+				return true;
 			}
-		}
+		});
 	}
 
 	addEventInfoTipHighlight(uiEvent) {

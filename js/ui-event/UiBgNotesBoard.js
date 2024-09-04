@@ -39,15 +39,16 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 			Sunniesnow.game.settings.reverseNoteOrder ? this.addChildAt(uiEvent, 0) : this.addChild(uiEvent);
 			this.uiEvents.push(uiEvent);
 		}
-		for (const uiEvent of this.uiEvents) {
+		Sunniesnow.Utils.eachWithRedoingIf(this.uiEvents, (uiEvent, i) => {
 			uiEvent.update(time - uiEvent.event.time);
 			uiEvent.alpha = uiEvent.fadingAlpha;
 			if (uiEvent.state === 'finished') {
 				uiEvent.destroy({children: true});
 				this.removeChild(uiEvent);
-				this.uiEvents.splice(this.uiEvents.indexOf(uiEvent), 1);
+				this.uiEvents.splice(i, 1);
+				return true;
 			}
-		}
+		});
 	}
 
 	adjustProgress(time) {

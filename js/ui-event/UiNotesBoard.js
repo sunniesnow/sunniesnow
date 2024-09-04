@@ -50,14 +50,15 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 			this.unappearedEvents.shift();
 			this.add(event);
 		}
-		for (const obj of this.uiEvents) {
+		Sunniesnow.Utils.eachWithRedoingIf(this.uiEvents, obj => {
 			const {uiEvent, container} = obj;
 			uiEvent.update(time - uiEvent.event.time);
 			container.alpha = uiEvent.fadingAlpha;
 			if (uiEvent.state === 'finished') {
 				this.remove(obj);
+				return true;
 			}
-		}
+		});
 	}
 
 	adjustProgress(time) {

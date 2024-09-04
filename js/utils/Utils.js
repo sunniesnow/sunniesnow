@@ -588,5 +588,13 @@ Sunniesnow.Utils = {
 			result.push(array[i+1] - array[i]);
 		}
 		return result;
+	},
+
+	eachWithRedoingIf(array, predicate) {
+		for (let i = 0; i < array.length;) {
+			if (!predicate(array[i], i, array)) {
+				i++;
+			}
+		}
 	}
 };
