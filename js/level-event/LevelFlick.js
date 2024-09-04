@@ -18,7 +18,7 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 			return;
 		}
 		const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
-		if (!Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
+		if (this.minFlickDistance() > 0 && !Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
 			this.judgement = 'bad';
 			return;
 		}
@@ -59,7 +59,7 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		let condition = rho >= this.minFlickDistance();
 		if (condition) {
 			const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
-			condition = Sunniesnow.Utils.between(angle, ...this.angleRange());
+			condition = this.minFlickDistance() === 0 || Sunniesnow.Utils.between(angle, ...this.angleRange());
 		}
 		condition ||= rho >= this.maxFlickDistance();
 		if (condition) {
