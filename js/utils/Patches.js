@@ -3,6 +3,7 @@ Sunniesnow.Patches = {
 		this.patchHasOwn();
 		this.patchFindLastIndex();
 		this.patchToSorted();
+		this.patchToSpliced();
 		this.patchRequestFullscreen();
 		this.patchVibrate();
 		Sunniesnow.PixiPatches.apply();
@@ -89,6 +90,14 @@ Sunniesnow.Patches = {
 		Array.prototype.toSorted ||= function (compareFunction) {
 			const result = this.slice();
 			result.sort(compareFunction);
+			return result;
+		};
+	},
+
+	patchToSpliced() {
+		Array.prototype.toSpliced ||= function () {
+			const result = this.slice();
+			result.splice(...arguments);
 			return result;
 		};
 	}
