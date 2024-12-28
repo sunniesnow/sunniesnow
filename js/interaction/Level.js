@@ -264,6 +264,9 @@ Sunniesnow.Level = class Level extends EventTarget {
 				note = this.tryHitNote(note, touch, time);
 				if (note?.constructor.ONLY_ONE_PER_TOUCH) {
 					return true;
+				} else if (note) {
+					// Do nothing!
+					// No i++ because the note is already removed from this.unhitNotes.
 				} else {
 					i++;
 				}
