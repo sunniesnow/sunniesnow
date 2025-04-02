@@ -24,6 +24,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		this.touch = null;
 		this.holding = false;
 		this.needsToUpdateHolding = true;
+		this.swiped = false;
 	}
 
 	// Only used for progress adjustment
@@ -43,8 +44,16 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 	static AUTO_FINISHES_HOLDING = true;
 
 	// Can a finger only hit one of this note?
-	// It is only false for drags.
-	static ONLY_ONE_PER_TOUCH = true;
+	// It is only false for drags in Lyrica 4.
+	onlyOnePerTouch() {
+		return true;
+	}
+
+	// This controls judgement priority when different notes are simultaneous.
+	// For simultaneous notes with the same priority, the one closer to the touch point is judged.
+	judgementPriority() {
+		return 0;
+	}
 
 	// x, y are in chart coordinates
 	isTappableAt(touch, x, y) {
@@ -82,11 +91,11 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		if (!Sunniesnow.game.settings.seWithMusic) {
 			this.event.hitSe();
 		}
-		if (!Sunniesnow.game.settings.vibrationWithMusic && this.constructor.ONLY_ONE_PER_TOUCH) {
+		if (!Sunniesnow.game.settings.vibrationWithMusic && !this.swiped) {
 			Sunniesnow.VibrationManager.vibrateOnce(this.event.vibrationTime());
 		}
 		this.touch = touch;
-		if (touch && this.constructor.ONLY_ONE_PER_TOUCH) {
+		if (touch && !this.swiped) {
 			touch.note = this;
 		}
 	}
@@ -128,7 +137,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		this.holding = false;
 		this.releaseRelativeTime = time - this.time;
 		this.determineJudgement();
-		if (this.touch && this.constructor.ONLY_ONE_PER_TOUCH) {
+		if (this.touch && this.onlyOnePerTouch()) {
 			this.touch.note = null;
 		}
 		this.processRelease(time);
@@ -141,7 +150,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		if (!Sunniesnow.game.settings.seWithMusic) {
 			this.event.releaseSe();
 		}
-		if (!Sunniesnow.game.settings.vibrationWithMusic && !this.constructor.ONLY_ONE_PER_TOUCH) {
+		if (!Sunniesnow.game.settings.vibrationWithMusic && !this.onlyOnePerTouch()) {
 			Sunniesnow.VibrationManager.vibrateOnce(this.event.vibrationTime());
 		}
 	}

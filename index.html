@@ -158,7 +158,10 @@ description: Sunniesnow is a web rhythm game
 		</div>
 
 		<div>
-			<input type="number" id="max-flick-distance" value="3" min="0" step="0.1">
+			<!-- It is later found that, in Lyrica, this value is actually effectively infinity.
+			If I knew that when developing this, this options wouldn't have existed at all.
+			However, now it is kept just because it is good to have customizability. -->
+			<input type="number" id="max-flick-distance" value="999" min="0" step="0.1">
 		</div>
 
 		<div>

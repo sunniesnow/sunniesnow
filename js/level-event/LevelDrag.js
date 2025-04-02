@@ -5,19 +5,27 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 		this.highestJudgement = Sunniesnow.game.settings.autoplay ? 'perfect' : 'miss';
 	}
 
-	static ONLY_ONE_PER_TOUCH = false
 	static AUTO_FINISHES_HOLDING = false
+
+	onlyOnePerTouch() {
+		return Sunniesnow.game.settings.lyrica5;
+	}
+
+	// If a tap and a drag are simultaneous, the tap is judged first.
+	judgementPriority() {
+		return Sunniesnow.game.settings.lyrica5 ? -1 : super.judgementPriority();
+	}
 
 	hit(touch, time) {
 		super.hit(touch, time);
 		if (!touch) {
 			return;
 		}
-		this.swipe(touch);
+		this.touchedBy(touch);
 		this.release(time);
 	}
 
-	swipe(touch) {
+	touchedBy(touch) {
 		const time = touch.end().time;
 		const relativeTime = time - this.time;
 		if (!this.holding) {
@@ -33,6 +41,11 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 			this.touch = touch;
 			this.determineEarlyLate();
 		}
+	}
+
+	swipe(touch) {
+		this.swiped = true;
+		this.touchedBy(touch);
 	}
 
 	determineJudgement() {

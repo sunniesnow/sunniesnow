@@ -36,6 +36,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 		if (this.unhitNotes.length === 0) {
 			Sunniesnow.Logs.error('No notes in the chart');
 		}
+		this.unhitNotes.sort((a, b) => a.time - b.time || b.judgementPriority() - a.judgementPriority());
 		if (Sunniesnow.game.progressAdjustable) {
 			this.allNotes = this.unhitNotes.slice();
 			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allNotes, e => e.time, e => e.endTime);
@@ -262,7 +263,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 			}
 			if (Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows[note.type].bad)) {
 				note = this.tryHitNote(note, touch, time);
-				if (note?.constructor.ONLY_ONE_PER_TOUCH) {
+				if (note?.onlyOnePerTouch()) {
 					return true;
 				} else if (note) {
 					// Do nothing!
@@ -304,36 +305,39 @@ Sunniesnow.Level = class Level extends EventTarget {
 	// The function hits the most appropriate note and returns the actually hit note.
 	tryHitNote(note, touch, time) {
 		const {x, y} = touch.start();
+		const simultaneousNotes = note.event.simultaneousEvents.map(e => e.levelNote);
 		// Should we replace Euclidean distance with L-infinity distance?
+		// In some cases, a closer note may be out of the hit area while a farther note is in the hit area
+		// because the hit area is a square instead of a circle.
+		// Using L-infinity distance will solve this problem.
 		let [distance, angle] = this.distanceAndAngle(x, y, note.event);
-		for (const event of note.event.simultaneousEvents) {
-			const newNote = event.levelNote;
+		let tappable = note.isTappableAt(touch, x, y);
+		for (const newNote of simultaneousNotes) {
 			let condition = newNote === note || !newNote || newNote.hitRelativeTime !== null;
+			condition ||= newNote.judgementPriority() < note.judgementPriority();
 			condition ||= !newNote.isTappableAt(touch, x, y);
 			if (condition) {
 				continue;
 			}
 			const [newDistance, newAngle] = this.distanceAndAngle(x, y, newNote.event);
-			condition = (!note.constructor.ONLY_ONE_PER_TOUCH || newDistance < distance) && newNote.constructor.ONLY_ONE_PER_TOUCH;
-			condition ||= !note.constructor.ONLY_ONE_PER_TOUCH && !newNote.constructor.ONLY_ONE_PER_TOUCH && newDistance < distance;
+			condition = !tappable;
+			condition ||= (!note.onlyOnePerTouch() || newDistance < distance) && newNote.onlyOnePerTouch();
+			condition ||= !note.onlyOnePerTouch() && !newNote.onlyOnePerTouch() && newDistance < distance;
 			if (note.type === 'flick' && newNote.type === 'flick') {
-				condition ||= newDistance === distance && Sunniesnow.Utils.angleDistance(event.angle, newAngle) < Sunniesnow.Utils.angleDistance(note.event.angle, angle);
+				condition ||= newDistance === distance && Sunniesnow.Utils.angleDistance(newNote.event.angle, newAngle) < Sunniesnow.Utils.angleDistance(note.event.angle, angle);
 			}
 			if (condition) {
 				note = newNote;
 				distance = newDistance;
 				angle = newAngle;
+				tappable = true;
 			}
 		}
-		if (!note.constructor.ONLY_ONE_PER_TOUCH && Sunniesnow.game.settings.noEarlyDrag) {
+		if (!tappable || !note.onlyOnePerTouch() && Sunniesnow.game.settings.noEarlyDrag) {
 			return null;
 		}
-		if (note.isTappableAt(touch, x, y)) {
-			note.hit(touch, time);
-			return note;
-		} else {
-			return null;
-		}
+		note.hit(touch, time);
+		return note;
 	}
 
 	onNewJudgement(note) {
@@ -369,7 +373,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 				this.late++;
 			}
 		}
-		if (note.judgement !== 'miss' && note.constructor.ONLY_ONE_PER_TOUCH) {
+		if (note.hitRelativeTime !== null && note.type !== 'drag') { // ugly special treatment for drag
 			this.inaccuracies.push(note.hitRelativeTime);
 		}
 	}

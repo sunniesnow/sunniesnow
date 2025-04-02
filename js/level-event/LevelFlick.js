@@ -12,11 +12,11 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 			super.determineJudgement();
 			return;
 		}
-		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
-		if (rho < this.minFlickDistance()) { // too short
-			this.judgement = this.slow ? 'miss' : 'bad';
+		if (this.slow) {
+			this.judgement = 'miss';
 			return;
 		}
+		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
 		const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
 		if (this.minFlickDistance() > 0 && !Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
 			this.judgement = 'bad';

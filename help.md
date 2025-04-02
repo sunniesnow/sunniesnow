@@ -220,6 +220,9 @@ When this setting is set to `true`, the following mechanics are changed:
 - The score and the accuracy is calculated differently.
 - The bad judgement is called *Ok* now, but it depends on the skin.
 - The perfect interval of drag notes are changed to be the same as the bad interval of them.
+- Hitting (instead of swiping over) a drag note will only impose judgement on the drag note itself
+  instead of hitting other notes behind the drag note.
+  This means [`no-early-drag`](#no-early-drag) will not have an effect.
 - Bad judgement does not break the combo.
 - The look of the AP/FC indicator is changed.
 
@@ -236,6 +239,8 @@ will be hit and judged
 if there are no other types of notes with higher priority.
 Setting this setting to `true` disables this mechanics
 (and reduces difficulty).
+
+When [`lyrica-5`](#lyrica-5) is `true`, this setting is effectively **ignored**.
 
 ##### Hold notes lock the position of touch
 {:#locking-hold}
@@ -279,6 +284,10 @@ moves by a certain distance.
 This distance is defined as the value of this setting **times** the radius of the note
 (when the value of [`note-size`](#note-size) is one).
 The judgement of a released flick note is explained in [`flick-angle-range`](#flick-angle-range).
+
+In Lyrica, this value is effectively infinity,
+so the default value is `999`, which is also effectively infinity.
+Historically, the default value of this option used to be `3`.
 
 ##### Angle range
 {:#flick-angle-range}
