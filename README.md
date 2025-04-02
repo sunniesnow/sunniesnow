@@ -30,7 +30,7 @@ Look at its source codes for reference.
 ## License notice
 
 Sunniesnow is licensed under
-[GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
+[AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.en.html).
 
 Sunniesnow has no relation to the game
 [Lyrica](https://lyricagame.wixsite.com/lyricagame)
