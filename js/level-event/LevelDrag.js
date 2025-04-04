@@ -25,6 +25,13 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 		this.release(time);
 	}
 
+	release(time) {
+		if (Sunniesnow.game.settings.noEarlyDrag && time < this.time) {
+			return;
+		}
+		super.release(time);
+	}
+
 	touchedBy(touch) {
 		const time = touch.end().time;
 		const relativeTime = time - this.time;

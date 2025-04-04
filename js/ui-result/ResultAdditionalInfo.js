@@ -217,6 +217,7 @@ locking-hold: ${Sunniesnow.game.settings.lockingHold}
 min-flick-distance: ${Sunniesnow.game.settings.minFlickDistance}
 max-flick-distance: ${Sunniesnow.game.settings.maxFlickDistance}
 flick-angle-range: ${Sunniesnow.game.settings.flickAngleRange}
+overlapping-flick-fix: ${Sunniesnow.game.settings.overlappingFlickFix}
 scroll: ${Sunniesnow.game.settings.scroll}
 autoplay: ${Sunniesnow.game.settings.autoplay}
 chart-offset: ${Sunniesnow.game.settings.chartOffset}

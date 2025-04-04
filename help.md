@@ -234,13 +234,10 @@ When this setting is set to `true`, the following mechanics are changed:
 
 This setting is used to set whether drag notes can be hit early.
 When this setting is set to `false`,
-whenever you hit the screen, drag notes within a certain range (space and time)
-will be hit and judged
-if there are no other types of notes with higher priority.
-Setting this setting to `true` disables this mechanics
-(and reduces difficulty).
-
-When [`lyrica-5`](#lyrica-5) is `true`, this setting is effectively **ignored**.
+tapping on a drag note within its judgement window will hit the note immediately.
+When this setting is set to `true`,
+the judgement will be delayed until the exact time of the drag note
+(and reduces difficulty if [`lyrica-5`](#lyrica-5) is `false`).
 
 ##### Hold notes lock the position of touch
 {:#locking-hold}
@@ -307,6 +304,21 @@ and is independent of the direction of the movement of the touch point.
 
 If the angle between these two directions is greater than the value of this setting (in degrees),
 then the flick note will be judged as a bad.
+
+##### Judgement priority by angle
+{:#overlapping-flick-fix}
+
+- **Setting id**: `overlapping-flick-fix`.
+- **Possible values**: `true`, `false`.
+
+When this setting is `true`, for flick notes that are simultaneous **and** completely overlapping,
+where in the judgement area the player taps will determine which note gets judged.
+The smaller the angle between the angle of the flick note and the segment connecting the center of the note and the tapped position,
+the higher the judgement priority of the note.
+
+When this setting is `false`, the judgement priority of flick notes that are simultaneous and completely overlapping
+will be purely determined by the order of their appearances in the chart file.
+This is the behavior of Lyrica, which is manifest in the special chart of Frog Rappa.
 
 ### Visual settings
 

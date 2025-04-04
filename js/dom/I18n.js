@@ -490,6 +490,7 @@ Sunniesnow.I18n = {
 			minFlickDistance: 'Minimum distance: ',
 			maxFlickDistance: 'Maximum distance: ',
 			flickAngleRange: ['Angle range: ', ' degrees'],
+			overlappingFlickFix: 'Judgement priority by angle',
 
 			speed: '',
 			noteSize: '',
@@ -660,6 +661,7 @@ Sunniesnow.I18n = {
 			minFlickDistance: '最小距离: ',
 			maxFlickDistance: '最大距离: ',
 			flickAngleRange: ['角度范围: ', ' 度'],
+			overlappingFlickFix: '角度控制判定优先级',
 
 			speed: '',
 			noteSize: '',
@@ -837,6 +839,7 @@ Sunniesnow.I18n = {
 			minFlickDistance: '最小距離: ',
 			maxFlickDistance: '最大距離: ',
 			flickAngleRange: ['角度範囲: ', ' 度'],
+			overlappingFlickFix: undefined,
 
 			speed: '',
 			noteSize: '',

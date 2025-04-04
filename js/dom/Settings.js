@@ -148,6 +148,7 @@ Sunniesnow.Settings = {
 			minFlickDistance: this.readValue('min-flick-distance'),
 			maxFlickDistance: this.readValue('max-flick-distance'),
 			flickAngleRange: this.readValue('flick-angle-range') / 180 * Math.PI,
+			overlappingFlickFix: this.readCheckbox('overlapping-flick-fix'),
 
 			// visual settings
 			speed: this.readValue('speed'),
@@ -329,6 +330,7 @@ Sunniesnow.Settings = {
 		this.writeValue('min-flick-distance', d('minFlickDistance'));
 		this.writeValue('max-flick-distance', d('maxFlickDistance'));
 		this.writeValue('flick-angle-range', d('flickAngleRange') / Math.PI * 180);
+		this.writeCheckbox('overlapping-flick-fix', d('overlappingFlickFix'));
 
 		this.writeValue('speed', d('speed'));
 		this.writeValue('note-size', d('noteSize'));
