@@ -13,7 +13,9 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 
 	populateLegacyUis() {
 		for (const ui of this.legacyUis) {
-			this.addChild(ui);
+			if (ui) {
+				this.addChild(ui);
+			}
 		}
 	}
 
@@ -33,7 +35,7 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 
 	updateLegacyUis(delta) {
 		for (const ui of this.legacyUis) {
-			if (ui.update) {
+			if (ui?.update) {
 				ui.update(delta);
 			}
 		}
