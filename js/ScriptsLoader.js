@@ -231,6 +231,7 @@ Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
 	'dom/SpinUp',
 
 	'external/Sscharter',
+	'external/DiscordRichPresence',
 
 	'Config',
 	'Plugin',

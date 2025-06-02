@@ -253,9 +253,12 @@ Sunniesnow.Settings = {
 			avatarUpload: this.readFile('avatar-upload'),
 			avatarGravatar: this.readValue('avatar-gravatar'),
 
-			// charting helper settings
+			// integration settings
 			sscharter: this.readCheckbox('sscharter'),
 			sscharterLiveRestart: this.readCheckbox('sscharter-live-restart'),
+			discordPresence: this.readCheckbox('discord-presence'),
+			discordToken: this.readValue('discord-token'),
+			watchingInsteadOfPlaying: this.readCheckbox('watching-instead-of-playing'),
 
 			// system settings
 			width: this.readValue('width'),
@@ -430,6 +433,9 @@ Sunniesnow.Settings = {
 
 		this.writeCheckbox('sscharter', d('sscharter'));
 		this.writeCheckbox('sscharter-live-restart', d('sscharterLiveRestart'));
+		this.writeCheckbox('discord-presence', d('discordPresence'));
+		this.writeValue('discord-token', d('discordToken'));
+		this.writeCheckbox('watching-instead-of-playing', d('watchingInsteadOfPlaying'));
 
 		this.writeValue('width', d('width'));
 		this.writeValue('height', d('height'));
@@ -790,6 +796,8 @@ Sunniesnow.Settings = {
 		this.associateRadio('avatar-online-radio', 'avatar-online');
 		this.associateRadio('avatar-upload-radio', 'avatar-upload');
 		this.associateRadio('avatar-gravatar-radio', 'avatar-gravatar');
+		this.associateCheckbox('discord-presence', 'discord-token');
+		this.associateCheckbox('discord-presence', 'watching-instead-of-playing');
 	},
 
 	clearDownloadingProgresses() {

@@ -102,8 +102,9 @@ Sunniesnow.I18n = {
 			nicknameCategory: 'Nickname',
 			avatarCategory: 'Avatar',
 
-			chartingHelperSettings: 'Charting helper settings',
+			integrationSettings: 'Integration settings',
 			sscharterCategory: 'Sscharter integration',
+			discordCategory: 'Discord Rich Presence',
 
 			systemSettings: 'System settings',
 			interfaceCategory: 'Interface',
@@ -253,8 +254,9 @@ Sunniesnow.I18n = {
 			nicknameCategory: '昵称',
 			avatarCategory: '头像',
 
-			chartingHelperSettings: '制谱器辅助设置',
+			integrationSettings: '集成设置',
 			sscharterCategory: '连接 sscharter',
+			discordCategory: 'Discord 状态',
 
 			systemSettings: '系统设置',
 			interfaceCategory: '界面',
@@ -408,8 +410,9 @@ Sunniesnow.I18n = {
 			nicknameCategory: undefined,
 			avatarCategory: undefined,
 
-			chartingHelperSettings: '譜面エディター設定',
+			integrationSettings: undefined,
 			sscharterCategory: 'sscharter を連結',
+			discordCategory: undefined,
 
 			systemSettings: 'システム設定',
 			interfaceCategory: 'インターフェース',
@@ -608,6 +611,9 @@ Sunniesnow.I18n = {
 
 			sscharter: ' Enable sscharter integration',
 			sscharterLiveRestart: ' Live restart',
+			discordPresence: ' Enable Discord Rich Presence',
+			discordToken: 'Discord token: ',
+			watchingInsteadOfPlaying: ' Use "Watching" instead of "Playing"',
 
 			width: 'Width: ',
 			height: 'Height: ',
@@ -779,6 +785,9 @@ Sunniesnow.I18n = {
 
 			sscharter: ' 启用 sscharter 集成',
 			sscharterLiveRestart: ' 关卡更新时即刻重新开始',
+			discordPresence: ' 启用 Discord 状态',
+			discordToken: 'Discord token: ',
+			watchingInsteadOfPlaying: ' 使用 "正在观看" 而不是 "正在玩"',
 
 			width: '宽度: ',
 			height: '高度: ',
@@ -957,6 +966,9 @@ Sunniesnow.I18n = {
 
 			sscharter: ' sscharter 連結を有効にする',
 			sscharterLiveRestart: ' レベルアップデート時にリスタートする',
+			discordPresence: undefined,
+			discordToken: undefined,
+			watchingInsteadOfPlaying: undefined,
 
 			width: '幅: ',
 			height: '高さ: ',

@@ -249,6 +249,7 @@ Sunniesnow.Loader = {
 		this.loadUiEvents();
 		this.loadFx();
 		this.loadUiNonevents();
+		this.loadExternal();
 		while (this.modulesQueue.length > 0) {
 			await this.modulesQueue.shift()();
 		}
@@ -343,6 +344,10 @@ Sunniesnow.Loader = {
 		this.loadModule('TipPoint');
 		this.loadModule('DoubleLine');
 		this.loadModule('JudgementLine');
+	},
+
+	loadExternal() {
+		this.loadModule('DiscordRichPresence');
 	},
 
 	loadModule(name) {

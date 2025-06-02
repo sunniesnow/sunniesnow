@@ -8,8 +8,8 @@ Sunniesnow.SceneLoading = class SceneLoading extends Sunniesnow.Scene {
 		}
 	}
 
-	update() {
-		super.update();
+	update(delta) {
+		super.update(delta);
 		Sunniesnow.Loader.updateLoading();
 		if (Sunniesnow.Utils.isBrowser()) {
 			this.ui.update();

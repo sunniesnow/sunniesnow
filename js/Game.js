@@ -85,6 +85,9 @@ Sunniesnow.Game = class Game {
 			Progress: Sunniesnow.Music.progress
 		});
 		this.debugBoard?.update(delta);
+		if (Sunniesnow.DiscordRichPresence.connected) {
+			Sunniesnow.DiscordRichPresence.update(delta);
+		}
 	}
 
 	update(delta) {
@@ -117,6 +120,7 @@ Sunniesnow.Game = class Game {
 			Sunniesnow.SpinUp.terminate();
 			Sunniesnow.Popup.close();
 			Sunniesnow.Sscharter.disconnect();
+			Sunniesnow.DiscordRichPresence.terminate();
 		}
 		Sunniesnow.Audio.stopAll();
 		if (!this.app) {
