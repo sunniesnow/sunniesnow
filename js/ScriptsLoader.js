@@ -49,7 +49,7 @@ Sunniesnow.ScriptsLoader = {
 		} else {
 			const script = await this.fetchText(scriptPath);
 			// use indirect eval to run in global scope
-			eval?.(script + `\n//# sourceURL=${scriptPath}`);
+			eval?.(script + `\n//# sourceURL=${this.sourceUrl(scriptPath)}`);
 		}
 	},
 
@@ -68,9 +68,13 @@ Sunniesnow.ScriptsLoader = {
 
 	runScriptFromString(scriptString, scriptPath) {
 		if (scriptPath) {
-			scriptString += `\n//# sourceURL=${scriptPath}`;
+			scriptString += `\n//# sourceURL=${this.sourceUrl(scriptPath)}`;
 		}
 		new Function(...this.polyfill.keys, scriptString)(...this.polyfill.values);
+	},
+	
+	sourceUrl(scriptPath) {
+		return Sunniesnow.Utils.isBrowser() ? scriptPath : scriptPath.replace(/^\//, '');
 	}
 };
 

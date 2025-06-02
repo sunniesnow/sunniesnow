@@ -17,7 +17,7 @@ Sunniesnow.PixiPatches = {
 		};
 	},
 
-	// https://github.com/pixijs/node/issues/4
+	// https://github.com/pixijs-userland/node/issues/4
 	patchLoadSvg() {
 		let src = PIXI.SVGResource.prototype._loadSvg.toString().match(/\{(.*)\}/s)[1];
 		src = src.replace(/tempImage\.src\s*=\s*this\.svg[,;]/, '');
@@ -28,7 +28,7 @@ Sunniesnow.PixiPatches = {
 		)(require('canvas').Image, PIXI.BaseImageResource, PIXI.utils.uid);
 	},
 
-	// https://github.com/pixijs/node/issues/11
+	// https://github.com/pixijs-userland/node/issues/11
 	patchExtractCanvas() {
 		let src = PIXI.Extract.prototype.canvas.toString();
 		PIXI.Extract.prototype.canvas = new Function(
@@ -37,7 +37,7 @@ Sunniesnow.PixiPatches = {
 		)(require('canvas').ImageData, PIXI.Extract, PIXI.utils);
 	},
 
-	// https://github.com/pixijs/node/pull/13
+	// https://github.com/pixijs-userland/node/pull/13
 	patchNodeLoaderParsers() {
 		PIXI.loadNodeTexture.name = 'loadNodeTexture';
 		PIXI.loadNodeFont.name = 'loadNodeFont';

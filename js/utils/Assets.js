@@ -25,7 +25,7 @@ Sunniesnow.Assets = {
 				throw new Error('Failed to load font');
 			}
 		} else {
-			// https://github.com/pixijs/node/issues/5
+			// https://github.com/pixijs-userland/node/issues/5
 			const path = require('path');
 			const fs = require('fs');
 			const dest = path.join(Sunniesnow.record.tempDir, path.basename(url));
