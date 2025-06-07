@@ -1488,6 +1488,22 @@ The progress bar will be unavailable.
 
 This setting is only useful when [`discord-presence`](#discord-presence) is `true`.
 
+#### Imgur
+
+##### Imgur Client ID
+{:#imgur-client-id}
+
+- **Setting id**: `imgur-client-id`.
+- **Possible values**: Any string.
+
+This setting is used to set the Imgur Client ID.
+Normally you do not need to change this setting
+because it almost never gets rate limited.
+
+The Imgur Client ID is used when uploading the background images to Imgur
+for use with Discord Rich Presence.
+It is not used if [`discord-presence`](#discord-presence) is `false`.
+
 ### System settings
 
 #### Interface

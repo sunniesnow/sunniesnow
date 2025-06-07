@@ -105,6 +105,7 @@ Sunniesnow.I18n = {
 			integrationSettings: 'Integration settings',
 			sscharterCategory: 'Sscharter integration',
 			discordCategory: 'Discord Rich Presence',
+			imgurCategory: 'Imgur',
 
 			systemSettings: 'System settings',
 			interfaceCategory: 'Interface',
@@ -257,6 +258,7 @@ Sunniesnow.I18n = {
 			integrationSettings: '集成设置',
 			sscharterCategory: '连接 sscharter',
 			discordCategory: 'Discord 状态',
+			imgurCategory: 'Imgur',
 
 			systemSettings: '系统设置',
 			interfaceCategory: '界面',
@@ -413,6 +415,7 @@ Sunniesnow.I18n = {
 			integrationSettings: undefined,
 			sscharterCategory: 'sscharter を連結',
 			discordCategory: undefined,
+			imgurCategory: undefined,
 
 			systemSettings: 'システム設定',
 			interfaceCategory: 'インターフェース',
@@ -614,6 +617,7 @@ Sunniesnow.I18n = {
 			discordPresence: ' Enable Discord Rich Presence',
 			discordToken: 'Discord token: ',
 			watchingInsteadOfPlaying: ' Use "Watching" instead of "Playing"',
+			imgurClientId: 'Imgur client ID: ',
 
 			width: 'Width: ',
 			height: 'Height: ',
@@ -788,6 +792,7 @@ Sunniesnow.I18n = {
 			discordPresence: ' 启用 Discord 状态',
 			discordToken: 'Discord token: ',
 			watchingInsteadOfPlaying: ' 使用 "正在观看" 而不是 "正在玩"',
+			imgurClientId: 'Imgur Client ID: ',
 
 			width: '宽度: ',
 			height: '高度: ',
@@ -969,6 +974,7 @@ Sunniesnow.I18n = {
 			discordPresence: undefined,
 			discordToken: undefined,
 			watchingInsteadOfPlaying: undefined,
+			imgurClientId: undefined,
 
 			width: '幅: ',
 			height: '高さ: ',

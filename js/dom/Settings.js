@@ -259,6 +259,7 @@ Sunniesnow.Settings = {
 			discordPresence: this.readCheckbox('discord-presence'),
 			discordToken: this.readValue('discord-token'),
 			watchingInsteadOfPlaying: this.readCheckbox('watching-instead-of-playing'),
+			imgurClientId: this.readValue('imgur-client-id'),
 
 			// system settings
 			width: this.readValue('width'),
@@ -436,6 +437,7 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('discord-presence', d('discordPresence'));
 		this.writeValue('discord-token', d('discordToken'));
 		this.writeCheckbox('watching-instead-of-playing', d('watchingInsteadOfPlaying'));
+		this.writeValue('imgur-client-id', d('imgurClientId'));
 
 		this.writeValue('width', d('width'));
 		this.writeValue('height', d('height'));

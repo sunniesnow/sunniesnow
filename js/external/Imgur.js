@@ -1,6 +1,4 @@
 Sunniesnow.Imgur = {
-	CLIENT_ID: '28c34d2d6d4ec58',
-
 	async load() {
 		if (typeof indexedDB === 'undefined') {
 			Sunniesnow.Logs.warn('IndexedDB is not supported in this browser');
@@ -60,7 +58,7 @@ Sunniesnow.Imgur = {
 		formData.append('description', description);
 		const response = await fetch('https://api.imgur.com/3/image', {
 			method: 'POST',
-			headers: {Authorization: `Client-ID ${this.CLIENT_ID}`},
+			headers: {Authorization: `Client-ID ${Sunniesnow.game.settings.imgurClientId}`},
 			body: formData,
 		});
 		if (!response.ok) {
