@@ -232,6 +232,7 @@ Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
 
 	'external/Sscharter',
 	'external/DiscordRichPresence',
+	'external/Imgur',
 
 	'Config',
 	'Plugin',

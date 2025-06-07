@@ -15,7 +15,10 @@
 <script>
 	Sunniesnow = {
 		vscodeBrowserReqId: location.search.match(/^\?.*vscodeBrowserReqId=(\d+)/)?.[1],
-		environment: '{{ jekyll.environment }}'
+		environment: '{{ jekyll.environment }}',
+		{% if site.sunniesnow_authentication %}
+			authentication: '{{ site.sunniesnow_authentication }}',
+		{% endif %}
 	};
 </script>
 <script src="js/utils/Utils.js{{ affix }}"></script>

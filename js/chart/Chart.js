@@ -18,7 +18,7 @@ Sunniesnow.Chart = class Chart {
 	static EVENT_FIELDS = ['time', 'type', 'properties']
 	
 	static async load() {
-		Sunniesnow.game.chart = new this(Sunniesnow.Loader.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
+		Sunniesnow.game.chart = new this(Sunniesnow.game.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
 		await Sunniesnow.game.chart.readSscharterInfo();
 		Sunniesnow.Music.start = Math.min(
 			Sunniesnow.game.settings.start * Sunniesnow.Music.duration,

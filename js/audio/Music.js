@@ -1,6 +1,6 @@
 Sunniesnow.Music = {
 	async load() {
-		const buffer = Sunniesnow.Loader.loaded.chart.music[Sunniesnow.game.settings.musicSelect];
+		const buffer = Sunniesnow.game.loaded.chart.music[Sunniesnow.game.settings.musicSelect];
 		if (!buffer) {
 			Sunniesnow.Logs.error('No music loaded');
 		}

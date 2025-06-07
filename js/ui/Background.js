@@ -27,12 +27,9 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 			case 'none':
 				return null;
 			case 'online':
-				return Sunniesnow.Utils.url(
-					Sunniesnow.Config.BACKGROUND_PREFIX,
-					Sunniesnow.game.settings.backgroundOnline
-				);
+				return Sunniesnow.Utils.url('background', Sunniesnow.game.settings.backgroundOnline);
 			case 'from-level':
-				blob = Sunniesnow.Loader.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel];
+				blob = Sunniesnow.game.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel];
 				if (!blob) {
 					Sunniesnow.Logs.warn('No background provided');
 					return;

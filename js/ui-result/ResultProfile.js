@@ -37,10 +37,7 @@ Sunniesnow.ResultProfile = class ResultProfile extends Sunniesnow.UiComponent {
 			case 'none':
 				return null;
 			case 'online':
-				return Sunniesnow.Utils.url(
-					Sunniesnow.Config.AVATAR_PREFIX,
-					Sunniesnow.game.settings.avatarOnline
-				);
+				return Sunniesnow.Utils.url('avatar', Sunniesnow.game.settings.avatarOnline);
 			case 'upload':
 				blob = Sunniesnow.game.settings.avatarUpload;
 				if (!blob) {

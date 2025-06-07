@@ -72,7 +72,7 @@ Sunniesnow.Loader = {
 				this.clearChart();
 				this.loaded.chart.source = 'online';
 				this.loaded.chart.sourceContents = sourceContents;
-				const url = Sunniesnow.Utils.url(Sunniesnow.Config.CHART_PREFIX, sourceContents, '.ssc');
+				const url = Sunniesnow.Utils.url('chart', sourceContents, '.ssc');
 				try {
 					file = await Sunniesnow.Fetcher.blob(url, 'level-file-downloading');
 				} catch (e) {
@@ -179,33 +179,46 @@ Sunniesnow.Loader = {
 		document.getElementById('level-readme').innerHTML = '';
 	},
 
+	cloneLoaded() {
+		return {
+			chart: {
+				source: this.loaded.chart.source,
+				sourceContents: this.loaded.chart.sourceContents,
+				charts: {...this.loaded.chart.charts},
+				music: {...this.loaded.chart.music},
+				backgrounds: {...this.loaded.chart.backgrounds}
+			},
+			plugins: {...this.loaded.plugins}
+		};
+	},
+
 	async pluginBlob(id) {
-		let source, prefix, online, upload, downloading;
+		let source, basePath, online, upload, downloading;
 		switch (id) {
 			case 'skin':
 				source = Sunniesnow.game.settings.skin;
-				prefix = Sunniesnow.Config.SKIN_PREFIX;
+				basePath = 'skin';
 				online = Sunniesnow.game.settings.skinOnline;
 				upload = Sunniesnow.game.settings.skinUpload;
 				downloading = 'skin-downloading';
 				break;
 			case 'fx':
 				source = Sunniesnow.game.settings.fx;
-				prefix = Sunniesnow.Config.FX_PREFIX;
+				basePath = 'fx';
 				online = Sunniesnow.game.settings.fxOnline;
 				upload = Sunniesnow.game.settings.fxUpload;
 				downloading = 'fx-downloading';
 				break;
 			case 'se':
 				source = Sunniesnow.game.settings.se;
-				prefix = Sunniesnow.Config.SE_PREFIX;
+				basePath = 'se';
 				online = Sunniesnow.game.settings.seOnline;
 				upload = Sunniesnow.game.settings.seUpload;
 				downloading = 'se-downloading';
 				break;
 			default:
 				source = Sunniesnow.game.settings.plugin[id];
-				prefix = Sunniesnow.Config.PLUGIN_PREFIX;
+				basePath = 'plugin';
 				online = Sunniesnow.game.settings.pluginOnline[id];
 				upload = Sunniesnow.game.settings.pluginUpload[id];
 				downloading = `plugin-${id}-downloading`;
@@ -221,7 +234,7 @@ Sunniesnow.Loader = {
 					this.loaded.plugins[id] = {source: 'online', sourceContents: online};
 				}
 				try {
-					return await Sunniesnow.Fetcher.blob(Sunniesnow.Utils.url(prefix, online, '.ssp'), downloading);
+					return await Sunniesnow.Fetcher.blob(Sunniesnow.Utils.url(basePath, online, '.ssp'), downloading);
 				} catch (e) {
 					Sunniesnow.Logs.warn(`Failed to download plugin ${id}: ${e.message ?? e}`, e);
 					return null;
@@ -347,6 +360,7 @@ Sunniesnow.Loader = {
 	},
 
 	loadExternal() {
+		this.loadModule('Imgur');
 		this.loadModule('DiscordRichPresence');
 	},
 
@@ -420,6 +434,9 @@ Sunniesnow.Loader = {
 			Sunniesnow.Logs.warn('Level file not loaded, waiting');
 			await this.loadChart()
 		}
+		// When the user clicks the "Load" button in DOM, Sunniesnow.Loader.loaded will be altered.
+		// Therefore, we need to save a clone of it in Sunniesnow.game.loaded.
+		Sunniesnow.game.loaded = this.cloneLoaded();
 		if (Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Settings.saveSettings();
 			if (this.loaded.chart.source === 'online') {

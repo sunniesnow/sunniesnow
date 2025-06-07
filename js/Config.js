@@ -370,13 +370,7 @@ Sunniesnow.Config = {
 		miss: 0
 	},
 
-	CHART_PREFIX: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovY2hhcnQv'),
-	BACKGROUND_PREFIX: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovYmFja2dyb3VuZC8='),
-	SE_PREFIX: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovc2Uv'),
-	SKIN_PREFIX: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovc2tpbi8='),
-	FX_PREFIX: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovZngv'),
-	AVATAR_PREFIX: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovYXZhdGFyLw=='),
-	PLUGIN_PREFIX: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXovcGx1Z2luLw=='),
+	SERVER_BASE_URL: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXo='),
 
 	OBJECT_URL_TIMEOUT: 1,
 };

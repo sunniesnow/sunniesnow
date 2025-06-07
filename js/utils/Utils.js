@@ -8,11 +8,15 @@ Sunniesnow.Utils = {
 		return true;
 	},
 
-	url(prefix, text, suffix = '') {
+	url(basePath, text, suffix = '') {
 		if (Sunniesnow.Utils.isValidUrl(text)) {
 			return text;
 		} else {
-			return prefix + (text.endsWith(suffix) ? text : text + suffix);
+			let result = `${Sunniesnow.Config.SERVER_BASE_URL}/${basePath}/${text.endsWith(suffix) ? text : text + suffix}`;
+			if (Sunniesnow.authentication) {
+				result += `${result.includes('?') ? '&' : '?'}authentication=${Sunniesnow.authentication}`;
+			}
+			return result;
 		}
 	},
 
@@ -575,8 +579,12 @@ Sunniesnow.Utils = {
 		return false;
 	},
 
-	async sha256(string) {
-		const data = new TextEncoder().encode(string);
+	async sha256(data) {
+		if (typeof data === 'string') {
+			data = new TextEncoder().encode(data);
+		} else if (data instanceof Blob) {
+			data = await data.arrayBuffer();
+		}
 		const hashBuffer = await crypto.subtle.digest('SHA-256', data);
 		const array = Array.from(new Uint8Array(hashBuffer))
 		return array.map(b => b.toString(16).padStart(2, '0')).join('');

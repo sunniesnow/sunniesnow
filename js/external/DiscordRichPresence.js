@@ -66,7 +66,35 @@ Sunniesnow.DiscordRichPresence = {
 			return;
 		}
 		this.createdAt = Date.now();
+		this.largeImage = await this.getLargeImage();
 		this.connect();
+	},
+
+	async getLargeImage() {
+		const url = await Sunniesnow.Imgur.backgroundFromLevel();
+		if (!url) {
+			return this.ASSETS.logo;
+		}
+		let response;
+		try {
+			response = await Sunniesnow.Utils.strictFetch(`https://discord.com/api/v10/applications/${this.APPLICATION_ID}/external-assets`, {
+				method: 'POST',
+				headers: {
+					Authorization: this.token,
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({urls: [url]}),
+			});
+		} catch (err) {
+			Sunniesnow.Logs.warn(`Failed to use image from Imgur as Discord app external asset: ${err.message ?? err}`, err);
+			return this.ASSETS.logo;
+		}
+		const externalImageId = (await response.json())?.[0]?.external_asset_path;
+		if (!externalImageId) {
+			Sunniesnow.Logs.warn('Discord did not take the image from Imgur as external asset');
+			return this.ASSETS.logo;
+		}
+		return `mp:${externalImageId}`;
 	},
 
 	connect() {
@@ -187,7 +215,7 @@ Sunniesnow.DiscordRichPresence = {
 	async send(op, d) {
 		if (this.isWebSocketConnected()) {
 			const payload = JSON.stringify({op, d});
-			console.log({op, d});
+			//console.log({op, d});
 			this.websocket.send(payload);
 		}
 	},
@@ -237,7 +265,7 @@ Sunniesnow.DiscordRichPresence = {
 			created_at: this.createdAt,
 			application_id: this.APPLICATION_ID,
 			assets: {
-				large_image: this.ASSETS.logo,
+				large_image: this.largeImage,
 				small_image: Sunniesnow.Music.pausing ? this.ASSETS.pause : this.ASSETS.play,
 				small_text: Sunniesnow.Music.pausing ? 'Pausing' : 'Playing',
 			},

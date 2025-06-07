@@ -1408,7 +1408,7 @@ This setting is only **useful** when [`avatar`](#avatar) is set to `upload`.
 You can fill in the email address of your [Gravatar](https://gravatar.com/)
 account to use its avatar here.
 
-### Charting helper settings
+### Integration settings
 
 #### Sscharter
 
@@ -1436,6 +1436,57 @@ This setting is used to set whether the game should restart when the level file 
 When it is `true`, the game will restart when the level is updated by sscharter.
 When it is `false`, the game will not restart when the level is updated by sscharter.
 This setting is only useful when [`sscharter`](#sscharter) is `true`.
+
+#### Discord Rich Presence
+
+##### Enable Discord Rich Presence
+{:#discord-presence}
+
+- **Setting id**: `discord-presence`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the Discord Rich Presence integration should be enabled.
+When this setting is `true`, the game will mimick a Discord client using the token provided
+in [`discord-token`](#discord-token)
+to update the current presence of the user in Discord.
+Information shown in the Rich Presence includes the current chart title,
+difficulty, and progress.
+
+Technically, using this feature is **against Discord's Terms of Service**
+because it mimicks a Discord client to connect to Discord's websocket gateway,
+so you should use it at your own risk.
+However, there is no known case of Discord banning users for using custom clients,
+so the risk should be minimal.
+
+##### Discord token
+{:#discord-token}
+
+- **Setting id**: `discord-token`.
+- **Possible values**: Any string.
+
+This setting is used to set the Discord token of the user.
+You need to manually fill in the token here
+(because an OAuth2 flow is not possible for this use case).
+
+To obtain the token, log in your Discord account in your browser,
+head to the developer tools,
+and find the `Authorization` header in the HTTP request sent by the webpage.
+
+This setting is only useful when [`discord-presence`](#discord-presence) is `true`.
+
+##### Use "Watching" instead of "Playing"
+{:#watching-instead-of-playing}
+
+- **Setting id**: `watching-instead-of-playing`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the Rich Presence should use "Watching" instead of "Playing".
+When it is `true`, the Rich Presence will use "Watching" status.
+Only in this case can the progress bar be shown in the Rich Presence.
+When it is `false`, the Rich Presence will use "Playing" status.
+The progress bar will be unavailable.
+
+This setting is only useful when [`discord-presence`](#discord-presence) is `true`.
 
 ### System settings
 

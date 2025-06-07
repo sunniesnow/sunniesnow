@@ -1,6 +1,6 @@
 Sunniesnow.Sscharter = {
 	async connect(data) {
-		if (!Sunniesnow.Utils.isValidUrl(Sunniesnow.Loader.loaded.chart.sourceContents)) {
+		if (!Sunniesnow.Utils.isValidUrl(Sunniesnow.game.loaded.chart.sourceContents)) {
 			return;
 		}
 		if (!(typeof data === 'object' && 'version' in data && 'port' in data)) {
@@ -10,7 +10,7 @@ Sunniesnow.Sscharter = {
 		const {version, port} = data;
 		this.version = version;
 		this.port = port;
-		this.host = new URL(Sunniesnow.Loader.loaded.chart.sourceContents).hostname;
+		this.host = new URL(Sunniesnow.game.loaded.chart.sourceContents).hostname;
 		this.url = `ws://${this.host}:${this.port}`;
 		this.socket = new WebSocket(this.url);
 		this.addListeners();
