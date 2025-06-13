@@ -47,7 +47,7 @@ Sunniesnow.ResultProfile = class ResultProfile extends Sunniesnow.UiComponent {
 				break;
 			case 'gravatar':
 				const hash = await Sunniesnow.Utils.sha256(Sunniesnow.game.settings.avatarGravatar);
-				return `https://gravatar.com/avatar/${hash}`;
+				return hash && `https://gravatar.com/avatar/${hash}`;
 		}
 		return Sunniesnow.ObjectUrl.create(blob);
 	}

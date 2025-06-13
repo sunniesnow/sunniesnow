@@ -5,7 +5,8 @@ A web rhythm game.
 
 ## Serve the game locally
 
-*Note: if you play the game in this way, you still need internet access.*
+> [!NOTE]
+> If you play the game in this way, you still need internet access.
 
 [Install Ruby](https://www.ruby-lang.org/en/documentation/installation), and then run
 
@@ -20,6 +21,18 @@ Now, visit http://localhost:4000/game/ to see the game.
 
 You can also build the static files by running `bundle exec jekyll build`.
 You can see the built files in the `_site` directory.
+
+> [!NOTE]
+> Because Imgur blocks requests with `Origin` being localhost,
+> and because the `Crypto.subtle` API is not available in insecure contexts,
+> you must enable HTTPS support for some functionalities to work
+> (e.g., Discord Rich Presence).
+> You can enable HTTPS support by setting `JEKYLL_SSL=1` and trusting the generated certificate at `_ssl/ca.crt` in the browser.
+> The generated server certificate can be used to enable HTTPS
+> with the hostname `jekyll.local`,
+> which you can use some custom DNS resolver to resolve to `127.0.0.1`.
+> You can change the hostname by modifying `_ssl/*.cnf` files
+> and deleting the previously generated `_ssl/server.*` files.
 
 ## Use in Node.js
 

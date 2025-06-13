@@ -30,6 +30,9 @@ Sunniesnow.Imgur = {
 		let hash;
 		if (this.db) {
 			hash = await Sunniesnow.Utils.sha256(blob);
+			if (!hash) {
+				return null;
+			}
 			const retrieved = await new Promise((resolve, reject) => {
 				const transaction = this.db.transaction(['images'], 'readonly');
 				const objectStore = transaction.objectStore('images');

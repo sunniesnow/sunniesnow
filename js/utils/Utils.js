@@ -561,25 +561,19 @@ Sunniesnow.Utils = {
 	},
 	
 	isPrivate(hostname) {
-		if (hostname === 'localhost') {
-			return true;
-		}
-		if (/10\.\d+\.\d+\.\d+/.test(hostname)) {
-			return true;
-		}
-		if (/192\.168\.\d+\.\d+/.test(hostname)) {
-			return true;
-		}
-		if (/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+/.test(hostname)) {
-			return true;
-		}
-		if (/127\.\d+\.\d+\.\d+/.test(hostname)) {
-			return true;
-		}
-		return false;
+		return [
+			/^localhost$/i,
+			/^(0|10|127)\.\d+\.\d+\.\d+$/,
+			/^192\.168\.\d+\.\d+$/,
+			/^172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+$/,
+		].some(regexp => regexp.test(hostname));
 	},
 
 	async sha256(data) {
+		if (!crypto?.subtle) {
+			Sunniesnow.Logs.warn('Crypto.subtle API not available');
+			return null;
+		}
 		if (typeof data === 'string') {
 			data = new TextEncoder().encode(data);
 		} else if (data instanceof Blob) {
