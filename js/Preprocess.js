@@ -61,11 +61,12 @@ Sunniesnow.Preprocess = {
 			if (Sunniesnow.serviceWorkerRegistration) {
 				Sunniesnow.serviceWorkerRegistration = await Sunniesnow.serviceWorkerRegistration.update();
 			} else {
-				let swUrl = '/game/service-worker.js';
+				const base = Sunniesnow.Utils.base();
+				let swUrl = `${base}/service-worker.js`;
 				if (Sunniesnow.vscodeBrowserReqId) {
 					swUrl += `?vscodeBrowserReqId=${Sunniesnow.vscodeBrowser}`;
 				}
-				Sunniesnow.serviceWorkerRegistration = await sw.register(swUrl, {scope: '/game/'});
+				Sunniesnow.serviceWorkerRegistration = await sw.register(swUrl, {scope: `${base}/`});
 			}
 		} catch (error) {
 			Sunniesnow.Logs.warn(`Failed to register service worker: ${error}`, error);

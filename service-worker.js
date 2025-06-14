@@ -3,17 +3,19 @@ importScripts('js/utils/Utils.js');
 importScripts('js/ScriptsLoader.js');
 const {CDN_PREFIX, CDN_SCRIPTS, SITE_SCRIPTS} = Sunniesnow.ScriptsLoader;
 
+const base = Sunniesnow.Utils.base();
+
 const ONLINE_HOST = atob('c3Vubmllc25vdy1jb21tdW5pdHkuNzU3MzY4MDgueHl6');
 const SITE_RESOURCES = [
 	...SITE_SCRIPTS,
-	'/game/css/style.css',
-	'/game/json/manifest.json',
-	'/game/index.html',
-	'/game/help.html',
-	'/game/',
-	'/game/popup/',
-	'/game/popup/index.html',
-	'/game/popup/style.css',
+	`${base}/css/style.css`,
+	`${base}/json/manifest.json`,
+	`${base}/index.html`,
+	`${base}/help.html`,
+	`${base}/`,
+	`${base}/popup`,
+	`${base}/popup/index.html`,
+	`${base}/popup/style.css`,
 	'/favicon.ico',
 	'/favicon.svg',
 ];

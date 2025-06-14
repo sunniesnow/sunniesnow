@@ -12,9 +12,9 @@
 			"sizes": "256x256"
 		}
 	],
-	"start_url": "{{ site.url }}/game/",
+	"start_url": "{{ site.url }}{{ page.dir }}",
 	"display": "fullscreen",
 	"theme_color": "{{ site.theme_color }}",
 	"orientation": "landscape-primary",
-	"scope": "/game/"
+	"scope": "{{ page.dir }}"
 }

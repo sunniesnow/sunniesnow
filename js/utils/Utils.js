@@ -300,7 +300,7 @@ Sunniesnow.Utils = {
 	},
 
 	isBrowser() {
-		return typeof window === 'object';
+		return typeof window === 'object' || typeof self === 'object';
 	},
 
 	isMobileSafari() {
@@ -598,5 +598,9 @@ Sunniesnow.Utils = {
 				i++;
 			}
 		}
+	},
+
+	base() {
+		return Sunniesnow.Utils.isBrowser() ? Sunniesnow.Utils.dirname(location.pathname) : '/game'
 	}
 };

@@ -1,7 +1,7 @@
 Sunniesnow.ScriptsLoader = {
 
 	CDN_PREFIX: 'https://fastly.jsdelivr.net/npm/',
-	SITE_PREFIX: '/game/js/',
+	SITE_PREFIX: `${Sunniesnow.Utils.base()}/js/`,
 	polyfill: {keys: [], values: []},
 
 	setPolyfill(polyfill) {
