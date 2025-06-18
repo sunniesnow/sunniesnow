@@ -49,7 +49,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		super.updateFadingIn(progress, relativeTime);
 		this.note.scale.set(progress);
 		this.arrow.alpha = progress;
-		this.arrow.scale.set(1 + 0.05*Math.cos(relativeTime * 2));
+		this.arrow.scale.set(1 - 0.05*Math.cos(relativeTime * 5));
 		if (!this.circle) {
 			return;
 		}
@@ -60,7 +60,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	updateActive(progress, relativeTime) {
 		super.updateActive(progress, relativeTime);
 		this.note.scale.set(1);
-		this.arrow.scale.set(1 + 0.05*Math.cos(relativeTime * 5));
+		this.arrow.scale.set(1 - 0.05*Math.cos(relativeTime * 5));
 		if (!this.circle) {
 			return;
 		}

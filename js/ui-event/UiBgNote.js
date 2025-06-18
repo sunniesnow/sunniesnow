@@ -40,7 +40,7 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
 		this.fadingAlpha = Sunniesnow.Config.fadingAlpha();
-		this.note.scale.set(1 + (1 - (1 - progress) ** 2) * 0.5);
+		this.note.scale.set(1 + (3 * (progress - 1/3) ** 2 - 1/3) * 0.5);
 		this.note.alpha = 1 - progress;
 	}
 
