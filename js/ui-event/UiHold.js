@@ -84,7 +84,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 	updateHolding(progress, relativeTime) {
 		super.updateHolding(progress, relativeTime);
 		this.rotateHaloMask(progress);
-		this.swellBounce(progress);
+		this.swellBounce(relativeTime);
 		if (this.bar) {
 			this.bar.scale.y = (this.event.duration - relativeTime) * Sunniesnow.Config.SCROLL_SPEED;
 			if (this.bar.scale.y < 0) {
@@ -125,10 +125,8 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 		this.haloMask.endFill();
 	}
 
-	swellBounce(progress) {
-		const periodsCount = Math.floor(this.event.duration / 0.33);
-		const phase = progress * (periodsCount+1/2) * Math.PI*2;
-		this.note.scale.set(1.1 - Math.cos(phase) * 0.1);
+	swellBounce(time) {
+		this.note.scale.set(1.1 - Math.cos(2*Math.PI * time/0.27) * 0.1);
 	}
 
 	updateFadingOut(progress, relativeTime) {
@@ -146,8 +144,9 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 			this.noteBody.visible = false;
 			return;
 		}
+		this.swellBounce(this.event.duration);
 		if (progress <= 1) {
-			this.noteBody.scale.set(1.2 + (1-(1-progress)**2) * 0.3);
+			this.noteBody.scale.set(1 + (1-(1-progress)**2) * 0.5);
 			this.noteBody.alpha = (1 - progress)**3;
 		} else {
 			this.noteBody.visible = false;

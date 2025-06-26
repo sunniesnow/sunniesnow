@@ -34,6 +34,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 			return;
 		}
 		this.radius = Sunniesnow.Config.NOTE_RADIUS / 3;
+		this.halfThickness = this.radius / 1.5; // half width of trail
 		this.tipPointGeometry = this.createTipPointGeometry();
 		if (Sunniesnow.game.settings.scroll) {
 			this.ACTIVE_DURATION = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
@@ -130,13 +131,13 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		super.updateZoomingIn(time);
 		this.tipPoint.visible = true;
 		const sinceStart = time - this.startTime;
+		this.tipPoint.scale.set(sinceStart / this.constructor.ZOOMING_IN_DURATION);
+		this.updateTipPoint(time);
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
 			this.trail.visible = true;
 			this.trailShader.uniforms.uAlpha = 1;
 			this.updateTrail(time);
 		}
-		this.tipPoint.scale.set(sinceStart / this.constructor.ZOOMING_IN_DURATION);
-		this.updateTipPoint(time);
 	}
 
 	updateZoomingOut(time) {
@@ -144,25 +145,25 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.tipPoint.visible = true;
 		const sinceEnd = time - this.endTime;
 		const alpha = 1 - sinceEnd / this.constructor.ZOOMING_OUT_DURATION;
+		this.tipPoint.scale.set(alpha);
+		this.updateTipPoint(time);
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
 			this.trail.visible = true;
 			this.trailShader.uniforms.uAlpha = alpha;
 			this.updateTrail(time);
 		}
-		this.tipPoint.scale.set(alpha);
-		this.updateTipPoint(time);
 	}
 
 	updateHolding(time) {
 		super.updateHolding(time);
 		this.tipPoint.visible = true;
+		this.tipPoint.scale.set(1);
+		this.updateTipPoint(time);
 		if (Sunniesnow.game.settings.renderer === 'webgl') {
 			this.trail.visible = true;
 			this.trailShader.uniforms.uAlpha = 1;
 			this.updateTrail(time);
 		}
-		this.tipPoint.scale.set(1);
-		this.updateTipPoint(time);
 	}
 
 	updateRemnant(time) {
@@ -230,57 +231,72 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	// endTime: the time when the tip point is at the head of the trail
 	getCheckpointsBetween(startTime, endTime) {
 		const checkpoints = [];
-		let previousCheckpoint = null;
-		let nextCheckpoint = null;
+		let previousCheckpointIndex = null; // the nearest checkpoint before startTime
+		let nextCheckpointIndex = null; // the nearest checkpoint after endTime
 		const tailConnectTime = startTime + this.constructor.TRAIL_TAIL_DURATION
-		let tailConnect = null;
+		let tailConnect = null; // the checkpoint that connects the tail to the main trail
 		for (let i = 0; i < this.checkpoints.length; i++) {
 			const checkpoint = this.checkpoints[i];
 			if (checkpoint.time >= startTime) {
 				if (!tailConnect && i > 0 && checkpoint.time >= tailConnectTime && tailConnectTime < endTime) {
-					const lastCheckpoint = this.checkpoints[i-1];
-					const progress = (tailConnectTime - lastCheckpoint.time) / (checkpoint.time - lastCheckpoint.time);
-					tailConnect = {
-						time: tailConnectTime,
-						x: lastCheckpoint.x + (checkpoint.x - lastCheckpoint.x) * progress,
-						y: lastCheckpoint.y + (checkpoint.y - lastCheckpoint.y) * progress
-					};
-					checkpoints.push(tailConnect);
+					checkpoints.push(tailConnect = this.checkpointByProgress(i-1, tailConnectTime));
 				}
 				if (checkpoint.time > endTime) {
-					nextCheckpoint = checkpoint;
+					nextCheckpointIndex = i;
 					break;
-				} else
-				checkpoints.push(checkpoint);
+				}
+				checkpoints.push(checkpoint)
 			} else {
-				previousCheckpoint = checkpoint;
+				previousCheckpointIndex = i;
 			}
 		}
-		if (!(checkpoints[0] && checkpoints[0].time == startTime) && previousCheckpoint) {
-			const firstCheckpoint = checkpoints[0] || nextCheckpoint;
-			const progress = (startTime - previousCheckpoint.time) / (firstCheckpoint.time - previousCheckpoint.time);
-			checkpoints.unshift({
-				time: startTime,
-				x: previousCheckpoint.x + (firstCheckpoint.x - previousCheckpoint.x) * progress,
-				y: previousCheckpoint.y + (firstCheckpoint.y - previousCheckpoint.y) * progress
-			});
+		if (checkpoints[0]?.time !== startTime && previousCheckpointIndex !== null) {
+			checkpoints.unshift(this.checkpointByProgress(previousCheckpointIndex, startTime));
 		}
-		if (!(checkpoints[checkpoints.length-1] && checkpoints[checkpoints.length-1].time == endTime) && nextCheckpoint) {
-			const lastCheckpoint = checkpoints[checkpoints.length - 1] || previousCheckpoint;
-			const progress = (endTime - lastCheckpoint.time) / (nextCheckpoint.time - lastCheckpoint.time);
-			checkpoints.push({
-				time: endTime,
-				x: lastCheckpoint.x + (nextCheckpoint.x - lastCheckpoint.x) * progress,
-				y: lastCheckpoint.y + (nextCheckpoint.y - lastCheckpoint.y) * progress
-			});
+		if (checkpoints[checkpoints.length - 1]?.time !== endTime && nextCheckpointIndex !== null) {
+			checkpoints.push(this.checkpointByProgress(nextCheckpointIndex - 1, endTime));
 		}
-		checkpoints.forEach(checkpoint => {
-			checkpoint.thicknessRatio = Math.min(
-				(checkpoint.time - startTime) / this.constructor.TRAIL_TAIL_DURATION,
-				1
-			);
-		});
 		return checkpoints;
+	}
+
+	checkpointByProgress(index, time) {
+		const {time: t1, x: x1, y: y1} = this.checkpoints[index];
+		const {time: t2, x: x2, y: y2} = this.checkpoints[index + 1];
+		const progress = (time - t1) / (t2 - t1);
+		return {time, x: x1 + (x2 - x1) * progress, y: y1 + (y2 - y1) * progress, index: index + 0.5};
+	}
+
+	jointEdge(checkpoint, startTime) {
+		const {x, y, index} = checkpoint;
+		let xP, yP;
+		for (let i = Math.floor(index); i >= 0; i--) {
+			({x: xP, y: yP} = this.checkpoints[i]);
+			if (xP != x || yP != y) {
+				break;
+			}
+		}
+		let xN, yN;
+		for (let i = Math.ceil(index); i < this.checkpoints.length; i++) {
+			({x: xN, y: yN} = this.checkpoints[i]);
+			if (xN != x || yN != y) {
+				break;
+			}
+		}
+		let angleP = xP != x || yP != y ? this.atan2(xP - x, yP - y) : undefined;
+		let angleN = xN != x || yN != y ? this.atan2(xN - x, yN - y) : undefined;
+		if (angleP === undefined && angleN === undefined) {
+			return this.zeroAngle();
+		}
+		angleP ??= angleN + Math.PI;
+		angleN ??= angleP + Math.PI;
+		let angle = (angleP + angleN) / 2;
+		if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI/2 - 1e-4) {
+			angle += Math.PI / 2;
+		}
+		return Sunniesnow.Utils.polarToCartesian(
+			this.constructor.halfThickness * Math.min((checkpoint.time - startTime) / this.constructor.TRAIL_TAIL_DURATION, this.tipPoint.scale.x) / Math.sin(angle - angleN),
+			angle
+		);
 	}
 
 	drawTrailThrough(checkpoints) {
@@ -327,60 +343,22 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.trailUvs.update();
 
 		const vertices = this.trailVertices.data;
-		const halfThickness = this.constructor.radius / 1.5; // half thickness of trail
 		let lastX1, lastX2, lastY1, lastY2;
 		lastX1 = lastX2 = vertices[0] = vertices[2] = checkpoints[0].x
 		lastY1 = lastY2 = vertices[1] = vertices[3] = checkpoints[0].y;
 		for (let i = 1; i < checkpoints.length; i++) {
 			const index = i * 4;
-			const {x, y, thicknessRatio} = checkpoints[i];
+			const {x, y} = checkpoints[i];
 			const {x: xP, y: yP} = checkpoints[i-1];
-			if (x == xP && y == yP) {
-				vertices[index] = lastX1;
-				vertices[index + 1] = lastY1;
-				vertices[index + 2] = lastX2;
-				vertices[index + 3] = lastY2;
-				continue;
-			}
-			let j, xN, yN, perpX, perpY;
-			for (j = i + 1; j < checkpoints.length; j++) {
-				({x: xN, y: yN} = checkpoints[j]);
-				if (xN != x || yN != y) {
-					break;
-				}
-			}
-			if (j === checkpoints.length) {
-				perpX = y - yP;
-				perpY = xP - x;
-				const perpLength = Math.hypot(perpX, perpY);
-				perpX *= halfThickness / perpLength * thicknessRatio;
-				perpY *= halfThickness / perpLength * thicknessRatio;
-			} else {
-				const angleP = this.atan2(xP - x, yP - y);
-				const angleN = this.atan2(xN - x, yN - y);
-				let angle = (angleP + angleN) / 2;
-				if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI/2 - 1e-3) {
-					angle += Math.PI / 2;
-				}
-				[perpX, perpY] = Sunniesnow.Utils.polarToCartesian(halfThickness * thicknessRatio, angle);
-			}
-			let x1 = x + perpX;
-			let y1 = y + perpY;
-			let x2 = x - perpX;
-			let y2 = y - perpY;
-			const c1 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x1, y1);
-			const c2 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, lastX1, lastY1);
-			if (c1 !== c2) {
+			const [dx, dy] = this.jointEdge(checkpoints[i], startTime);
+			let x1 = x + dx, y1 = y + dy, x2 = x - dx, y2 = y - dy;
+			if (Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x1, y1) !== Sunniesnow.Utils.clockwiseness(xP, yP, x, y, lastX1, lastY1)) {
 				[x1, y1, x2, y2] = [x2, y2, x1, y1]
 			}
-			const cP11 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x1, y1);
-			const cP12 = Sunniesnow.Utils.clockwiseness(lastX1, lastY1, x, y, x1, y1);
-			if (cP11 !== cP12) {
+			if (Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x1, y1) !== Sunniesnow.Utils.clockwiseness(lastX1, lastY1, x, y, x1, y1)) {
 				[x1, y1] = [lastX1, lastY1];
 			}
-			const cP21 = Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x2, y2);
-			const cP22 = Sunniesnow.Utils.clockwiseness(lastX2, lastY2, x, y, x2, y2);
-			if (cP21 !== cP22) {
+			if (Sunniesnow.Utils.clockwiseness(xP, yP, x, y, x2, y2) !== Sunniesnow.Utils.clockwiseness(lastX2, lastY2, x, y, x2, y2)) {
 				[x2, y2] = [lastX2, lastY2];
 			}
 			vertices[index] = lastX1 = x1;

@@ -8,8 +8,8 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 	constructor(events) {
 		super();
 		this.events = events;
-		this.checkpoints = events.map(event => {
-			const checkpoint = {time: event.time};
+		this.checkpoints = events.map((event, i) => {
+			const checkpoint = {time: event.time, index: i};
 			[checkpoint.x, checkpoint.y] = Sunniesnow.Config.chartMapping(event.x, event.y);
 			return checkpoint;
 		});
