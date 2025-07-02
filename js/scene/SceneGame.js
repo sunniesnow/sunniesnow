@@ -125,8 +125,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	updateBoards(delta) {
 		this.uiBgPatternBoard?.update(delta);
 		this.uiBgNotesBoard?.update(delta);
-		this.doubleLinesBoard?.update(delta);
 		this.uiNotesBoard?.update(delta);
+		// Must be after uiNotesBoard.update() because double lines use uiNotes positions.
+		this.doubleLinesBoard?.update(delta);
 		this.tipPointsBoard?.update(delta);
 		if (Sunniesnow.game.settings.alwaysUpdateFx || !Sunniesnow.Music.pausing) {
 			this.fxBoard?.update(delta);
@@ -198,8 +199,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		}
 		this.uiBgPatternBoard?.adjustProgress(time);
 		this.uiBgNotesBoard?.adjustProgress(time);
-		this.doubleLinesBoard?.adjustProgress(time);
 		this.uiNotesBoard?.adjustProgress(time);
+		// Must be after uiNotesBoard.update() because double lines use uiNotes positions.
+		this.doubleLinesBoard?.adjustProgress(time);
 		this.tipPointsBoard?.adjustProgress(time);
 		this.seWithMusic?.adjustProgress(time);
 		Sunniesnow.game.level.adjustProgress(time);

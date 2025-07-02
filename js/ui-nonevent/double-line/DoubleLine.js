@@ -33,31 +33,21 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 	updateFadingIn(progress, relativeTime) {
 		super.updateFadingIn(progress, relativeTime);
 		this.drawShape(progress);
-		this.firstActive = false;
 	}
 
 	updateActive(progress, relativeTime) {
 		super.updateActive(progress, relativeTime);
-		if (!this.firstActive || Sunniesnow.game.settings.scroll) {
-			this.drawShape(1);
-			this.firstActive = true;
-		}
+		this.drawShape(1);
 	}
 
 	updateHolding(progress, relativeTime) {
 		super.updateHolding(progress, relativeTime);
-		if (!this.firstHolding) {
-			this.drawShape(1);
-			this.firstHolding = true;
-		}
+		this.drawShape(1);
 	}
 
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
 		this.graphics.alpha = (1 - progress)**2;
-		if (!this.firstHolding) {
-			this.drawShape(1);
-			this.firstHolding = true;
-		}
+		this.drawShape(1);
 	}
 };

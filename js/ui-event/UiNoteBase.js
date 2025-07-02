@@ -3,7 +3,6 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 	constructor(event) {
 		super(event);
 		this.activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
-		[this.x, this.y] = Sunniesnow.Config.chartMapping(event.x, event.y);
 	}
 
 	static fadingInDuration(event) {
@@ -47,6 +46,10 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 
 	update(relativeTime) {
 		this.fadingAlpha = 1; // to be updated in updateActive(); will be used in UiNotesBoard and UiBgNotesBoard
+		[this.x, this.y] = Sunniesnow.Config.chartMapping(
+			this.event.timeDependentAt('x', relativeTime),
+			this.event.timeDependentAt('y', relativeTime)
+		);
 		super.update(relativeTime);
 	}
 

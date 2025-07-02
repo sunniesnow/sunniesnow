@@ -89,19 +89,31 @@ Sunniesnow.Event = class Event {
 		this.timeDependent = {};
 		timeDependent = Object.assign({}, timeDependent);
 		for (const property in this.constructor.TIME_DEPENDENT) {
+			const options = {};
 			if (Object.hasOwn(timeDependent, property)) {
-				this.timeDependent[property] = timeDependent[property];
+				Object.assign(options, timeDependent[property]);
 				delete timeDependent[property];
 			} else {
-				this.timeDependent[property] = this.constructor.TIME_DEPENDENT[property];
+				Object.assign(options, this.constructor.TIME_DEPENDENT[property]);
 			}
-			const options = this.timeDependent[property];
 			options.interpolable ??= true;
+			options.dataPoints = options.dataPoints?.map(x => Object.assign({}, x)) ?? [];
+			options.value ??= this[property];
+			Sunniesnow.Utils.eachWithRedoingIf(options.dataPoints, ({time, value}, i) => {
+				if (typeof time !== 'number' || options.interpolable && typeof value !== 'number') {
+					Sunniesnow.Logs.warn(`Invalid data point in time dependent property \`${property}\` in ${this.constructor.TYPE_NAME} event`);
+					options.dataPoints.splice(i, 1);
+					return true;
+				}
+			});
 			if (options.interpolable) {
 				options.speed ??= 0;
-				options.value ??= this[property];
+				options.dataPoints.unshift({time: this.time, value: options.value});
+			} else {
+				options.dataPoints.unshift({time: -Infinity, value: options.value});
 			}
-			options.dataPoints ??= [];
+			options.dataPoints.sort((a, b) => a.time - b.time);
+			this.timeDependent[property] = options;
 		}
 		for (const property in timeDependent) {
 			Sunniesnow.Logs.warn(`Unknown time dependent property \`${property}\` in ${this.constructor.TYPE_NAME} event`);
@@ -147,7 +159,9 @@ Sunniesnow.Event = class Event {
 	}
 
 	newUiEvent() {
-		return new (this.uiClass())(this);
+		const result = new (this.uiClass())(this);
+		this.uiEvent = result;
+		return result;
 	}
 
 	checkProperties() {
@@ -175,6 +189,25 @@ Sunniesnow.Event = class Event {
 	}
 
 	timeDependentAt(property, time) {
-		// TODO
+		const {interpolable, speed, dataPoints} = this.timeDependent[property];
+		const index = Sunniesnow.Utils.bisectRight(dataPoints, ({time: t}) => t - time);
+		if (!interpolable || index === dataPoints.length - 1) {
+			// index is never -1 because there is a -Infinity.
+			return dataPoints[index].value;
+		}
+		if (index === -1) {
+			return dataPoints[0].value + speed * (time - dataPoints[0].time);
+		}
+		const {time: t1, value: v1} = dataPoints[index];
+		const {time: t2, value: v2} = dataPoints[index + 1];
+		let progress = (time - t1) / (t2 - t1);
+		if (Number.isNaN(progress)) { // extremely unlikely, but put here for robustness
+			progress = 1/2;
+		}
+		return v1 + (v2 - v1) * progress;
+	}
+
+	timeDependentAtRelative(property, relativeTime) {
+		return this.timeDependentAt(property, this.time + relativeTime);
 	}
 };

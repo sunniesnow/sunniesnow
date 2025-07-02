@@ -353,9 +353,9 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	createTouchArea(uiNote) {
 		const graphics = new PIXI.Graphics(this.constructor.touchAreaGeometry);
-		graphics.x = uiNote.x;
-		if (!Sunniesnow.game.settings.scroll) {
-			graphics.y = uiNote.y;
+		graphics.position.set(...Sunniesnow.Config.chartMapping(uiNote.event.x, uiNote.event.y));
+		if (Sunniesnow.game.settings.scroll) {
+			graphics.y = 0;
 		}
 		graphics.uiNote = uiNote;
 		this.addChild(graphics);
@@ -386,7 +386,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			const uiEvent = highlight.uiEvent;
 			highlight.life -= delta / this.constructor.eventInfoTipHighlightLifeTime;
 			if (!uiEvent.parent || highlight.life <= 0) {
-				uiEvent.filters.splice(uiEvent.filters.indexOf(highlight.filter), 1);
+				uiEvent.filters?.splice(uiEvent.filters.indexOf(highlight.filter), 1);
 				this.eventInfoTipHighlights.delete(highlight);
 				this.removeChild(uiEvent);
 				continue;

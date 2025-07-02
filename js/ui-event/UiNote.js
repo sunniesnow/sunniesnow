@@ -6,8 +6,12 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 		if (!Sunniesnow.game.settings.hideCircles) {
 			this.populateCircle();
 			this.circle.visible = false;
-			this.circle.x = this.x;
-			this.circle.y = Sunniesnow.game.settings.scroll ? Sunniesnow.Config.SCROLL_END_Y : this.y;
+			if (!Sunniesnow.game.settings.circleMovesWithNote) {
+				this.circle.position.set(...Sunniesnow.Config.chartMapping(this.event.x, this.event.y));
+				if (Sunniesnow.game.settings.scroll) {
+					this.circle.y = Sunniesnow.Config.SCROLL_END_Y;
+				}
+			}
 		}
 	}
 

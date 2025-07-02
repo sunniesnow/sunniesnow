@@ -7,11 +7,6 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 		super();
 		this.event1 = event1;
 		this.event2 = event2;
-		[this.x1, this.y1] = Sunniesnow.Config.chartMapping(event1.x, event1.y);
-		[this.x2, this.y2] = Sunniesnow.Config.chartMapping(event2.x, event2.y);
-		if (Sunniesnow.game.settings.scroll) {
-			this.y1 = this.y2 = Sunniesnow.Config.SCROLL_START_Y;
-		}
 		this.levelNote1 = event1.levelNote;
 		this.levelNote2 = event2.levelNote;
 		this.activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
@@ -23,6 +18,7 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 
 	update(relativeTime) {
 		this.fadingAlpha = 1; // to be updated in updateActive(); will be used in DoubleLinesBoard
+		this.updateCoordinates(relativeTime);
 		this.updateState(relativeTime);
 		switch (this.state) {
 			case 'ready':
@@ -81,6 +77,17 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 		}
 	}
 
+	updateCoordinates(relativeTime) {
+		if (this.event1.uiEvent?.parent) {
+			this.x1 = this.event1.uiEvent.x;
+			this.y1 = this.event1.uiEvent.y;
+		}
+		if (this.event2.uiEvent?.parent) {
+			this.x2 = this.event2.uiEvent.x;
+			this.y2 = this.event2.uiEvent.y;
+		}
+	}
+
 	updateState(relativeTime) {
 		this.state = this.getStateByRelativeTime(relativeTime);
 		this.visible = this.state !== 'ready' && this.state !== 'finished';
@@ -91,22 +98,13 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 
 	updateFadingOut(progress, relativeTime) {
 		this.fadingAlpha = Sunniesnow.Config.fadingAlpha();
-		if (Sunniesnow.game.settings.scroll && Sunniesnow.game.settings.autoplay) {
-			this.y1 = this.y2 = Sunniesnow.Config.SCROLL_END_Y;
-		}
 	}
 
 	updateActive(progress, relativeTime) {
 		this.fadingAlpha = Sunniesnow.Config.fadingAlpha(progress, relativeTime);
-		if (Sunniesnow.game.settings.scroll) {
-			this.y1 = this.y2 = Sunniesnow.Config.scrollY(progress);
-		}
 	}
 
 	updateHolding(relativeTime) {
 		this.fadingAlpha = Sunniesnow.Config.fadingAlpha();
-		if (Sunniesnow.game.settings.scroll && Sunniesnow.game.settings.autoplay) {
-			this.y1 = this.y2 = Sunniesnow.Config.SCROLL_END_Y;
-		}
 	}
 };
