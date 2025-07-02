@@ -5,8 +5,7 @@ Sunniesnow.Flick = class Flick extends Sunniesnow.Note {
 	}
 
 	static TIME_DEPENDENT = {
-		...Sunniesnow.NoteBase.TIME_DEPENDENT,
-		angle: {},
+		...Sunniesnow.Note.TIME_DEPENDENT,
 		text: {interpolable: false},
 	}
 

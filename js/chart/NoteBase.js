@@ -5,7 +5,7 @@ Sunniesnow.NoteBase = class NoteBase extends Sunniesnow.Event {
 		circle: {speed: 1, value: 0},
 		opacity: {value: 1},
 		size: {},
-		angle: {value: 0}
+		rotation: {value: 0}
 	}
 
 	static UI_CLASS = 'UiNoteBase'
@@ -19,5 +19,9 @@ Sunniesnow.NoteBase = class NoteBase extends Sunniesnow.Event {
 
 	checkProperties() {
 		return super.checkProperties() && this.assertType("x", "number") && this.assertType("y", "number");
+	}
+
+	hasText() {
+		return this.timeDependent.text.dataPoints.some(({value}) => value);
 	}
 };

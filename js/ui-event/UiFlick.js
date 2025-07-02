@@ -6,7 +6,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.circleRadius = this.radius * 4;
 		this.circleGeometry = Sunniesnow.UiTap.createCircleGeometry.call(this, 0xccfcfc);
 	}
-	
+
 	static createArrowGeometry() {
 		const graphics = new PIXI.Graphics();
 		const tipDistance = this.radius * 2;
@@ -43,6 +43,11 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 
 	populateCircle() {
 		this.circle = new PIXI.Graphics(Sunniesnow.UiFlick.circleGeometry);
+	}
+
+	update(relativeTime) {
+		Sunniesnow.UiTap.prototype.updateText.call(this, relativeTime);
+		super.update(relativeTime);
 	}
 
 	updateFadingIn(progress, relativeTime) {

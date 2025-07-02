@@ -5,7 +5,7 @@ Sunniesnow.Hold = class Hold extends Sunniesnow.Note {
 	}
 
 	static TIME_DEPENDENT = {
-		...Sunniesnow.NoteBase.TIME_DEPENDENT,
+		...Sunniesnow.Note.TIME_DEPENDENT,
 		text: {interpolable: false},
 	}
 

@@ -89,18 +89,20 @@ Sunniesnow.Event = class Event {
 		this.timeDependent = {};
 		timeDependent = Object.assign({}, timeDependent);
 		for (const property in this.constructor.TIME_DEPENDENT) {
-			const options = {};
+			const options = Object.assign({}, this.constructor.TIME_DEPENDENT[property]);
 			if (Object.hasOwn(timeDependent, property)) {
 				Object.assign(options, timeDependent[property]);
 				delete timeDependent[property];
-			} else {
-				Object.assign(options, this.constructor.TIME_DEPENDENT[property]);
 			}
-			options.interpolable ??= true;
+			options.interpolable = this.constructor.TIME_DEPENDENT[property].interpolable ?? true;
 			options.dataPoints = options.dataPoints?.map(x => Object.assign({}, x)) ?? [];
 			options.value ??= this[property];
 			Sunniesnow.Utils.eachWithRedoingIf(options.dataPoints, ({time, value}, i) => {
-				if (typeof time !== 'number' || options.interpolable && typeof value !== 'number') {
+				let condition = typeof time !== 'number';
+				if (options.interpolable) {
+					condition ||= typeof value !== 'number';
+				}
+				if (condition) {
 					Sunniesnow.Logs.warn(`Invalid data point in time dependent property \`${property}\` in ${this.constructor.TYPE_NAME} event`);
 					options.dataPoints.splice(i, 1);
 					return true;

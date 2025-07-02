@@ -16,7 +16,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 		graphics.endFill();
 		return graphics.geometry;
 	}
-	
+
 	populate() {
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
 		this.text = Sunniesnow.UiTap.prototype.createText.call(this);
@@ -53,6 +53,11 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 		this.halo.mask = this.haloMask;
 		this.note.addChild(this.halo);
 		this.note.addChild(this.haloMask);
+	}
+
+	update(relativeTime) {
+		Sunniesnow.UiTap.prototype.updateText.call(this, relativeTime);
+		super.update(relativeTime);
 	}
 
 	updateFadingIn(progress, relativeTime) {

@@ -50,6 +50,7 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 			this.event.timeDependentAt('x', relativeTime),
 			this.event.timeDependentAt('y', relativeTime)
 		);
+		this.transform.rotation = Sunniesnow.Config.chartMappingAngle(this.event.timeDependentAtRelative('rotation', relativeTime));
 		super.update(relativeTime);
 	}
 

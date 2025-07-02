@@ -7,7 +7,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		this.doubleCircleGeometry = this.createCircleGeometry(0xf9f9e9);
 		this.geometry = this.createGeometry(0x29a9b9, 0xe8f8b8);
 		this.doubleGeometry = this.createGeometry(0x3171d1, 0xe3f3f3);
-		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.NoteBase && e.text)) {
+		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.NoteBase && e.hasText())) {
 			try {
 				await Sunniesnow.Assets.loadFont(
 					//'https://fastly.jsdelivr.net/gh/kaio/wangfonts/TrueType/wt024.ttf',
@@ -65,6 +65,15 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		return this.event.simultaneousEvents.some(event => {
 			return event !== this.event && event instanceof Sunniesnow.Tap
 		});
+	}
+
+	update(relativeTime) {
+		this.updateText(relativeTime);
+		super.update(relativeTime);
+	}
+
+	updateText(relativeTime) {
+		this.text.text = this.event.timeDependentAtRelative('text', relativeTime);
 	}
 
 	updateFadingIn(progress, relativeTime) {
