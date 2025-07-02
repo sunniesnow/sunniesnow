@@ -78,6 +78,12 @@ Sunniesnow.Game = class Game {
 		if (Sunniesnow.TouchManager.loaded) {
 			Sunniesnow.TouchManager.update(delta);
 		}
+		if (Sunniesnow.DiscordRichPresence.connected) {
+			Sunniesnow.DiscordRichPresence.update(delta);
+		}
+	}
+
+	updateComponents(delta) {
 		this.touchEffectsBoard?.update(delta);
 		this.debugHud?.update(delta, {
 			FPS: this.app.ticker.FPS,
@@ -85,9 +91,6 @@ Sunniesnow.Game = class Game {
 			Progress: Sunniesnow.Music.progress
 		});
 		this.debugBoard?.update(delta);
-		if (Sunniesnow.DiscordRichPresence.connected) {
-			Sunniesnow.DiscordRichPresence.update(delta);
-		}
 	}
 
 	update(delta) {
@@ -108,6 +111,11 @@ Sunniesnow.Game = class Game {
 		} else {
 			this.terminate();
 		}
+		// Must be after scene.update() because of the joint effect of:
+		// - ProgressControl.update() is called in scene.update() before uiNotesBoard.update(), but
+		// - debugBoard.update() is called in updateComponents().
+		// If the order is not right, touch areas may be doubly drawn.
+		this.updateComponents(delta);
 	}
 
 	terminate() {
