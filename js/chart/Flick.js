@@ -1,7 +1,13 @@
 Sunniesnow.Flick = class Flick extends Sunniesnow.Note {
 	static PROPERTIES = {
 		required: ['x', 'y', 'angle'],
-		optional: {text: '', tipPoint: null}
+		optional: {text: '', tipPoint: null, size: 1}
+	}
+
+	static TIME_DEPENDENT = {
+		...Sunniesnow.NoteBase.TIME_DEPENDENT,
+		angle: {},
+		text: {interpolable: false},
 	}
 
 	static UI_CLASS = 'UiFlick'

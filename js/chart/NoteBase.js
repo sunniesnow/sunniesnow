@@ -1,4 +1,13 @@
 Sunniesnow.NoteBase = class NoteBase extends Sunniesnow.Event {
+	static TIME_DEPENDENT = {
+		x: {},
+		y: {},
+		circle: {speed: 1, value: 0},
+		opacity: {value: 1},
+		size: {},
+		angle: {value: 0}
+	}
+
 	static UI_CLASS = 'UiNoteBase'
 	static LEVEL_CLASS = 'LevelNoteBase'
 	static TYPE_NAME = 'noteBase'

@@ -1,7 +1,12 @@
 Sunniesnow.BgNote = class BgNote extends Sunniesnow.NoteBase {
 	static PROPERTIES = {
 		required: ['x', 'y'],
-		optional: {tipPoint: null, text: '', duration: 0}
+		optional: {tipPoint: null, text: '', duration: 0, size: 1}
+	}
+
+	static TIME_DEPENDENT = {
+		...Sunniesnow.NoteBase.TIME_DEPENDENT,
+		text: {interpolable: false},
 	}
 
 	static UI_CLASS = 'UiBgNote'

@@ -1,7 +1,7 @@
 Sunniesnow.Drag = class Drag extends Sunniesnow.Note {
 	static PROPERTIES = {
 		required: ['x', 'y'],
-		optional: {tipPoint: null}
+		optional: {tipPoint: null, size: 1}
 	}
 
 	static UI_CLASS = 'UiDrag'

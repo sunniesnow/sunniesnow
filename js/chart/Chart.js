@@ -15,14 +15,12 @@ Sunniesnow.Chart = class Chart {
 		offset: 0
 	}
 
-	static EVENT_FIELDS = ['time', 'type', 'properties']
-	
 	static async load() {
 		Sunniesnow.game.chart = new this(Sunniesnow.game.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
 		await Sunniesnow.game.chart.readSscharterInfo();
 		Sunniesnow.Music.start = Math.min(
 			Sunniesnow.game.settings.start * Sunniesnow.Music.duration,
-			Sunniesnow.game.settings.speed === 0 ? Infinity : Sunniesnow.game.chart.eventsSortedByAppearTime[0].appearTime()
+			Sunniesnow.game.settings.speed === 0 ? Infinity : Sunniesnow.game.chart.eventsSortedByAppearTime.find(event => event instanceof Sunniesnow.Note).appearTime()
 		) - Sunniesnow.game.settings.beginningPreparationTime;
 		if (!Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Audio.loadOfflineAudioContext();
@@ -35,6 +33,7 @@ Sunniesnow.Chart = class Chart {
 		}
 		this.data = data;
 		this.readMeta();
+		this.init();
 		this.readEvents();
 		this.eventsPostProcess();
 	}
@@ -60,40 +59,23 @@ Sunniesnow.Chart = class Chart {
 		await Sunniesnow.Sscharter.connect(this.sscharter);
 	}
 
+	init() {
+		this.duration = Sunniesnow.Music.duration;
+		this.start = Sunniesnow.game.settings.start * this.duration;
+		this.end = Sunniesnow.game.settings.end * this.duration;
+		this.totalOffset = this.offset + Sunniesnow.game.settings.chartOffset;
+	}
+
 	readEvents() {
 		this.events = [];
-		const duration = Sunniesnow.Music.duration;
-		const start = Sunniesnow.game.settings.start * duration - Sunniesnow.game.settings.resumePreparationTime;
-		const end = Sunniesnow.game.settings.end * duration;
-		const offset = Sunniesnow.game.settings.chartOffset + this.offset;
 		this.data.events.forEach((eventData, id) => {
-			if (!Sunniesnow.Event.check(eventData)) {
-				return;
-			}
-			const {type, time, properties} = this.readEventMeta(eventData);
-			const reducedTime = (time + offset) / Sunniesnow.game.settings.gameSpeed;
-			if (!Sunniesnow.Utils.between(reducedTime, start, end)) {
-				return;
-			}
-			const event = Sunniesnow.Event.newFromType(type, time, reducedTime, properties);
+			const event = Sunniesnow.Event.from(eventData, this);
 			if (!event) {
 				return;
 			}
 			event.id = id;
 			this.events.push(event);
 		});
-	}
-
-	readEventMeta(eventData) {
-		const result = {}
-		for (const field of Sunniesnow.Chart.EVENT_FIELDS) {
-			result[field] = eventData[field];
-			if (!Object.hasOwn(result, field)) {
-				Sunniesnow.Logs.warn(`Missing \`${field}\` in event`);
-				return null;
-			}
-		}
-		return result;
 	}
 
 	endTime() {
@@ -106,6 +88,7 @@ Sunniesnow.Chart = class Chart {
 			Sunniesnow.Logs.error('There are no events in the chart in the specified range');
 		}
 		this.events.sort((a, b) => a.time - b.time);
+		this.stripEvents();
 		for (let i = 0; i < this.events.length - 1; i++) {
 			const event1 = this.events[i];
 			const event2 = this.events[i + 1];
@@ -117,6 +100,31 @@ Sunniesnow.Chart = class Chart {
 		this.eventsSortedByAppearTime = this.events.toSorted((a, b) => a.appearTime() - b.appearTime());
 		this.eventsSortedByEndTime = this.events.toSorted((a, b) => a.endTime() - b.endTime());
 		this.eventsSortedByEndTime.filter(event => event instanceof Sunniesnow.Note).forEach((note, i) => note.comboIndex = i + 1);
+	}
+
+	// Event.from() already strips events after this.end,
+	// but we still need to strip events before this.start.
+	// This method assumes that this.events are sorted by time.
+	stripEvents() {
+		const tipPoints = new Map();
+		const preparationStart = this.start - Sunniesnow.game.settings.beginningPreparationTime;
+		for (let i = this.events.length - 1; i >= 0; i--) {
+			const event = this.events[i];
+			if (event.time >= preparationStart && event.tipPoint) {
+				tipPoints.set(event.tipPoint, false);
+			}
+			if (event instanceof Sunniesnow.Note && event.time < this.start || event.disappearTime() < preparationStart) {
+				if (tipPoints.has(event.tipPoint)) {
+					this.events[i] = tipPoints.get(event.tipPoint) ? null : event.toPlaceholder();
+				} else {
+					this.events[i] = null;
+				}
+			}
+			if (event.time < preparationStart && tipPoints.has(event.tipPoint)) {
+				tipPoints.set(event.tipPoint, true);
+			}
+		}
+		Sunniesnow.Utils.compactify(this.events);
 	}
 
 };

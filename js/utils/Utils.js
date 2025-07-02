@@ -602,5 +602,18 @@ Sunniesnow.Utils = {
 
 	base() {
 		return Sunniesnow.Utils.isBrowser() ? Sunniesnow.Utils.dirname(location.pathname) : '/game'
+	},
+
+	compactify(array) {
+		let nullCount = 0;
+		for (let i = 0; i < array.length; i++) {
+			if (array[i] == null) {
+				nullCount++;
+			} else {
+				array[i - nullCount] = array[i];
+			}
+		}
+		array.length -= nullCount;
+		return array;
 	}
 };

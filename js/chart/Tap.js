@@ -1,7 +1,12 @@
 Sunniesnow.Tap = class Tap extends Sunniesnow.Note {
 	static PROPERTIES = {
 		required: ['x', 'y'],
-		optional: {tipPoint: null, text: ''}
+		optional: {tipPoint: null, text: '', size: 1}
+	}
+
+	static TIME_DEPENDENT = {
+		...Sunniesnow.NoteBase.TIME_DEPENDENT,
+		text: {interpolable: false},
 	}
 
 	static UI_CLASS = 'UiTap'
