@@ -1,7 +1,7 @@
 Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 	static PROPERTIES = {
 		required: ['x', 'y'],
-		optional: {tipPoint: null}
+		optional: {tipPoint: null, size: 1}
 	}
 
 	static UI_CLASS = 'UiNote'

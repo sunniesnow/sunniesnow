@@ -60,7 +60,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		if (touch.wholeScreen) {
 			return true;
 		}
-		const r = Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.noteHitSize;
+		const r = Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.noteHitSize * this.event.size;
 		let result = Math.abs(this.event.x - x) < r;
 		if (!Sunniesnow.game.settings.scroll) {
 			result &&= Math.abs(this.event.y - y) < r;

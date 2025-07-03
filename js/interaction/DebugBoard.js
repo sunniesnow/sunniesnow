@@ -354,6 +354,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	createTouchArea(uiNote) {
 		const graphics = new PIXI.Graphics(this.constructor.touchAreaGeometry);
 		graphics.position.set(...Sunniesnow.Config.chartMapping(uiNote.event.x, uiNote.event.y));
+		graphics.scale.set(uiNote.event.size);
 		if (Sunniesnow.game.settings.scroll) {
 			graphics.y = 0;
 		}
