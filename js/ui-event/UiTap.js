@@ -8,6 +8,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		this.doubleCircleGeometry = this.createCircleGeometry(0xf9f9e9);
 		this.geometry = this.createNoteBodyGeometry(0x29a9b9, 0xe8f8b8);
 		this.doubleGeometry = this.createNoteBodyGeometry(0x3171d1, 0xe3f3f3);
+		this.textStyle = this.createTextStyle();
 	}
 
 	populate() {

@@ -5,6 +5,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.arrowGeometry = this.createArrowGeometry();
 		this.circleRadius = this.radius * 4;
 		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
+		this.textStyle = this.createTextStyle();
 	}
 
 	static createArrowGeometry() {

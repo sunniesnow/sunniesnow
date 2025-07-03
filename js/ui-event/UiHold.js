@@ -7,6 +7,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 		this.haloGeometry = this.createHaloGeometry();
 		this.circleRadius = this.radius * 4;
 		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
+		this.textStyle = this.createTextStyle();
 	}
 
 	static createHaloGeometry() {

@@ -23,7 +23,7 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 			fontSize: this.fontSize,
 			fill: 0xffffff,
 			align: 'center',
-			padding: this.fontSize / 2
+			padding: this.fontSize / 2 // https://github.com/pixijs/pixijs/issues/9663
 		});
 		this.widthCache = new Map();
 	}

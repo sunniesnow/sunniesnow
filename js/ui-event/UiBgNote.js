@@ -3,6 +3,7 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 	static async load() {
 		this.radius = Sunniesnow.Config.NOTE_RADIUS;
 		this.geometry = this.createGeometry();
+		this.textStyle = this.createTextStyle();
 	}
 
 	static createGeometry() {
@@ -50,6 +51,7 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 // because I do not want the Sunniesnow code base to be too coupled with the default skin.
 // It is put in this file because UiBgNote is the last loaded UiNoteBase subclass.
 const UiNoteMixin = new Sunniesnow.Mixin({
+	widthCache: new Map(),
 
 	// Call this method in the load() method of only one of the UiNoteBase subclasses.
 	async loadFontIfNeeded() {
@@ -92,24 +94,40 @@ const UiNoteMixin = new Sunniesnow.Mixin({
 		graphics.drawCircle(0, 0, this.radius);
 		graphics.endFill();
 		return graphics.geometry;
-	}
-}, {
-	createText(maxWidth, maxSize, font) {
-		maxWidth ??= this.constructor.radius * 1.5;
-		maxSize ??= this.constructor.radius;
-		const text = new PIXI.Text(this.event.text, {
-			fontSize: maxSize,
+	},
+
+	createTextStyle(fontSize, fontFamily) {
+		return new PIXI.TextStyle({
+			fontSize: fontSize ?? this.radius,
+			fontFamily: fontFamily ?? 'LXGW WenKai,Noto Sans Math',
 			fill: 'white',
 			align: 'center',
-			fontFamily: font ?? 'LXGW WenKai,Noto Sans Math'
 		});
+	}
+}, {
+	createText() {
+		const text = new PIXI.Text(this.event.text, this.constructor.textStyle.clone());
 		text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
-		text.scale.set(Math.min(maxWidth / text.width, 1));
 		return text;
 	},
 
 	updateText(relativeTime) {
 		this.text.text = this.event.timeDependentAtRelative('text', relativeTime);
+		this.adjustTextSize();
+	},
+
+	adjustTextSize(maxWidth) {
+		maxWidth ??= this.constructor.radius * 1.5;
+		if (!this.constructor.widthCache.has(this.text.text)) {
+			this.constructor.widthCache.set(
+				this.text.text,
+				PIXI.TextMetrics.measureText(this.text.text, this.constructor.textStyle).width
+			);
+		}
+		this.text.style.fontSize = this.constructor.textStyle.fontSize * Math.min(
+			1,
+			maxWidth / this.constructor.widthCache.get(this.text.text)
+		);
 	},
 
 	updateTextFadingOut(progress) {
