@@ -89,7 +89,7 @@ Sunniesnow.Assets = {
 			const fs = require('fs');
 			src = path.join(Sunniesnow.record.tempDir, path.basename(url));
 			if (!fs.existsSync(src) || Sunniesnow.record.clean) {
-				fs.writeFileSync(dest, Buffer.from(arrayBuffer));
+				fs.writeFileSync(src, Buffer.from(arrayBuffer));
 			}
 		}
 		const result = await PIXI.Assets.load({src, ...options});
