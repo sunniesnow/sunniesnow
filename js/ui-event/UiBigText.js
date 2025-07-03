@@ -18,25 +18,41 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 		}
 		this.fontSize = Sunniesnow.Config.RADIUS * 10 * Sunniesnow.Config.SCALE;
 		this.maxWidth = Sunniesnow.Config.MIN_WIDTH * 0.9 * Sunniesnow.Config.SCALE;
+		this.style = new PIXI.TextStyle({
+			fontFamily: 'HanWangShinSuMedium,YujiBoku,Noto Sans Math,Noto Sans CJK TC',
+			fontSize: this.fontSize,
+			fill: 0xffffff,
+			align: 'center',
+			padding: this.fontSize / 2
+		});
+		this.widthCache = new Map();
 	}
 
 	populate() {
 		super.populate();
-		const style = new PIXI.TextStyle({
-			fontFamily: 'HanWangShinSuMedium,YujiBoku,Noto Sans Math,Noto Sans CJK TC',
-			fontSize: this.constructor.fontSize,
-			fill: 0xffffff,
-			align: 'center',
-			padding: this.constructor.fontSize / 2
-		});
-		const textMetrics = PIXI.TextMetrics.measureText(this.event.text, style);
-		if (textMetrics.width > this.constructor.maxWidth) {
-			style.fontSize *= this.constructor.maxWidth / textMetrics.width;
-		}
-		this.text = new PIXI.Text(this.event.text, style);
+		this.text = new PIXI.Text(this.event.text, this.constructor.style.clone());
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
 		this.addChild(this.text);
 		this.alpha = 0.8;
+	}
+
+	update(relativeTime) {
+		this.text.text = this.event.timeDependentAtRelative('text', relativeTime);
+		this.adjustTextSize();
+		super.update(relativeTime);
+	}
+
+	adjustTextSize() {
+		if (!this.constructor.widthCache.has(this.text.text)) {
+			this.constructor.widthCache.set(
+				this.text.text,
+				PIXI.TextMetrics.measureText(this.text.text, this.constructor.style).width
+			);
+		}
+		this.text.style.fontSize = this.constructor.fontSize * Math.min(
+			1,
+			this.constructor.maxWidth / this.constructor.widthCache.get(this.text.text)
+		);
 	}
 
 	updateFadingIn(progress, relativeTime) {

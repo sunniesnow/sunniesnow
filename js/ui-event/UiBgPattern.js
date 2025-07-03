@@ -10,7 +10,16 @@ Sunniesnow.UiBgPattern = class UiBgPattern extends Sunniesnow.UiEvent {
 
 	constructor(event) {
 		super(event);
-		this.x = Sunniesnow.Config.WIDTH / 2;
-		this.y = Sunniesnow.Config.HEIGHT / 2;
+	}
+
+	update(relativeTime) {
+		[this.x, this.y] = Sunniesnow.Config.chartMapping(
+			this.event.timeDependentAtRelative('x', relativeTime),
+			this.event.timeDependentAtRelative('y', relativeTime)
+		);
+		this.transform.rotation = Sunniesnow.Config.chartMappingAngle(this.event.timeDependentAtRelative('rotation', relativeTime));
+		this.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
+		this.alpha = this.event.timeDependentAtRelative('opacity', relativeTime);
+		super.update(relativeTime);
 	}
 };

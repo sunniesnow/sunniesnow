@@ -215,6 +215,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 ];
 Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
 	'utils/Utils',
+	'utils/Mixin',
 	'utils/ObjectUrl',
 	'utils/PixiPatches',
 	'utils/Patches',
