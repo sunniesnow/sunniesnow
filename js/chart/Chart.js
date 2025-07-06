@@ -18,10 +18,7 @@ Sunniesnow.Chart = class Chart {
 	static async load() {
 		Sunniesnow.game.chart = new this(Sunniesnow.game.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
 		await Sunniesnow.game.chart.readSscharterInfo();
-		Sunniesnow.Music.start = Math.min(
-			Sunniesnow.game.settings.start * Sunniesnow.Music.duration,
-			Sunniesnow.game.settings.speed === 0 ? Infinity : Sunniesnow.game.chart.eventsSortedByAppearTime.find(event => event instanceof Sunniesnow.Note).appearTime()
-		) - Sunniesnow.game.settings.beginningPreparationTime;
+		Sunniesnow.Music.setStart();
 		if (!Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Audio.loadOfflineAudioContext();
 		}
@@ -89,14 +86,8 @@ Sunniesnow.Chart = class Chart {
 		}
 		this.events.sort((a, b) => a.time - b.time);
 		this.stripEvents();
-		for (let i = 0; i < this.events.length - 1; i++) {
-			const event1 = this.events[i];
-			const event2 = this.events[i + 1];
-			if (event1.time === event2.time) {
-				event1.simultaneousEvents.push(event2);
-				event2.simultaneousEvents = event1.simultaneousEvents;
-			}
-		}
+		this.applyGlobalSpeed();
+		this.setSimultaneousEvents();
 		this.eventsSortedByAppearTime = this.events.toSorted((a, b) => a.appearTime() - b.appearTime());
 		this.eventsSortedByEndTime = this.events.toSorted((a, b) => a.endTime() - b.endTime());
 		this.eventsSortedByEndTime.filter(event => event instanceof Sunniesnow.Note).forEach((note, i) => note.comboIndex = i + 1);
@@ -125,6 +116,50 @@ Sunniesnow.Chart = class Chart {
 			}
 		}
 		Sunniesnow.Utils.compactify(this.events);
+	}
+
+	// This converts all the globalSpeed events to data points in timeDependent.circle of all the notes,
+	// and then removes those events.
+	// Assumes that this.events are sorted by time.
+	// This then raises the question: why do we need globalSpeed events in the first place?
+	// In principle, we could just use timeDependent.circle to achieve the same effect,
+	// but it would make the chart file very large for charts with many notes.
+	applyGlobalSpeed() {
+		const notes = [];
+		for (let i = this.events.length - 1; i >= 0; i--) {
+			const event = this.events[i];
+			if (event instanceof Sunniesnow.NoteBase) {
+				notes.push(event);
+			}
+			if (!(event instanceof Sunniesnow.GlobalSpeed)) {
+				continue;
+			}
+			this.events.splice(i, 1);
+			const {speed: globalSpeed, time} = event;
+			for (const note of notes) {
+				const {speed, dataPoints} = note.timeDependent.circle;
+				const {time: t0, value: v0} = dataPoints[0];
+				if (t0 <= time) {
+					continue;
+				}
+				dataPoints.unshift({time, value: v0 + globalSpeed * speed * (time - t0)});
+			}
+		}
+		for (const note of notes) {
+			note.timeDependent.circle.dataPoints.forEach(point => point.value *= Sunniesnow.game.settings.speed);
+			note.timeDependent.circle.speed *= Sunniesnow.game.settings.speed;
+		}
+	}
+
+	setSimultaneousEvents() {
+		for (let i = 0; i < this.events.length - 1; i++) {
+			const event1 = this.events[i];
+			const event2 = this.events[i + 1];
+			if (event1.time === event2.time) {
+				event1.simultaneousEvents.push(event2);
+				event2.simultaneousEvents = event1.simultaneousEvents;
+			}
+		}
 	}
 
 };

@@ -13,6 +13,21 @@ Sunniesnow.Music = {
 		// this.start is set in Sunniesnow.Chart.load()
 	},
 
+	// Called in Chart.load()
+	setStart() {
+		this.start = Sunniesnow.game.settings.start * this.duration;
+		for (const event of Sunniesnow.game.chart.eventsSortedByAppearTime) {
+			if (!(event instanceof Sunniesnow.Note)) {
+				continue;
+			}
+			const appearTime = event.appearTime() - Sunniesnow.game.settings.beginningPreparationTime;
+			if (appearTime > -Infinity && appearTime < this.start) {
+				this.start = appearTime;
+			}
+			break;
+		}
+	},
+
 	play(time) {
 		this.lastResumeTime = time;
 		this.lastResumeTimeStamp = performance.now();

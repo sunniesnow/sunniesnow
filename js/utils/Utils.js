@@ -59,7 +59,6 @@ Sunniesnow.Utils = {
 	},
 	
 	between(x, a, b) {
-		[a, b] = Sunniesnow.Utils.minmax(a, b);
 		return a <= x && x <= b || b <= x && x <= a;
 	},
 
@@ -615,5 +614,33 @@ Sunniesnow.Utils = {
 		}
 		array.length -= nullCount;
 		return array;
+	},
+
+	// dataPoints: an array of {time, value} objects.
+	// Interpolates each consecutive pair of points linearly,
+	// and returns an array of {time, sign} objects,
+	// where `time` is the time of the point and it is when the line crosses the target value,
+	// and `sign` is one of -1, 0, 1,
+	// depending on whether the line is above or below the target value immediately after the point.
+	solveBrokenLine(dataPoints, targetValue = 0) {
+		const result = [];
+		for (let i = 0; i < dataPoints.length - 1; i++) {
+			const {time: t1, value: v1} = dataPoints[i];
+			const {time: t2, value: v2} = dataPoints[i + 1];
+			if (v1 <= targetValue && targetValue < v2) {
+				result.push({
+					time: t1 + (t2 - t1) * (targetValue - v1) / (v2 - v1),
+					sign: 1
+				});
+			} else if (v1 >= targetValue && targetValue > v2) {
+				result.push({
+					time: t1 + (t2 - t1) * (targetValue - v1) / (v2 - v1),
+					sign: -1
+				});
+			} else if (v1 === targetValue && v2 === targetValue && result[result.length - 1]?.sign !== 0) {
+				result.push({time: t1, sign: 0});
+			}
+		}
+		return result;
 	}
 };

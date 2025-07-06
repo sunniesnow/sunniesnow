@@ -2,7 +2,8 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 
 	constructor(event) {
 		super(event);
-		this.activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
+		//this.activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
+		this.calculateFadingInInstances();
 	}
 
 	static fadingInDuration(event) {
@@ -11,6 +12,16 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 
 	static fadingOutDuration(event) {
 		return 2/3;
+	}
+
+	calculateFadingInInstances() {
+		const {dataPoints, speed} = this.event.timeDependent.circle;
+		this.fadingInInstances = Sunniesnow.Utils.solveBrokenLine(dataPoints, -1);
+		const {time: t0, value: v0} = dataPoints[0];
+		if (v0 > -1 && speed > 0) {
+			this.fadingInInstances.unshift({time: t0 + (-1 - v0) / speed, sign: 1})
+		}
+		this.fadingInInstances.forEach(p => p.relativeTime = p.time - this.event.time);
 	}
 
 	updateFadingIn(progress, relativeTime) {
@@ -54,6 +65,23 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 		this.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
 		this.alpha = this.event.timeDependentAtRelative('opacity', relativeTime);
 		super.update(relativeTime);
+	}
+
+	getBeforeTimeStateByRelativeTime(relativeTime) {
+		const circleValue = this.event.timeDependentAtRelative('circle', relativeTime);
+		if (circleValue >= -1) {
+			return ['active', circleValue + 1];
+		}
+		const fadingInInstanceIndex = Sunniesnow.Utils.bisectRight(
+			this.fadingInInstances,
+			({relativeTime: t}) => t - relativeTime
+		);
+		let delta = this.fadingInInstances[fadingInInstanceIndex + 1].relativeTime - relativeTime;
+		if (fadingInInstanceIndex >= 0) {
+			delta = Math.min(delta, relativeTime - this.fadingInInstances[fadingInInstanceIndex].relativeTime);
+		}
+		const progress = 1 - delta / this.fadingInDuration();
+		return progress >= 0 ? ['fadingIn', progress] : ['ready'];
 	}
 
 };

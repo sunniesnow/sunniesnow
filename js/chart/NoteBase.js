@@ -13,8 +13,23 @@ Sunniesnow.NoteBase = class NoteBase extends Sunniesnow.Event {
 	static TYPE_NAME = 'noteBase'
 
 	appearTime() {
-		const activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
-		return this.time - activeDuration - this.uiClass().fadingInDuration(this);
+		const {speed, dataPoints} = this.timeDependent.circle;
+		if (speed < 0) {
+			return -Infinity;
+		}
+		const fadingInDuration = this.uiClass().fadingInDuration(this);
+		const {time: t0, value: v0} = dataPoints[0];
+		if (v0 >= -1) {
+			return speed === 0 ? -Infinity : t0 - (v0 - -1) / speed - fadingInDuration;
+		}
+		for (let i = 0; i < dataPoints.length - 1; i++) {
+			const {time: t1, value: v1} = dataPoints[i];
+			const {time: t2, value: v2} = dataPoints[i + 1];
+			if (v1 <= -1 && v2 >= -1) {
+				return (v1 === v2 ? t1 : t1 + (-1 - v1) / (v2 - v1) * (t2 - t1)) - fadingInDuration;
+			}
+		}
+		return super.appearTime();
 	}
 
 	checkProperties() {

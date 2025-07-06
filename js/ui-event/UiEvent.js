@@ -16,6 +16,8 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 	constructor(event) {
 		super();
 		this.event = event;
+		// This is only used in getBeforeTimeStateByRelativeTime(),
+		// so it can be safely ignored if that method is overridden.
 		this.activeDuration = 0;
 		// For notes and background notes:
 		// ready -> fadingIn -> active -> holding -> fadingOut -> finished
@@ -37,17 +39,16 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 				// do nothing
 				break;
 			case 'fadingIn':
-				this.updateFadingIn((relativeTime + this.activeDuration) / this.fadingInDuration() + 1, relativeTime);
+				this.updateFadingIn(this.stateProgress, relativeTime);
 				break;
 			case 'active':
-				this.updateActive(relativeTime / this.activeDuration + 1, relativeTime);
+				this.updateActive(this.stateProgress, relativeTime);
 				break;
 			case 'holding':
-				this.updateHolding(relativeTime / this.event.duration, relativeTime);
+				this.updateHolding(this.stateProgress, relativeTime);
 				break;
 			case 'fadingOut':
-				const releaseRelativeTime = this.levelNote ? this.levelNote.releaseRelativeTime : this.event.duration || 0;
-				this.updateFadingOut((relativeTime - releaseRelativeTime) / this.fadingOutDuration(), relativeTime);
+				this.updateFadingOut(this.stateProgress, relativeTime);
 				break;
 			case 'finished':
 				// do nothing
@@ -63,44 +64,33 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 		return this.constructor.fadingInDuration(this.event);
 	}
 
-	getStateByRelativeTime(relativeTime) {
-		if (this.levelNote) {
-			if (this.levelNote.hitRelativeTime !== null) {
-				if (this.levelNote.releaseRelativeTime !== null) {
-					if (relativeTime >= this.levelNote.releaseRelativeTime + this.fadingOutDuration()) {
-						return 'finished';
-					} else if (relativeTime >= this.levelNote.releaseRelativeTime) {
-						return 'fadingOut';
-					} else {
-						return 'finished';
-					}
-				} else if (this.event.duration > 0) {
-					return 'holding';
-				} else {
-					return 'active';
-				}
-			}
-		} else {
-			const releaseRelativeTime = this.event.duration || 0;
-			if (relativeTime >= releaseRelativeTime + this.fadingOutDuration()) {
-				return 'finished';
-			} else if (relativeTime >= releaseRelativeTime) {
-				return 'fadingOut';
-			} else if (relativeTime >= 0) {
-				return 'holding';
-			}
-		}
+	// Not nullable. Only called when getAfterTimeStateByRelativeTime() returns null.
+	getBeforeTimeStateByRelativeTime(relativeTime) {
 		if (relativeTime >= -this.activeDuration) {
-			return 'active';
-		} else if (relativeTime >= -this.fadingInDuration() - this.activeDuration) {
-			return 'fadingIn';
-		} else {
-			return 'ready';
+			return ['active', relativeTime / this.activeDuration + 1];
+		}
+		if (relativeTime >= -this.fadingInDuration() - this.activeDuration) {
+			return ['fadingIn', (relativeTime + this.activeDuration) / this.fadingInDuration() + 1];
+		}
+		return ['ready'];
+	}
+
+	// Nullable.
+	getAfterTimeStateByRelativeTime(relativeTime) {
+		const releaseRelativeTime = this.event.duration ?? 0;
+		if (relativeTime >= releaseRelativeTime + this.fadingOutDuration()) {
+			return ['finished'];
+		}
+		if (relativeTime >= releaseRelativeTime) {
+			return ['fadingOut', (relativeTime - releaseRelativeTime) / this.fadingOutDuration()];
+		}
+		if (relativeTime >= 0) {
+			return ['holding', relativeTime / this.event.duration];
 		}
 	}
 
 	updateState(relativeTime) {
-		this.state = this.getStateByRelativeTime(relativeTime);
+		[this.state, this.stateProgress] = this.getAfterTimeStateByRelativeTime(relativeTime) ?? this.getBeforeTimeStateByRelativeTime(relativeTime);
 		this.visible = this.state !== 'ready' && this.state !== 'finished';
 	}
 
@@ -111,7 +101,7 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 
 	// Progress is zero at the start of the active time,
 	// and is one when the note is supposed to be hit.
-	// It may exceed one (because the note may be hit late).
+	// It may exceed one (because the note may be hit late and because speed may be negative).
 	updateActive(progress, relativeTime) {
 	}
 

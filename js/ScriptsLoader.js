@@ -195,6 +195,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'chart/Pentagon',
 	'chart/Turntable',
 	'chart/Hexagram',
+	'chart/GlobalSpeed',
 
 	'ui-nonevent/tip-point/TipPointBase',
 	'ui-nonevent/tip-point/TipPoint',

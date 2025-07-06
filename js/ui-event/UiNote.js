@@ -41,4 +41,20 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 		}
 	}
 
+	getAfterTimeStateByRelativeTime(relativeTime) {
+		const releaseRelativeTime = this.levelNote.releaseRelativeTime;
+		if (releaseRelativeTime != null) {
+			if (relativeTime >= releaseRelativeTime + this.fadingOutDuration()) {
+				return ['finished'];
+			}
+			if (relativeTime >= releaseRelativeTime) {
+				return ['fadingOut', (relativeTime - releaseRelativeTime) / this.fadingOutDuration()];
+			}
+			return ['finished'];
+		}
+		if (this.event.duration > 0 && this.levelNote.hitRelativeTime != null) {
+			return ['holding', relativeTime / this.event.duration];
+		}
+	}
+
 };
