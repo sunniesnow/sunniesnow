@@ -4,17 +4,11 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 		super();
 		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.BgPattern)
 		this.clear();
-		if (Sunniesnow.game.settings.horizontalFlip) {
-			this.scale.x = -1;
-		}
-		if (Sunniesnow.game.settings.verticalFlip) {
-			this.scale.y = -1;
-		}
 	}
 
 	clear() {
 		this.unappearedEvents = this.allEvents.slice();
-		this.uiEvents ||= [];
+		this.uiEvents ??= [];
 		this.removeAll();
 	}
 

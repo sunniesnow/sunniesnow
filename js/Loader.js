@@ -1,6 +1,7 @@
 Sunniesnow.Loader = {
 	loaded: {
 		chart: {
+			zip: null,
 
 			// 'online' or 'upload'
 			source: null,
@@ -109,7 +110,11 @@ Sunniesnow.Loader = {
 			Sunniesnow.Logs.warn('Failed to load chart: cannot read as zip', e);
 			return;
 		}
+		this.loaded.chart.zip = zip;
 		for (const filename in zip.files) {
+			if (filename.includes('/')) {
+				continue;
+			}
 			const zipObject = zip.files[filename];
 			if (zipObject.dir) {
 				continue;
@@ -167,6 +172,7 @@ Sunniesnow.Loader = {
 	},
 	
 	clearChart() {
+		this.loaded.chart.zip = null;
 		this.loaded.chart.charts = {};
 		this.loaded.chart.music = {};
 		this.loaded.chart.backgrounds = {};
@@ -182,6 +188,7 @@ Sunniesnow.Loader = {
 	cloneLoaded() {
 		return {
 			chart: {
+				zip: this.loaded.chart.zip,
 				source: this.loaded.chart.source,
 				sourceContents: this.loaded.chart.sourceContents,
 				charts: {...this.loaded.chart.charts},
@@ -344,6 +351,7 @@ Sunniesnow.Loader = {
 		this.loadModule('UiPentagon');
 		this.loadModule('UiTurntable');
 		this.loadModule('UiHexagram');
+		this.loadModule('UiImage');
 	},
 
 	loadFx() {

@@ -119,6 +119,16 @@ Sunniesnow.Config = {
 		return angle;
 	},
 
+	chartMappingRotation(rotation) {
+		if (!Sunniesnow.game.settings.verticalFlip) {
+			rotation = -rotation;
+		}
+		if (Sunniesnow.game.settings.horizontalFlip) {
+			rotation = -rotation;
+		}
+		return rotation;
+	},
+
 	scrollY(progress) {
 		return this.SCROLL_START_Y + (this.SCROLL_END_Y - this.SCROLL_START_Y) * progress;
 	},

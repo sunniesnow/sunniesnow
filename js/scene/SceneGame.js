@@ -18,6 +18,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.topCenterHud = new Sunniesnow.TopCenterHud();
 		this.pauseBoard = new Sunniesnow.PauseBoard();
 		this.pauseButton = new Sunniesnow.ButtonPause(this.pauseBoard);
+		this.uiImagesBoard = new Sunniesnow.UiImagesBoard();
 		if (!Sunniesnow.game.settings.hideBgNotes) {
 			this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard();
 		}
@@ -37,8 +38,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.uiNotesBoard = new Sunniesnow.UiNotesBoard();
 		}
 		this.background.addTo(this);
-		this.progressBar.addTo(this);
 		this.uiBgPatternBoard?.addTo(this);
+		this.uiImagesBoard?.addTo(this);
+		this.progressBar.addTo(this);
 		this.topLeftHud.addTo(this);
 		this.topRightHud.addTo(this);
 		this.topCenterHud.addTo(this);
@@ -98,31 +100,28 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 	}
 
 	gotoResult() {
-		const boards = [
+		Sunniesnow.game.goto(new Sunniesnow.SceneResult([
 			this.background,
+			this.uiImagesBoard,
 			this.progressBar,
 			this.uiBgPatternBoard,
 			this.fxBoard,
 			this.uiBgNotesBoard,
 			this.doubleLinesBoard,
-			this.uiNotesBoard
-		];
-		if (!Sunniesnow.game.settings.hideTipPoints) {
-			boards.push(this.tipPointsBoard);
-		}
-		if (!Sunniesnow.game.settings.hideFxInFront) {
-			boards.push(this.fxBoard.front);
-		}
-		Sunniesnow.game.goto(new Sunniesnow.SceneResult(boards));
+			this.uiNotesBoard,
+			this.tipPointsBoard,
+			this.fxBoard.front
+		]));
 	}
 
 	updateAudioAndHaptics() {
 		this.seWithMusic?.update();
 		this.vibrationWithMusic?.update();
 	}
-	
+
 	// except fxBoard
 	updateBoards(delta) {
+		this.uiImagesBoard?.update(delta);
 		this.uiBgPatternBoard?.update(delta);
 		this.uiBgNotesBoard?.update(delta);
 		this.uiNotesBoard?.update(delta);
@@ -198,6 +197,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			return;
 		}
 		this.uiBgPatternBoard?.adjustProgress(time);
+		this.uiImagesBoard?.adjustProgress(time);
 		this.uiBgNotesBoard?.adjustProgress(time);
 		this.uiNotesBoard?.adjustProgress(time);
 		// Must be after uiNotesBoard.update() because double lines use uiNotes positions.

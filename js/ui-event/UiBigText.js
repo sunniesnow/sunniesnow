@@ -74,4 +74,8 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 		}
 		this.text.alpha = 1 - progress;
 	}
+
+	updateScale(relativeTime) {
+		this.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
+	}
 };

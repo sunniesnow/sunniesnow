@@ -95,8 +95,13 @@ Sunniesnow.Event = class Event {
 				delete timeDependent[property];
 			}
 			options.interpolable = this.constructor.TIME_DEPENDENT[property].interpolable ?? true;
+			options.nullable = this.constructor.TIME_DEPENDENT[property].nullable ?? false;
 			options.dataPoints = options.dataPoints?.map(x => Object.assign({}, x)) ?? [];
 			options.value ??= this[property];
+			if (options.interpolable && !options.nullable && options.value == null) {
+				Sunniesnow.Logs.warn(`Time dependent property \`${property}\` in ${this.constructor.TYPE_NAME} event must have a value`);
+				options.value = 0; // default value
+			}
 			Sunniesnow.Utils.eachWithRedoingIf(options.dataPoints, ({time, value}, i) => {
 				let condition = typeof time !== 'number';
 				if (options.interpolable) {
@@ -191,7 +196,10 @@ Sunniesnow.Event = class Event {
 	}
 
 	timeDependentAt(property, time) {
-		const {interpolable, speed, dataPoints} = this.timeDependent[property];
+		const {interpolable, speed, dataPoints, nullable, value} = this.timeDependent[property];
+		if (nullable && value == null) {
+			return null;
+		}
 		const index = Sunniesnow.Utils.bisectRight(dataPoints, ({time: t}) => t - time);
 		if (!interpolable || index === dataPoints.length - 1) {
 			// index is never -1 because there is a -Infinity.

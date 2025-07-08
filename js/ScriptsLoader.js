@@ -144,6 +144,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 
 	'ui-event/UiNotesBoard',
 	'ui-event/UiBgNotesBoard',
+	'ui-event/UiImagesBoard',
 	'ui-event/UiBgPatternBoard',
 	'ui-event/UiEvent',
 	'ui-event/UiNoteBase',
@@ -162,6 +163,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui-event/UiPentagon',
 	'ui-event/UiTurntable',
 	'ui-event/UiHexagram',
+	'ui-event/UiImage',
 
 	'fx/FxBoard',
 	'fx/FxNote',
@@ -195,6 +197,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'chart/Pentagon',
 	'chart/Turntable',
 	'chart/Hexagram',
+	'chart/Image',
 	'chart/GlobalSpeed',
 
 	'ui-nonevent/tip-point/TipPointBase',
