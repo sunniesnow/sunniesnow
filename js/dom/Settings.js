@@ -189,6 +189,7 @@ Sunniesnow.Settings = {
 			touchEffects: this.readCheckbox('touch-effects'),
 			reverseNoteOrder: this.readCheckbox('reverse-note-order'),
 			circleMovesWithNote: this.readCheckbox('circle-moves-with-note'),
+			disableOrnament: this.readCheckbox('disable-ornament'),
 
 			// audio settings
 			se: this.readRadio('se'),
@@ -375,6 +376,7 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('touch-effects', d('touchEffects'));
 		this.writeCheckbox('reverse-note-order', d('reverseNoteOrder'));
 		this.writeCheckbox('circle-moves-with-note', d('circleMovesWithNote'));
+		this.writeCheckbox('disable-ornament', d('disableOrnament'));
 
 		this.writeRadio('se', d('se'));
 		this.writeValue('se-online', d('seOnline'));

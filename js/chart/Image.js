@@ -4,22 +4,19 @@ Sunniesnow.Image = class Image extends Sunniesnow.Event {
 		optional: {
 			height: null,
 			x: 0,
-			y: 0,
-			z: 0,
-			anchorX: 0.5,
-			anchorY: 0.5
+			y: 0
 		}
 	}
 
 	static TIME_DEPENDENT = {
 		x: {},
 		y: {},
-		z: {interpolable: false},
+		z: {interpolable: false, value: 0},
 		opacity: {value: 1},
 		width: {},
 		height: {nullable: true},
-		anchorX: {},
-		anchorY: {},
+		anchorX: {value: 0.5},
+		anchorY: {value: 0.5},
 		rotation: {value: 0}
 	};
 

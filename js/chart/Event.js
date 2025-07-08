@@ -91,7 +91,9 @@ Sunniesnow.Event = class Event {
 		for (const property in this.constructor.TIME_DEPENDENT) {
 			const options = Object.assign({}, this.constructor.TIME_DEPENDENT[property]);
 			if (Object.hasOwn(timeDependent, property)) {
-				Object.assign(options, timeDependent[property]);
+				if (!Sunniesnow.game.settings.disableOrnament) {
+					Object.assign(options, timeDependent[property]);
+				}
 				delete timeDependent[property];
 			}
 			options.interpolable = this.constructor.TIME_DEPENDENT[property].interpolable ?? true;

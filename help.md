@@ -713,6 +713,20 @@ Currently, this only affects scroll mode (when [`scroll`](#scroll) is `true`).
 When it is `true`, the circles will move with the notes.
 When it is `false`, the circles will not move with the notes.
 
+##### Disable ornamental effects
+{:#disable-ornament}
+
+- **Setting id**: `disable-ornament`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to disable the ornamental effects of the game.
+Ornamental effects include:
+
+- changes in speed specified by the chart,
+- changes in opacity, size, position, rotation, etc. of notes, background patterns, etc,
+- special changes to HUDs specified by the chart,
+- shader effects.
+
 ### Audio settings
 
 #### SE (note hit sound effects)

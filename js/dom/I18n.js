@@ -543,6 +543,7 @@ Sunniesnow.I18n = {
 			touchEffects: ' Touch effects',
 			reverseNoteOrder: ' Reverse the display order of notes',
 			circleMovesWithNote: ' Circles move with notes',
+			disableOrnament: ' Disable ornamental effects',
 
 			seDefaultRadio: ' Default',
 			seOnlineRadio: '',
@@ -718,6 +719,7 @@ Sunniesnow.I18n = {
 			touchEffects: ' 触摸效果',
 			reverseNoteOrder: ' 音符显示顺序反转',
 			circleMovesWithNote: ' 缩圈随音符移动',
+			disableOrnament: ' 禁用装饰性特效',
 
 			seDefaultRadio: ' 默认',
 			seOnlineRadio: '',
@@ -900,6 +902,7 @@ Sunniesnow.I18n = {
 			touchEffects: ' タッチエフェクト',
 			reverseNoteOrder: ' ノートの表示順を逆にする',
 			circleMovesWithNote: ' リングがノートに移動する',
+			disableOrnament: undefined,
 
 			seDefaultRadio: ' デフォルト',
 			seOnlineRadio: '',

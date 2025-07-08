@@ -18,7 +18,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.topCenterHud = new Sunniesnow.TopCenterHud();
 		this.pauseBoard = new Sunniesnow.PauseBoard();
 		this.pauseButton = new Sunniesnow.ButtonPause(this.pauseBoard);
-		this.uiImagesBoard = new Sunniesnow.UiImagesBoard();
+		if (!Sunniesnow.game.settings.disableOrnament) {
+			this.uiImagesBoard = new Sunniesnow.UiImagesBoard();
+		}
 		if (!Sunniesnow.game.settings.hideBgNotes) {
 			this.uiBgNotesBoard = new Sunniesnow.UiBgNotesBoard();
 		}

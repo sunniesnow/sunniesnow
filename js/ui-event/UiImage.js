@@ -2,6 +2,9 @@ Sunniesnow.UiImage = class UiImage extends Sunniesnow.UiEvent {
 
 	static async load() {
 		this.assets = {};
+		if (Sunniesnow.game.settings.disableOrnament) {
+			return;
+		}
 		for (const event of Sunniesnow.game.chart.events) {
 			if (!(event instanceof Sunniesnow.Image)) {
 				continue;

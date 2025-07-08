@@ -135,6 +135,9 @@ Sunniesnow.Chart = class Chart {
 				continue;
 			}
 			this.events.splice(i, 1);
+			if (Sunniesnow.game.settings.disableOrnament) {
+				continue;
+			}
 			const {speed: globalSpeed, time} = event;
 			for (const note of notes) {
 				const {speed, dataPoints} = note.timeDependent.circle;
