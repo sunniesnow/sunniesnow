@@ -14,7 +14,7 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 
 	clear() {
 		this.unappearedEvents = this.allEvents.slice();
-		this.uiEvents ||= [];
+		this.uiEvents ??= [];
 		this.removeAll();
 	}
 

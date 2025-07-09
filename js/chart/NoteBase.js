@@ -37,6 +37,6 @@ Sunniesnow.NoteBase = class NoteBase extends Sunniesnow.Event {
 	}
 
 	hasText() {
-		return this.timeDependent.text.dataPoints.some(({value}) => value);
+		return !!this.timeDependent.text?.dataPoints.some(({value}) => value);
 	}
 };

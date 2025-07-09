@@ -1,5 +1,9 @@
 Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 
+	static EFFECT_EVENT_CLASS = 'EffectTopLeftHud';
+	static DEFAULT_X = 0;
+	static DEFAULT_Y = 0;
+
 	static async load() {
 		this.backgroundGeometry = this.createBackgroundGeometry();
 		this.textMaxWidth = Sunniesnow.Config.WIDTH / 60 * 13;
@@ -64,8 +68,8 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 		this.addChild(this.text);
 	}
 
-	update(delta, data) {
-		super.update(delta);
+	privateUpdate(delta, data) {
+		super.privateUpdate(delta, data);
 		this.text.text = data;
 		const rescale = Math.min(1 / this.text.scale.x, this.constructor.textMaxWidth / this.text.width);
 		this.text.scale.set(this.text.scale.x * rescale);

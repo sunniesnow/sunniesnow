@@ -1,5 +1,9 @@
 Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 
+	static EFFECT_EVENT_CLASS = 'EffectBackground';
+	static DEFAULT_X = 0.5;
+	static DEFAULT_Y = 0.5;
+
 	static async load() {
 		this.originalTexture = await this.getBackgroundTexture();
 		const tempSprite = new PIXI.Sprite(this.originalTexture);
@@ -63,6 +67,7 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 	populate() {
 		super.populate();
 		this.background = new PIXI.Sprite(this.constructor.texture);
+		this.background.anchor.set(0.5);
 		this.addChild(this.background);
 	}
 };

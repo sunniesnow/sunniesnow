@@ -165,7 +165,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.topLeftHud.update(delta, this.getUiText('hudTopLeft'));
 		this.topRightHud.update(delta, this.getUiText('hudTopRight'));
 		this.topCenterHud.update(delta, this.getUiText('hudTopCenter'));
-		this.progressBar.update(delta);
+		this.progressBar.update(delta, Sunniesnow.Music.progress);
 		this.pauseBoard.update(delta);
 		this.pauseButton.update(delta);
 		this.judgementLine?.update(delta);
@@ -210,6 +210,11 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		if (method === 'pause') {
 			Sunniesnow.game.hidePauseUi = Sunniesnow.game.settings.hidePauseUi;
 		}
+		this.background.adjustProgress(time);
+		this.topLeftHud.adjustProgress(time);
+		this.topRightHud.adjustProgress(time);
+		this.topCenterHud.adjustProgress(time);
+		this.progressBar.adjustProgress(time);
 		Sunniesnow.game.level.lastPause = false;
 	}
 

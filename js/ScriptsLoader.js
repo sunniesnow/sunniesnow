@@ -199,6 +199,12 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'chart/Hexagram',
 	'chart/Image',
 	'chart/GlobalSpeed',
+	'chart/EffectUiComponent',
+	'chart/EffectBackground',
+	'chart/EffectTopCenterHud',
+	'chart/EffectTopLeftHud',
+	'chart/EffectTopRightHud',
+	'chart/EffectProgressBar',
 
 	'ui-nonevent/tip-point/TipPointBase',
 	'ui-nonevent/tip-point/TipPoint',

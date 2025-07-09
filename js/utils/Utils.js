@@ -30,7 +30,7 @@ Sunniesnow.Utils = {
 
 	mirrorAndReversePath(path) {
 		for (let i = 0; i < path.length; i += 2) {
-			path[i] = Sunniesnow.Config.WIDTH - path[i];
+			path[i] *= -1;
 		}
 		for (let i = 0; i < path.length / 2; i += 2) {
 			const x = path[i];

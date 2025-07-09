@@ -1,5 +1,9 @@
 Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 
+	static EFFECT_EVENT_CLASS = 'EffectTopCenterHud';
+	static DEFAULT_X = 0.5;
+	static DEFAULT_Y = 0;
+
 	static async load() {
 		await Promise.all([
 			Sunniesnow.Assets.loadFont(
@@ -26,8 +30,9 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 
 	populate() {
 		super.populate();
-		this.x = Sunniesnow.Config.WIDTH / 2;
-		this.y = Sunniesnow.Config.WIDTH / 18;
+		this.wrapper = new PIXI.Container();
+		this.wrapper.y = Sunniesnow.Config.WIDTH / 18;
+		this.addChild(this.wrapper);
 		this.populateText();
 		this.populateLastJudgement();
 	}
@@ -40,7 +45,7 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 			align: 'center'
 		});
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 1);
-		this.addChild(this.text);
+		this.wrapper.addChild(this.text);
 	}
 
 	populateLastJudgement() {
@@ -55,20 +60,20 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC'
 		});
 		this.lastJudgement.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0);
-		this.addChild(this.lastJudgement);
-		this.addChild(this.earlyLate);
+		this.wrapper.addChild(this.lastJudgement);
+		this.wrapper.addChild(this.earlyLate);
 	}
 
-	update(delta, data) {
-		super.update(delta);
+	privateUpdate(delta, data) {
+		super.privateUpdate(delta, data);
 		if (this.lastData !== data) {
 			this.lastData = data;
 			this.animationTime = 0;
 			this.text.text = data;
 			this.updateLastJudgement();
 		}
-		this.scale.x = 1 + 0.6*Math.exp(-0.6*this.animationTime);
-		this.scale.y = 1 + 0.5*Math.exp(-0.5*this.animationTime);
+		this.wrapper.scale.x = 1 + 0.6*Math.exp(-0.6*this.animationTime);
+		this.wrapper.scale.y = 1 + 0.5*Math.exp(-0.5*this.animationTime);
 		this.animationTime += delta;
 	}
 

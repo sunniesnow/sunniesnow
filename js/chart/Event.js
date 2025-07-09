@@ -6,7 +6,7 @@ Sunniesnow.Event = class Event {
 	}
 
 	// key: property name
-	// value: {speed: 0, value:, interpolable: true}
+	// value: {speed: 0, value:, interpolable: true, nullable: false, noDefault: false}
 	// Omitted value uses the value from property
 	static TIME_DEPENDENT = {}
 
@@ -95,6 +95,9 @@ Sunniesnow.Event = class Event {
 					Object.assign(options, timeDependent[property]);
 				}
 				delete timeDependent[property];
+			} else if (options.noDefault) {
+				this.timeDependent[property] = {omitted: true};
+				continue;
 			}
 			options.interpolable = this.constructor.TIME_DEPENDENT[property].interpolable ?? true;
 			options.nullable = this.constructor.TIME_DEPENDENT[property].nullable ?? false;
@@ -135,6 +138,9 @@ Sunniesnow.Event = class Event {
 			this.duration /= Sunniesnow.game.settings.gameSpeed;
 		}
 		for (const property in this.timeDependent) {
+			if (this.timeDependent[property].omitted) {
+				continue;
+			}
 			this.timeDependent[property].dataPoints.forEach(point => {
 				point.time = (point.time + offset) / Sunniesnow.game.settings.gameSpeed;
 			});
@@ -198,8 +204,8 @@ Sunniesnow.Event = class Event {
 	}
 
 	timeDependentAt(property, time) {
-		const {interpolable, speed, dataPoints, nullable, value} = this.timeDependent[property];
-		if (nullable && value == null) {
+		const {interpolable, speed, dataPoints, nullable, value, omitted} = this.timeDependent[property];
+		if (nullable && value == null || omitted) {
 			return null;
 		}
 		const index = Sunniesnow.Utils.bisectRight(dataPoints, ({time: t}) => t - time);

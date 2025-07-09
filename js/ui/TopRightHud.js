@@ -1,5 +1,9 @@
 Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 
+	static EFFECT_EVENT_CLASS = 'EffectTopRightHud';
+	static DEFAULT_X = 1;
+	static DEFAULT_Y = 0;
+
 	static async load() {
 		this.backgroundGeometry = this.createBackgroundGeometry();
 	}
@@ -60,7 +64,7 @@ Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			align: 'right'
 		});
-		this.text.x = Sunniesnow.Config.WIDTH * (1 - 1 / 30);
+		this.text.x = -Sunniesnow.Config.WIDTH / 30;
 		this.text.y = Sunniesnow.Config.WIDTH / 45;
 		this.text.anchor = new PIXI.ObservablePoint(null, null, 1, 0);
 		this.addChild(this.text);
@@ -72,12 +76,13 @@ Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 			fill: Sunniesnow.game.chart.difficultyColor,
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 		});
-		this.difficultyName.x = Sunniesnow.Config.WIDTH - Sunniesnow.Config.WIDTH / 4;
+		this.difficultyName.x = -Sunniesnow.Config.WIDTH / 4;
 		this.difficultyName.y = Sunniesnow.Config.WIDTH / 45;
 		this.addChild(this.difficultyName);
 	}
 
-	update(delta, data) {
+	privateUpdate(delta, data) {
+		super.privateUpdate(delta, data);
 		this.text.text = data;
 	}
 };
