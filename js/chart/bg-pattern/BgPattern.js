@@ -9,7 +9,11 @@ Sunniesnow.BgPattern = class BgPattern extends Sunniesnow.Event {
 		y: {value: 0},
 		opacity: {value: 1},
 		size: {value: 1},
-		rotation: {value: 0}
+		rotation: {value: 0},
+		tintRed: {value: 1},
+		tintGreen: {value: 1},
+		tintBlue: {value: 1},
+		blendMode: {value: 'normal', interpolable: false}
 	}
 
 	static UI_CLASS = 'UiBgPattern'

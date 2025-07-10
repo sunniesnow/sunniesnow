@@ -5,7 +5,11 @@ Sunniesnow.NoteBase = class NoteBase extends Sunniesnow.Event {
 		circle: {speed: 1, value: 0},
 		opacity: {value: 1},
 		size: {},
-		rotation: {value: 0}
+		rotation: {value: 0},
+		tintRed: {value: 1},
+		tintGreen: {value: 1},
+		tintBlue: {value: 1},
+		blendMode: {value: 'normal', interpolable: false}
 	}
 
 	static UI_CLASS = 'UiNoteBase'

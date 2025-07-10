@@ -51,19 +51,25 @@ Sunniesnow.UiComponent = class UiComponent extends PIXI.Container {
 	}
 
 	applyEffects(time) {
-		let x, y, size, opacity, rotation;
+		let x, y, size, opacity, rotation, tintRed, tintGreen, tintBlue, blendMode;
 		for (const effect of this.currentEffects) {
 			x = effect.timeDependentAt('x', time) ?? x;
 			y = effect.timeDependentAt('y', time) ?? y;
 			size = effect.timeDependentAt('size', time) ?? size;
 			opacity = effect.timeDependentAt('opacity', time) ?? opacity;
 			rotation = effect.timeDependentAt('rotation', time) ?? rotation;
+			tintRed = effect.timeDependentAt('tintRed', time) ?? tintRed;
+			tintGreen = effect.timeDependentAt('tintGreen', time) ?? tintGreen
+			tintBlue = effect.timeDependentAt('tintBlue', time) ?? tintBlue;
+			blendMode = effect.timeDependentAt('blendMode', time) ?? blendMode;
 		}
 		this.x = (x ?? this.constructor.DEFAULT_X) * Sunniesnow.Config.WIDTH;
 		this.y = (y ?? this.constructor.DEFAULT_Y) * Sunniesnow.Config.HEIGHT;
 		this.alpha = opacity ?? 1;
 		this.transform.rotation = rotation ?? 0;
 		this.scale.set(size ?? 1);
+		this.tint = [tintRed ?? 1, tintGreen ?? 1, tintBlue ?? 1];
+		this.blendMode = blendMode ?? 'normal';
 	}
 
 	privateUpdate(delta, data) {
