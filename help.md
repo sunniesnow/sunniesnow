@@ -1681,15 +1681,20 @@ This setting is **only** useful when the corresponding [`plugin`](#plugin) item 
 #### Renderer
 
 - **Setting id**: `renderer`.
-- **Possible values**: `"canvas"`, `"webgl"`.
+- **Possible values**: ~~`"canvas"`~~, `"webgl"`, `"webgpu"`.
 
-When the setting is `"canvas"`,
-Sunniesnow uses the canvas API to draw everything.
+~~When the setting is `"canvas"`,
+Sunniesnow uses the canvas API to draw everything.~~
+Setting this to `"canvas"` is not supported
+because [PIXI.js removed it](https://github.com/pixijs/pixijs/discussions/10682).
 When the setting is `"webgl"`,
 Sunniesnow uses the [WebGL](https://webgl.org){:target="_blank"} API
 to draw everything.
+When the setting is `"webgpu"`,
+Sunniesnow uses WebGPU, the successor to WebGL, to draw everything
+(if WebGPU is supported on the browser).
 
-The technical differences between the two renderers:
+The technical differences between the canvas renderer and the WebGL renderer:
 
 - WebGL is a more modern API than canvas.
 It draws hardware-accelerated 2D and 3D graphics,

@@ -24,7 +24,7 @@ Sunniesnow.CoverGenerator = {
 		await cover.populate();
 		app.stage.addChild(cover);
 		app.renderer.render(app.stage);
-		const result = app.view.toDataURL('image/png');
+		const result = app.canvas.toDataURL('image/png');
 		app.destroy(true, {children: true});
 		return result;
 	},

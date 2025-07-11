@@ -1,4 +1,4 @@
-Sunniesnow.ResultScore = class ResultScore extends Sunniesnow.UiComponent {
+Sunniesnow.ResultScore = class ResultScore extends PIXI.Container {
 
 	static async load() {
 		this.backgroundGeometry = this.createBackgroundGeometry();
@@ -15,25 +15,29 @@ Sunniesnow.ResultScore = class ResultScore extends Sunniesnow.UiComponent {
 			w/2, -h/2,
 			w/2+h/2, 0
 		]
-		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(h/10, Sunniesnow.Result.mainColor, 1, 1);
-		graphics.beginFill(Sunniesnow.Result.mainColor, 1);
-		graphics.drawPolygon(path);
-		graphics.endFill();
-		graphics.lineStyle(h/40, Sunniesnow.Result.mainContourColor, 1, 0);
-		graphics.drawPolygon(path);
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.poly(path);
+		graphics.fill(Sunniesnow.Result.mainColor);
+		graphics.stroke({width: h/10, color: Sunniesnow.Result.mainColor, alignment: 0});
+		graphics.poly(path);
+		graphics.stroke({width: h/40, color: Sunniesnow.Result.mainContourColor, alignment: 1});
+		return graphics;
+	}
+
+	constructor() {
+		super();
+		this.populate();
 	}
 
 	populate() {
 		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
-		this.text = new PIXI.Text(Sunniesnow.game.level.score(), {
+		this.text = new PIXI.Text({text: Sunniesnow.game.level.score(), style: {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.constructor.height / 1.5,
 			fill: '#43586e',
 			align: 'center'
-		});
-		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
+		}});
+		this.text.anchor.set(0.5, 0.5);
 		this.addChild(this.background);
 		this.addChild(this.text);
 	}

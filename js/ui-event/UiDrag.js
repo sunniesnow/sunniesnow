@@ -8,26 +8,25 @@ Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
 	}
 
 	static createCircleGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.circleRadius / 24, 0xccfcfc, 1, 0);
-		graphics.drawCircle(0, 0, this.circleRadius);
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.circle(0, 0, this.circleRadius);
+		graphics.stroke({width: this.circleRadius / 24, color: 0xccfcfc, alignment: 1});
+		return graphics;
 	}
 
 	static createGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.radius / 8, 0xfcfc7c, 1, 0);
-		graphics.drawCircle(0, 0, this.radius);
+		const graphics = new PIXI.GraphicsContext();
+		graphics.circle(0, 0, this.radius);
 		const smallerRadius = this.radius * 2/3;
-		graphics.drawCircle(0, 0, smallerRadius);
+		graphics.circle(0, 0, smallerRadius);
 		const unit1 = smallerRadius / Math.sqrt(2);
 		const unit2 = this.radius / Math.sqrt(2);
 		graphics.moveTo(-unit1, unit1);
 		graphics.lineTo(-unit2, unit2);
 		graphics.moveTo(unit1, -unit1);
 		graphics.lineTo(unit2, -unit2);
-		graphics.finishPoly();
-		return graphics.geometry;
+		graphics.stroke({width: this.radius / 8, color: 0xfcfc7c, alignment: 1});
+		return graphics;
 	}
 
 	populate() {

@@ -29,20 +29,12 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 			20 * unit, 4 * unit,
 			0, 4 * unit
 		]
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill('black', 0.5);
-		graphics.drawPolygon(path2);
-		graphics.endFill();
-		graphics.lineStyle(unit / 6, 'white', 1, 0);
-		for (let i = 0; i < path1.length; i += 2) {
-			if (i === 0) {
-				graphics.moveTo(path1[i], path1[i + 1]);
-			} else {
-				graphics.lineTo(path1[i], path1[i + 1]);
-			}
-		}
-		graphics.finishPoly();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.poly(path2);
+		graphics.fill({color: 'black', alpha: 0.5});
+		graphics.poly(path1, false);
+		graphics.stroke({width: unit / 6, color: 'white', alignment: 1});
+		return graphics;
 	}
 
 	populate() {
@@ -57,14 +49,14 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 	}
 
 	populateText() {
-		this.text = new PIXI.Text('', {
+		this.text = new PIXI.Text({text: '', style: {
 			fontSize: Sunniesnow.Config.WIDTH / 45,
 			fill: 'white',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC'
-		});
+		}});
 		this.text.x = Sunniesnow.Config.WIDTH / 15;
 		this.text.y = Sunniesnow.Config.WIDTH / 30;
-		this.text.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
+		this.text.anchor.set(0, 0.5);
 		this.addChild(this.text);
 	}
 

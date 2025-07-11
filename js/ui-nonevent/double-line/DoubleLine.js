@@ -18,7 +18,6 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 		this.graphics.x = this.x1;
 		this.graphics.y = this.y1;
 		this.graphics.clear();
-		this.graphics.lineStyle(Sunniesnow.DoubleLine.radius / 12, 0xf9f9e9);
 		Sunniesnow.Utils.drawDashedLine(
 			this.graphics,
 			(1-progress) * dx / 2,
@@ -28,6 +27,7 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 			this.constructor.radius / 4,
 			this.constructor.radius / 4
 		);
+		this.graphics.stroke({width: Sunniesnow.DoubleLine.radius / 12, color: 0xf9f9e9});
 	}
 
 	updateFadingIn(progress, relativeTime) {

@@ -1,4 +1,4 @@
-Sunniesnow.PauseBackground = class PauseBackground extends Sunniesnow.UiComponent {
+Sunniesnow.PauseBackground = class PauseBackground extends PIXI.Container {
 
 	static async load() {
 		this.geometry = this.createGeometry();
@@ -6,15 +6,18 @@ Sunniesnow.PauseBackground = class PauseBackground extends Sunniesnow.UiComponen
 
 	static createGeometry() {
 		const unit = Sunniesnow.Config.WIDTH / 8;
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0x000000, 0.5);
-		graphics.drawRect(0, -unit, Sunniesnow.Config.WIDTH, unit * 2);
-		graphics.endFill();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.rect(0, -unit, Sunniesnow.Config.WIDTH, unit * 2);
+		graphics.fill({color: 0x000000, alpha: 0.5});
+		return graphics;
+	}
+
+	constructor() {
+		super();
+		this.populate();
 	}
 
 	populate() {
-		super.populate();
 		this.background = new PIXI.Graphics(this.constructor.geometry);
 		this.background.y = Sunniesnow.Config.HEIGHT / 2;
 		this.addChild(this.background);

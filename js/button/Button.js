@@ -6,7 +6,6 @@ Sunniesnow.Button = class Button extends PIXI.Container {
 		super();
 		this.onTrigger = onTrigger;
 		this.populate();
-		this.getBounds(false);
 		this.addTouchListener(priority);
 	}
 
@@ -33,7 +32,8 @@ Sunniesnow.Button = class Button extends PIXI.Container {
 	}
 
 	hitRegion() {
-		return this._bounds.getRectangle();
+		this.boundsCache ??= this.getBounds(false).rectangle;
+		return this.boundsCache;
 	}
 
 	triggerIfContains(x, y) {

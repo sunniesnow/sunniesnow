@@ -83,7 +83,7 @@ Sunniesnow.Utils = {
 			x += gapDx;
 			y += gapDy;
 		}
-		return graphics.finishPoly();
+		return graphics;
 	},
 
 	minmax(...numbers) {

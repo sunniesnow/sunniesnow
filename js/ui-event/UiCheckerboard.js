@@ -4,18 +4,17 @@ Sunniesnow.UiCheckerboard = class UiCheckerboard extends Sunniesnow.UiBgPattern 
 	}
 
 	static createGeometry() {
-		const graphics = new PIXI.Graphics();
+		const graphics = new PIXI.GraphicsContext();
 		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
 		const rowCount = 4;
 		const columnCount = 4;
 		for (let i = 0; i < rowCount; i++) {
 			for (let j = 0; j < columnCount; j++) {
-				graphics.beginFill((i + j) % 2 ? 0x000000 : 0xffffff, 0.4);
-				graphics.drawRect((i-rowCount/2) * unit, (j-columnCount/2) * unit, unit, unit);
-				graphics.endFill();
+				graphics.rect((i-rowCount/2) * unit, (j-columnCount/2) * unit, unit, unit);
+				graphics.fill({color: (i + j) % 2 ? 0x000000 : 0xffffff, alpha: 0.4});
 			}
 		}
-		return graphics.geometry;
+		return graphics;
 	}
 
 	populate() {

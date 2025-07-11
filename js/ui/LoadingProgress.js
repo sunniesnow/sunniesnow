@@ -11,11 +11,11 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 	}
 
 	populateText() {
-		this.text = new PIXI.Text('', {
+		this.text = new PIXI.Text({text: '', style: {
 			fontSize: Sunniesnow.Config.HEIGHT / 20,
 			fill: 'white',
 			align: 'center'
-		});
+		}});
 		this.text.anchor.set(0.5);
 		this.text.x = Sunniesnow.Config.WIDTH / 2;
 		this.text.y = Sunniesnow.Config.HEIGHT / 4;
@@ -41,42 +41,44 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 
 	updateProgressBar() {
 		this.progressBar.clear();
-		this.progressBar.beginFill(0xffffff);
 		const [_, numerator, denominator] = Sunniesnow.Loader.loadingText.match(/(\d+)\/(\d+)/) ?? [0, 1, 1];
 		const progress = Number(numerator) / Number(denominator);
 		const width = Sunniesnow.Config.WIDTH*3/4;
 		const height = Sunniesnow.Config.HEIGHT / 10;
 		const thickness = Sunniesnow.Config.HEIGHT / 100;
-		this.progressBar.drawRect(0, 0, width, height);
-		this.progressBar.beginFill(0x000000);
+		this.progressBar.rect(0, 0, width, height);
+		this.progressBar.fill(0xffffff);
 		const barWidth = (width - 2*thickness) * progress
-		this.progressBar.drawRect(
+		this.progressBar.rect(
 			barWidth + thickness,
 			thickness,
 			width - 2*thickness - barWidth,
 			height - 2*thickness
 		);
+		this.progressBar.fill(0x000000);
 	}
 
 	populateAssetProgressBar(name) {
+		const container = new PIXI.Container();
+		container.x = Sunniesnow.Config.WIDTH / 2;
 		const bar = new PIXI.Graphics();
-		bar.x = Sunniesnow.Config.WIDTH / 2;
-		const text = new PIXI.Text(name, {
+		const text = new PIXI.Text({text: name, style: {
 			fontSize: Sunniesnow.Config.HEIGHT / 30,
 			fill: 'white',
 			align: 'center'
-		});
+		}});
 		text.anchor.x = 0.5;
 		text.anchor.y = 1;
-		bar.addChild(text);
-		this.addChild(bar);
-		this.assetProgressBars.set(name, bar);
+		container.addChild(bar);
+		container.addChild(text);
+		this.addChild(container);
+		this.assetProgressBars.set(name, {container, bar, text});
 	}
 
 	destroyAssetProgressBar(name) {
-		const bar = this.assetProgressBars.get(name);
-		this.removeChild(bar);
-		bar.destroy(true, {children: true});
+		const {container} = this.assetProgressBars.get(name);
+		this.removeChild(container);
+		container.destroy(true, {children: true});
 		this.assetProgressBars.delete(name);
 	}
 
@@ -99,22 +101,22 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 	}
 
 	updateAssetProgressBar(name, index) {
-		const bar = this.assetProgressBars.get(name);
-		bar.y = Sunniesnow.Config.HEIGHT * 2/3 + index * Sunniesnow.Config.HEIGHT/10;
+		const {container, bar} = this.assetProgressBars.get(name);
+		container.y = Sunniesnow.Config.HEIGHT * 2/3 + index * Sunniesnow.Config.HEIGHT/10;
 		const progress = Sunniesnow.Assets.progresses.get(name);
 		const width = Sunniesnow.Config.WIDTH / 2;
 		const height = Sunniesnow.Config.HEIGHT / 20;
 		const thickness = Sunniesnow.Config.HEIGHT / 100;
 		bar.clear();
-		bar.beginFill(0xffffff);
-		bar.drawRect(-width/2, 0, width, height);
-		bar.beginFill(0x000000);
+		bar.rect(-width/2, 0, width, height);
+		bar.fill(0xffffff);
 		const barWidth = (width - 2 * thickness) * progress;
-		bar.drawRect(
+		bar.rect(
 			-width/2 + thickness + barWidth,
 			thickness,
 			width - 2 * thickness - barWidth,
 			height - 2 * thickness
 		);
+		bar.fill(0x000000);
 	}
 };

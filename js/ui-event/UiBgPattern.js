@@ -17,7 +17,7 @@ Sunniesnow.UiBgPattern = class UiBgPattern extends Sunniesnow.UiEvent {
 			this.event.timeDependentAtRelative('x', relativeTime),
 			this.event.timeDependentAtRelative('y', relativeTime)
 		);
-		this.transform.rotation = Sunniesnow.Config.chartMappingRotation(this.event.timeDependentAtRelative('rotation', relativeTime));
+		this.rotation = Sunniesnow.Config.chartMappingRotation(this.event.timeDependentAtRelative('rotation', relativeTime));
 		this.updateScale(relativeTime);
 		this.alpha = this.event.timeDependentAtRelative('opacity', relativeTime);
 		this.tint = [

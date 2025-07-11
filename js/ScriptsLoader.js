@@ -80,9 +80,8 @@ Sunniesnow.ScriptsLoader = {
 
 Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 	`jszip@3.10.1/dist/jszip${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	`pixi.js-legacy@7.4.2/dist/pixi-legacy${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	`@pixi/graphics-extras@7.4.2/dist/graphics-extras${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	// `@pixi/devtools@2.0.1/+esm`,
+	`pixi.js@8.11.0/dist/pixi${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
+	`pixi.js@8.11.0/dist/packages/advanced-blend-modes${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
 	'mime@3.0.0/lite/+esm',
 	'marked@5.1.1/marked.min.js',
 	`dompurify@3.0.5/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,

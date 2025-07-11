@@ -17,17 +17,16 @@ Sunniesnow.Game = class Game {
 		Sunniesnow.Loader.load();
 	}
 
-	mainTicker(delta) {
+	mainTicker({deltaTime}) {
 		if (!this.sceneInitialized) {
 			this.initScene();
 		}
-		this.update(delta);
+		this.update(deltaTime);
 	}
 
 	async initPixiApp() {
-		// Application init will be async in PIXI v8
-		// https://pixijs.com/8.x/guides/migrations/v8#async-initialisation
-		this.app = new PIXI.Application({
+		this.app = new PIXI.Application();
+		await this.app.init({
 			hello: this.settings.debug,
 			width: this.settings.width,
 			height: this.settings.height,
@@ -38,7 +37,7 @@ Sunniesnow.Game = class Game {
 				move: false,
 				wheel: false
 			},
-			forceCanvas: this.settings.renderer === 'canvas',
+			preference: this.settings.renderer,
 			antialias: this.settings.antialias,
 			powerPreference: this.settings.powerPreference,
 			autoStart: Sunniesnow.Utils.isBrowser()

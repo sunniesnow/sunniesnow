@@ -4,15 +4,15 @@ Sunniesnow.UiPentagon = class UiPentagon extends Sunniesnow.UiBgPattern {
 	}
 
 	static createGeometry() {
-		const graphics = new PIXI.Graphics();
+		const graphics = new PIXI.GraphicsContext();
 		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
 		const thickness = unit / 20;
-		graphics.lineStyle(thickness, 0xffffef, 1);
-		graphics.beginFill(0x000000, 0.2)
-		graphics.drawRegularPolygon(0, 0, unit * 2, 5);
-		graphics.endFill();
-		graphics.drawCircle(0, 0, thickness / 2);
-		return graphics.geometry;
+		graphics.regularPoly(0, 0, unit * 2, 5);
+		graphics.fill({color: 0x000000, alpha: 0.2});
+		graphics.stroke({width: thickness, color: 0xffffef});
+		graphics.circle(0, 0, thickness / 2);
+		graphics.stroke({width: thickness, color: 0xffffef});
+		return graphics;
 	}
 
 	populate() {

@@ -7,11 +7,10 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 	}
 
 	static createGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0x000000, 0.7);
-		graphics.drawRegularPolygon(0, 0, this.radius, 6);
-		graphics.endFill();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.regularPoly(0, 0, this.radius, 6);
+		graphics.fill({color: 0x000000, alpha: 0.7});
+		return graphics;
 	}
 
 	static fadingOutDuration(event) {
@@ -20,9 +19,11 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 
 	populate() {
 		super.populate();
-		this.note = new PIXI.Graphics(this.constructor.geometry);
+		this.note = new PIXI.Container();
+		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
 		this.text = Sunniesnow.UiTap.prototype.createText.call(this);
-		this.note.addChild(this.text)
+		this.note.addChild(this.noteBody);
+		this.note.addChild(this.text);
 		this.addChild(this.note);
 	}
 
@@ -81,19 +82,18 @@ const UiNoteMixin = new Sunniesnow.Mixin({
 	},
 
 	createCircleGeometry(color) {
-		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.radius / 4, color, 1, 0);
-		graphics.drawCircle(0, 0, this.circleRadius);
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.circle(0, 0, this.circleRadius);
+		graphics.stroke({width: this.radius / 4, color, alignment: 1});
+		return graphics;
 	},
 
 	createNoteBodyGeometry(fillColor, lineColor) {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(fillColor);
-		graphics.lineStyle(this.radius / 8, lineColor, 1, 0);
-		graphics.drawCircle(0, 0, this.radius);
-		graphics.endFill();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.circle(0, 0, this.radius);
+		graphics.fill(fillColor);
+		graphics.stroke({width: this.radius / 8, color: lineColor, alignment: 1});
+		return graphics;
 	},
 
 	createTextStyle(fontSize, fontFamily) {
@@ -106,8 +106,8 @@ const UiNoteMixin = new Sunniesnow.Mixin({
 	}
 }, {
 	createText() {
-		const text = new PIXI.Text(this.event.text, this.constructor.textStyle.clone());
-		text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
+		const text = new PIXI.Text({text: this.event.text, style: this.constructor.textStyle.clone()});
+		text.anchor.set(0.5, 0.5);
 		return text;
 	},
 
@@ -121,7 +121,7 @@ const UiNoteMixin = new Sunniesnow.Mixin({
 		if (!this.constructor.widthCache.has(this.text.text)) {
 			this.constructor.widthCache.set(
 				this.text.text,
-				PIXI.TextMetrics.measureText(this.text.text, this.constructor.textStyle).width
+				PIXI.CanvasTextMetrics.measureText(this.text.text, this.constructor.textStyle).width
 			);
 		}
 		this.text.style.fontSize = this.constructor.textStyle.fontSize * Math.min(

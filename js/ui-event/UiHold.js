@@ -11,11 +11,10 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 	}
 
 	static createHaloGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0xd3e373);
-		graphics.drawCircle(0, 0, this.haloRadius);
-		graphics.endFill();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.circle(0, 0, this.haloRadius);
+		graphics.fill(0xd3e373);
+		return graphics;
 	}
 
 	populate() {
@@ -37,9 +36,8 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 
 	createBar() {
 		this.bar = new PIXI.Graphics();
-		this.bar.beginFill(0xd3e373);
-		this.bar.drawRect(-this.constructor.radius / 4, -1, this.constructor.radius / 2, 1);
-		this.bar.endFill();
+		this.bar.rect(-this.constructor.radius / 4, -1, this.constructor.radius / 2, 1);
+		this.bar.fill(0xd3e373);
 		this.bar.scale.y = this.event.duration * Sunniesnow.Config.SCROLL_SPEED;
 		this.addChild(this.bar);
 	}
@@ -47,10 +45,9 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 	createHalo() {
 		this.halo = new PIXI.Graphics(this.constructor.haloGeometry);
 		this.haloMask = new PIXI.Graphics();
-		this.haloMask.beginFill(0xffffff);
 		const r = this.constructor.haloRadius;
-		this.haloMask.drawRect(-r, -r, r*2, r*2);
-		this.haloMask.endFill();
+		this.haloMask.rect(-r, -r, r*2, r*2);
+		this.haloMask.fill(0xffffff);
 		this.halo.mask = this.haloMask;
 		this.note.addChild(this.halo);
 		this.note.addChild(this.haloMask);
@@ -119,8 +116,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 			}
 		}
 		this.haloMask.clear();
-		this.haloMask.beginFill(0xffffff);
-		this.haloMask.drawPolygon([
+		this.haloMask.poly([
 			0, 0,
 			...corners,
 			...Sunniesnow.Utils.polarToCartesian(
@@ -128,7 +124,7 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 				progress * Math.PI*2 - Math.PI/2
 			)
 		]);
-		this.haloMask.endFill();
+		this.haloMask.fill(0xffffff);
 	}
 
 	swellBounce(time) {

@@ -55,7 +55,7 @@ Sunniesnow.UiImage = class UiImage extends Sunniesnow.UiEvent {
 			this.event.timeDependentAtRelative('y', relativeTime)
 		);
 		this.zIndex = this.event.timeDependentAtRelative('z', relativeTime);
-		this.transform.rotation = Sunniesnow.Config.chartMappingRotation(this.event.timeDependentAtRelative('rotation', relativeTime));
+		this.rotation = Sunniesnow.Config.chartMappingRotation(this.event.timeDependentAtRelative('rotation', relativeTime));
 		this.scale.x = this.event.timeDependentAtRelative('width', relativeTime) * Sunniesnow.Config.SCALE / this.texture.width;
 		const setHeight = this.event.timeDependentAtRelative('height', relativeTime);
 		this.scale.y = setHeight == null ? this.scale.x : setHeight * Sunniesnow.Config.SCALE / this.texture.height;

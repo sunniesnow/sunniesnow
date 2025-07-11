@@ -57,37 +57,34 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	static createTouchGeometry() {
 		this.touchRadius = Sunniesnow.Config.WIDTH / 180;
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(this.mainColor, 0.5);
-		graphics.drawCircle(0, 0, this.touchRadius);
-		graphics.endFill();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.circle(0, 0, this.touchRadius);
+		graphics.fill({color: this.mainColor, alpha: 0.5});
+		return graphics;
 	}
 
 	static createTouchAreaGeometry() {
 		const radius = Sunniesnow.Config.NOTE_RADIUS * Sunniesnow.game.settings.noteHitSize;
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(this.mainColor, 0.1);
+		const graphics = new PIXI.GraphicsContext();
 		if (Sunniesnow.game.settings.scroll) {
-			graphics.drawRect(-radius, 0, radius*2, Sunniesnow.Config.HEIGHT);
+			graphics.rect(-radius, 0, radius*2, Sunniesnow.Config.HEIGHT);
 		} else {
-			graphics.drawRect(-radius, -radius, radius*2, radius*2);
+			graphics.rect(-radius, -radius, radius*2, radius*2);
 		}
-		graphics.endFill();
-		return graphics.geometry;
+		graphics.fill({color: this.mainColor, alpha: 0.1});
+		return graphics;
 	}
 
 	static createPinnedPointGeometry() {
 		this.pinnedPointRadius = Sunniesnow.Config.WIDTH / 90;
 		this.pinnedPointThickness = Sunniesnow.Config.WIDTH / 360;
-		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.pinnedPointThickness, this.mainColor);
+		const graphics = new PIXI.GraphicsContext();
 		graphics.moveTo(0, -this.pinnedPointRadius);
 		graphics.lineTo(0, this.pinnedPointRadius);
 		graphics.moveTo(-this.pinnedPointRadius, 0);
 		graphics.lineTo(this.pinnedPointRadius, 0);
-		graphics.finishPoly();
-		return graphics.geometry;
+		graphics.stroke({width: this.pinnedPointThickness, color: this.mainColor});
+		return graphics;
 	}
 
 	update(delta) {
@@ -149,17 +146,19 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	addTouchUi(touch) {
 		const id = touch.id;
-		const touchUi = this.touches[id] = new PIXI.Graphics(this.constructor.touchGeometry);
-		touchUi.touch = touch;
-		const text = touchUi.text = new PIXI.Text('', {
+		const container = this.touches[id] = new PIXI.Container();
+		const touchUi = new PIXI.Graphics(this.constructor.touchGeometry);
+		container.addChild(touchUi);
+		container.touch = touch;
+		const text = container.text = new PIXI.Text({text: '', style: {
 			fontSize: Sunniesnow.Config.WIDTH / 90,
 			fill: '#ff00ff',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
-		});
-		text.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
-		touchUi.addChild(text);
+		}});
+		text.anchor.set(0, 0.5);
+		container.addChild(text);
 		text.alpha = 0.5;
-		this.addChild(touchUi);
+		this.addChild(container);
 	}
 
 	pinPoint(touch) {
@@ -169,14 +168,15 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	pinPointByCoordinates(x, y) {
-		const pinnedPoint = new PIXI.Graphics(this.constructor.pinnedPointGeometry);
+		const pinnedPoint = new PIXI.Container();
+		pinnedPoint.addChild(new PIXI.Graphics(this.constructor.pinnedPointGeometry));
 		pinnedPoint.alpha = 0.5;
 		this.addChild(pinnedPoint);
-		const text = new PIXI.Text('', {
+		const text = new PIXI.Text({text: '', style: {
 			fontSize: Sunniesnow.Config.WIDTH / 90,
 			fill: '#ff00ff',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
-		});
+		}});
 		pinnedPoint.text = text;
 		pinnedPoint.addChild(text);
 		this.pinnedPoints.push(pinnedPoint);
@@ -325,13 +325,13 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	createEarlyLateText(levelNote) {
 		const text = Math.round(levelNote.hitRelativeTime * 1000).toString();
-		const earlyLateText = new PIXI.Text(text, {
+		const earlyLateText = new PIXI.Text({text: text, style: {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: Sunniesnow.Config.WIDTH / 36,
 			fill: '#ff00ff',
 			align: 'center'
-		});
-		earlyLateText.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
+		}});
+		earlyLateText.anchor.set(0.5, 0.5);
 		[earlyLateText.x, earlyLateText.y] = Sunniesnow.Config.chartMapping(levelNote.event.x, levelNote.event.y);
 		this.addChild(earlyLateText);
 		this.earlyLateTexts.push(earlyLateText);
@@ -377,7 +377,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	addEventInfoTipHighlight(uiEvent) {
 		const filter = new PIXI.ColorMatrixFilter();
-		(uiEvent.filters ||= []).push(filter);
+		uiEvent.filters = uiEvent.filters?.concat([filter]) ?? [filter];
 		const highlight = {uiEvent, life: 1, filter};
 		this.eventInfoTipHighlights.add(highlight);
 	}
@@ -387,7 +387,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			const uiEvent = highlight.uiEvent;
 			highlight.life -= delta / this.constructor.eventInfoTipHighlightLifeTime;
 			if (!uiEvent.parent || highlight.life <= 0) {
-				uiEvent.filters?.splice(uiEvent.filters.indexOf(highlight.filter), 1);
+				uiEvent.filters = uiEvent.filters?.toSpliced(uiEvent.filters.indexOf(highlight.filter), 1);
 				this.eventInfoTipHighlights.delete(highlight);
 				this.removeChild(uiEvent);
 				continue;

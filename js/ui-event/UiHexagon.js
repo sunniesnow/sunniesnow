@@ -5,19 +5,18 @@ Sunniesnow.UiHexagon = class UiHexagon extends Sunniesnow.UiBgPattern {
 	}
 
 	static createGeometry() {
-		const graphics = new PIXI.Graphics();
+		const graphics = new PIXI.GraphicsContext();
 		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
 		const thickness = unit / 20;
-		graphics.lineStyle(thickness, 0xffffef, 1, 1);
-		graphics.beginFill(0x000000, 0.2)
-		graphics.drawRegularPolygon(0, 0, unit*4/Math.sqrt(3), 6, Math.PI / 2);
-		graphics.endFill();
-		graphics.lineStyle(unit / 50, 0xffffef, 0.7);
-		graphics.drawRegularPolygon(0, 0, unit * 2, 6);
-		graphics.drawRegularPolygon(0, 0, unit*Math.sqrt(3), 6, Math.PI / 2);
-		graphics.lineStyle(thickness, 0xffffef, 1);
-		graphics.drawCircle(0, 0, thickness / 2);
-		return graphics.geometry;
+		graphics.regularPoly(0, 0, unit*4/Math.sqrt(3), 6, Math.PI / 2);
+		graphics.fill({color: 0x000000, alpha: 0.2});
+		graphics.stroke({width: thickness, color: 0xffffef, alignment: 0});
+		graphics.regularPoly(0, 0, unit * 2, 6);
+		graphics.regularPoly(0, 0, unit*Math.sqrt(3), 6, Math.PI / 2);
+		graphics.stroke({width: unit / 50, color: 0xffffef, alpha: 0.7});
+		graphics.circle(0, 0, thickness / 2);
+		graphics.stroke({width: thickness, color: 0xffffef, alpha: 1});
+		return graphics;
 	}
 
 	populate() {

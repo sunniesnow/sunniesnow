@@ -5,24 +5,23 @@ Sunniesnow.UiHexagram = class UiHexagram extends Sunniesnow.UiBgPattern {
 	}
 
 	static createGeometry() {
-		const graphics = new PIXI.Graphics();
+		const graphics = new PIXI.GraphicsContext();
 		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
 		const thickness = unit / 20;
-		graphics.beginFill(0x000000, 0.2);
 		const polygon = [];
 		for (let i = 0; i < 12; i++) {
 			const r = i % 2 ? unit*2 : unit*2/Math.sqrt(3);
 			const angle = i * Math.PI / 6;
 			polygon.push(r*Math.cos(angle), r*Math.sin(angle));
 		}
-		graphics.drawPolygon(polygon);
-		graphics.endFill();
-		graphics.lineStyle(thickness, 0xffffef, 1, 1);
-		graphics.drawRegularPolygon(0, 0, unit*2, 3);
-		graphics.drawRegularPolygon(0, 0, unit*2, 3, Math.PI);
-		graphics.lineStyle(thickness, 0xffffef, 1);
-		graphics.drawCircle(0, 0, thickness / 2);
-		return graphics.geometry;
+		graphics.poly(polygon);
+		graphics.fill({color: 0x000000, alpha: 0.2});
+		graphics.regularPoly(0, 0, unit*2, 3);
+		graphics.regularPoly(0, 0, unit*2, 3, Math.PI);
+		graphics.stroke({width: thickness, color: 0xffffef, alignment: 0});
+		graphics.circle(0, 0, thickness / 2);
+		graphics.stroke({width: thickness, color: 0xffffef});
+		return graphics;
 	}
 
 	populate() {

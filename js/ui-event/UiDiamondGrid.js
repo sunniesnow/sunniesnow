@@ -4,10 +4,9 @@ Sunniesnow.UiDiamondGrid = class UiDiamondGrid extends Sunniesnow.UiBgPattern {
 	}
 
 	static createGeometry() {
-		const graphics = new PIXI.Graphics();
+		const graphics = new PIXI.GraphicsContext();
 		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
 		const margin = unit / 10;
-		graphics.lineStyle(unit / 50, 0xffffef);
 		const ends = [3, 2, 1, -1];
 		const halfSpan = ends.length - 1;
 		for (let i = -halfSpan; i <= halfSpan; i++) {
@@ -19,8 +18,8 @@ Sunniesnow.UiDiamondGrid = class UiDiamondGrid extends Sunniesnow.UiBgPattern {
 			graphics.moveTo(-x - start + margin, start - margin);
 			graphics.lineTo(-x - end - margin, end + margin);
 		}
-		graphics.finishPoly();
-		return graphics.geometry;
+		graphics.stroke({width: unit / 50, color: 0xffffef});
+		return graphics;
 	}
 
 	populate() {

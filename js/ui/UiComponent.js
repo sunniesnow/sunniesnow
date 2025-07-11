@@ -1,6 +1,6 @@
 Sunniesnow.UiComponent = class UiComponent extends PIXI.Container {
 
-	static EFFECT_EVENT_CLASS = 'EffectUiComponent';
+	static EFFECT_EVENT_CLASS = null;
 	static DEFAULT_X = 0;
 	static DEFAULT_Y = 0;
 
@@ -66,7 +66,7 @@ Sunniesnow.UiComponent = class UiComponent extends PIXI.Container {
 		this.x = (x ?? this.constructor.DEFAULT_X) * Sunniesnow.Config.WIDTH;
 		this.y = (y ?? this.constructor.DEFAULT_Y) * Sunniesnow.Config.HEIGHT;
 		this.alpha = opacity ?? 1;
-		this.transform.rotation = rotation ?? 0;
+		this.rotation = rotation ?? 0;
 		this.scale.set(size ?? 1);
 		this.tint = [tintRed ?? 1, tintGreen ?? 1, tintBlue ?? 1];
 		this.blendMode = blendMode ?? 'normal';

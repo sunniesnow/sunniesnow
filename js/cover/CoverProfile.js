@@ -20,13 +20,13 @@ Sunniesnow.CoverProfile = class CoverProfile extends PIXI.Container {
 	}
 
 	populateNickname() {
-		this.nickname = new PIXI.Text(Sunniesnow.game.settings.nickname, {
+		this.nickname = new PIXI.Text({text: Sunniesnow.game.settings.nickname, style: {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.radius,
 			fill: '#fbfbff',
 			align: 'left'
-		});
-		this.nickname.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
+		}});
+		this.nickname.anchor.set(0, 0.5);
 		this.nickname.x = this.avatar.x + this.radius*2;
 		this.addChild(this.nickname);
 	}

@@ -9,31 +9,29 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	}
 
 	static createArrowGeometry() {
-		const graphics = new PIXI.Graphics();
+		const graphics = new PIXI.GraphicsContext();
 		const tipDistance = this.radius * 2;
 		const innerDistance = this.radius * 1.1;
 		const halfAngle = Math.PI / 4;
-		graphics.beginFill(0xeece4e);
 		graphics.arc(0, 0, innerDistance, -halfAngle, halfAngle);
 		graphics.lineTo(tipDistance, 0);
 		graphics.closePath();
-		graphics.endFill();
-		graphics.beginFill(0xfafa7a);
-		graphics.drawPolygon([
+		graphics.fill(0xeece4e);
+		graphics.poly([
 			tipDistance, 0,
 			...Sunniesnow.Utils.polarToCartesian(innerDistance, halfAngle),
 			(innerDistance + tipDistance) / 2, 0,
 			...Sunniesnow.Utils.polarToCartesian(innerDistance, -halfAngle)
 		]);
-		graphics.endFill();
-		return graphics.geometry;
+		graphics.fill(0xfafa7a);
+		return graphics;
 	}
 
 	populate() {
 		super.populate();
-		this.noteBody = new PIXI.Graphics(Sunniesnow.UiFlick.geometry);
-		this.arrow = new PIXI.Graphics(Sunniesnow.UiFlick.arrowGeometry);
-		this.arrow.transform.rotation = Sunniesnow.Config.chartMappingAngle(this.event.angle);
+		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
+		this.arrow = new PIXI.Graphics(this.constructor.arrowGeometry);
+		this.arrow.rotation = Sunniesnow.Config.chartMappingAngle(this.event.angle);
 		this.text = this.createText();
 		this.note = new PIXI.Container();
 		this.note.addChild(this.noteBody);
@@ -43,7 +41,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	}
 
 	populateCircle() {
-		this.circle = new PIXI.Graphics(Sunniesnow.UiFlick.circleGeometry);
+		this.circle = new PIXI.Graphics(this.constructor.circleGeometry);
 	}
 
 	update(relativeTime) {
@@ -98,7 +96,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 			this.arrow.alpha = (1 - progress)**3;
 			this.arrow.position.set(...Sunniesnow.Utils.polarToCartesian(
 				distance * (1 - (1-progress)**2),
-				this.arrow.transform.rotation
+				this.arrow.rotation
 			));
 		} else {
 			this.arrow.visible = false;

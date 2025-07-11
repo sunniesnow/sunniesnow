@@ -30,7 +30,7 @@ Sunniesnow.TouchEffect = class TouchEffect extends Sunniesnow.TouchEffectBase {
 		super.populate();
 		this.sprite = new PIXI.Sprite(this.constructor.texture);
 		this.sprite.anchor.set(0.5);
-		this.sprite.blendMode = PIXI.BLEND_MODES.ADD;
+		this.sprite.blendMode = 'add';
 		this.sprite.scale.set(this.constructor.initialScale);
 		this.addChild(this.sprite);
 		this.time = 0;

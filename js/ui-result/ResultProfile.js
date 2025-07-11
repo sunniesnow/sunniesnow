@@ -1,34 +1,8 @@
-Sunniesnow.ResultProfile = class ResultProfile extends Sunniesnow.UiComponent {
+Sunniesnow.ResultProfile = class ResultProfile extends PIXI.Container {
 
 	static async load() {
 		this.radius = Sunniesnow.Config.WIDTH / 45;
-		// this.frameGeometry = this.createFrameGeometry();
-		// this.maskGeometry = this.createMaskGeometry();
-		// this.backgroundGeometry = this.createBackgroundGeometry();
 		this.avatarTexture = await this.createAvatarTexture();
-	}
-
-	static createFrameGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.radius/10, Sunniesnow.Result.mainColor);
-		Sunniesnow.Utils.drawRoundRegularPolygon(graphics, 0, 0, this.radius/Math.sqrt(3)*2, this.radius/2, 6);
-		return graphics.geometry;
-	}
-
-	static createMaskGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill('black');
-		Sunniesnow.Utils.drawRoundRegularPolygon(graphics, 0, 0, this.radius/Math.sqrt(3)*2, this.radius/2, 6);
-		graphics.endFill();
-		return graphics.geometry;
-	}
-
-	static createBackgroundGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(Sunniesnow.Result.mainColor);
-		Sunniesnow.Utils.drawRoundRegularPolygon(graphics, 0, 0, this.radius/Math.sqrt(3)*2, this.radius/2, 6);
-		graphics.endFill();
-		return graphics.geometry;
 	}
 
 	static async avatarUrl() {
@@ -66,38 +40,35 @@ Sunniesnow.ResultProfile = class ResultProfile extends Sunniesnow.UiComponent {
 		}
 	}
 
+	constructor() {
+		super();
+		this.populate();
+	}
+
 	populate() {
-		super.populate();
 		this.populateAvatar();
 		this.populateNickname();
 	}
 
 	populateAvatar() {
-		// this.frame = new PIXI.Graphics(this.constructor.frameGeometry);
-		// this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
 		this.avatar = new PIXI.Sprite(this.constructor.avatarTexture);
 		this.avatar.anchor.set(0.5);
 		this.avatar.scale.set(Math.min(
 			this.constructor.radius/Math.sqrt(3)*4 / this.avatar.width,
 			this.constructor.radius*2 / this.avatar.height
 		));
-		// this.avatar.mask = this.mask = new PIXI.Graphics(this.constructor.maskGeometry);
-		// this.frame.x = this.background.x = this.mask.x = this.constructor.radius;
 		this.avatar.x = this.constructor.radius;
-		// this.addChild(this.background);
-		// this.addChild(this.mask);
 		this.addChild(this.avatar);
-		// this.addChild(this.frame);
 	}
 
 	populateNickname() {
-		this.nickname = new PIXI.Text(Sunniesnow.game.settings.nickname, {
+		this.nickname = new PIXI.Text({text: Sunniesnow.game.settings.nickname, style: {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: Sunniesnow.ResultTitle.height / 2,
 			fill: '#fbfbff',
 			align: 'left'
-		});
-		this.nickname.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
+		}});
+		this.nickname.anchor.set(0, 0.5);
 		this.nickname.x = this.avatar.x + this.constructor.radius*2;
 		this.addChild(this.nickname);
 	}

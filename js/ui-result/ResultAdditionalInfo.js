@@ -57,10 +57,10 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	}
 
 	createSamplesDiagram() {
-		this.meanText = new PIXI.Text('μ', {...this.constructor.textStyle});
-		this.meanText.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
-		this.sdText = new PIXI.Text('σ', {...this.constructor.textStyle});
-		this.sdText.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
+		this.meanText = new PIXI.Text({text: 'μ', style: {...this.constructor.textStyle}});
+		this.meanText.anchor.set(0, 0.5);
+		this.sdText = new PIXI.Text({text: 'σ', style: {...this.constructor.textStyle}});
+		this.sdText.anchor.set(0, 0.5);
 
 		const textWidth = Math.max(this.meanText.width, this.sdText.width);
 		const diagramWidth = Sunniesnow.Config.WIDTH - textWidth;
@@ -87,8 +87,8 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 
 		const zeroY = this.sampleMean / this.sampleSd * unit + 2*unit;
 		if (Sunniesnow.Utils.between(zeroY, 0, 4*unit)) {
-			this.zeroText = new PIXI.Text('0', { ...this.constructor.textStyle });
-			this.zeroText.anchor = new PIXI.ObservablePoint(null, null, 0, 0.5);
+			this.zeroText = new PIXI.Text({text: '0', style: { ...this.constructor.textStyle }});
+			this.zeroText.anchor.set(0, 0.5);
 			this.samplesDiagram.lineStyle(thick, this.constructor.COLOR);
 			this.samplesDiagram.moveTo(0, zeroY);
 			this.samplesDiagram.lineTo(diagramWidth, zeroY);
@@ -102,8 +102,8 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 			}
 			const x = (i + 0.5) / this.sampleCount * diagramWidth;
 			const y = unit*2 * (1 - (sample - this.sampleMean) / (this.sampleSd*2));
-			this.samplesDiagram.beginFill(this.constructor.COLOR);
-			this.samplesDiagram.drawCircle(x, y, unit/10);
+			this.samplesDiagram.circle(x, y, unit/10);
+			this.samplesDiagram.fill(this.constructor.COLOR);
 		});
 
 		this.allContents.addChild(this.samplesDiagram);
@@ -115,12 +115,12 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	}
 
 	createDistributionDiagram() {
-		this.meanText2 = new PIXI.Text('μ', {...this.constructor.textStyle});
-		this.meanText2.anchor = new PIXI.ObservablePoint(null, null, 0.5, 1);
-		this.sdText2 = new PIXI.Text('σ', {...this.constructor.textStyle});
-		this.sdText2.anchor = new PIXI.ObservablePoint(null, null, 0.5, 1);
-		this.zeroText2 = new PIXI.Text('0', {...this.constructor.textStyle});
-		this.zeroText2.anchor = new PIXI.ObservablePoint(null, null, 0.5, 1);
+		this.meanText2 = new PIXI.Text({text: 'μ', style: {...this.constructor.textStyle}});
+		this.meanText2.anchor.set(0.5, 1);
+		this.sdText2 = new PIXI.Text({text: 'σ', style: {...this.constructor.textStyle}});
+		this.sdText2.anchor.set(0.5, 1);
+		this.zeroText2 = new PIXI.Text({text: '0', style: {...this.constructor.textStyle}});
+		this.zeroText2.anchor.set(0.5, 1);
 
 		const width = Sunniesnow.Config.WIDTH;
 		const height = Sunniesnow.Config.HEIGHT - this.constructor.samplesDiagramHeight;
@@ -164,17 +164,16 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		});
 
 		const max = points.reduce((a, b) => Math.max(a, b), -Infinity);
-		this.distributionDiagram.lineStyle({
-			width: unit/60,
-			color: this.constructor.COLOR,
-			join: PIXI.LINE_JOIN.ROUND
-		});
 		for (let i = 0; i < rasterCount; i++) {
 			const x = (i - rasterCount / 2) * raster
 			const y = height * (1 - points[i] / max);
 			i === 0 ? this.distributionDiagram.moveTo(x, y) : this.distributionDiagram.lineTo(x, y);
 		}
-		this.distributionDiagram.finishPoly();
+		this.distributionDiagram.stroke({
+			width: unit/60,
+			color: this.constructor.COLOR,
+			join: PIXI.LINE_JOIN.ROUND
+		});
 
 		this.allContents.addChild(this.distributionDiagram);
 		this.allContents.addChild(this.meanText2);
@@ -186,14 +185,14 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		const style = {...this.constructor.textStyle};
 		const text = this.getTextContents();
 		style.fontSize = style.lineHeight = (Sunniesnow.Config.HEIGHT - this.constructor.samplesDiagramHeight) / Sunniesnow.Utils.countLines(text);
-		this.text = new PIXI.Text(text, style);
+		this.text = new PIXI.Text({text, style});
 		this.text.y = this.constructor.samplesDiagramHeight;
 		this.allContents.addChild(this.text);
 	}
 
 	createRightText() {
-		this.rightText = new PIXI.Text(this.getRightTextContents(), {...this.constructor.textStyle, align: 'right'});
-		this.rightText.anchor = new PIXI.ObservablePoint(null, null, 1, 0);
+		this.rightText = new PIXI.Text({text: this.getRightTextContents(), style: {...this.constructor.textStyle, align: 'right'}});
+		this.rightText.anchor.set(1, 0);
 		this.rightText.x = Sunniesnow.Config.WIDTH;
 		this.rightText.y = this.constructor.samplesDiagramHeight;
 		this.allContents.addChild(this.rightText);

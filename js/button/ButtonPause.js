@@ -5,16 +5,15 @@ Sunniesnow.ButtonPause = class ButtonPause extends Sunniesnow.ButtonPauseBase {
 
 	static createGeometry() {
 		const radius = Sunniesnow.Config.WIDTH / 45;
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill('white');
-		graphics.drawRect(-radius/2, -radius/2, radius/3, radius);
-		graphics.drawRect(radius/6, -radius/2, radius/3, radius);
-		graphics.endFill();
-		graphics.lineStyle(radius / 36, 'white');
-		graphics.beginFill('white', 0.1);
-		graphics.drawRoundedRect(-radius, -radius, radius*2, radius*2, radius/4);
-		graphics.endFill();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.rect(-radius/2, -radius/2, radius/3, radius);
+		graphics.fill('white');
+		graphics.rect(radius/6, -radius/2, radius/3, radius);
+		graphics.fill('white');
+		graphics.roundRect(-radius, -radius, radius*2, radius*2, radius/4);
+		graphics.fill({color: 'white', alpha: 0.1});
+		graphics.stroke({width: radius / 36, color: 'white'});
+		return graphics;
 	}
 
 	populate() {

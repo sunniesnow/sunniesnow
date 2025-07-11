@@ -215,7 +215,6 @@ Sunniesnow.DiscordRichPresence = {
 	async send(op, d) {
 		if (this.isWebSocketConnected()) {
 			const payload = JSON.stringify({op, d});
-			//console.log({op, d});
 			this.websocket.send(payload);
 		}
 	},

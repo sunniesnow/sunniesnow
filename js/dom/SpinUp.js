@@ -8,7 +8,7 @@ Sunniesnow.SpinUp = {
 	},
 
 	async initCanvas() {
-		Sunniesnow.game.canvas = Sunniesnow.game.app.view;
+		Sunniesnow.game.canvas = Sunniesnow.game.app.canvas;
 		Sunniesnow.game.canvas.id = 'main-canvas';
 		if (!Sunniesnow.Utils.isBrowser()) {
 			return;

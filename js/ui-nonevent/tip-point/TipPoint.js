@@ -5,29 +5,14 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	static ZOOMING_IN_DURATION = 0.3;
 	static ZOOMING_OUT_DURATION = 0.3;
 
-	static TRAIL_VERTEX_SHADER = `
-		attribute vec2 aVertexPosition;
-		attribute vec2 aTextureCoord;
-
-		uniform mat3 projectionMatrix;
-		uniform mat3 translationMatrix;
-
-		varying vec2 vTextureCoord; // x=0 means trail tail, x=1 means trail head
-
-		void main() {
-			gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
-			vTextureCoord = aTextureCoord;
+	static TRAIL_SHADER_BIT = {
+		name: 'tipPointTrail',
+		vertex: {},
+		fragment: {
+			header: 'uniform float uAlpha;',
+			main: 'outColor = vec4(vUV.xxx * 0.5 * uAlpha, 1.0);',
 		}
-	`;
-	static TRAIL_FRAGMENT_SHADER = `
-		varying vec2 vTextureCoord;
-
-		uniform float uAlpha;
-
-		void main() {
-			gl_FragColor = vec4(vTextureCoord.xxx * 0.5 * uAlpha, 1.0);
-		}
-	`;
+	};
 
 	static async load() {
 		if (Sunniesnow.game.settings.hideTipPoints) {
@@ -48,25 +33,23 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	}
 
 	static createTipPointGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0x000000);
-		graphics.drawCircle(0, 0, this.radius);
-		graphics.endFill();
+		const graphics = new PIXI.GraphicsContext();
+		graphics.circle(0, 0, this.radius);
+		graphics.fill(0x000000);
 		const unit = this.radius / Math.sqrt(2);
-		graphics.beginFill(0x000000);
-		graphics.drawPolygon([
+		graphics.poly([
 			unit, unit,
 			unit*2, 0,
 			unit, -unit
 		]);
-		graphics.endFill();
-		graphics.lineStyle(this.radius / 10, 0xffff00);
-		graphics.drawCircle(0, 0, unit);
-		return graphics.geometry;
+		graphics.fill(0x000000);
+		graphics.circle(0, 0, unit);
+		graphics.stroke({width: this.radius / 10, color: 0xffff00});
+		return graphics;
 	}
 
 	populate() {
-		if (Sunniesnow.game.settings.renderer === 'webgl') {
+		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.createTrail();
 		}
 		this.createTipPoint();
@@ -84,22 +67,24 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	createTrail() {
 		this.trailGeometry = new PIXI.MeshGeometry();
 		this.lastNodesCount = null;
-		this.trailVertices = this.trailGeometry.getBuffer('aVertexPosition');
-		this.trailUvs = this.trailGeometry.getBuffer('aTextureCoord');
-		this.trailIndices = this.trailGeometry.getIndex();
-		this.trailShader = PIXI.Shader.from(
-			this.constructor.TRAIL_VERTEX_SHADER,
-			this.constructor.TRAIL_FRAGMENT_SHADER,
-			{uAlpha: 1}
-		);
-		this.trail = new PIXI.Mesh(this.trailGeometry, this.trailShader);
-		this.trail.blendMode = PIXI.BLEND_MODES.ADD;
+		this.trailVertices = this.trailGeometry.attributes.aPosition.buffer;
+		this.trailUvs = this.trailGeometry.attributes.aUV.buffer;
+		this.trailIndices = this.trailGeometry.indexBuffer;
+		this.trailShader = new PIXI.Shader({
+			glProgram: PIXI.compileHighShaderGlProgram({bits: [
+				PIXI.localUniformBitGl,
+				PIXI.roundPixelsBitGl,
+				this.constructor.TRAIL_SHADER_BIT
+			]}),
+			resources: {myUniforms: {uAlpha: {value: 1, type: 'f32'}}}
+		});
+		this.trail = new PIXI.Mesh({geometry: this.trailGeometry, shader: this.trailShader});
+		this.trail.blendMode = 'add';
 		this.addChild(this.trail);
 	}
 
 	createConnections() {
 		this.connections = new PIXI.Graphics();
-		this.connections.lineStyle(Sunniesnow.Config.WIDTH / 200, 0x8f8f7f, 0.5);
 		this.connections.moveTo(this.checkpoints[0].x, 0);
 		for (const {x, time} of this.checkpoints.slice(1)) {
 			this.connections.lineTo(
@@ -107,6 +92,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 				(this.startTime - time) * Sunniesnow.Config.SCROLL_SPEED
 			);
 		}
+		this.connections.stroke({width: Sunniesnow.Config.WIDTH / 200, color: 0x8f8f7f, alpha: 0.5});
 		this.connections.y = Sunniesnow.Config.SCROLL_END_Y;
 		this.addChild(this.connections);
 	}
@@ -122,7 +108,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	updateActive(time) {
 		super.updateActive(time);
 		this.tipPoint.visible = false;
-		if (Sunniesnow.game.settings.renderer === 'webgl') {
+		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.trail.visible = true;
 		}
 	}
@@ -133,9 +119,9 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		const sinceStart = time - this.startTime;
 		this.tipPoint.scale.set(sinceStart / this.constructor.ZOOMING_IN_DURATION);
 		this.updateTipPoint(time);
-		if (Sunniesnow.game.settings.renderer === 'webgl') {
+		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.trail.visible = true;
-			this.trailShader.uniforms.uAlpha = 1;
+			this.trailShader.resources.myUniforms.uniforms.uAlpha = 1;
 			this.updateTrail(time);
 		}
 	}
@@ -147,9 +133,9 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		const alpha = 1 - sinceEnd / this.constructor.ZOOMING_OUT_DURATION;
 		this.tipPoint.scale.set(alpha);
 		this.updateTipPoint(time);
-		if (Sunniesnow.game.settings.renderer === 'webgl') {
+		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.trail.visible = true;
-			this.trailShader.uniforms.uAlpha = alpha;
+			this.trailShader.resources.myUniforms.uniforms.uAlpha = alpha;
 			this.updateTrail(time);
 		}
 	}
@@ -159,9 +145,9 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.tipPoint.visible = true;
 		this.tipPoint.scale.set(1);
 		this.updateTipPoint(time);
-		if (Sunniesnow.game.settings.renderer === 'webgl') {
+		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.trail.visible = true;
-			this.trailShader.uniforms.uAlpha = 1;
+			this.trailShader.resources.myUniforms.uniforms.uAlpha = 1;
 			this.updateTrail(time);
 		}
 	}
@@ -169,7 +155,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	updateRemnant(time) {
 		super.updateRemnant(time);
 		this.tipPoint.visible = false;
-		if (Sunniesnow.game.settings.renderer === 'webgl') {
+		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.trail.visible = false;
 		}
 	}

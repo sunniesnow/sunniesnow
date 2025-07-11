@@ -6,12 +6,11 @@ Sunniesnow.JudgementLine = class JudgementLine extends Sunniesnow.JudgementLineB
 	}
 
 	static createGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(Sunniesnow.Config.HEIGHT / 120, 0xffffff, 0.8);
+		const graphics = new PIXI.GraphicsContext();
 		graphics.moveTo(0, Sunniesnow.Config.SCROLL_END_Y);
 		graphics.lineTo(Sunniesnow.Config.WIDTH, Sunniesnow.Config.SCROLL_END_Y);
-		graphics.finishPoly();
-		return graphics.geometry;
+		graphics.stroke({width: Sunniesnow.Config.HEIGHT / 120, color: 0xffffff, alpha: 0.8});
+		return graphics;
 	}
 
 	populate() {

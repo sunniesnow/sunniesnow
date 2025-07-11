@@ -4,52 +4,35 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		this.sparkLine = this.createSparkLine();
 		this.explosionContourArc = this.createExplosionContourArc();
 		this.missHalo = this.createMissHalo();
-		this.earlyTextTexture = this.createTextTexture('E', 0x9f57e4);
-		this.lateTextTexture = this.createTextTexture('L', 0xe74c4c);
-	}
-
-	static createTextTexture(text, color) {
-		const sprite = new PIXI.Text(text, {
-			align: 'center',
-			fill: color,
-			fontSize: this.radius,
-			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
-			fontWeight: 'bold'
-		});
-		sprite.updateText();
-		return sprite.texture;
 	}
 
 	static createSparkLine() {
-		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.radius / 20, 0xffffff);
+		const graphics = new PIXI.GraphicsContext();
 		graphics.moveTo(0, 0);
 		graphics.lineTo(this.radius * 2, 0);
-		graphics.finishPoly();
-		return graphics.geometry;
+		graphics.stroke({width: this.radius / 20, color: 0xffffff});
+		return graphics;
 	}
 
 	static createExplosionContourArc() {
-		const graphics = new PIXI.Graphics();
-		graphics.lineStyle(this.radius / 10, 0xffffff);
+		const graphics = new PIXI.GraphicsContext();
 		graphics.arc(0, 0, this.radius * 1.5, -Math.PI / 6, Math.PI / 6);
-		graphics.finishPoly();
-		return graphics.geometry;
+		graphics.stroke({width: this.radius / 10, color: 0xffffff});
+		return graphics;
 	}
 
 	static createMissHalo() {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0x000000, 0.7);
-		graphics.drawCircle(0, 0, this.radius);
-		graphics.endFill();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.circle(0, 0, this.radius);
+		graphics.fill({color: 0x000000, alpha: 0.7});
+		return graphics;
 	}
 
 	populateSparks(count, minColor, maxColor) {
 		this.sparks = [];
 		for (let i = 0; i < count; i++) {
 			const spark = new PIXI.Graphics(this.constructor.sparkLine);
-			spark.transform.rotation = Math.random() * Math.PI * 2;
+			spark.rotation = Math.random() * Math.PI * 2;
 			spark.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
 			this.addChild(spark);
 			this.sparks.push(spark);
@@ -60,7 +43,7 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		this.contours = [];
 		for (let i = 0; i < count; i++) {
 			const contour = new PIXI.Graphics(this.constructor.explosionContourArc);
-			contour.transform.rotation = Math.random() * Math.PI * 2;
+			contour.rotation = Math.random() * Math.PI * 2;
 			contour.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
 			this.addChild(contour);
 			this.contours.push(contour);
@@ -68,8 +51,8 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 	}
 
 	updateSparks(delta) {
-		this.sparks.forEach((spark) => {
-			const [vx, vy] = Sunniesnow.Utils.polarToCartesian(this.constructor.radius / 2, spark.transform.rotation);
+		this.sparks.forEach(spark => {
+			const [vx, vy] = Sunniesnow.Utils.polarToCartesian(this.constructor.radius / 2, spark.rotation);
 			spark.x += delta * vx;
 			spark.y += delta * vy;
 			spark.alpha -= delta * 0.1;
@@ -128,36 +111,6 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		this.graphics.alpha -= delta * 0.05;
 		if (this.graphics.alpha <= 0) {
 			this.state = 'finished';
-		}
-	}
-
-	populate() {
-		super.populate();
-		// this.createEarlyLateText(); // commented in favor of Lyrica 5 style E/L indicator
-	}
-
-	createEarlyLateText() {
-		if (!this.earlyLate) {
-			return;
-		}
-		this.earlyLateText = new PIXI.Sprite(this.earlyLate < 0 ? this.constructor.earlyTextTexture : this.constructor.lateTextTexture);
-		this.earlyLateText.anchor.set(0.5);
-		this.front.addChild(this.earlyLateText);
-	}
-
-	update(delta) {
-		super.update(delta);
-		this.updateEarlyLateText(delta);
-	}
-
-	updateEarlyLateText(delta) {
-		if (!this.earlyLateText) {
-			return;
-		}
-		this.earlyLateText.alpha -= delta * 0.05;
-		if (this.earlyLateText.alpha <= 0) {
-			this.front.removeChild(this.earlyLateText);
-			this.earlyLateText = null;
 		}
 	}
 };

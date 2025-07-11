@@ -38,28 +38,28 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 	}
 
 	populateText() {
-		this.text = new PIXI.Text('', {
+		this.text = new PIXI.Text({text: '', style: {
 			fontSize: Sunniesnow.Config.WIDTH / 30,
 			fill: 'white',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			align: 'center'
-		});
-		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 1);
+		}});
+		this.text.anchor.set(0.5, 1);
 		this.wrapper.addChild(this.text);
 	}
 
 	populateLastJudgement() {
-		this.lastJudgement = new PIXI.Text('', {
+		this.lastJudgement = new PIXI.Text({text: '', style: {
 			fontSize: Sunniesnow.Config.WIDTH / 45,
 			fill: 'yellow',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			align: 'center'
-		});
-		this.earlyLate = new PIXI.Text('', {
+		}});
+		this.earlyLate = new PIXI.Text({text: '', style: {
 			fontSize: Sunniesnow.Config.WIDTH / 45,
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC'
-		});
-		this.lastJudgement.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0);
+		}});
+		this.lastJudgement.anchor.set(0.5, 0);
 		this.wrapper.addChild(this.lastJudgement);
 		this.wrapper.addChild(this.earlyLate);
 	}
@@ -96,8 +96,15 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 		switch (Sunniesnow.game.level.apFcIndicator) {
 			case 'ap':
 				if (Sunniesnow.game.settings.lyrica5) {
-					this.lastJudgement.style.fill = [0xf3eba2, 0xd2fbfa];
-					this.lastJudgement.style.fillGradientStops = [0, 1];
+					this.lastJudgement.style.fill = new PIXI.FillGradient({
+						type: 'linear',
+						start: {x: 0, y: 0},
+						end: {x: 0, y: 1},
+						colorStops: [
+							{offset: 0, color: 0xf3eba2},
+							{offset: 1, color: 0xd2fbfa}
+						]
+					});
 				} else {
 					this.lastJudgement.style.fill = 'yellow';
 				}
@@ -105,16 +112,30 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 				break;
 			case 'fc':
 				if (Sunniesnow.game.settings.lyrica5) {
-					this.lastJudgement.style.fill = [0xf9dc52, 0xfbf88a];
-					this.lastJudgement.style.fillGradientStops = [0, 1];
+					this.lastJudgement.style.fill = new PIXI.FillGradient({
+						type: 'linear',
+						start: {x: 0, y: 0},
+						end: {x: 0, y: 1},
+						colorStops: [
+							{offset: 0, color: 0xf9dc52},
+							{offset: 0, color: 0xfbf88a}
+						]
+					});
 				} else {
 					this.lastJudgement.style.fill = 'white';
 				}
 				this.lastJudgement.text = `⟐ ${this.lastJudgement.text} ⟐`;
 				break;
 			case 'fcs': // only in Lyrica 5
-				this.lastJudgement.style.fill = [0xb4d7d9, 0xf4fbfc];
-				this.lastJudgement.style.fillGradientStops = [0, 1];
+				this.lastJudgement.style.fill = new PIXI.FillGradient({
+					type: 'linear',
+					start: {x: 0, y: 0},
+					end: {x: 0, y: 1},
+					colorStops: [
+						{offset: 0, color: 0xb4d7d9},
+						{offset: 0, color: 0xf4fbfc}
+					]
+				});
 				this.lastJudgement.text = `· ${this.lastJudgement.text} ·`;
 				break;
 			default:

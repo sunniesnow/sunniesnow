@@ -30,8 +30,8 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 
 	populate() {
 		super.populate();
-		this.text = new PIXI.Text(this.event.text, this.constructor.style.clone());
-		this.text.anchor = new PIXI.ObservablePoint(null, null, 0.5, 0.5);
+		this.text = new PIXI.Text({text: this.event.text, style: this.constructor.style.clone()});
+		this.text.anchor.set(0.5, 0.5);
 		this.addChild(this.text);
 		this.alpha = 0.8;
 	}
@@ -46,7 +46,7 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 		if (!this.constructor.widthCache.has(this.text.text)) {
 			this.constructor.widthCache.set(
 				this.text.text,
-				PIXI.TextMetrics.measureText(this.text.text, this.constructor.style).width
+				PIXI.CanvasTextMetrics.measureText(this.text.text, this.constructor.style).width
 			);
 		}
 		this.text.style.fontSize = this.constructor.fontSize * Math.min(

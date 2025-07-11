@@ -1,24 +1,23 @@
-Sunniesnow.DebugHud = class DebugHud extends Sunniesnow.UiComponent {
+Sunniesnow.DebugHud = class DebugHud extends PIXI.Container {
 
-	populate() {
-		super.populate();
-		this.populateText();
+	constructor() {
+		super();
+		this.populate();
 	}
 
-	populateText() {
-		this.text = new PIXI.Text('', {
+	populate() {
+		this.text = new PIXI.Text({text: '', style: {
 			fontSize: Sunniesnow.Config.WIDTH / 60,
 			fill: '#ff00ff',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
-		});
+		}});
 		this.text.alpha = 0.7;
-		this.text.anchor = new PIXI.ObservablePoint(null, null, 0, 1);
-		this.text.y = Sunniesnow.Config.HEIGHT;
+		this.text.anchor.set(0, 1);
 		this.addChild(this.text);
+		this.y = Sunniesnow.Config.HEIGHT;
 	}
 
 	update(delta, data) {
-		super.update(delta);
 		if (Sunniesnow.game.settings.hideDebugExceptPause) {
 			this.visible = Sunniesnow.Music.pausing;
 		}

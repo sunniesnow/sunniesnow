@@ -5,17 +5,15 @@ Sunniesnow.UiGrid = class UiGrid extends Sunniesnow.UiBgPattern {
 	}
 
 	static createGeometry() {
-		const graphics = new PIXI.Graphics();
+		const graphics = new PIXI.GraphicsContext();
 		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
 		const rightMost = 4;
 		const upMost = 2;
 		const halfWidth = rightMost * unit;
 		const halfHeight = upMost * unit;
 		const margin = unit / 10;
-		graphics.beginFill(0x000000, 0.2);
-		graphics.drawRect(-halfWidth, -halfHeight, halfWidth * 2, halfHeight * 2);
-		graphics.endFill();
-		graphics.lineStyle(unit / 50, 0xffffef);
+		graphics.rect(-halfWidth, -halfHeight, halfWidth * 2, halfHeight * 2);
+		graphics.fill({color: 0x000000, alpha: 0.2});
 		for (let i = -rightMost; i <= rightMost; i += 1) {
 			const x = i * unit;
 			graphics.moveTo(x, -halfHeight - margin);
@@ -26,8 +24,8 @@ Sunniesnow.UiGrid = class UiGrid extends Sunniesnow.UiBgPattern {
 			graphics.moveTo(-halfWidth - margin, y);
 			graphics.lineTo(halfWidth + margin, y);
 		}
-		graphics.finishPoly();
-		return graphics.geometry;
+		graphics.stroke({width: unit / 50, color: 0xffffef});
+		return graphics;
 	}
 
 	populate() {

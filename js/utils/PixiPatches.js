@@ -1,20 +1,12 @@
 Sunniesnow.PixiPatches = {
 	apply() {
-		// this.patchHasProtocol(); // fixed in PIXI 7.3
 		if (!Sunniesnow.Utils.isBrowser()) {
 			this.patchLoadSvg();
 			this.patchExtractCanvas();
 			this.patchNodeLoaderParsers();
 		}
+		this.patchWorldVisible();
 		this.patchAddTo();
-	},
-
-	// https://github.com/pixijs/pixijs/issues/9568#issuecomment-1653126302
-	// fixed in https://github.com/pixijs/pixijs/commit/d1f23cfe62bf5004533ec4ac565b1945aa6ccdb3
-	patchHasProtocol() {
-		PIXI.utils.path.hasProtocol = function (path) {
-			return (/^[^/:]+:/).test(this.toPosix(path));
-		};
 	},
 
 	// https://github.com/pixijs-userland/node/issues/4
@@ -50,5 +42,21 @@ Sunniesnow.PixiPatches = {
 			parent.addChild(this);
 			return this;
 		}
+	},
+
+	// https://github.com/pixijs/pixijs/issues/11030
+	patchWorldVisible() {
+		Object.defineProperty(PIXI.Container.prototype, 'worldVisible', {
+			get() {
+				let container = this;
+				while (container) {
+					if (!container.visible) {
+						return false;
+					}
+					container = container.parent;
+				}
+				return true;
+			}
+		});
 	}
 };

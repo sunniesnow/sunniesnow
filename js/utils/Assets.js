@@ -4,7 +4,7 @@ Sunniesnow.Assets = {
 	async loadTexture(url) {
 		let loadParser;
 		// Reason for using Sunniesnow.ObjectUrl: https://github.com/pixijs/pixijs/issues/9568
-		if (Sunniesnow.ObjectUrl.types[url] === 'image/svg+xml' || PIXI.loadSVG.test(url)) {
+		if (Sunniesnow.ObjectUrl.types[url] === 'image/svg+xml' || PIXI.loadSvg.test(url)) {
 			loadParser = 'loadSVG';
 		} else {
 			loadParser = Sunniesnow.Utils.isBrowser() ? 'loadTextures' : 'loadNodeTexture';

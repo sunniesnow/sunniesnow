@@ -11,19 +11,17 @@ Sunniesnow.ProgressBar = class ProgressBar extends Sunniesnow.UiComponent {
 	}
 
 	static createBackgroundGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0xffffff, 0.5);
-		graphics.drawRect(-Sunniesnow.Config.WIDTH/2, -this.barHeight, Sunniesnow.Config.WIDTH, this.barHeight);
-		graphics.endFill();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.rect(-Sunniesnow.Config.WIDTH/2, -this.barHeight, Sunniesnow.Config.WIDTH, this.barHeight);
+		graphics.fill({color: 0xffffff, alpha: 0.5});
+		return graphics;
 	}
 
 	static createBarGeometry() {
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(0xc3efec);
-		graphics.drawRect(0, -this.barHeight, Sunniesnow.Config.WIDTH, this.barHeight);
-		graphics.endFill();
-		return graphics.geometry;
+		const graphics = new PIXI.GraphicsContext();
+		graphics.rect(0, -this.barHeight, Sunniesnow.Config.WIDTH, this.barHeight);
+		graphics.fill(0xc3efec);
+		return graphics;
 	}
 
 	populate() {

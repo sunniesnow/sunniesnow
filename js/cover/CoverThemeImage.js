@@ -22,8 +22,8 @@ Sunniesnow.CoverThemeImage = class CoverThemeImage extends PIXI.Container {
 
 	populateImageMask() {
 		this.imageMask = new PIXI.Graphics();
-		this.imageMask.beginFill('black');
-		this.imageMask.drawRoundedPolygon(0, 0, this.radius, 4, this.radius/10);
+		this.imageMask.roundPoly(0, 0, this.radius, 4, this.radius/10);
+		this.imageMask.fill('black');
 		this.addChild(this.imageMask);
 	}
 
@@ -37,8 +37,8 @@ Sunniesnow.CoverThemeImage = class CoverThemeImage extends PIXI.Container {
 
 	populateFrame() {
 		this.frame = new PIXI.Graphics();
-		this.frame.lineStyle(this.radius/20, 0xfbfbff);
-		this.frame.drawRoundedPolygon(0, 0, this.radius, 4, this.radius/10);
+		this.frame.roundPoly(0, 0, this.radius, 4, this.radius/10);
+		this.frame.stroke({width: this.radius/20, color: 0xfbfbff});
 		this.addChild(this.frame);
 	}
 };
