@@ -1721,9 +1721,16 @@ because by using canvas some features are dropped.
 There are some graphical settings
 that are **only** useful when [`renderer`](#renderer) is set to `"webgl"`.
 
-##### Antialias
+##### WebGL version
+{:#gl-version}
 
-- **Setting id**: `antialias`.
+- **Setting id**: `gl-version`.
+- **Possible values**: `1`, `2`.
+
+##### Antialias
+{:#gl-antialias}
+
+- **Setting id**: `gl-antialias`.
 - **Possible values**: `true`, `false`.
 
 This setting is used to set whether antialiasing should be enabled.
@@ -1734,8 +1741,9 @@ Antialiasing is a technique to make the edges of objects look smoother.
 It may lead to noticeable performance loss on some devices.
 
 ##### Power preference
+{:#gl-power-preference}
 
-- **Setting id**: `power-preference`.
+- **Setting id**: `gl-power-preference`.
 - **Possible values**: `"default"`, `"low-power"`, `"high-performance"`.
 
 This is a hint indicating what configuration of GPU is suitable for the WebGL context.
@@ -1744,6 +1752,22 @@ and setting it to `"low-power"` will prioritize power consumption over performan
 
 Because this is just a hint, whether it actually affects the performance
 or the power consumption is **not** certain.
+
+#### WebGPU options
+
+There are some graphical settings
+that are **only** useful when [`renderer`](#renderer) is set to `"webgpu"`.
+
+##### Antialias
+{:#gpu-antialias}
+
+- **Setting id**: `gpu-antialias`.
+- **Possible values**: `true`, `false`.
+
+##### Power preference
+{:#gpu-power-preference}
+- **Setting id**: `gpu-power-preference`.
+- **Possible values**: `"low-power"`, `"high-performance"`
 
 #### Debug
 {:#debug-category}
