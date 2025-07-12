@@ -1,3 +1,4 @@
+// Do not add this.circle as a child. See UiNotesBoard for how it is handled.
 Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 
 	constructor(event) {
@@ -27,6 +28,7 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 	}
 
 	update(relativeTime) {
+		this.circle?.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
 		super.update(relativeTime);
 		if (Sunniesnow.game.settings.circleMovesWithNote) {
 			this.circle?.position.set(this.x, this.y);

@@ -46,17 +46,13 @@ Sunniesnow.PixiPatches = {
 
 	// https://github.com/pixijs/pixijs/issues/11030
 	patchWorldVisible() {
-		Object.defineProperty(PIXI.Container.prototype, 'worldVisible', {
+		const worldVisibleDescriptor = {
 			get() {
-				let container = this;
-				while (container) {
-					if (!container.visible) {
-						return false;
-					}
-					container = container.parent;
-				}
-				return true;
-			}
-		});
+				return this.visible && (!this.parent || this.parent.worldVisible) && (!this.parentRenderLayer || this.parentRenderLayer.worldVisible);
+			},
+			readonly: true
+		};
+		Object.defineProperty(PIXI.Container.prototype, 'worldVisible', worldVisibleDescriptor);
+		Object.defineProperty(PIXI.RenderLayer.prototype, 'worldVisible', worldVisibleDescriptor);
 	}
 };

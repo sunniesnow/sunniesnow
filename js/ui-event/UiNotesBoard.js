@@ -7,6 +7,9 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME, e => e.disappearTime());
 		}
 		this.clear();
+		if (!Sunniesnow.game.settings.hideCircles) {
+			this.circlesLayer = new PIXI.RenderLayer();
+		}
 	}
 
 	clear() {
@@ -25,9 +28,12 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 		const container = new PIXI.Container();
 		const uiEvent = event.newUiEvent();
 		if (!Sunniesnow.game.settings.hideNotes) {
-			uiEvent.addTo(container);
+			container.addChild(uiEvent);
 		}
-		uiEvent.circle?.addTo(container);
+		if (!Sunniesnow.game.settings.hideCircles && uiEvent.circle) {
+			container.addChild(uiEvent.circle);
+			this.circlesLayer.attach(uiEvent.circle);
+		}
 		Sunniesnow.game.settings.reverseNoteOrder ? this.addChildAt(container, 0) : this.addChild(container);
 		this.uiEvents.push({uiEvent, container});
 	}

@@ -52,10 +52,9 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.uiBgNotesBoard?.addTo(this);
 		this.doubleLinesBoard?.addTo(this);
 		this.uiNotesBoard?.addTo(this);
+		this.uiNotesBoard?.circlesLayer?.addTo(this);
 		this.tipPointsBoard?.addTo(this);
-		if (!Sunniesnow.game.settings.hideFxInFront) {
-			this.fxBoard?.front.addTo(this);
-		}
+		this.fxBoard?.frontLayer.addTo(this);
 		this.pauseBoard.addTo(this);
 	}
 

@@ -13,7 +13,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 
 	populate() {
 		super.populate();
-		this.noteBody = new PIXI.Graphics(this.hasConnectedTap() ? Sunniesnow.UiTap.doubleGeometry : Sunniesnow.UiTap.geometry);
+		this.noteBody = new PIXI.Graphics(this.hasConnectedTap() ? this.constructor.doubleGeometry : this.constructor.geometry);
 		this.text = this.createText();
 		this.note = new PIXI.Container();
 		this.note.addChild(this.noteBody)
@@ -22,7 +22,9 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 	}
 
 	populateCircle() {
-		this.circle = new PIXI.Graphics(this.hasConnectedTap() ? Sunniesnow.UiTap.doubleCircleGeometry : Sunniesnow.UiTap.circleGeometry);
+		super.populateCircle();
+		this.circleGraphics = new PIXI.Graphics(this.hasConnectedTap() ? this.constructor.doubleCircleGeometry : this.constructor.circleGeometry);
+		this.circle.addChild(this.circleGraphics);
 	}
 
 	hasConnectedTap() {
@@ -42,8 +44,8 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		if (!this.circle) {
 			return;
 		}
-		this.circle.scale.set(1 - (progress-1)**2);
-		this.circle.alpha = progress / 3;
+		this.circleGraphics.scale.set(1 - (progress-1)**2);
+		this.circleGraphics.alpha = progress / 3;
 	}
 
 	updateActive(progress, relativeTime) {
@@ -54,11 +56,11 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		}
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
 		if (progress <= 1) {
-			this.circle.visible = true;
-			this.circle.scale.set(1 - (1-targetCircleScale) * progress);
-			this.circle.alpha = (1/3 + 2/3 * progress);
+			this.circleGraphics.visible = true;
+			this.circleGraphics.scale.set(1 - (1-targetCircleScale) * progress);
+			this.circleGraphics.alpha = (1/3 + 2/3 * progress);
 		} else {
-			this.circle.visible = false;
+			this.circleGraphics.visible = false;
 		}
 	}
 
@@ -69,7 +71,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 		if (!this.circle) {
 			return;
 		}
-		this.circle.visible = false;
+		this.circleGraphics.visible = false;
 	}
 
 	static fadingOutDuration(event) {

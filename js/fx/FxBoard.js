@@ -2,8 +2,9 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 	constructor() {
 		super();
 		this.presentFx = [];
-		if (!Sunniesnow.game.settings.hideFxInFront) {
-			this.front = new PIXI.Container();
+		this.frontLayer = new PIXI.RenderLayer();
+		if (Sunniesnow.game.settings.hideFxInFront) {
+			this.frontLayer.visible = false;
 		}
 		this.addLevelEventListeners();
 	}
@@ -13,9 +14,6 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 			const fx = this.presentFx.shift();
 			fx.destroy({children: true});
 			this.removeChild(fx);
-			if (!Sunniesnow.game.settings.hideFxInFront) {
-				this.front.removeChild(fx.front);
-			}
 		}
 		this.addLevelEventListeners();
 	}
@@ -37,17 +35,11 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		if (judgement === 'perfect' && Sunniesnow.game.settings.hideFxPerfect) {
 			return;
 		}
-		const fx = levelNote.event.newFx(levelNote);
+		const fx = levelNote.event.newFx(levelNote, this.frontLayer);
 		if (Sunniesnow.game.settings.reverseNoteOrder) {
 			this.addChildAt(fx, 0);
-			if (!Sunniesnow.game.settings.hideFxInFront) {
-				this.front.addChildAt(fx.front, 0);
-			}
 		} else {
 			this.addChild(fx);
-			if (!Sunniesnow.game.settings.hideFxInFront) {
-				this.front.addChild(fx.front);
-			}
 		}
 		this.presentFx.push(fx);
 	}

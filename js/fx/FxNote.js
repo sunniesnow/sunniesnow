@@ -1,20 +1,24 @@
+// The children referred to by this.front will be shown in front of all notes.
 Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 
 	static async load() {
 	}
 
-	constructor(levelNote) {
+	constructor(levelNote, frontLayer) {
 		super();
-		this.front = new PIXI.Container();
 		this.state = 'present'; // present -> finished
 		this.levelNote = levelNote;
-		[this.x, this.y] = [this.front.x, this.front.y] = Sunniesnow.Config.chartMapping(levelNote.event.x, levelNote.event.y);
-		if (Sunniesnow.game.settings.scroll) {
-			this.y = this.front.y = Sunniesnow.Config.SCROLL_END_Y;
-		}
 		this.judgement = levelNote.judgement || levelNote.highestJudgement;
 		this.earlyLate = levelNote.earlyLate;
 		this.populate();
+		this.position.set(...Sunniesnow.Config.chartMapping(levelNote.event.x, levelNote.event.y));
+		if (Sunniesnow.game.settings.scroll) {
+			this.y = Sunniesnow.Config.SCROLL_END_Y;
+		}
+		if (this.front) {
+			frontLayer?.attach(this.front);
+			this.front.position.set(this.position);
+		}
 	}
 
 	populate() {
@@ -80,11 +84,6 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 
 	updateMiss(delta) {
 		this.state = 'finished';
-	}
-
-	destroy(options) {
-		super.destroy(options);
-		this.front.destroy(options);
 	}
 
 };
