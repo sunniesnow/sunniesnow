@@ -273,8 +273,11 @@ Sunniesnow.Settings = {
 			contextMenuPause: this.readCheckbox('context-menu-pause'),
 			contextMenuNoModifier: this.readCheckbox('context-menu-no-modifier'),
 			renderer: this.readRadio('renderer'),
-			antialias: this.readCheckbox('antialias'),
-			powerPreference: this.readRadio('power-preference'),
+			glVersion: Number(this.readRadio('gl-version')),
+			glAntialias: this.readCheckbox('gl-antialias'),
+			glPowerPreference: this.readRadio('gl-power-preference'),
+			gpuAntialias: this.readCheckbox('gpu-antialias'),
+			gpuPowerPreference: this.readRadio('gpu-power-preference'),
 			debug: this.readCheckbox('debug'),
 			hideDebugExceptPause: this.readCheckbox('hide-debug-except-pause'),
 			suppressWarnings: this.readCheckbox('suppress-warnings')
@@ -445,8 +448,11 @@ Sunniesnow.Settings = {
 		this.writeValue('height', d('height'));
 		this.writeCheckbox('popup', d('popup'));
 		this.writeRadio('renderer', d('renderer'));
-		this.writeCheckbox('antialias', d('antialias'));
-		this.writeRadio('power-preference', d('powerPreference'));
+		this.writeRadio('gl-version', d('glVersion')?.toString());
+		this.writeCheckbox('gl-antialias', d('glAntialias'));
+		this.writeRadio('gl-power-preference', d('glPowerPreference'));
+		this.writeCheckbox('gpu-antialias', d('gpuAntialias'));
+		this.writeRadio('gpu-power-preference', d('gpuPowerPreference'));
 		this.writeCheckbox('fullscreen-on-start', d('fullscreenOnStart'));
 		this.writeCheckbox('float-as-fullscreen', d('floatAsFullscreen'));
 		this.writeCheckbox('avoid-downloading-fonts', d('avoidDownloadingFonts'));
@@ -782,10 +788,15 @@ Sunniesnow.Settings = {
 		this.associateRadio('se-online-radio', 'se-online');
 		this.associateRadio('se-upload-radio', 'se-upload');
 		this.associateRadio('latency-hint-value-radio', 'latency-hint-value');
-		this.associateRadio('renderer-webgl-radio', 'antialias');
-		this.associateRadio('renderer-webgl-radio', 'power-preference-default-radio');
-		this.associateRadio('renderer-webgl-radio', 'power-preference-low-power-radio');
-		this.associateRadio('renderer-webgl-radio', 'power-preference-high-performance-radio');
+		this.associateRadio('renderer-webgl-radio', 'gl-version-1-radio');
+		this.associateRadio('renderer-webgl-radio', 'gl-version-2-radio');
+		this.associateRadio('renderer-webgl-radio', 'gl-antialias');
+		this.associateRadio('renderer-webgl-radio', 'gl-power-preference-default-radio');
+		this.associateRadio('renderer-webgl-radio', 'gl-power-preference-low-power-radio');
+		this.associateRadio('renderer-webgl-radio', 'gl-power-preference-high-performance-radio');
+		this.associateRadio('renderer-webgpu-radio', 'gpu-antialias');
+		this.associateRadio('renderer-webgpu-radio', 'gpu-power-preference-low-power-radio');
+		this.associateRadio('renderer-webgpu-radio', 'gpu-power-preference-high-performance-radio');
 		this.associateRange('volume-se', 'volume-se-value');
 		this.associateRange('volume-music', 'volume-music-value');
 		this.associateRange('background-blur', 'background-blur-value');

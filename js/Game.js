@@ -26,7 +26,7 @@ Sunniesnow.Game = class Game {
 
 	async initPixiApp() {
 		this.app = new PIXI.Application();
-		await this.app.init({
+		const appOptions = {
 			hello: this.settings.debug,
 			width: this.settings.width,
 			height: this.settings.height,
@@ -38,10 +38,17 @@ Sunniesnow.Game = class Game {
 				wheel: false
 			},
 			preference: this.settings.renderer,
-			antialias: this.settings.antialias,
-			powerPreference: this.settings.powerPreference,
 			autoStart: Sunniesnow.Utils.isBrowser()
-		});
+		};
+		if (this.settings.renderer === 'webgl') {
+			appOptions.preferWebGLVersion = this.settings.glVersion;
+			appOptions.antialias = this.settings.glAntialias;
+			appOptions.powerPreference = this.settings.glPowerPreference;
+		} else if (this.settings.renderer === 'webgpu') {
+			appOptions.antialias = this.settings.gpuAntialias;
+			appOptions.powerPreference = this.settings.gpuPowerPreference;
+		}
+		await this.app.init(appOptions);
 		/*if (this.settings.renderer === 'canvas') {
 			this.maxTextureSize = Infinity
 		} else {

@@ -858,26 +858,46 @@ description: Sunniesnow is a web rhythm game
 		</div>
 
 		<div>
-			<input type="radio" id="renderer-webgl-radio" name="renderer" value="webgl">
+			<input type="radio" id="renderer-webgl-radio" name="renderer" value="webgl" checked>
 		</div>
 
 		<div>
-			<input type="radio" id="renderer-webgpu-radio" name="renderer" value="webgpu" checked>
+			<input type="radio" id="renderer-webgpu-radio" name="renderer" value="webgpu">
 		</div>
 	</fieldset>
 
 	<fieldset>
 		<legend id="webgl-category"></legend>
-		
+
 		<div>
-			<input type="checkbox" id="antialias" checked>
+			<span id="gl-version-introducer"></span>
+			<input type="radio" id="gl-version-1-radio" name="gl-version" value="1">
+			<input type="radio" id="gl-version-2-radio" name="gl-version" value="2" checked>
 		</div>
-		
+
 		<div>
-			<span id="power-preference-introducer"></span>
-			<input type="radio" id="power-preference-default-radio" name="power-preference" value="default" checked>
-			<input type="radio" id="power-preference-low-power-radio" name="power-preference" value="low-power">
-			<input type="radio" id="power-preference-high-performance-radio" name="power-preference" value="high-performance">
+			<input type="checkbox" id="gl-antialias" checked>
+		</div>
+
+		<div>
+			<span id="gl-power-preference-introducer"></span>
+			<input type="radio" id="gl-power-preference-default-radio" name="gl-power-preference" value="default" checked>
+			<input type="radio" id="gl-power-preference-low-power-radio" name="gl-power-preference" value="low-power">
+			<input type="radio" id="gl-power-preference-high-performance-radio" name="gl-power-preference" value="high-performance">
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend id="webgpu-category"></legend>
+
+		<div>
+			<input type="checkbox" id="gpu-antialias" checked>
+		</div>
+
+		<div>
+			<span id="gpu-power-preference-introducer"></span>
+			<input type="radio" id="gpu-power-preference-low-power-radio" name="gpu-power-preference" value="low-power">
+			<input type="radio" id="gpu-power-preference-high-performance-radio" name="gpu-power-preference" value="high-performance" checked>
 		</div>
 	</fieldset>
 

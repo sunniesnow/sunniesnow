@@ -1,18 +1,27 @@
 Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 
-	static TRAIL_DURATION = 0.5;
-	static TRAIL_TAIL_DURATION = 0.1;
-	static ZOOMING_IN_DURATION = 0.3;
-	static ZOOMING_OUT_DURATION = 0.3;
+	static TRAIL_DURATION = 0.5
+	static TRAIL_TAIL_DURATION = 0.1
+	static ZOOMING_IN_DURATION = 0.3
+	static ZOOMING_OUT_DURATION = 0.3
 
-	static TRAIL_SHADER_BIT = {
+	static TRAIL_SHADER_BIT_GL = {
 		name: 'tipPointTrail',
 		vertex: {},
 		fragment: {
 			header: 'uniform float uAlpha;',
 			main: 'outColor = vec4(vUV.xxx * 0.5 * uAlpha, 1.0);',
 		}
-	};
+	}
+
+	static TRAIL_SHADER_BIT = {
+		name: 'tipPointTrail',
+		vertex: {},
+		fragment: {
+			header: 'struct MyUniforms { uAlpha: f32, } @group(2) @binding(0) var<uniform> myUniforms: MyUniforms;',
+			main: 'outColor = vec4<f32>(vUV.xxx * 0.5 * myUniforms.uAlpha, 1.0);',
+		}
+	}
 
 	static async load() {
 		if (Sunniesnow.game.settings.hideTipPoints) {
@@ -74,6 +83,11 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 			glProgram: PIXI.compileHighShaderGlProgram({bits: [
 				PIXI.localUniformBitGl,
 				PIXI.roundPixelsBitGl,
+				this.constructor.TRAIL_SHADER_BIT_GL
+			]}),
+			gpuProgram: PIXI.compileHighShaderGpuProgram({bits: [
+				PIXI.localUniformBit,
+				PIXI.roundPixelsBit,
 				this.constructor.TRAIL_SHADER_BIT
 			]}),
 			resources: {myUniforms: {uAlpha: {value: 1, type: 'f32'}}}

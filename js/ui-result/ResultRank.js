@@ -73,6 +73,12 @@ Sunniesnow.ResultRank = class ResultRank extends PIXI.Container {
 				PIXI.localUniformBitGl,
 				PIXI.roundPixelsBitGl,
 				{fragment: {main: 'outColor = vec4(1.0);'}}
+			]}),
+			gpuProgram: PIXI.compileHighShaderGpuProgram({bits: [
+				PIXI.colorBit,
+				PIXI.localUniformBit,
+				PIXI.roundPixelsBit,
+				{fragment: {main: 'outColor = vec4<f32>(1.0);'}}
 			]})
 		});
 	}
