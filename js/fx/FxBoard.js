@@ -11,9 +11,7 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 
 	clear() {
 		while (this.presentFx.length > 0) {
-			const fx = this.presentFx.shift();
-			fx.destroy({children: true});
-			this.removeChild(fx);
+			this.presentFx.shift().destroy({children: true});
 		}
 		this.addLevelEventListeners();
 	}
@@ -23,7 +21,6 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 			fx.update(delta);
 			if (fx.state == 'finished') {
 				fx.destroy({children: true});
-				this.removeChild(fx);
 				this.presentFx.splice(i, 1);
 				return true;
 			}

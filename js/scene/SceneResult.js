@@ -13,9 +13,7 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 
 	populateLegacyUis() {
 		for (const ui of this.legacyUis) {
-			if (ui) {
-				this.addChild(ui);
-			}
+			ui?.addTo?.(this);
 		}
 	}
 
@@ -35,16 +33,13 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 
 	updateLegacyUis(delta) {
 		for (const ui of this.legacyUis) {
-			if (ui?.update) {
-				ui.update(delta);
-			}
+			ui?.update?.(delta);
 		}
 	}
 
 	updateUisAndButtons(delta) {
 		if (Sunniesnow.Music.currentTime >= Sunniesnow.Music.duration && this.pauseButton) {
 			this.pauseButton.destroy({children: true});
-			this.removeChild(this.pauseButton);
 			this.pauseButton = null;
 		}
 	}

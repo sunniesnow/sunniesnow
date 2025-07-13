@@ -10,7 +10,6 @@ Sunniesnow.TouchEffectsBoard = class TouchEffectsBoard extends PIXI.Container {
 		while (this.presentTouchEffects.length > 0) {
 			const touchEffect = this.presentTouchEffects.shift();
 			touchEffect.destroy({children: true});
-			this.removeChild(touchEffect);
 		}
 	}
 
@@ -24,7 +23,6 @@ Sunniesnow.TouchEffectsBoard = class TouchEffectsBoard extends PIXI.Container {
 			touchEffect.update(delta);
 			if (touchEffect.state == 'finished') {
 				touchEffect.destroy({children: true});
-				this.removeChild(touchEffect);
 				this.presentTouchEffects.splice(this.presentTouchEffects.indexOf(touchEffect), 1);
 			}
 		});

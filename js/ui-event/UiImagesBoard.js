@@ -1,16 +1,15 @@
-Sunniesnow.UiImagesBoard = class UiImagesBoard extends PIXI.Container {
+Sunniesnow.UiImagesBoard = class UiImagesBoard {
 
 	constructor() {
-		super();
 		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.Image);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME, e => e.disappearTime());
 		}
-		this.sortableChildren = true;
 		this.clear();
 		this.layerAbove = {};
 		for (const above of Sunniesnow.Image.LAYER_ABOVE) {
-			this.layerAbove[above] = new PIXI.RenderLayer();
+			this.layerAbove[above] = new PIXI.Container();
+			this.layerAbove[above].sortableChildren = true;
 		}
 	}
 
@@ -22,9 +21,7 @@ Sunniesnow.UiImagesBoard = class UiImagesBoard extends PIXI.Container {
 
 	removeAll() {
 		while (this.uiEvents.length > 0) {
-			const uiEvent = this.uiEvents.shift();
-			uiEvent.destroy({children: true});
-			this.removeChild(uiEvent);
+			this.uiEvents.shift().destroy({children: true});
 		}
 	}
 
@@ -42,7 +39,6 @@ Sunniesnow.UiImagesBoard = class UiImagesBoard extends PIXI.Container {
 			uiEvent.update(time - uiEvent.event.time);
 			if (uiEvent.state === 'finished') {
 				uiEvent.destroy({children: true});
-				this.removeChild(uiEvent);
 				this.uiEvents.splice(i, 1);
 				return true;
 			}
@@ -52,8 +48,7 @@ Sunniesnow.UiImagesBoard = class UiImagesBoard extends PIXI.Container {
 	add(event) {
 		const uiEvent = event.newUiEvent();
 		this.uiEvents.push(uiEvent);
-		this.addChild(uiEvent);
-		this.layerAbove[event.above].attach(uiEvent);
+		this.layerAbove[event.above].addChild(uiEvent);
 	}
 
 	adjustProgress(time) {

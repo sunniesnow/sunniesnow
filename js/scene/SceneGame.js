@@ -18,7 +18,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.topCenterHud = new Sunniesnow.TopCenterHud();
 		this.pauseBoard = new Sunniesnow.PauseBoard();
 		this.pauseButton = new Sunniesnow.ButtonPause(this.pauseBoard);
-		this.hudContainer = new PIXI.Container();
 		if (!Sunniesnow.game.settings.disableOrnament) {
 			this.uiImagesBoard = new Sunniesnow.UiImagesBoard();
 		}
@@ -41,18 +40,16 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.uiNotesBoard = new Sunniesnow.UiNotesBoard();
 		}
 		// See Image.LAYER_ABOVE for available properties of uiImageBoard.layerAbove.
-		this.uiImagesBoard?.addTo(this);
 		this.uiImagesBoard?.layerAbove.none.addTo(this);
 		this.background.addTo(this);
 		this.uiImagesBoard?.layerAbove.background.addTo(this);
 		this.uiBgPatternBoard?.addTo(this);
 		this.uiImagesBoard?.layerAbove.bgPattern.addTo(this);
-		this.progressBar.addTo(this.hudContainer);
-		this.topLeftHud.addTo(this.hudContainer);
-		this.topRightHud.addTo(this.hudContainer);
-		this.topCenterHud.addTo(this.hudContainer);
-		this.pauseButton.addTo(this.hudContainer);
-		this.hudContainer.addTo(this);
+		this.progressBar.addTo(this);
+		this.topLeftHud.addTo(this);
+		this.topRightHud.addTo(this);
+		this.topCenterHud.addTo(this);
+		this.pauseButton.addTo(this);
 		this.uiImagesBoard?.layerAbove.hud.addTo(this);
 		this.fxBoard?.addTo(this);
 		this.uiImagesBoard?.layerAbove.fx.addTo(this);
@@ -116,16 +113,28 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	gotoResult() {
 		Sunniesnow.game.goto(new Sunniesnow.SceneResult([
-			this.background,
 			this.uiImagesBoard,
+			this.uiImagesBoard?.layerAbove.none,
+			this.background,
+			this.uiImagesBoard?.layerAbove.background,
 			this.progressBar,
+			this.uiImagesBoard?.layerAbove.hud,
 			this.uiBgPatternBoard,
+			this.uiImagesBoard?.layerAbove.bgPattern,
 			this.fxBoard,
+			this.uiImagesBoard?.layerAbove.fx,
+			this.uiImagesBoard?.layerAbove.judgementLine,
 			this.uiBgNotesBoard,
+			this.uiImagesBoard?.layerAbove.bgNotes,
 			this.doubleLinesBoard,
 			this.uiNotesBoard,
+			this.uiImagesBoard?.layerAbove.notes,
+			this.uiNotesBoard?.circles,
+			this.uiImagesBoard?.layerAbove.circles,
 			this.tipPointsBoard,
-			this.fxBoard.front
+			this.uiImagesBoard?.layerAbove.tipPoints,
+			this.fxBoard.front,
+			this.uiImagesBoard?.layerAbove.fxFront,
 		]));
 	}
 

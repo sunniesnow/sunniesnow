@@ -20,9 +20,7 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 
 	removeAll() {
 		while (this.uiEvents.length > 0) {
-			const uiEvent = this.uiEvents.shift();
-			uiEvent.destroy({children: true});
-			this.removeChild(uiEvent);
+			this.uiEvents.shift().destroy({children: true});
 		}
 	}
 
@@ -44,7 +42,6 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 			uiEvent.alpha = uiEvent.fadingAlpha;
 			if (uiEvent.state === 'finished') {
 				uiEvent.destroy({children: true});
-				this.removeChild(uiEvent);
 				this.uiEvents.splice(i, 1);
 				return true;
 			}

@@ -40,7 +40,6 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 		for (const id in this.tipPoints) {
 			const tipPoint = this.tipPoints[id];
 			tipPoint.destroy({children: true});
-			this.removeChild(tipPoint);
 			delete this.tipPoints[id];
 		}
 	}
@@ -58,7 +57,6 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 		for (const id in this.tipPoints) {
 			const tipPoint = this.tipPoints[id];
 			if (tipPoint.state === 'finished') {
-				this.removeChild(tipPoint);
 				tipPoint.destroy({children: true});
 				delete this.tipPoints[id];
 			} else {

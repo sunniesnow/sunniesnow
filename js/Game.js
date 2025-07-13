@@ -103,7 +103,7 @@ Sunniesnow.Game = class Game {
 		if (this.scene !== this.lastScene) {
 			if (this.lastScene) {
 				this.lastScene.terminate();
-				this.app.stage.removeChild(this.lastScene);
+				this.lastScene.destroy();
 			}
 			if (this.scene) {
 				this.app.stage.addChildAt(this.scene, 0);

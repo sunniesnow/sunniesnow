@@ -102,19 +102,15 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		this.removeTouchListeners();
 		for (const touchUi of Object.values(this.touches)) {
 			touchUi.destroy({children: true});
-			this.removeChild(touchUi);
 		}
 		for (const point of this.pinnedPoints) {
 			point.destroy({children: true});
-			this.removeChild(point);
 		}
 		for (const earlyLateText of this.earlyLateTexts) {
 			earlyLateText.destroy();
-			this.removeChild(earlyLateText);
 		}
 		for (const touchArea of this.touchAreas) {
 			touchArea.destroy();
-			this.removeChild(touchArea);
 		}
 		this.touches = {};
 		this.pinnedPoints = [];
@@ -228,7 +224,6 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	unpinPoint(point) {
-		this.removeChild(point);
 		point.destroy({children: true});
 		this.pinnedPoints.splice(this.pinnedPoints.indexOf(point), 1);
 		Sunniesnow.PinnedCoordinates.remove(point);
@@ -276,7 +271,6 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			if (touchUi.alpha <= 0) {
 				touchUi.destroy({children: true});
 				this.endedTouches.delete(touchUi);
-				this.removeChild(touchUi);
 			}
 		}
 	}
@@ -343,7 +337,6 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			earlyLateText.alpha -= 0.02 * delta;
 			if (earlyLateText.alpha <= 0) {
 				earlyLateText.destroy();
-				this.removeChild(earlyLateText);
 				this.earlyLateTexts.splice(i, 1);
 			} else {
 				i++;
@@ -368,7 +361,6 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			const state = touchArea.uiNote.state;
 			if (!touchArea.uiNote.parent || state === 'fadingOut' || state === 'finished') {
 				touchArea.destroy();
-				this.removeChild(touchArea);
 				this.touchAreas.splice(i, 1);
 				return true;
 			}
@@ -389,7 +381,6 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			if (!uiEvent.parent || highlight.life <= 0) {
 				uiEvent.filters = uiEvent.filters?.toSpliced(uiEvent.filters.indexOf(highlight.filter), 1);
 				this.eventInfoTipHighlights.delete(highlight);
-				this.removeChild(uiEvent);
 				continue;
 			}
 			Sunniesnow.Utils.colorMatrixInterpolate(

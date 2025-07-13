@@ -77,8 +77,7 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 
 	destroyAssetProgressBar(name) {
 		const {container} = this.assetProgressBars.get(name);
-		this.removeChild(container);
-		container.destroy(true, {children: true});
+		container.destroy({children: true});
 		this.assetProgressBars.delete(name);
 	}
 

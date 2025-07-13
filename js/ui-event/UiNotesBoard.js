@@ -38,7 +38,6 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 	remove(uiEvent) {
 		uiEvent.circle?.destroy({children: true});
 		uiEvent.destroy({children: true});
-		this.removeChild(uiEvent);
 		this.uiEvents.splice(this.uiEvents.indexOf(uiEvent), 1);
 	}
 

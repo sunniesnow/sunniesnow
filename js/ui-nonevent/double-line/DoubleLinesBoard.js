@@ -39,7 +39,6 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 		for (const child of this.children) {
 			child.destroy({children: true});
 		}
-		this.removeChildren();
 	}
 
 	add(doubleLine) {
@@ -62,7 +61,6 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 			child.alpha = child.fadingAlpha;
 			if (child.state === 'finished') {
 				child.destroy({children: true});
-				this.removeChild(child);
 				return true;
 			}
 		});
