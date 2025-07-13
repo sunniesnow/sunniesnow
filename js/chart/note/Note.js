@@ -4,6 +4,16 @@ Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 		optional: {tipPoint: null, size: 1}
 	}
 
+	static TIME_DEPENDENT = {
+		...Sunniesnow.NoteBase.TIME_DEPENDENT,
+		circleOpacity: {value: 1},
+		circleRotation: {value: 0},
+		circleTintRed: {value: 1},
+		circleTintGreen: {value: 1},
+		circleTintBlue: {value: 1},
+		circleBlendMode: {value: 'normal', interpolable: false}
+	}
+
 	static UI_CLASS = 'UiNote'
 	static LEVEL_CLASS = 'LevelNote'
 	static FX_CLASS = 'FxNote'

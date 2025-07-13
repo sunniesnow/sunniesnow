@@ -71,6 +71,7 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 		];
 		this.blendMode = this.event.timeDependentAtRelative('blendMode', relativeTime);
 		super.update(relativeTime);
+		this.alpha *= this.fadingAlpha;
 	}
 
 	getBeforeTimeStateByRelativeTime(relativeTime) {

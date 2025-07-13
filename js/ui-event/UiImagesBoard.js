@@ -2,7 +2,7 @@ Sunniesnow.UiImagesBoard = class UiImagesBoard extends PIXI.Container {
 
 	constructor() {
 		super();
-		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.Image)
+		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.Image);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME, e => e.disappearTime());
 		}

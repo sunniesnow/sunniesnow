@@ -8,13 +8,13 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 		}
 		this.clear();
 		if (!Sunniesnow.game.settings.hideCircles) {
-			this.circlesLayer = new PIXI.RenderLayer();
+			this.circles = new PIXI.Container();
 		}
 	}
 
 	clear() {
 		this.unappearedEvents = this.allEvents.slice();
-		this.uiEvents ||= [];
+		this.uiEvents ??= [];
 		this.removeAll();
 	}
 
@@ -25,24 +25,21 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 	}
 
 	add(event) {
-		const container = new PIXI.Container();
 		const uiEvent = event.newUiEvent();
 		if (!Sunniesnow.game.settings.hideNotes) {
-			container.addChild(uiEvent);
+			Sunniesnow.game.settings.reverseNoteOrder ? this.addChildAt(uiEvent, 0) : this.addChild(uiEvent);
 		}
 		if (!Sunniesnow.game.settings.hideCircles && uiEvent.circle) {
-			container.addChild(uiEvent.circle);
-			this.circlesLayer.attach(uiEvent.circle);
+			Sunniesnow.game.settings.reverseNoteOrder ? this.circles.addChildAt(uiEvent.circle, 0) : this.circles.addChild(uiEvent.circle);
 		}
-		Sunniesnow.game.settings.reverseNoteOrder ? this.addChildAt(container, 0) : this.addChild(container);
-		this.uiEvents.push({uiEvent, container});
+		this.uiEvents.push(uiEvent);
 	}
 
-	remove(obj) {
-		const {container} = obj;
-		container.destroy({children: true});
-		this.removeChild(container);
-		this.uiEvents.splice(this.uiEvents.indexOf(obj), 1);
+	remove(uiEvent) {
+		uiEvent.circle?.destroy({children: true});
+		uiEvent.destroy({children: true});
+		this.removeChild(uiEvent);
+		this.uiEvents.splice(this.uiEvents.indexOf(uiEvent), 1);
 	}
 
 	update(delta) {
@@ -56,12 +53,10 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 			this.unappearedEvents.shift();
 			this.add(event);
 		}
-		Sunniesnow.Utils.eachWithRedoingIf(this.uiEvents, obj => {
-			const {uiEvent, container} = obj;
+		Sunniesnow.Utils.eachWithRedoingIf(this.uiEvents, uiEvent => {
 			uiEvent.update(time - uiEvent.event.time);
-			container.alpha = uiEvent.fadingAlpha;
 			if (uiEvent.state === 'finished') {
-				this.remove(obj);
+				this.remove(uiEvent);
 				return true;
 			}
 		});

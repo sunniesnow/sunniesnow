@@ -28,10 +28,23 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 	}
 
 	update(relativeTime) {
-		this.circle?.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
+		if (this.circle) {
+			this.circle.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
+			this.circle.alpha = this.event.timeDependentAtRelative('circleOpacity', relativeTime);
+			this.circle.rotation = this.event.timeDependentAtRelative('circleRotation', relativeTime);
+			this.circle.tint = [
+				this.event.timeDependentAtRelative('circleTintRed', relativeTime),
+				this.event.timeDependentAtRelative('circleTintGreen', relativeTime),
+				this.event.timeDependentAtRelative('circleTintBlue', relativeTime)
+			];
+			this.circle.blendMode = this.event.timeDependentAtRelative('circleBlendMode', relativeTime);
+		}
 		super.update(relativeTime);
 		if (Sunniesnow.game.settings.circleMovesWithNote) {
 			this.circle?.position.set(this.x, this.y);
+		}
+		if (this.circle) {
+			this.circle.alpha *= this.fadingAlpha;
 		}
 		if (Sunniesnow.game.settings.debug) {
 			const judgementWindows = Sunniesnow.Config.JUDGEMENT_WINDOWS;

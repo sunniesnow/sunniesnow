@@ -63,7 +63,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.doubleLinesBoard?.addTo(this);
 		this.uiNotesBoard?.addTo(this);
 		this.uiImagesBoard?.layerAbove.notes.addTo(this);
-		this.uiNotesBoard?.circlesLayer?.addTo(this);
+		this.uiNotesBoard?.circles?.addTo(this);
 		this.uiImagesBoard?.layerAbove.circles.addTo(this);
 		this.tipPointsBoard?.addTo(this);
 		this.uiImagesBoard?.layerAbove.tipPoints.addTo(this);
