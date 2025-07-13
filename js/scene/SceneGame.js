@@ -18,6 +18,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.topCenterHud = new Sunniesnow.TopCenterHud();
 		this.pauseBoard = new Sunniesnow.PauseBoard();
 		this.pauseButton = new Sunniesnow.ButtonPause(this.pauseBoard);
+		this.hudContainer = new PIXI.Container();
 		if (!Sunniesnow.game.settings.disableOrnament) {
 			this.uiImagesBoard = new Sunniesnow.UiImagesBoard();
 		}
@@ -39,22 +40,35 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		if (!Sunniesnow.game.settings.hideNotes || !Sunniesnow.game.settings.hideCircles) {
 			this.uiNotesBoard = new Sunniesnow.UiNotesBoard();
 		}
-		this.background.addTo(this);
-		this.uiBgPatternBoard?.addTo(this);
+		// See Image.LAYER_ABOVE for available properties of uiImageBoard.layerAbove.
 		this.uiImagesBoard?.addTo(this);
-		this.progressBar.addTo(this);
-		this.topLeftHud.addTo(this);
-		this.topRightHud.addTo(this);
-		this.topCenterHud.addTo(this);
-		this.pauseButton.addTo(this);
+		this.uiImagesBoard?.layerAbove.none.addTo(this);
+		this.background.addTo(this);
+		this.uiImagesBoard?.layerAbove.background.addTo(this);
+		this.uiBgPatternBoard?.addTo(this);
+		this.uiImagesBoard?.layerAbove.bgPattern.addTo(this);
+		this.progressBar.addTo(this.hudContainer);
+		this.topLeftHud.addTo(this.hudContainer);
+		this.topRightHud.addTo(this.hudContainer);
+		this.topCenterHud.addTo(this.hudContainer);
+		this.pauseButton.addTo(this.hudContainer);
+		this.hudContainer.addTo(this);
+		this.uiImagesBoard?.layerAbove.hud.addTo(this);
 		this.fxBoard?.addTo(this);
+		this.uiImagesBoard?.layerAbove.fx.addTo(this);
 		this.judgementLine?.addTo(this);
+		this.uiImagesBoard?.layerAbove.judgementLine.addTo(this);
 		this.uiBgNotesBoard?.addTo(this);
+		this.uiImagesBoard?.layerAbove.bgNotes.addTo(this);
 		this.doubleLinesBoard?.addTo(this);
 		this.uiNotesBoard?.addTo(this);
+		this.uiImagesBoard?.layerAbove.notes.addTo(this);
 		this.uiNotesBoard?.circlesLayer?.addTo(this);
+		this.uiImagesBoard?.layerAbove.circles.addTo(this);
 		this.tipPointsBoard?.addTo(this);
+		this.uiImagesBoard?.layerAbove.tipPoints.addTo(this);
 		this.fxBoard?.frontLayer.addTo(this);
+		this.uiImagesBoard?.layerAbove.fxFront.addTo(this);
 		this.pauseBoard.addTo(this);
 	}
 

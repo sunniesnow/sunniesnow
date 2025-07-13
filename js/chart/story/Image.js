@@ -4,7 +4,8 @@ Sunniesnow.Image = class Image extends Sunniesnow.Event {
 		optional: {
 			height: null,
 			x: 0,
-			y: 0
+			y: 0,
+			above: 'bgPattern'
 		}
 	}
 
@@ -24,7 +25,25 @@ Sunniesnow.Image = class Image extends Sunniesnow.Event {
 		blendMode: {value: 'normal', interpolable: false}
 	};
 
-	static UI_CLASS = 'UiImage';
-	static TYPE_NAME = 'image';
+	static UI_CLASS = 'UiImage'
+	static TYPE_NAME = 'image'
+
+	static LAYER_ABOVE = [
+		'none',
+		'background',
+		'bgPattern',
+		'hud',
+		'fx',
+		'judgementLine',
+		'bgNotes',
+		'notes',
+		'circles',
+		'tipPoints',
+		'fxFront'
+	]
+
+	checkProperties() {
+		return super.checkProperties() && this.constructor.LAYER_ABOVE.includes(this.above);
+	}
 
 };

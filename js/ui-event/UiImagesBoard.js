@@ -8,6 +8,10 @@ Sunniesnow.UiImagesBoard = class UiImagesBoard extends PIXI.Container {
 		}
 		this.sortableChildren = true;
 		this.clear();
+		this.layerAbove = {};
+		for (const above of Sunniesnow.Image.LAYER_ABOVE) {
+			this.layerAbove[above] = new PIXI.RenderLayer();
+		}
 	}
 
 	clear() {
@@ -49,6 +53,7 @@ Sunniesnow.UiImagesBoard = class UiImagesBoard extends PIXI.Container {
 		const uiEvent = event.newUiEvent();
 		this.uiEvents.push(uiEvent);
 		this.addChild(uiEvent);
+		this.layerAbove[event.above].attach(uiEvent);
 	}
 
 	adjustProgress(time) {
