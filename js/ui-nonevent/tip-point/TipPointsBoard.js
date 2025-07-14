@@ -21,6 +21,10 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 				disappearTime: events[events.length - 1].time + Sunniesnow.TipPoint.ZOOMING_OUT_DURATION
 			})
 		);
+		Sunniesnow.Utils.eachWithRedoingIf(
+			this.allTipPointHeads,
+			({events}, i) => events.length === 0 && this.allTipPointHeads.splice(i, 1)
+		);
 		this.allTipPointHeads.sort((a, b) => a.appearTime - b.appearTime);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(

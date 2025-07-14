@@ -1,5 +1,8 @@
 Sunniesnow.Event = class Event {
 
+	// Override this to false in subclasses that should actually be instantiated.
+	static ABSTRACT = true
+
 	static PROPERTIES = {
 		required: [],
 		optional: {}
@@ -45,7 +48,7 @@ Sunniesnow.Event = class Event {
 			return null;
 		}
 		const eventClass = Sunniesnow[Sunniesnow.Utils.upcaseFirst(eventData.type)];
-		if (!(eventClass?.prototype instanceof Sunniesnow.Event)) {
+		if (!(eventClass?.prototype instanceof Sunniesnow.Event) || eventClass.ABSTRACT) {
 			Sunniesnow.Logs.warn(`Unknown event type \`${eventData.type}\``);
 			return null;
 		}

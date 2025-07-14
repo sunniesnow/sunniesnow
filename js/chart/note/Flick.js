@@ -1,4 +1,6 @@
 Sunniesnow.Flick = class Flick extends Sunniesnow.Note {
+	static ABSTRACT = false
+
 	static PROPERTIES = {
 		required: ['x', 'y', 'angle'],
 		optional: {text: '', tipPoint: null, size: 1}

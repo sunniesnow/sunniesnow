@@ -1,4 +1,6 @@
 Sunniesnow.EffectMultiple = class EffectMultiple extends Sunniesnow.Event {
+	static ABSTRACT = false
+
 	static PROPERTIES = {
 		required: ['duration'],
 		optional: {

@@ -1,4 +1,6 @@
 Sunniesnow.BgNote = class BgNote extends Sunniesnow.NoteBase {
+	static ABSTRACT = false
+
 	static PROPERTIES = {
 		required: ['x', 'y'],
 		optional: {tipPoint: null, text: '', duration: 0, size: 1}

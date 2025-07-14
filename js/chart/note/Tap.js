@@ -1,4 +1,6 @@
 Sunniesnow.Tap = class Tap extends Sunniesnow.Note {
+	static ABSTRACT = false
+
 	static PROPERTIES = {
 		required: ['x', 'y'],
 		optional: {tipPoint: null, text: '', size: 1}

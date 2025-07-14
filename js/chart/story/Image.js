@@ -1,4 +1,6 @@
 Sunniesnow.Image = class Image extends Sunniesnow.Event {
+	static ABSTRACT = false
+
 	static PROPERTIES = {
 		required: ['filename', 'width', 'duration'],
 		optional: {

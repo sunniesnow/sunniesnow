@@ -1,4 +1,6 @@
 Sunniesnow.EffectTipPoint = class EffectTipPoint extends Sunniesnow.Event {
+	static ABSTRACT = false
+
 	static PROPERTIES = {
 		required: ['duration', 'tipPoint'],
 		optional: {}

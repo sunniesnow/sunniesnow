@@ -1,4 +1,6 @@
 Sunniesnow.Drag = class Drag extends Sunniesnow.Note {
+	static ABSTRACT = false
+
 	static PROPERTIES = {
 		required: ['x', 'y'],
 		optional: {tipPoint: null, size: 1}

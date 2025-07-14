@@ -1,4 +1,6 @@
 Sunniesnow.GlobalSpeed = class GlobalSpeed extends Sunniesnow.Event {
+	static ABSTRACT = false
+
 	static PROPERTIES = {
 		required: ['speed'],
 		optional: {}

@@ -1,4 +1,5 @@
 Sunniesnow.EffectProgressBar = class EffectProgressBar extends Sunniesnow.EffectUiComponent {
+	static ABSTRACT = false
 
 	static TIME_DEPENDENT = {
 		...Sunniesnow.EffectUiComponent.TIME_DEPENDENT,

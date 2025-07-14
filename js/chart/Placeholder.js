@@ -1,4 +1,6 @@
 Sunniesnow.Placeholder = class Placeholder extends Sunniesnow.Event {
+	static ABSTRACT = false
+
 	static PROPERTIES = {
 		required: ['x', 'y'],
 		optional: {tipPoint: null}
