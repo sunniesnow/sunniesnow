@@ -49,7 +49,7 @@ Sunniesnow.EventInfoTip = {
 		let minDistance = Infinity;
 		let nearest = null;
 		const {canvasX: x, canvasY: y} = touch.start();
-		for (const {uiEvent} of this.uiNotesBoard.uiEvents) {
+		for (const uiEvent of this.uiNotesBoard.uiEvents) {
 			if (uiEvent.state === 'ready' || uiEvent.state === 'finished') {
 				continue;
 			}
