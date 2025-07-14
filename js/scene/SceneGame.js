@@ -67,6 +67,32 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.fxBoard?.frontLayer.addTo(this);
 		this.uiImagesBoard?.layerAbove.fxFront.addTo(this);
 		this.pauseBoard.addTo(this);
+		if (!Sunniesnow.game.settings.disableOrnament) {
+			// See EffectMultiple.LAYERS for available layers.
+			this.uiEffectsBoard = new Sunniesnow.UiEffectsBoard(this, {
+				imagesAboveNone: this.uiImagesBoard?.layerAbove.none,
+				background: this.background,
+				imagesAboveBackground: this.uiImagesBoard?.layerAbove.background,
+				bgPattern: this.uiBgPatternBoard,
+				imagesAboveBgPattern: this.uiImagesBoard?.layerAbove.bgPattern,
+				hud: [this.progressBar, this.topLeftHud, this.topRightHud, this.topCenterHud],
+				imagesAboveHud: this.uiImagesBoard?.layerAbove.hud,
+				fx: this.fxBoard,
+				imagesAboveFx: this.uiImagesBoard?.layerAbove.fx,
+				judgementLine: this.judgementLine,
+				imagesAboveJudgementLine: this.uiImagesBoard?.layerAbove.judgementLine,
+				bgNotes: this.uiBgNotesBoard,
+				imagesAboveBgNotes: this.uiImagesBoard?.layerAbove.bgNotes,
+				notes: [this.doubleLinesBoard, this.uiNotesBoard],
+				imagesAboveNotes: this.uiImagesBoard?.layerAbove.notes,
+				circles: this.uiNotesBoard?.circles,
+				imagesAboveCircles: this.uiImagesBoard?.layerAbove.circles,
+				tipPoints: this.tipPointsBoard,
+				imagesAboveTipPoints: this.uiImagesBoard?.layerAbove.tipPoints,
+				fxFront: this.fxBoard.frontLayer,
+				imagesAboveFxFront: this.uiImagesBoard?.layerAbove.fxFront
+			});
+		}
 	}
 
 	populateAudio() {
@@ -145,6 +171,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 
 	// except fxBoard
 	updateBoards(delta) {
+		this.uiEffectsBoard?.update(delta);
 		this.uiImagesBoard?.update(delta);
 		this.uiBgPatternBoard?.update(delta);
 		this.uiBgNotesBoard?.update(delta);
@@ -179,6 +206,8 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.fxBoard?.clear();
 		this.seWithMusic?.clear();
 		this.vibrationWithMusic?.clear();
+		this.uiImagesBoard?.clear();
+		this.uiEffectsBoard?.clear();
 		Sunniesnow.Music.playFromBeginning();
 	}
 
@@ -220,6 +249,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		if (Sunniesnow.game.level.finished) {
 			return;
 		}
+		this.uiEffectsBoard?.adjustProgress(time);
 		this.uiBgPatternBoard?.adjustProgress(time);
 		this.uiImagesBoard?.adjustProgress(time);
 		this.uiBgNotesBoard?.adjustProgress(time);

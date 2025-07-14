@@ -163,6 +163,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui-event/UiTurntable',
 	'ui-event/UiHexagram',
 	'ui-event/UiImage',
+	'ui-event/UiEffectsBoard',
 
 	'fx/FxBoard',
 	'fx/FxNote',
@@ -204,6 +205,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'chart/effect/EffectTopLeftHud',
 	'chart/effect/EffectTopRightHud',
 	'chart/effect/EffectProgressBar',
+	'chart/effect/EffectMultiple',
 
 	'ui-nonevent/tip-point/TipPointBase',
 	'ui-nonevent/tip-point/TipPoint',
