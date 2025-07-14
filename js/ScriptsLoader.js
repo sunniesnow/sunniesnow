@@ -205,6 +205,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'chart/effect/EffectTopLeftHud',
 	'chart/effect/EffectTopRightHud',
 	'chart/effect/EffectProgressBar',
+	'chart/effect/EffectTipPoint',
 	'chart/effect/EffectMultiple',
 
 	'ui-nonevent/tip-point/TipPointBase',

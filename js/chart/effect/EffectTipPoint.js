@@ -1,7 +1,6 @@
-Sunniesnow.EffectUiComponent = class EffectUiComponent extends Sunniesnow.Event {
-
+Sunniesnow.EffectTipPoint = class EffectTipPoint extends Sunniesnow.Event {
 	static PROPERTIES = {
-		required: ['duration'],
+		required: ['duration', 'tipPoint'],
 		optional: {}
 	}
 
@@ -14,9 +13,8 @@ Sunniesnow.EffectUiComponent = class EffectUiComponent extends Sunniesnow.Event 
 		tintRed: {value: 1, noDefault: true},
 		tintGreen: {value: 1, noDefault: true},
 		tintBlue: {value: 1, noDefault: true},
-		blendMode: {value: 'normal', interpolable: false, noDefault: true},
-		data: {interpolable: false, value: null, noDefault: true}
-	};
+		blendMode: {value: 'normal', interpolable: false, noDefault: true}
+	}
 
-	static TYPE_NAME = 'effectUiComponent'
+	static TYPE_NAME = 'effectTipPoint'
 };

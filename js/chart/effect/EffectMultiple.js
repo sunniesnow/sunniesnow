@@ -19,7 +19,7 @@ Sunniesnow.EffectMultiple = class EffectMultiple extends Sunniesnow.Event {
 		tintGreen: {value: 1},
 		tintBlue: {value: 1},
 		blendMode: {value: 'normal', interpolable: false}
-	};
+	}
 
 	static TYPE_NAME = 'effectMultiple'
 

@@ -1,27 +1,27 @@
 Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	constructor() {
 		super();
-		// [{id, events, startTime}, ...], sorted by events[0].time
+		// [{id, events, appearTime, disappearTime, effects}, ...], sorted by events[0].time
 		this.allTipPointHeads = new Map();
 		for (const event of Sunniesnow.game.chart.events) {
-			if (event.tipPoint === null || event.tipPoint === undefined) {
+			if (event.tipPoint == null) {
 				continue;
 			}
-			if (this.allTipPointHeads.has(event.tipPoint)) {
-				this.allTipPointHeads.get(event.tipPoint).push(event);
-			} else {
-				this.allTipPointHeads.set(event.tipPoint, [event]);
+			if (!this.allTipPointHeads.has(event.tipPoint)) {
+				this.allTipPointHeads.set(event.tipPoint, {effects: [], events: []});
 			}
+			this.allTipPointHeads.get(event.tipPoint)[event instanceof Sunniesnow.EffectTipPoint ? 'effects' : 'events'].push(event);
 		}
 		// First convert to array then map instead of the other way around
 		// because Safari and Firefox do not support Iterator.
 		this.allTipPointHeads = Array.from(this.allTipPointHeads.entries()).map(
-			([id, events]) => ({
-				id, events,
+			([id, {events, effects}]) => ({
+				id, events, effects,
 				appearTime: events[0].time - Sunniesnow.TipPoint.ACTIVE_DURATION - Sunniesnow.Config.UI_PREPARATION_TIME,
 				disappearTime: events[events.length - 1].time + Sunniesnow.TipPoint.ZOOMING_OUT_DURATION
 			})
 		);
+		this.allTipPointHeads.sort((a, b) => a.appearTime - b.appearTime);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(
 				this.allTipPointHeads, e => e.appearTime, e => e.disappearTime
@@ -32,7 +32,7 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 
 	clear() {
 		this.unappearedTipPointHeads = this.allTipPointHeads.slice();
-		this.tipPoints ||= {};
+		this.tipPoints ??= {};
 		this.removeAll();
 	}
 
@@ -46,8 +46,8 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 
 	addNewTipPoints(time) {
 		while (this.unappearedTipPointHeads.length > 0 && time >= this.unappearedTipPointHeads[0].appearTime) {
-			const {id, events} = this.unappearedTipPointHeads.shift();
-			this.add(id, events);
+			const {id, events, effects} = this.unappearedTipPointHeads.shift();
+			this.add(id, events, effects);
 		}
 	}
 
@@ -65,8 +65,8 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 		}
 	}
 
-	add(id, events) {
-		this.tipPoints[id] = new Sunniesnow.TipPoint(events);
+	add(id, events, effects) {
+		this.tipPoints[id] = new Sunniesnow.TipPoint(events, effects);
 		this.addChild(this.tipPoints[id]);
 	}
 
@@ -76,7 +76,10 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 		);
 		this.removeAll();
 		this.timeline[Sunniesnow.Utils.bisectRight(this.timeline, ({time: t}) => t - time)].events.forEach(
-			({id, events}) => this.add(id, events)
+			({id, events, effects}) => this.add(id, events, effects)
 		);
+		for (const id in this.tipPoints) {
+			this.tipPoints[id].adjustProgress(time);
+		}
 	}
 }
