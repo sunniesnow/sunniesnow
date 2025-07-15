@@ -1,4 +1,4 @@
-Sunniesnow.EffectTipPoint = class EffectTipPoint extends Sunniesnow.Event {
+Sunniesnow.EffectTipPoint = class EffectTipPoint extends Sunniesnow.FilterableEvent {
 	static ABSTRACT = false
 
 	static PROPERTIES = {

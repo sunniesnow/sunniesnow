@@ -1,4 +1,4 @@
-Sunniesnow.Image = class Image extends Sunniesnow.Event {
+Sunniesnow.Image = class Image extends Sunniesnow.FilterableEvent {
 	static ABSTRACT = false
 
 	static PROPERTIES = {

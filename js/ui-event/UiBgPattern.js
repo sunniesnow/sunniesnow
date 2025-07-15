@@ -26,6 +26,7 @@ Sunniesnow.UiBgPattern = class UiBgPattern extends Sunniesnow.UiEvent {
 			this.event.timeDependentAtRelative('tintBlue', relativeTime)
 		];
 		this.blendMode = this.event.timeDependentAtRelative('blendMode', relativeTime);
+		this.filters = (this.filters ?? []).filter(f => !(f instanceof Sunniesnow.FilterFromChart)).concat(this.event.filtersAtRelative(relativeTime));
 		super.update(relativeTime);
 	}
 

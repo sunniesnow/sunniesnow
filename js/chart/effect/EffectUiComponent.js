@@ -1,4 +1,4 @@
-Sunniesnow.EffectUiComponent = class EffectUiComponent extends Sunniesnow.Event {
+Sunniesnow.EffectUiComponent = class EffectUiComponent extends Sunniesnow.FilterableEvent {
 
 	static PROPERTIES = {
 		required: ['duration'],

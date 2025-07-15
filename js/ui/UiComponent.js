@@ -52,6 +52,7 @@ Sunniesnow.UiComponent = class UiComponent extends PIXI.Container {
 
 	applyEffects(time) {
 		let x, y, size, opacity, rotation, tintRed, tintGreen, tintBlue, blendMode;
+		const filters = [];
 		for (const effect of this.currentEffects) {
 			x = effect.timeDependentAt('x', time) ?? x;
 			y = effect.timeDependentAt('y', time) ?? y;
@@ -62,6 +63,7 @@ Sunniesnow.UiComponent = class UiComponent extends PIXI.Container {
 			tintGreen = effect.timeDependentAt('tintGreen', time) ?? tintGreen
 			tintBlue = effect.timeDependentAt('tintBlue', time) ?? tintBlue;
 			blendMode = effect.timeDependentAt('blendMode', time) ?? blendMode;
+			filters.push(...effect.filtersAt(time));
 		}
 		this.x = (x ?? this.constructor.DEFAULT_X) * Sunniesnow.Config.WIDTH;
 		this.y = (y ?? this.constructor.DEFAULT_Y) * Sunniesnow.Config.HEIGHT;
@@ -70,6 +72,7 @@ Sunniesnow.UiComponent = class UiComponent extends PIXI.Container {
 		this.scale.set(size ?? 1);
 		this.tint = [tintRed ?? 1, tintGreen ?? 1, tintBlue ?? 1];
 		this.blendMode = blendMode ?? 'normal';
+		this.filters = (this.filters ?? []).filter(f => !(f instanceof Sunniesnow.FilterFromChart)).concat(filters);
 	}
 
 	privateUpdate(delta, data) {

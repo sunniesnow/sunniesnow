@@ -104,6 +104,7 @@ Sunniesnow.UiEffectsBoard = class UiEffectsBoard {
 			event.timeDependentAt('tintBlue', time)
 		];
 		container.blendMode = event.timeDependentAt('blendMode', time);
+		container.filters = (container.filters ?? []).filter(f => !(f instanceof Sunniesnow.FilterFromChart)).concat(event.filtersAt(time));
 	}
 
 	adjustProgress(time) {

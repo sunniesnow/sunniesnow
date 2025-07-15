@@ -1,4 +1,4 @@
-Sunniesnow.BgPattern = class BgPattern extends Sunniesnow.Event {
+Sunniesnow.BgPattern = class BgPattern extends Sunniesnow.FilterableEvent {
 	static PROPERTIES = {
 		required: [],
 		optional: {duration: 0}

@@ -9,35 +9,13 @@ Sunniesnow.UiImage = class UiImage extends Sunniesnow.UiEvent {
 			if (!(event instanceof Sunniesnow.Image)) {
 				continue;
 			}
-			if (Object.hasOwn(this.assets, event.filename)) {
-				continue;
-			}
-			const filename = `story/${event.filename}`;
-			const zipFiles = Sunniesnow.game.loaded.chart.zip.files;
-			if (!Object.hasOwn(zipFiles, filename)) {
-				Sunniesnow.Logs.warn(`Image \`${filename}\` not found in the level file`);
-				this.assets[event.filename] = null;
-				continue;
-			}
-			const type = mime.getType(filename);
-			if (!type?.startsWith('image')) {
-				Sunniesnow.Logs.warn(`Cannot infer a image file type from the filename \`${filename}\``);
-				this.assets[event.filename] = null;
-				continue;
-			}
-			const url = Sunniesnow.ObjectUrl.create(new Blob([await zipFiles[filename].async('blob')], {type}));
-			try {
-				this.assets[event.filename] = await Sunniesnow.Assets.loadTexture(url);
-			} catch (error) {
-				Sunniesnow.Logs.warn(`Failed to load image \`${filename}\`: ${error.message}`);
-				this.assets[event.filename] = null;
-			}
+			await Sunniesnow.StoryAssets.loadTexture(event.filename);
 		}
 	}
 
 	populate() {
 		super.populate();
-		this.texture = this.constructor.assets[this.event.filename];
+		this.texture = Sunniesnow.StoryAssets.texture(this.event.filename);
 		if (!this.texture) {
 			return;
 		}
@@ -74,6 +52,7 @@ Sunniesnow.UiImage = class UiImage extends Sunniesnow.UiEvent {
 			this.event.timeDependentAtRelative('tintBlue', relativeTime)
 		];
 		this.blendMode = this.event.timeDependentAtRelative('blendMode', relativeTime);
+		this.filters = (this.filters ?? []).filter(f => !(f instanceof Sunniesnow.FilterFromChart)).concat(this.event.filtersAtRelative(relativeTime));
 	}
 
 };

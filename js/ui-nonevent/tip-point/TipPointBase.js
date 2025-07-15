@@ -84,6 +84,7 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 
 	applyEffects(time) {
 		let x, y, size, opacity, rotation, tintRed, tintGreen, tintBlue, blendMode;
+		const filters = [];
 		for (const effect of this.currentEffects) {
 			x = effect.timeDependentAt('x', time) ?? x;
 			y = effect.timeDependentAt('y', time) ?? y;
@@ -94,6 +95,7 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 			tintGreen = effect.timeDependentAt('tintGreen', time) ?? tintGreen
 			tintBlue = effect.timeDependentAt('tintBlue', time) ?? tintBlue;
 			blendMode = effect.timeDependentAt('blendMode', time) ?? blendMode;
+			filters.push(...effect.filtersAt(time));
 		}
 		x ??= 0;
 		y ??= 0;
@@ -103,6 +105,7 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 		this.scale.set(size ?? 1);
 		this.tint = [tintRed ?? 1, tintGreen ?? 1, tintBlue ?? 1];
 		this.blendMode = blendMode ?? 'normal';
+		this.filters = (this.filters ?? []).filter(f => !(f instanceof Sunniesnow.FilterFromChart)).concat(filters);
 	}
 
 	updateState(time) {

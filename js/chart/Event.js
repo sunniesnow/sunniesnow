@@ -30,6 +30,9 @@ Sunniesnow.Event = class Event {
 		if (!result.checkProperties()) {
 			return null;
 		}
+		if (result instanceof Sunniesnow.FilterableEvent) {
+			result.assignFilters(data.filters, chart.totalOffset);
+		}
 		result.data = data;
 		return result;
 	}

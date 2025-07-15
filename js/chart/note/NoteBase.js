@@ -1,4 +1,4 @@
-Sunniesnow.NoteBase = class NoteBase extends Sunniesnow.Event {
+Sunniesnow.NoteBase = class NoteBase extends Sunniesnow.FilterableEvent {
 	static TIME_DEPENDENT = {
 		x: {},
 		y: {},

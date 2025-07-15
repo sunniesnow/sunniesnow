@@ -18,6 +18,7 @@ Sunniesnow.Chart = class Chart {
 	static async load() {
 		Sunniesnow.game.chart = new this(Sunniesnow.game.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
 		await Sunniesnow.game.chart.readSscharterInfo();
+		await Sunniesnow.game.chart.checkAndLoadFilters();
 		Sunniesnow.Music.setStart();
 		if (!Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.Audio.loadOfflineAudioContext();
@@ -30,6 +31,7 @@ Sunniesnow.Chart = class Chart {
 		}
 		this.data = data;
 		this.readMeta();
+		this.readFilters();
 		this.init();
 		this.readEvents();
 		this.eventsPostProcess();
@@ -54,6 +56,24 @@ Sunniesnow.Chart = class Chart {
 			return;
 		}
 		await Sunniesnow.Sscharter.connect(this.sscharter);
+	}
+
+	readFilters() {
+		this.filters = {};
+		if (!this.data.filters) {
+			return;
+		}
+		if (Sunniesnow.game.settings.disableOrnament) {
+			return;
+		}
+		for (const label in this.data.filters) {
+			const filterData = this.data.filters[label];
+			if (!filterData || typeof filterData !== 'object') {
+				Sunniesnow.Logs.warn(`Filter \`${label}\` is not an object`);
+				continue;
+			}
+			this.filters[label] = Sunniesnow.Filter.from(label, filterData);
+		}
 	}
 
 	init() {
@@ -162,6 +182,15 @@ Sunniesnow.Chart = class Chart {
 				event1.simultaneousEvents.push(event2);
 				event2.simultaneousEvents = event1.simultaneousEvents;
 			}
+		}
+	}
+
+	async checkAndLoadFilters() {
+		for (const event of this.events) {
+			if (!(event instanceof Sunniesnow.FilterableEvent)) {
+				continue;
+			}
+			await Sunniesnow.Utils.deleteIfAsync(event.filterEvents, async e => !await e.checkAndLoad());
 		}
 	}
 

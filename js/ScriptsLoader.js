@@ -90,6 +90,8 @@ Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 ].map(path => `${Sunniesnow.ScriptsLoader.CDN_PREFIX}${path}`);
 
 Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
+	'StoryAssets',
+
 	'audio/Audio',
 	'audio/Music',
 	'audio/Se',
@@ -115,6 +117,10 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'interaction/TouchEffect',
 	'interaction/TouchEffectsBoard',
 	'interaction/EventInfoTip',
+
+	'filter/Filter',
+	'filter/FilterEvent',
+	'filter/FilterFromChart',
 
 	'ui/LoadingProgress',
 	'ui/UiComponent',
@@ -180,6 +186,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 
 	'chart/Chart',
 	'chart/Event',
+	'chart/FilterableEvent',
 	'chart/Placeholder',
 	'chart/note/NoteBase',
 	'chart/note/Note',

@@ -642,5 +642,31 @@ Sunniesnow.Utils = {
 			}
 		}
 		return result;
+	},
+
+	isValidUniformValue(value, type) {
+		const [_, n] = /^vec(\d+)/.exec(type) ?? [];
+		if (n != null) {
+			return Array.isArray(value) && value.length === parseInt(n) && value.every(v => typeof v === 'number');
+		}
+		const [__, a, b] = /^mat(\d+)x(\d+)/.exec(type) ?? [];
+		if (a != null && b != null) {
+			return Array.isArray(value) && value.length === parseInt(a) * parseInt(b) && value.every(v => typeof v === 'number');
+		}
+		return typeof value === 'number' || Array.isArray(value) && value.length === 1 && typeof value[0] === 'number';
+	},
+
+	async deleteIfAsync(array, predicate) {
+		const shouldDelete = await Promise.all(array.map(predicate));
+		let count = 0;
+		for (let i = 0; i < array.length; i++) {
+			if (shouldDelete[i]) {
+				count++;
+			} else {
+				array[i - count] = array[i];
+			}
+		}
+		array.length -= count;
+		return array;
 	}
 };

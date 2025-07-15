@@ -1,4 +1,4 @@
-Sunniesnow.EffectMultiple = class EffectMultiple extends Sunniesnow.Event {
+Sunniesnow.EffectMultiple = class EffectMultiple extends Sunniesnow.FilterableEvent {
 	static ABSTRACT = false
 
 	static PROPERTIES = {
