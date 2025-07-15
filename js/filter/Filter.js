@@ -140,6 +140,13 @@ Sunniesnow.Filter = class Filter {
 					}
 					break;
 				case 'texture':
+					if (resources[key].coordinateSystem == null) {
+						break;
+					}
+					if (!['canvas', 'chart'].includes(resources[key].coordinateSystem)) {
+						Sunniesnow.Logs.warn(`Filter ${label} resource ${key} has unsupported coordinate system ${resources[key].coordinateSystem}.`);
+						return false;
+					}
 					break;
 				default:
 					Sunniesnow.Logs.warn(`Filter ${label} resource ${key} has unsupported type ${resources[key].type}.`);
@@ -209,15 +216,22 @@ Sunniesnow.Filter = class Filter {
 					break;
 				case 'texture':
 					this.resources[key] = {type: 'texture'};
-					if (options[key].samplerName) {
-						this.resources[key].samplerName = options[key].samplerName;
-					} else {
-						const samplerName = key + 'Sampler';
-						Sunniesnow.Logs.warn(`Filter ${this.label} texture ${key} does not have a sampler; using ${samplerName} as the sampler name.`);
-						this.resources[key].samplerName = samplerName;
-					}
+					this.setUpTextureResourceVariableName(options, key, 'samplerName', 'Sampler');
+					this.setUpTextureResourceVariableName(options, key, 'uniformsName', 'Uniforms');
+					this.setUpTextureResourceVariableName(options, key, 'matrixName', 'Matrix');
+					this.resources[key].coordinateSystem = options[key].coordinateSystem ?? 'canvas';
 					break;
 			}
+		}
+	}
+
+	setUpTextureResourceVariableName(options, resourceKey, variable, defaultSuffix) {
+		if (options[resourceKey][variable]) {
+			this.resources[resourceKey][variable] = options[resourceKey][variable];
+		} else {
+			const variableName = resourceKey + defaultSuffix;
+			Sunniesnow.Logs.warn(`Filter ${this.label} texture ${resourceKey} does not specify a ${variable}; using ${variableName}.`);
+			this.resources[resourceKey][variable] = variableName;
 		}
 	}
 
@@ -235,7 +249,9 @@ Sunniesnow.Filter = class Filter {
 				case 'texture':
 					const texture = PIXI.Texture.EMPTY;
 					resources[key] = texture.source;
-					resources[resources[key].samplerName] = texture.source.style;
+					resources[this.resources[key].samplerName] = texture.source.style;
+					const textureUniforms = resources[this.resources[key].uniformsName] = {}
+					textureUniforms[this.resources[key].matrixName] = {value: new PIXI.Matrix(), type: 'mat3x3<f32>'};
 					break;
 			}
 		}

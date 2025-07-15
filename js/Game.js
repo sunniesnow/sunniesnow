@@ -167,6 +167,11 @@ Sunniesnow.Game = class Game {
 		}
 	}
 
+	postLoading() {
+		this.initInteraction();
+		this.initAuxiliaryBoard();
+	}
+
 	initInteraction() {
 		if (this.settings.touchEffects) {
 			this.touchEffectsBoard = new Sunniesnow.TouchEffectsBoard();
@@ -180,5 +185,13 @@ Sunniesnow.Game = class Game {
 		}
 		this.initLevel();
 		this.hidePauseUi = this.settings.hidePauseUi;
+	}
+
+	// this.auxiliaryBoard is a nice place that you can use to grab transformation matrices.
+	// It will never get transformed itself, and it will not be rendered.
+	initAuxiliaryBoard() {
+		this.auxiliaryBoard = new PIXI.Container();
+		this.auxiliaryBoard.renderable = false;
+		this.app.stage.addChild(this.auxiliaryBoard);
 	}
 };

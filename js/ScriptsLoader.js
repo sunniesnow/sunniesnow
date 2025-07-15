@@ -119,6 +119,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'interaction/EventInfoTip',
 
 	'filter/Filter',
+	'filter/FilterSprite',
 	'filter/FilterEvent',
 	'filter/FilterFromChart',
 

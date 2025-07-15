@@ -55,6 +55,7 @@ Sunniesnow.FilterEvent = class FilterEvent {
 		if (offset != null) {
 			this.reduceTime(offset);
 		}
+		this.sprites = {};
 	}
 
 	reduceTime(offset) {
@@ -140,10 +141,9 @@ Sunniesnow.FilterEvent = class FilterEvent {
 					}
 					break;
 				case 'texture':
-					const samplerName = this.filter.resources[key].samplerName;
-					const texture = Sunniesnow.StoryAssets.texture(this.uninterpolableTimeDependentAt(key, time)) ?? PIXI.Texture.EMPTY;
-					filter.resources[key] = texture.source;
-					filter.resources[samplerName] = texture.sampler;
+					const sprite = this.sprites[key] ??= new Sunniesnow.FilterSprite(this, key);
+					sprite.update(time);
+					sprite.populateFilterResources(filter.resources);
 					break;
 			}
 		}
@@ -201,5 +201,15 @@ Sunniesnow.FilterEvent = class FilterEvent {
 			}
 		}
 		return true;
+	}
+
+	// currently never called, but we may see the necessity in the future.
+	gc() {
+		for (const key in this.sprites) {
+			this.sprites[key]?.destroy();
+			this.sprites[key] = null;
+		}
+		this.internalFilter?.destroy();
+		this.internalFilter = null;
 	}
 };
