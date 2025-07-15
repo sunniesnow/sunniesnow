@@ -7,7 +7,8 @@ Sunniesnow.Image = class Image extends Sunniesnow.FilterableEvent {
 			height: null,
 			x: 0,
 			y: 0,
-			above: 'bgPattern'
+			above: 'bgPattern',
+			coordinateSystem: 'chart'
 		}
 	}
 
@@ -20,6 +21,8 @@ Sunniesnow.Image = class Image extends Sunniesnow.FilterableEvent {
 		height: {nullable: true},
 		anchorX: {value: 0.5},
 		anchorY: {value: 0.5},
+		scaleX: {value: 1},
+		scaleY: {value: 1},
 		rotation: {value: 0},
 		tintRed: {value: 1},
 		tintGreen: {value: 1},
@@ -45,7 +48,7 @@ Sunniesnow.Image = class Image extends Sunniesnow.FilterableEvent {
 	]
 
 	checkProperties() {
-		return super.checkProperties() && this.constructor.LAYER_ABOVE.includes(this.above);
+		return super.checkProperties() && this.constructor.LAYER_ABOVE.includes(this.above) && ['canvas', 'chart'].includes(this.coordinateSystem);
 	}
 
 };
