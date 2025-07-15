@@ -5,7 +5,7 @@ Sunniesnow.ResultRank = class ResultRank extends PIXI.Container {
 		this.frameGeometry = this.createFrameGeometry();
 		this.backgroundGeometry = this.createBackgroundGeometry();
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
-			this.createApFcGeometry();
+			this.apFcShader = this.createApFcShader();
 		}
 	}
 
@@ -17,7 +17,7 @@ Sunniesnow.ResultRank = class ResultRank extends PIXI.Container {
 				ap: [0x99ffee, 0x6688ff, 0xee77ff, 0xffffaa]
 			};
 			for (const key in this.shaderColors) {
-				this.shaderColors[key] = this.shaderColors[key].map(color => new PIXI.Color(color).toArray()).flat();
+				this.shaderColors[key] = new Float32Array(this.shaderColors[key].flatMap(c => new PIXI.Color(c).toArray()));
 			}
 		} else {
 			this.plainColors = {
@@ -51,23 +51,26 @@ Sunniesnow.ResultRank = class ResultRank extends PIXI.Container {
 		return graphics;
 	}
 
-	static createApFcGeometry() {
+	createApFcGeometry() {
 		this.apFcGeometry = new PIXI.MeshGeometry();
 		this.apFcGeometry.positions = new Float32Array([
-			this.radius, 0,
-			0, this.radius,
-			-this.radius, 0,
-			0, -this.radius
+			this.constructor.radius, 0,
+			0, this.constructor.radius,
+			-this.constructor.radius, 0,
+			0, -this.constructor.radius
 		]);
 		this.apFcGeometry.addAttribute('aColor', {
-			buffer: new Float32Array(16),
+			buffer: this.constructor.shaderColors[Sunniesnow.game.level.apFcIndicator],
 			size: 4
 		});
 		this.apFcGeometry.indices = new Uint16Array([
 			0, 1, 2,
 			0, 2, 3
 		]);
-		this.apFcShader = new PIXI.Shader({
+	}
+
+	static createApFcShader() {
+		return new PIXI.Shader({
 			glProgram: PIXI.compileHighShaderGlProgram({bits: [
 				PIXI.colorBitGl,
 				PIXI.localUniformBitGl,
@@ -93,10 +96,8 @@ Sunniesnow.ResultRank = class ResultRank extends PIXI.Container {
 		this.addChild(this.background);
 		if (Sunniesnow.game.level.apFcIndicator) {
 			if (Sunniesnow.game.settings.renderer !== 'canvas') {
-				this.constructor.apFcGeometry.getBuffer('aColor').data.set(
-					this.constructor.shaderColors[Sunniesnow.game.level.apFcIndicator]
-				);
-				this.frame = new PIXI.Mesh({geometry: this.constructor.apFcGeometry, shader: this.constructor.apFcShader});
+				this.createApFcGeometry();
+				this.frame = new PIXI.Mesh({geometry: this.apFcGeometry, shader: this.constructor.apFcShader});
 				this.frame.mask = new PIXI.Graphics(this.constructor.frameGeometry);
 				this.addChild(this.frame.mask);
 			} else {

@@ -3,9 +3,12 @@ Sunniesnow.Filter = class Filter {
 	static GL_VERTEX_PREAMBLE = `
 		in vec2 aPosition;
 		out vec2 vTextureCoord;
-		uniform vec4 uInputSize;
+		uniform highp vec4 uInputSize;
+		uniform vec4 uInputPixel;
+		uniform vec4 uInputClamp;
 		uniform vec4 uOutputFrame;
 		uniform vec4 uOutputTexture;
+		uniform sampler2D uTexture;
 		vec4 filterVertexPosition(void) {
 			vec2 position = aPosition * uOutputFrame.zw + uOutputFrame.xy;
 			position.x = position.x * (2.0 / uOutputTexture.x) - 1.0;
@@ -20,6 +23,11 @@ Sunniesnow.Filter = class Filter {
 	static GL_FRAGMENT_PREAMBLE = `
 		in vec2 vTextureCoord;
 		out vec4 finalColor;
+		uniform highp vec4 uInputSize;
+		uniform vec4 uInputPixel;
+		uniform vec4 uInputClamp;
+		uniform vec4 uOutputFrame;
+		uniform vec4 uOutputTexture;
 		uniform sampler2D uTexture;
 	`
 
@@ -227,7 +235,7 @@ Sunniesnow.Filter = class Filter {
 				case 'texture':
 					const texture = PIXI.Texture.EMPTY;
 					resources[key] = texture.source;
-					resources[resources[key].samplerName] = texture.sampler;
+					resources[resources[key].samplerName] = texture.source.style;
 					break;
 			}
 		}

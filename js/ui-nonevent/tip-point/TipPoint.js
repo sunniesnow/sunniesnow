@@ -5,24 +5,6 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	static ZOOMING_IN_DURATION = 0.3
 	static ZOOMING_OUT_DURATION = 0.3
 
-	static TRAIL_SHADER_BIT_GL = {
-		name: 'tipPointTrail',
-		vertex: {},
-		fragment: {
-			header: 'uniform float uAlpha;',
-			main: 'outColor = vec4(vUV.xxx * 0.5 * uAlpha, 1.0);',
-		}
-	}
-
-	static TRAIL_SHADER_BIT = {
-		name: 'tipPointTrail',
-		vertex: {},
-		fragment: {
-			header: 'struct MyUniforms { uAlpha: f32, } @group(2) @binding(0) var<uniform> myUniforms: MyUniforms;',
-			main: 'outColor = vec4<f32>(vUV.xxx * 0.5 * myUniforms.uAlpha, 1.0);',
-		}
-	}
-
 	static async load() {
 		if (Sunniesnow.game.settings.hideTipPoints) {
 			return;
@@ -30,6 +12,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.radius = Sunniesnow.Config.NOTE_RADIUS / 3;
 		this.halfThickness = this.radius / 1.5; // half width of trail
 		this.tipPointGeometry = this.createTipPointGeometry();
+		this.trailShader = this.createTrailShader();
 		if (Sunniesnow.game.settings.scroll) {
 			this.ACTIVE_DURATION = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
 			this.REMNANT_DURATION = this.calculateRemnantDuration();
@@ -57,6 +40,21 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		return graphics;
 	}
 
+	static createTrailShader() {
+		return new PIXI.Shader({
+			glProgram: PIXI.compileHighShaderGlProgram({bits: [
+				PIXI.localUniformBitGl,
+				PIXI.roundPixelsBitGl,
+				{fragment: {main: 'outColor = vUV.xxxx * 0.5;'}}
+			]}),
+			gpuProgram: PIXI.compileHighShaderGpuProgram({bits: [
+				PIXI.localUniformBit,
+				PIXI.roundPixelsBit,
+				{fragment: {main: 'outColor = vUV.xxxx * 0.5;'}}
+			]})
+		});
+	}
+
 	populate() {
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.createTrail();
@@ -74,26 +72,11 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	}
 
 	createTrail() {
-		this.trailGeometry = new PIXI.MeshGeometry();
 		this.lastNodesCount = null;
-		this.trailVertices = this.trailGeometry.attributes.aPosition.buffer;
-		this.trailUvs = this.trailGeometry.attributes.aUV.buffer;
-		this.trailIndices = this.trailGeometry.indexBuffer;
-		this.trailShader = new PIXI.Shader({
-			glProgram: PIXI.compileHighShaderGlProgram({bits: [
-				PIXI.localUniformBitGl,
-				PIXI.roundPixelsBitGl,
-				this.constructor.TRAIL_SHADER_BIT_GL
-			]}),
-			gpuProgram: PIXI.compileHighShaderGpuProgram({bits: [
-				PIXI.localUniformBit,
-				PIXI.roundPixelsBit,
-				this.constructor.TRAIL_SHADER_BIT
-			]}),
-			resources: {myUniforms: {uAlpha: {value: 1, type: 'f32'}}}
+		this.trail = new PIXI.Mesh({
+			geometry: this.trailGeometry = new PIXI.MeshGeometry(),
+			shader: this.constructor.trailShader,
 		});
-		this.trail = new PIXI.Mesh({geometry: this.trailGeometry, shader: this.trailShader});
-		this.trail.blendMode = 'add';
 		this.addChild(this.trail);
 	}
 
@@ -135,7 +118,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.updateTipPoint(time);
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.trail.visible = true;
-			this.trailShader.resources.myUniforms.uniforms.uAlpha = 1;
+			this.trail.alpha = 1;
 			this.updateTrail(time);
 		}
 	}
@@ -149,7 +132,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.updateTipPoint(time);
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.trail.visible = true;
-			this.trailShader.resources.myUniforms.uniforms.uAlpha = alpha;
+			this.trail.alpha = alpha;
 			this.updateTrail(time);
 		}
 	}
@@ -161,7 +144,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.updateTipPoint(time);
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.trail.visible = true;
-			this.trailShader.resources.myUniforms.uniforms.uAlpha = 1;
+			this.trail.alpha = 1;
 			this.updateTrail(time);
 		}
 	}
@@ -304,10 +287,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		const endTime = checkpoints[checkpoints.length - 1].time;
 		if (this.lastNodesCount != checkpoints.length) {
 			this.lastNodesCount = checkpoints.length;
-			this.trailUvs.data = new Float32Array(checkpoints.length * 4);
-			this.trailVertices.data = new Float32Array(checkpoints.length * 4);
-			this.trailIndices.data = new Uint16Array((checkpoints.length - 1) * 6);
-			const indices = this.trailIndices.data;
+			const indices = new Uint16Array((checkpoints.length - 1) * 6);
 			for (let i = 0, indexCount = 0; i < checkpoints.length - 1; i++) {
 				const index = i * 2;
 				// make a rectangle out of two triangles
@@ -318,7 +298,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 				indices[indexCount++] = index + 1;
 				indices[indexCount++] = index + 3;
 			}
-			this.trailIndices.update();
+			this.trailGeometry.indices = indices;
 		}
 
 		/*
@@ -331,7 +311,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 
 		2n points in total, so 4n coordinates in total
 		*/
-		const uvs = this.trailUvs.data;
+		const uvs = new Float32Array(checkpoints.length * 4);
 		for (let i = 0; i < checkpoints.length; i++) {
 			const index = i * 4;
 			const trailPos = (checkpoints[i].time - startTime) / (endTime - startTime);
@@ -340,9 +320,9 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 			uvs[index + 2] = trailPos;
 			uvs[index + 3] = 1;
 		}
-		this.trailUvs.update();
+		this.trailGeometry.uvs = uvs;
 
-		const vertices = this.trailVertices.data;
+		const vertices = new Float32Array(checkpoints.length * 4);
 		let lastX1, lastX2, lastY1, lastY2;
 		lastX1 = lastX2 = vertices[0] = vertices[2] = checkpoints[0].x
 		lastY1 = lastY2 = vertices[1] = vertices[3] = checkpoints[0].y;
@@ -366,6 +346,6 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 			vertices[index + 2] = lastX2 = x2;
 			vertices[index + 3] = lastY2 = y2;
 		}
-		this.trailVertices.update();
+		this.trailGeometry.positions = vertices;
 	}
 };

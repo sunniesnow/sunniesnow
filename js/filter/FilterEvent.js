@@ -94,6 +94,9 @@ Sunniesnow.FilterEvent = class FilterEvent {
 		if (index === -1) {
 			return null;
 		}
+		if (index === dataPoints.length - 1) {
+			return dataPoints[index].value;
+		}
 		const {time: t1, value: v1} = dataPoints[index];
 		const {time: t2, value: v2} = dataPoints[index + 1];
 		let progress = (time - t1) / (t2 - t1);

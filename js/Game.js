@@ -31,12 +31,8 @@ Sunniesnow.Game = class Game {
 			width: this.settings.width,
 			height: this.settings.height,
 			backgroundColor: 'black',
-			eventFeatures: {
-				click: false,
-				globalMove: false,
-				move: false,
-				wheel: false
-			},
+			eventMode: 'none', // use our own event system
+			eventFeatures: {click: false, globalMove: false, move: false, wheel: false},
 			preference: this.settings.renderer,
 			autoStart: Sunniesnow.Utils.isBrowser()
 		};
