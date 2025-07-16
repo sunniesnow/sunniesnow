@@ -23,6 +23,8 @@ Sunniesnow.Image = class Image extends Sunniesnow.FilterableEvent {
 		anchorY: {value: 0.5},
 		scaleX: {value: 1},
 		scaleY: {value: 1},
+		skewX: {value: 0},
+		skewY: {value: 0},
 		rotation: {value: 0},
 		tintRed: {value: 1},
 		tintGreen: {value: 1},

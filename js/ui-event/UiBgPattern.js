@@ -19,6 +19,8 @@ Sunniesnow.UiBgPattern = class UiBgPattern extends Sunniesnow.UiEvent {
 		);
 		this.rotation = Sunniesnow.Config.chartMappingRotation(this.event.timeDependentAtRelative('rotation', relativeTime));
 		this.updateScale(relativeTime);
+		this.skew.x = this.event.timeDependentAtRelative('skewX', relativeTime);
+		this.skew.y = this.event.timeDependentAtRelative('skewY', relativeTime);
 		this.alpha = this.event.timeDependentAtRelative('opacity', relativeTime);
 		this.tint = [
 			this.event.timeDependentAtRelative('tintRed', relativeTime),
@@ -38,5 +40,7 @@ Sunniesnow.UiBgPattern = class UiBgPattern extends Sunniesnow.UiEvent {
 		if (Sunniesnow.game.settings.verticalFlip) {
 			this.scale.y *= -1;
 		}
+		this.scale.x *= this.event.timeDependentAtRelative('scaleX', relativeTime);
+		this.scale.y *= this.event.timeDependentAtRelative('scaleY', relativeTime);
 	}
 };

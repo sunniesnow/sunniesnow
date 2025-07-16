@@ -59,6 +59,8 @@ Sunniesnow.UiImage = class UiImage extends Sunniesnow.UiEvent {
 		this.sprite.anchor.y = this.event.timeDependentAtRelative('anchorY', relativeTime);
 		this.scale.x *= this.event.timeDependentAtRelative('scaleX', relativeTime);
 		this.scale.y *= this.event.timeDependentAtRelative('scaleY', relativeTime);
+		this.skew.x = this.event.timeDependentAtRelative('skewX', relativeTime);
+		this.skew.y = this.event.timeDependentAtRelative('skewY', relativeTime);
 		this.alpha = this.event.timeDependentAtRelative('opacity', relativeTime);
 		this.tint = [
 			this.event.timeDependentAtRelative('tintRed', relativeTime),

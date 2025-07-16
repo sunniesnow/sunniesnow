@@ -96,6 +96,10 @@ Sunniesnow.UiEffectsBoard = class UiEffectsBoard {
 		container.pivot.x = event.timeDependentAt('pivotX', time) * Sunniesnow.Config.WIDTH;
 		container.pivot.y = event.timeDependentAt('pivotY', time) * Sunniesnow.Config.HEIGHT;
 		container.scale.set(event.timeDependentAt('size', time));
+		container.scale.x *= event.timeDependentAt('scaleX', time);
+		container.scale.y *= event.timeDependentAt('scaleY', time);
+		container.skew.x = event.timeDependentAt('skewX', time);
+		container.skew.y = event.timeDependentAt('skewY', time);
 		container.alpha = event.timeDependentAt('opacity', time);
 		container.rotation = event.timeDependentAt('rotation', time);
 		container.tint = [

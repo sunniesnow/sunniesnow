@@ -63,6 +63,10 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 		);
 		this.rotation = Sunniesnow.Config.chartMappingRotation(this.event.timeDependentAtRelative('rotation', relativeTime));
 		this.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
+		this.scale.x *= this.event.timeDependentAtRelative('scaleX', relativeTime);
+		this.scale.y *= this.event.timeDependentAtRelative('scaleY', relativeTime);
+		this.skew.x = this.event.timeDependentAtRelative('skewX', relativeTime);
+		this.skew.y = this.event.timeDependentAtRelative('skewY', relativeTime);
 		this.alpha = this.event.timeDependentAtRelative('opacity', relativeTime);
 		this.tint = [
 			this.event.timeDependentAtRelative('tintRed', relativeTime),
