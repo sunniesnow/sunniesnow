@@ -119,7 +119,7 @@ Sunniesnow.Settings = {
 		const element = document.createElement('div');
 		details.appendChild(element);
 		if (type?.endsWith('markdown')) {
-			text = marked.parse(text, { mangle: false, headerIds: false });
+			text = marked.parse(text);
 			element.innerHTML = DOMPurify.sanitize(text);
 		} else {
 			const pre = document.createElement('pre');

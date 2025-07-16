@@ -82,10 +82,10 @@ Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 	`jszip@3.10.1/dist/jszip${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
 	`pixi.js@8.11.0/dist/pixi${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
 	`pixi.js@8.11.0/dist/packages/advanced-blend-modes${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	'mime@3.0.0/lite/+esm',
-	'marked@5.1.1/marked.min.js',
-	`dompurify@3.0.5/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	'audio-decode@2.2.2/+esm',
+	'mime@4.0.7/lite/+esm',
+	'marked@16.0.0/lib/marked.umd.js',
+	`dompurify@3.2.6/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
+	'audio-decode@2.2.3/+esm',
 	`vconsole@3.15.1/dist/vconsole.min.js`
 ].map(path => `${Sunniesnow.ScriptsLoader.CDN_PREFIX}${path}`);
 
