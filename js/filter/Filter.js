@@ -1,64 +1,7 @@
 Sunniesnow.Filter = class Filter {
-	// Adapted from built-in filters in PixiJS.
-	static GL_VERTEX_PREAMBLE = `
-		in vec2 aPosition;
-		out vec2 vTextureCoord;
-		uniform highp vec4 uInputSize;
-		uniform vec4 uInputPixel;
-		uniform vec4 uInputClamp;
-		uniform vec4 uOutputFrame;
-		uniform vec4 uOutputTexture;
-		uniform sampler2D uTexture;
-		vec4 filterVertexPosition(void) {
-			vec2 position = aPosition * uOutputFrame.zw + uOutputFrame.xy;
-			position.x = position.x * (2.0 / uOutputTexture.x) - 1.0;
-			position.y = position.y * (2.0*uOutputTexture.z / uOutputTexture.y) - uOutputTexture.z;
-			return vec4(position, 0.0, 1.0);
-		}
-		vec2 filterTextureCoord(void) {
-			return aPosition * (uOutputFrame.zw * uInputSize.zw);
-		}
-	`
-
-	static GL_FRAGMENT_PREAMBLE = `
-		in vec2 vTextureCoord;
-		out vec4 finalColor;
-		uniform highp vec4 uInputSize;
-		uniform vec4 uInputPixel;
-		uniform vec4 uInputClamp;
-		uniform vec4 uOutputFrame;
-		uniform vec4 uOutputTexture;
-		uniform sampler2D uTexture;
-	`
-
-	static GPU_PREAMBLE = `
-		struct GlobalFilterUniforms {
-			uInputSize: vec4<f32>,
-			uInputPixel: vec4<f32>,
-			uInputClamp: vec4<f32>,
-			uOutputFrame: vec4<f32>,
-			uGlobalFrame: vec4<f32>,
-			uOutputTexture: vec4<f32>,
-		};
-		@group(0) @binding(0) var<uniform> gfu: GlobalFilterUniforms;
-		@group(0) @binding(1) var uTexture: texture_2d<f32>;
-		@group(0) @binding(2) var uSampler: sampler;
-		fn filterVertexPosition(aPosition: vec2<f32>) -> vec4<f32> {
-			var position = aPosition * gfu.uOutputFrame.zw + gfu.uOutputFrame.xy;
-			position.x = position.x * (2.0 / gfu.uOutputTexture.x) - 1.0;
-			position.y = position.y * (2.0 * gfu.uOutputTexture.z / gfu.uOutputTexture.y) - gfu.uOutputTexture.z;
-			return vec4(position, 0.0, 1.0);
-		}
-		fn filterTextureCoord(aPosition: vec2<f32>) -> vec2<f32> {
-			return aPosition * (gfu.uOutputFrame.zw * gfu.uInputSize.zw);
-		}
-		fn globalTextureCoord(aPosition: vec2<f32>) -> vec2<f32> {
-			return aPosition.xy / gfu.uGlobalFrame.zw + gfu.uGlobalFrame.xy / gfu.uGlobalFrame.zw;
-		}
-		fn getSize() -> vec2<f32> {
-			return gfu.uGlobalFrame.zw;
-		}
-	`
+	static async load() {
+		this.liquid = new Sunniesnow.FilterLiquid();
+	}
 
 	static from(label, data) {
 		if (!this.check(label, data)) {
@@ -158,9 +101,9 @@ Sunniesnow.Filter = class Filter {
 
 	constructor(label, options) {
 		this.label = label;
+		this.setUpResources(options.resources);
 		this.setUpGl(options.gl);
 		this.setUpGpu(options.gpu);
-		this.setUpResources(options.resources);
 		if (!this.glProgram && !this.gpuProgram) {
 			this.invalid = true;
 		}
@@ -180,8 +123,8 @@ Sunniesnow.Filter = class Filter {
 			return;
 		}
 		this.glProgram = PIXI.GlProgram.from({
-			vertex: this.constructor.GL_VERTEX_PREAMBLE + options.vertex,
-			fragment: this.constructor.GL_FRAGMENT_PREAMBLE + options.fragment,
+			vertex: this.constructor.liquid.glVertex(options.vertex, this.label, this.resources),
+			fragment: this.constructor.liquid.glFragment(options.fragment, this.label, this.resources),
 			name: this.label
 		});
 	}
@@ -193,7 +136,7 @@ Sunniesnow.Filter = class Filter {
 			}
 			return;
 		}
-		const source = this.constructor.GPU_PREAMBLE + options.source;
+		const source = this.constructor.liquid.gpu(options.source, this.label, this.resources);
 		this.gpuProgram = PIXI.GpuProgram.from({
 			vertex: {source, entryPoint: options.vertexEntryPoint},
 			fragment: {source, entryPoint: options.fragmentEntryPoint},

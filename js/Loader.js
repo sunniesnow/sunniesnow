@@ -259,6 +259,7 @@ Sunniesnow.Loader = {
 		this.modulesQueue = [];
 		this.loadMeta();
 		this.loadDom();
+		this.loadFilter();
 		this.loadAudioAndChart();
 		this.loadTouch();
 		this.loadUiComponents();
@@ -365,6 +366,11 @@ Sunniesnow.Loader = {
 		this.loadModule('TipPoint');
 		this.loadModule('DoubleLine');
 		this.loadModule('JudgementLine');
+	},
+
+	loadFilter() {
+		this.loadModule('FilterLiquid');
+		this.loadModule('Filter');
 	},
 
 	loadExternal() {

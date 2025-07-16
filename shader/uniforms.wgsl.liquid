@@ -1,0 +1,30 @@
+{%- assign group = group | default: 1 -%}
+{%- assign binding = 0 -%}
+{%- for resource_item in resources -%}
+	{%- assign key = resource_item[0] -%}
+	{%- assign resource = resource_item[1] -%}
+	{%- if resource.type == 'uniforms' -%}
+		{%- assign struct_name = key | capitalize %}
+		struct {{ struct_name }} {
+			{%- for uniform_item in resource_item[1].uniforms %}
+				{{ uniform_item[0] }}: {{ uniform_item[1] }},
+			{% endfor -%}
+		};
+		@group({{ group }}) @binding({{ binding }}) var<uniform> {{ key }}: {{ struct_name }};
+		{%- assign binding = binding | plus: 1 -%}
+	{%- elsif resource.type == 'texture' %}
+		@group({{ group }}) @binding({{ binding }}) var {{ key }}: texture_2d<f32>;
+		{% assign binding = binding | plus: 1 -%}
+		@group({{ group }}) @binding({{ binding }}) var {{ resource.samplerName }}: sampler;
+		{% assign binding = binding | plus: 1 -%}
+		{%- assign struct_name = resource.uniformsName | capitalize -%}
+		struct {{ struct_name }} {
+			{{ resource.matrixName }}: mat3x3<f32>,
+		};
+		@group({{ group }}) @binding({{ binding }}) var<uniform> {{ resource.uniformsName }}: {{ struct_name }};
+		{% assign binding = binding | plus: 1 -%}
+		fn {{ key }}Coord(aPosition: vec2<f32>) -> vec2<f32> {
+			return ({{ resource.uniformsName }}.{{ resource.matrixName }} * vec3(filterTextureCoord(aPosition), 1.0)).xy;
+		}
+	{% endif -%}
+{%- endfor -%}

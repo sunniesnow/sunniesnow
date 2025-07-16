@@ -203,6 +203,10 @@ Sunniesnow.Utils = {
 		return string.replace(/[A-Z\d]/g, c => '-' + c.toLowerCase());
 	},
 
+	camelToUnderscore(string) {
+		return string.replace(/[A-Z\d]/g, c => '_' + c.toLowerCase());
+	},
+
 	urlSearchParamsObject(searchString) {
 		const params = new URLSearchParams(searchString || location.search);
 		const result = {};
@@ -668,5 +672,17 @@ Sunniesnow.Utils = {
 		}
 		array.length -= count;
 		return array;
+	},
+
+	glType(type) {
+		const basicTypes = {bool: 'bool', i32: 'int', u32: 'uint', f32: 'float'};
+		if (basicTypes[type]) {
+			return basicTypes[type];
+		}
+		const [_, base, typeParam] = type.match(/^(.+)<(.+)>$/) || [];
+		if (!base || !typeParam) {
+			return null;
+		}
+		return typeParam === 'f32' ? base : `${basicTypes[typeParam][0]}${base}`;
 	}
 };

@@ -1,0 +1,17 @@
+{%- for resource_item in resources -%}
+	{%- assign key = resource_item[0] -%}
+	{%- assign resource = resource_item[1] -%}
+	{%- if resource.type == 'uniforms' %}
+		{%- for uniform_item in resource.uniforms %}
+			uniform {{ uniform_item[1] | gl_type }} {{ uniform_item[0] }};
+		{% endfor -%}
+	{%- elsif resource.type == 'texture' %}
+		uniform sampler2D {{ key }};
+		uniform mat3 {{ resource.matrixName }};
+		{%- if environment == 'gl-vertex' %}
+			vec2 {{ key }}Coord(void) {
+				return ({{ resource.matrixName}} * vec3(filterTextureCoord(), 1.0)).xy;
+			}
+		{% endif -%}
+	{%- endif -%}
+{%- endfor -%}

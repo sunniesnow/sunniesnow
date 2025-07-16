@@ -58,6 +58,7 @@ The open-source projects used by Sunniesnow:
 - [audio-decode](https://github.com/audiojs/audio-decode) (MIT),
 - [marked](https://marked.js.org) (MIT),
 - [DOMPurify](https://github.com/cure53/DOMPurify) (Apache-2.0 or MPL-2.0),
+- [LiquidJS](https://liquidjs.com) (MIT),
 - [wangfonts](http://code.google.com/p/wangfonts) (GPL-2.0),
 - [Yuji](https://github.com/Kinutafontfactory/Yuji) (OFL-1.1),
 - [LXGW WenKai](https://github.com/lxgw/LxgwWenKai) (OFL-1.1),

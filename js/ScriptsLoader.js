@@ -86,6 +86,7 @@ Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 	'marked@16.0.0/lib/marked.umd.js',
 	`dompurify@3.2.6/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
 	'audio-decode@2.2.3/+esm',
+	`liquidjs@10.21.1/dist/liquid.browser${Sunniesnow.environment === 'production' ? '.min' : '.umd'}.js`,
 	`vconsole@3.15.1/dist/vconsole.min.js`
 ].map(path => `${Sunniesnow.ScriptsLoader.CDN_PREFIX}${path}`);
 
@@ -119,6 +120,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'interaction/EventInfoTip',
 
 	'filter/Filter',
+	'filter/FilterLiquid',
 	'filter/FilterSprite',
 	'filter/FilterEvent',
 	'filter/FilterFromChart',
