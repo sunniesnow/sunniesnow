@@ -56,6 +56,8 @@ Sunniesnow.FilterSprite = class FilterSprite extends PIXI.Sprite {
 		}
 		this.scale.x *= this.timeDependentAt('scaleX', time) ?? 1;
 		this.scale.y *= this.timeDependentAt('scaleY', time) ?? 1;
+		this.skew.x = this.timeDependentAt('skewX', time) ?? 0;
+		this.skew.y = this.timeDependentAt('skewY', time) ?? 0;
 		this.anchor.x = this.timeDependentAt('anchorX', time) ?? 0.5;
 		this.anchor.y = this.timeDependentAt('anchorY', time) ?? 0.5;
 	}

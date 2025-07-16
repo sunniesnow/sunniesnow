@@ -1,4 +1,9 @@
 Sunniesnow.FilterEvent = class FilterEvent {
+	static SPRITE_TIME_DEPENDENT = [
+		'x', 'y', 'width', 'height', 'rotation',
+		'scaleX', 'scaleY', 'skewX', 'skewY', 'anchorX', 'anchorY'
+	];
+
 	static check(data) {
 		if (typeof data !== 'object') {
 			Sunniesnow.Logs.warn('Filter event data are not an object.');
@@ -23,18 +28,29 @@ Sunniesnow.FilterEvent = class FilterEvent {
 			Sunniesnow.Logs.warn('Filter event timeDependent is not an object.');
 			return false;
 		}
-		if (data.timeDependent.dataPoints == null) {
-			return true;
-		}
-		if (!Array.isArray(data.timeDependent.dataPoints)) {
-			Sunniesnow.Logs.warn('Filter event timeDependent.dataPoints is not an array.');
-			return false;
-		}
-		if (!data.timeDependent.dataPoints.every(
-			point => typeof point === 'object' && typeof point.time === 'number' && point.value != null
-		)) {
-			Sunniesnow.Logs.warn('Filter event timeDependent.dataPoints contains invalid data points.');
-			return false;
+		for (const property in data.timeDependent) {
+			const timeDependentItem = data.timeDependent[property];
+			if (typeof timeDependentItem !== 'object') {
+				Sunniesnow.Logs.warn(`Filter event timeDependent.${property} is not an object.`);
+				return false;
+			}
+			if (timeDependentItem.scaleBy != null && !['none', 'chartUnitWidth', 'chartUnitHeight', 'canvasWidth', 'canvasHeight'].includes(timeDependentItem.scaleBy)) {
+				Sunniesnow.Logs.warn(`Filter event timeDependent.${property}.scaleBy is not valid.`);
+				return false;
+			}
+			if (timeDependentItem.dataPoints == null) {
+				continue;
+			}
+			if (!Array.isArray(timeDependentItem.dataPoints)) {
+				Sunniesnow.Logs.warn(`Filter event timeDependent.${property}.dataPoints is not an array.`);
+				return false;
+			}
+			if (!timeDependentItem.dataPoints.every(
+				point => typeof point === 'object' && typeof point.time === 'number' && point.value != null
+			)) {
+				Sunniesnow.Logs.warn(`Filter event timeDependent.${property}.dataPoints contains invalid data points.`);
+				return false;
+			}
 		}
 		return true;
 	}
@@ -76,7 +92,7 @@ Sunniesnow.FilterEvent = class FilterEvent {
 	assignTimeDependent(timeDependent) {
 		this.timeDependent = {};
 		for (const key in timeDependent) {
-			this.timeDependent[key] = {};
+			this.timeDependent[key] = {scaleBy: timeDependent[key].scaleBy ?? 'none'};
 			const dataPoints = this.timeDependent[key].dataPoints = timeDependent[key].dataPoints?.map(o => Object.assign({}, o)) ?? [];
 			if (timeDependent[key].value != null) {
 				dataPoints.unshift({time: this.time, value: timeDependent[key].value});
@@ -104,10 +120,25 @@ Sunniesnow.FilterEvent = class FilterEvent {
 		if (Number.isNaN(progress)) {
 			progress = 1/2;
 		}
-		if (typeof v1 === 'number' && typeof v2 === 'number') {
-			return v1 + (v2 - v1) * progress;
+		let scale = 1;
+		switch (this.timeDependent[property].scaleBy) {
+			case 'chartUnitWidth':
+				scale = Sunniesnow.Config.SCALE * (Sunniesnow.game.settings.horizontalFlip ? -1 : 1);
+				break;
+			case 'chartUnitHeight':
+				scale = Sunniesnow.Config.SCALE * (Sunniesnow.game.settings.verticalFlip ? -1 : 1);
+				break;
+			case 'canvasWidth':
+				scale = Sunniesnow.Config.WIDTH;
+				break;
+			case 'canvasHeight':
+				scale = Sunniesnow.Config.HEIGHT;
+				break;
 		}
-		return v1.map((v, i) => v + (v2[i] - v) * progress);
+		if (typeof v1 === 'number' && typeof v2 === 'number') {
+			return (v1 + (v2 - v1) * progress) * scale;
+		}
+		return v1.map((v, i) => (v + (v2[i] - v) * progress) * scale);
 	}
 
 	uninterpolableTimeDependentAt(property, time) {
@@ -168,9 +199,13 @@ Sunniesnow.FilterEvent = class FilterEvent {
 						if (timeDependentItem == null) {
 							continue;
 						}
-						const {value, dataPoints} = timeDependentItem;
+						const {value, dataPoints, scaleBy} = timeDependentItem;
 						if (value != null && !Sunniesnow.Utils.isValidUniformValue(value, uniformTypes[uniformName])) {
 							Sunniesnow.Logs.warn(`Filter event has an invalid value fo the uniform ${key}.${uniformName}.`);
+							return false;
+						}
+						if (scaleBy != null && scaleBy !== 'none' && uniformTypes[uniformName].includes('i')) {
+							Sunniesnow.Logs.warn(`Filter event has a scaleBy for uniform ${uniformName} of type ${uniformTypes[uniformName]}.`);
 							return false;
 						}
 						if (dataPoints == null) {
@@ -191,11 +226,27 @@ Sunniesnow.FilterEvent = class FilterEvent {
 					if (value != null && !(await Sunniesnow.StoryAssets.loadTexture(value))) {
 						return false;
 					}
-					if (dataPoints == null) {
-						continue;
-					}
-					if (!(await Promise.all(dataPoints.map(({value}) => Sunniesnow.StoryAssets.loadTexture(value)))).every(r => r)) {
+					if (dataPoints != null && !(await Promise.all(dataPoints.map(({value}) => Sunniesnow.StoryAssets.loadTexture(value)))).every(r => r)) {
 						return false;
+					}
+					for (const property of this.constructor.SPRITE_TIME_DEPENDENT) {
+						const timeDependentItem = this.timeDependent[key + '.' + property];
+						if (timeDependentItem == null) {
+							continue;
+						}
+						const {value, dataPoints, scaleBy} = timeDependentItem;
+						if (value != null && typeof value !== 'number') {
+							Sunniesnow.Logs.warn(`Filter event has an invalid value for the sprite property ${key}.${property}.`);
+							return false;
+						}
+						if (scaleBy != null && scaleBy !== 'none') {
+							Sunniesnow.Logs.warn(`Filter event has a scaleBy for the sprite property ${key}.${property}.`);
+							return false;
+						}
+						if (dataPoints != null && !dataPoints.every(({value}) => typeof value === 'number')) {
+							Sunniesnow.Logs.warn(`Filter event has an invalid data point for the sprite property ${key}.${property}.`);
+							return false;
+						}
 					}
 					break;
 			}
