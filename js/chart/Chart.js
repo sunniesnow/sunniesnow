@@ -186,6 +186,9 @@ Sunniesnow.Chart = class Chart {
 	}
 
 	async checkAndLoadFilters() {
+		if (Sunniesnow.game.settings.disableOrnament) {
+			return;
+		}
 		for (const event of this.events) {
 			if (!(event instanceof Sunniesnow.FilterableEvent)) {
 				continue;

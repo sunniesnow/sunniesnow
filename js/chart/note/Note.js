@@ -7,6 +7,10 @@ Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 	static TIME_DEPENDENT = {
 		...Sunniesnow.NoteBase.TIME_DEPENDENT,
 		circleOpacity: {value: 1},
+		circleScaleX: {value: 1},
+		circleScaleY: {value: 1},
+		circleSkewX: {value: 0},
+		circleSkewY: {value: 0},
 		circleRotation: {value: 0},
 		circleTintRed: {value: 1},
 		circleTintGreen: {value: 1},

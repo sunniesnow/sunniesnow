@@ -30,6 +30,10 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 	update(relativeTime) {
 		if (this.circle) {
 			this.circle.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
+			this.circle.scale.x *= this.event.timeDependentAtRelative('circleScaleX', relativeTime);
+			this.circle.scale.y *= this.event.timeDependentAtRelative('circleScaleY', relativeTime);
+			this.circle.skew.x = this.event.timeDependentAtRelative('circleSkewX', relativeTime);
+			this.circle.skew.y = this.event.timeDependentAtRelative('circleSkewY', relativeTime);
 			this.circle.alpha = this.event.timeDependentAtRelative('circleOpacity', relativeTime);
 			this.circle.rotation = this.event.timeDependentAtRelative('circleRotation', relativeTime);
 			this.circle.tint = [

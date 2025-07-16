@@ -30,7 +30,7 @@ Sunniesnow.Event = class Event {
 		if (!result.checkProperties()) {
 			return null;
 		}
-		if (result instanceof Sunniesnow.FilterableEvent) {
+		if (result instanceof Sunniesnow.FilterableEvent && !Sunniesnow.game.settings.disableOrnament) {
 			result.assignFilters(data.filters, chart.totalOffset);
 		}
 		result.data = data;

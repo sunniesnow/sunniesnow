@@ -7,6 +7,9 @@ Sunniesnow.FilterableEvent = class FilterableEvent extends Sunniesnow.Event {
 	}
 
 	filtersAt(time) {
+		if (Sunniesnow.game.settings.disableOrnament) {
+			return [];
+		}
 		const result = this.filterEvents.filter(e => e.time <= time && time < e.endTime()).map(e => {
 			e.update(time);
 			return e.actualFilter();
