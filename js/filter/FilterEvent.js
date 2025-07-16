@@ -21,21 +21,32 @@ Sunniesnow.FilterEvent = class FilterEvent {
 			Sunniesnow.Logs.warn('Filter event duration is not a positive number.');
 			return false;
 		}
-		if (data.timeDependent == null) {
+		return this.checkTimeDependent(data.timeDependent);
+	}
+
+	static RESERVED_NUMBER_TIME_DEPENDENT = ['paddingX', 'paddingY']
+
+	static checkTimeDependent(timeDependent) {
+		if (timeDependent == null) {
 			return true;
 		}
-		if (typeof data.timeDependent !== 'object') {
+		if (typeof timeDependent !== 'object') {
 			Sunniesnow.Logs.warn('Filter event timeDependent is not an object.');
 			return false;
 		}
-		for (const property in data.timeDependent) {
-			const timeDependentItem = data.timeDependent[property];
+		for (const property in timeDependent) {
+			const timeDependentItem = timeDependent[property];
+			const isReservedNumber = this.RESERVED_NUMBER_TIME_DEPENDENT.includes(property);
 			if (typeof timeDependentItem !== 'object') {
 				Sunniesnow.Logs.warn(`Filter event timeDependent.${property} is not an object.`);
 				return false;
 			}
 			if (timeDependentItem.scaleBy != null && !['none', 'chartUnitWidth', 'chartUnitHeight', 'canvasWidth', 'canvasHeight'].includes(timeDependentItem.scaleBy)) {
 				Sunniesnow.Logs.warn(`Filter event timeDependent.${property}.scaleBy is not valid.`);
+				return false;
+			}
+			if (timeDependentItem.value != null && typeof timeDependentItem.value !== 'number' && isReservedNumber) {
+				Sunniesnow.Logs.warn(`Filter event timeDependent.${property}.value is not a number.`);
 				return false;
 			}
 			if (timeDependentItem.dataPoints == null) {
@@ -46,7 +57,7 @@ Sunniesnow.FilterEvent = class FilterEvent {
 				return false;
 			}
 			if (!timeDependentItem.dataPoints.every(
-				point => typeof point === 'object' && typeof point.time === 'number' && point.value != null
+				point => typeof point === 'object' && typeof point.time === 'number' && point.value != null && (!isReservedNumber || typeof point.value === 'number')
 			)) {
 				Sunniesnow.Logs.warn(`Filter event timeDependent.${property}.dataPoints contains invalid data points.`);
 				return false;
@@ -178,6 +189,11 @@ Sunniesnow.FilterEvent = class FilterEvent {
 					break;
 			}
 		}
+		// PIXI filter cannot have different paddings for x and y: https://github.com/pixijs/pixijs/issues/11542
+		filter.padding = Math.max(
+			this.timeDependentAt('paddingX', time) ?? 0,
+			this.timeDependentAt('paddingY', time) ?? 0
+		);
 	}
 
 	endTime() {

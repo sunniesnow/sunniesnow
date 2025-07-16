@@ -107,7 +107,15 @@ Sunniesnow.Filter = class Filter {
 		if (!this.glProgram && !this.gpuProgram) {
 			this.invalid = true;
 		}
+		let antialias = options.antialias ?? 'inherit';
+		if (Sunniesnow.game.settings.renderer === 'webgl' && !Sunniesnow.game.settings.glAntialias) {
+			antialias = 'off';
+		}
+		if (Sunniesnow.game.settings.renderer === 'webgpu' && !Sunniesnow.game.settings.gpuAntialias) {
+			antialias = 'off';
+		}
 		this.filterOptions = {
+			antialias,
 			blendMode: options.blendMode ?? 'normal',
 			blendRequired: options.blendRequired ?? false,
 			padding: options.padding ?? 0,
@@ -123,8 +131,8 @@ Sunniesnow.Filter = class Filter {
 			return;
 		}
 		this.glProgram = PIXI.GlProgram.from({
-			vertex: this.constructor.liquid.glVertex(options.vertex, this.label, this.resources),
-			fragment: this.constructor.liquid.glFragment(options.fragment, this.label, this.resources),
+			vertex: this.constructor.liquid.glVertex(options.vertex, this),
+			fragment: this.constructor.liquid.glFragment(options.fragment, this),
 			name: this.label
 		});
 	}
@@ -136,7 +144,7 @@ Sunniesnow.Filter = class Filter {
 			}
 			return;
 		}
-		const source = this.constructor.liquid.gpu(options.source, this.label, this.resources);
+		const source = this.constructor.liquid.gpu(options.source, this);
 		this.gpuProgram = PIXI.GpuProgram.from({
 			vertex: {source, entryPoint: options.vertexEntryPoint},
 			fragment: {source, entryPoint: options.fragmentEntryPoint},

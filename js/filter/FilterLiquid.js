@@ -1,8 +1,7 @@
 Sunniesnow.FilterLiquid = class FilterLiquid extends liquidjs.Liquid {
 	static async load() {
 		[
-			this.glVertexPreamble,
-			this.glFragmentPreamble,
+			this.glPreamble,
 			this.glUniforms,
 			this.glTrivialVertex,
 			this.glTrivialFragment,
@@ -11,15 +10,14 @@ Sunniesnow.FilterLiquid = class FilterLiquid extends liquidjs.Liquid {
 			this.gpuTrivialVertex,
 			this.gpuTrivialFragment
 		] = await Promise.all([
-			'vertex-preamble.glsl',
-			'fragment-preamble.glsl',
+			'preamble.glsl.liquid',
 			'uniforms.glsl.liquid',
-			'trivial-vertex.glsl',
-			'trivial-fragment.glsl',
-			'preamble.wgsl',
+			'trivial-vertex.glsl.liquid',
+			'trivial-fragment.glsl.liquid',
+			'preamble.wgsl.liquid',
 			'uniforms.wgsl.liquid',
-			'trivial-vertex.wgsl',
-			'trivial-fragment.wgsl'
+			'trivial-vertex.wgsl.liquid',
+			'trivial-fragment.wgsl.liquid'
 		].map(p => fetch(`shader/${p}`).then(r => r.text())));
 	}
 
@@ -42,21 +40,18 @@ Sunniesnow.FilterLiquid = class FilterLiquid extends liquidjs.Liquid {
 	}
 
 	registerPreambleTag() {
-		const glVertexPreambleTemplates = this.parse(this.constructor.glVertexPreamble)
-		const glFragmentPreambleTemplates = this.parse(this.constructor.glFragmentPreamble);
+		const glPreambleTemplates = this.parse(this.constructor.glPreamble)
 		const gpuPreambleTemplates = this.parse(this.constructor.gpuPreamble);
 		this.registerTag('preamble', {
 			* render(ctx, emitter) {
 				const r = this.liquid.renderer;
 				switch (ctx.environments.environment) {
 					case 'gl-vertex':
-						yield r.renderTemplates(glVertexPreambleTemplates, ctx, emitter);
-						break;
 					case 'gl-fragment':
-						yield r.renderTemplates(glFragmentPreambleTemplates, ctx, emitter);
+						yield r.renderTemplates(glPreambleTemplates, ctx, emitter);
 						break;
 					case 'gpu':
-						yield r.renderTemplates(gpuPreambleTemplates, ctx, emitter);
+						yield r.renderTemplates(ctx.environments.environment === 'gpu' ? gpuPreambleTemplates : glPreambleTemplates, ctx, emitter);
 						break;
 				}
 			}
@@ -117,28 +112,28 @@ Sunniesnow.FilterLiquid = class FilterLiquid extends liquidjs.Liquid {
 		});
 	}
 
-	glVertex(string, label, resources) {
+	glVertex(string, {label, resources, filterOptions}) {
 		return this.parseAndRenderSync(string, {
 			environment: 'gl-vertex',
-			label, resources,
+			label, resources, options: filterOptions,
 			settings: Sunniesnow.game.settings,
 			config: Sunniesnow.Config
 		});
 	}
 
-	glFragment(string, label, resources) {
+	glFragment(string, {label, resources, filterOptions}) {
 		return this.parseAndRenderSync(string, {
 			environment: 'gl-fragment',
-			label, resources,
+			label, resources, options: filterOptions,
 			settings: Sunniesnow.game.settings,
 			config: Sunniesnow.Config
 		});
 	}
 
-	gpu(string, label, resources) {
+	gpu(string, {label, resources, filterOptions}) {
 		return this.parseAndRenderSync(string, {
 			environment: 'gpu',
-			label, resources,
+			label, resources, options: filterOptions,
 			settings: Sunniesnow.game.settings,
 			config: Sunniesnow.Config
 		});
