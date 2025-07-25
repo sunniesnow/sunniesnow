@@ -1,5 +1,8 @@
 Sunniesnow.Filter = class Filter {
 	static async load() {
+		if (Sunniesnow.game.settings.disableOrnament) {
+			return;
+		}
 		this.liquid = new Sunniesnow.FilterLiquid();
 	}
 

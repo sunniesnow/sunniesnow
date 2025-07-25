@@ -1,6 +1,6 @@
 Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 	static async load() {
-		if (Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.BigText)) {
+		if (!Sunniesnow.game.settings.hideBgPattern && Sunniesnow.game.chart.events.some(e => e instanceof Sunniesnow.BigText)) {
 			try {
 				await Promise.all([
 					Sunniesnow.Assets.loadFont(

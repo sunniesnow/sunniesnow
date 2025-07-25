@@ -1,5 +1,8 @@
 Sunniesnow.FilterLiquid = class FilterLiquid extends liquidjs.Liquid {
 	static async load() {
+		if (Sunniesnow.game.settings.disableOrnament) {
+			return;
+		}
 		[
 			this.glPreamble,
 			this.glUniforms,
