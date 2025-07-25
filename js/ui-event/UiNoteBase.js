@@ -89,7 +89,7 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 			({relativeTime: t}) => t - relativeTime
 		);
 		let delta = Infinity;
-		if (fadingInInstanceIndex < this.fadingInInstances.length) {
+		if (fadingInInstanceIndex < this.fadingInInstances.length - 1) {
 			delta = Math.min(delta, this.fadingInInstances[fadingInInstanceIndex + 1].relativeTime - relativeTime);
 		}
 		if (fadingInInstanceIndex >= 0) {

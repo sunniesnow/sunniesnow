@@ -22,7 +22,7 @@ Sunniesnow.StoryAssets = {
 			this.assets[filename] = await Sunniesnow.Assets.loadTexture(url);
 			return true;
 		} catch (error) {
-			Sunniesnow.Logs.warn(`Failed to load image \`${filename}\`: ${error.message}`);
+			Sunniesnow.Logs.warn(`Failed to load image \`${filename}\`: ${error.message}`, error);
 			this.assets[filename] = null;
 			return false;
 		}

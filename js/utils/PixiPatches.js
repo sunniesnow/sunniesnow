@@ -1,32 +1,10 @@
 Sunniesnow.PixiPatches = {
 	apply() {
 		if (!Sunniesnow.Utils.isBrowser()) {
-			this.patchLoadSvg();
-			this.patchExtractCanvas();
 			this.patchNodeLoaderParsers();
 		}
 		this.patchWorldVisible();
 		this.patchAddTo();
-	},
-
-	// https://github.com/pixijs-userland/node/issues/4
-	patchLoadSvg() {
-		let src = PIXI.SVGResource.prototype._loadSvg.toString().match(/\{(.*)\}/s)[1];
-		src = src.replace(/tempImage\.src\s*=\s*this\.svg[,;]/, '');
-		src += 'tempImage.src = this.svg;'
-		PIXI.SVGResource.prototype._loadSvg = new Function(
-			'Image', 'BaseImageResource', 'uid',
-			`return (function _loadSvg() { ${src} });`
-		)(require('canvas').Image, PIXI.BaseImageResource, PIXI.utils.uid);
-	},
-
-	// https://github.com/pixijs-userland/node/issues/11
-	patchExtractCanvas() {
-		let src = PIXI.Extract.prototype.canvas.toString();
-		PIXI.Extract.prototype.canvas = new Function(
-			'ImageData', '_Extract2', 'utils',
-			`return (function ${src});`
-		)(require('canvas').ImageData, PIXI.Extract, PIXI.utils);
 	},
 
 	// https://github.com/pixijs-userland/node/pull/13

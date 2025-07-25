@@ -91,7 +91,7 @@ Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 ].map(path => `${Sunniesnow.ScriptsLoader.CDN_PREFIX}${path}`);
 
 Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
-	'StoryAssets',
+	'utils/StoryAssets',
 
 	'audio/Audio',
 	'audio/Music',

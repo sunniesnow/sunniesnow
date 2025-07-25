@@ -172,7 +172,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.distributionDiagram.stroke({
 			width: unit/60,
 			color: this.constructor.COLOR,
-			join: PIXI.LINE_JOIN.ROUND
+			join: 'round'
 		});
 
 		this.allContents.addChild(this.distributionDiagram);

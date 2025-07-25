@@ -118,7 +118,6 @@ Sunniesnow.Filter = class Filter {
 			antialias,
 			blendMode: options.blendMode ?? 'normal',
 			blendRequired: options.blendRequired ?? false,
-			padding: options.padding ?? 0,
 			resolution: 'inherit'
 		};
 	}
