@@ -68,11 +68,18 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 		this.skew.x = this.event.timeDependentAtRelative('skewX', relativeTime);
 		this.skew.y = this.event.timeDependentAtRelative('skewY', relativeTime);
 		this.alpha = this.event.timeDependentAtRelative('opacity', relativeTime);
-		this.tint = [
-			this.event.timeDependentAtRelative('tintRed', relativeTime),
-			this.event.timeDependentAtRelative('tintGreen', relativeTime),
-			this.event.timeDependentAtRelative('tintBlue', relativeTime)
-		];
+		//this.tint = [
+		//	this.event.timeDependentAtRelative('tintRed', relativeTime),
+		//	this.event.timeDependentAtRelative('tintGreen', relativeTime),
+		//	this.event.timeDependentAtRelative('tintBlue', relativeTime)
+		//];
+		if (this.text) {
+			if (this.event.timeDependentAtRelative('tintRed', relativeTime) < 1) {
+				this.text.tint = 0x63f9f9;
+			} else if (this.event.timeDependentAtRelative('tintBlue', relativeTime) < 1) {
+				this.text.tint = 0xf496ff;
+			}
+		}
 		this.blendMode = this.event.timeDependentAtRelative('blendMode', relativeTime);
 		this.filters = (this.filters ?? []).filter(f => !(f instanceof Sunniesnow.FilterFromChart)).concat(this.event.filtersAtRelative(relativeTime));
 		super.update(relativeTime);

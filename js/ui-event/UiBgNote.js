@@ -131,6 +131,8 @@ const UiNoteMixin = new Sunniesnow.Mixin({
 	},
 
 	updateTextFadingOut(progress) {
+		this.text.visible = false;
+		return;
 		if (this.levelNote.judgement === 'miss' || this.levelNote.judgement === 'bad') {
 			this.text.scale.set(1 - progress);
 			return;
