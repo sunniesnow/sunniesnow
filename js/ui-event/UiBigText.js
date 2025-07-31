@@ -26,6 +26,7 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 			padding: this.fontSize / 2 // https://github.com/pixijs/pixijs/issues/9663
 		});
 		this.widthCache = new Map();
+		this.textBaseAlpha = 0.8;
 	}
 
 	populate() {
@@ -33,7 +34,6 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 		this.text = new PIXI.Text({text: this.event.text, style: this.constructor.style.clone()});
 		this.text.anchor.set(0.5, 0.5);
 		this.addChild(this.text);
-		this.alpha = 0.8;
 	}
 
 	update(relativeTime) {
@@ -57,13 +57,13 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 
 	updateFadingIn(progress, relativeTime) {
 		super.updateFadingIn(progress, relativeTime);
-		this.text.alpha = progress;
+		this.text.alpha = progress * this.constructor.textBaseAlpha;
 		this.text.scale.set(progress);
 	}
 
 	updateHolding(progress, relativeTime) {
 		super.updateHolding(progress, relativeTime);
-		this.text.alpha = 1;
+		this.text.alpha = this.constructor.textBaseAlpha;
 		this.text.scale.set(1);
 	}
 
@@ -72,7 +72,7 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 		if (this.aborted) {
 			return;
 		}
-		this.text.alpha = 1 - progress;
+		this.text.alpha = (1 - progress) * this.constructor.textBaseAlpha;
 	}
 
 	updateScale(relativeTime) {
