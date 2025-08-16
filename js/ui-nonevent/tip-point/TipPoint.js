@@ -250,6 +250,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	}
 
 	jointEdge(checkpoint, startTime) {
+		const r = this.constructor.halfThickness * Math.min((checkpoint.time - startTime) / this.constructor.TRAIL_TAIL_DURATION, this.tipPoint.scale.x);
 		const {x, y, index} = checkpoint;
 		let xP, yP;
 		for (let i = Math.floor(index); i >= 0; i--) {
@@ -268,7 +269,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		let angleP = xP != x || yP != y ? this.atan2(xP - x, yP - y) : undefined;
 		let angleN = xN != x || yN != y ? this.atan2(xN - x, yN - y) : undefined;
 		if (angleP === undefined && angleN === undefined) {
-			return this.zeroAngle();
+			return Sunniesnow.Utils.polarToCartesian(r, this.zeroAngle());
 		}
 		angleP ??= angleN + Math.PI;
 		angleN ??= angleP + Math.PI;
@@ -276,10 +277,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI/2 - 1e-4) {
 			angle += Math.PI / 2;
 		}
-		return Sunniesnow.Utils.polarToCartesian(
-			this.constructor.halfThickness * Math.min((checkpoint.time - startTime) / this.constructor.TRAIL_TAIL_DURATION, this.tipPoint.scale.x) / Math.sin(angle - angleN),
-			angle
-		);
+		return Sunniesnow.Utils.polarToCartesian(r / Math.sin(angle - angleN), angle);
 	}
 
 	drawTrailThrough(checkpoints) {
