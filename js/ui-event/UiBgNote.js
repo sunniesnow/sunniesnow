@@ -27,6 +27,11 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 		this.addChild(this.note);
 	}
 
+	update(relativeTime) {
+		this.updateText(relativeTime);
+		super.update(relativeTime);
+	}
+
 	updateFadingIn(progress, relativeTime) {
 		super.updateFadingIn(progress, relativeTime);
 		this.note.alpha = progress;
