@@ -5,7 +5,8 @@ Sunniesnow.CoverGenerator = {
 			Sunniesnow.Logs.warn('Cannot generate a cover before the game is loaded');
 			return;
 		}
-		const app = new PIXI.Application({
+		const app = new PIXI.Application();
+		await app.init({
 			width: Sunniesnow.Config.WIDTH,
 			height: Sunniesnow.Config.HEIGHT,
 			backgroundColor: 'black',
