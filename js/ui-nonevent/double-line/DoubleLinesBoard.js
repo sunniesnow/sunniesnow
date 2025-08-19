@@ -1,5 +1,7 @@
 Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 
+	static globalId = 0;
+
 	constructor() {
 		super();
 		this.allEvents = Sunniesnow.game.chart.events.filter(event => {
@@ -36,8 +38,8 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 	}
 
 	removeAll() {
-		for (const child of this.children) {
-			child.destroy({children: true});
+		while (this.children.length > 0) {
+			this.children[0].destroy({children: true});
 		}
 	}
 

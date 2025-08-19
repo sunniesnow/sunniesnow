@@ -57,10 +57,14 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 
 	update(relativeTime) {
 		this.fadingAlpha = 1; // to be updated in updateActive(); will be used in UiNotesBoard and UiBgNotesBoard
-		[this.x, this.y] = Sunniesnow.Config.chartMapping(
+		const [x, y] = Sunniesnow.Config.chartMapping(
 			this.event.timeDependentAtRelative('x', relativeTime),
 			this.event.timeDependentAtRelative('y', relativeTime)
 		);
+		this.x = x;
+		if (!Sunniesnow.game.settings.scroll) {
+			this.y = y;
+		}
 		this.rotation = Sunniesnow.Config.chartMappingRotation(this.event.timeDependentAtRelative('rotation', relativeTime));
 		this.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
 		this.scale.x *= this.event.timeDependentAtRelative('scaleX', relativeTime);

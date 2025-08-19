@@ -69,19 +69,19 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		const thin = unit / 50;
 		const thick = unit / 30;
 
-		this.samplesDiagram.lineStyle(thin, this.constructor.COLOR);
+		this.samplesDiagram.stroke({width: thin, color: this.constructor.COLOR});
 		this.samplesDiagram.moveTo(0, unit);
 		this.samplesDiagram.lineTo(diagramWidth, unit);
 		this.sdText.x = diagramWidth;
 		this.sdText.y = unit;
 
-		this.samplesDiagram.lineStyle(thick, this.constructor.COLOR);
+		this.samplesDiagram.stroke({width: thick, color: this.constructor.COLOR});
 		this.samplesDiagram.moveTo(0, 2*unit);
 		this.samplesDiagram.lineTo(diagramWidth, 2*unit);
 		this.meanText.x = diagramWidth;
 		this.meanText.y = 2*unit;
 
-		this.samplesDiagram.lineStyle(thin, this.constructor.COLOR);
+		this.samplesDiagram.stroke({width: thin, color: this.constructor.COLOR});
 		this.samplesDiagram.moveTo(0, 3*unit);
 		this.samplesDiagram.lineTo(diagramWidth, 3*unit);
 
@@ -89,7 +89,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		if (Sunniesnow.Utils.between(zeroY, 0, 4*unit)) {
 			this.zeroText = new PIXI.Text({text: '0', style: { ...this.constructor.textStyle }});
 			this.zeroText.anchor.set(0, 0.5);
-			this.samplesDiagram.lineStyle(thick, this.constructor.COLOR);
+			this.samplesDiagram.stroke({width: thick, color: this.constructor.COLOR});
 			this.samplesDiagram.moveTo(0, zeroY);
 			this.samplesDiagram.lineTo(diagramWidth, zeroY);
 			this.zeroText.x = diagramWidth;
@@ -135,12 +135,12 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.distributionDiagram.y = this.constructor.samplesDiagramHeight;
 		for (let i = -2; i <= 2; i++) {
 			const thickness = i === 0 ? unit / 60 : unit / 108;
-			this.distributionDiagram.lineStyle(thickness, this.constructor.COLOR);
+			this.distributionDiagram.stroke({width: thickness, color: this.constructor.COLOR});
 			this.distributionDiagram.moveTo(i*unit, 0);
 			this.distributionDiagram.lineTo(i*unit, height);
 		}
 		const zeroX = -this.sampleMean / this.sampleSd * unit;
-		this.distributionDiagram.lineStyle(unit / 60, this.constructor.COLOR);
+		this.distributionDiagram.stroke({width: unit / 60, color: this.constructor.COLOR});
 		this.distributionDiagram.moveTo(zeroX, 0);
 		this.distributionDiagram.lineTo(zeroX, height);
 		this.zeroText2.x = zeroX + width/2;
