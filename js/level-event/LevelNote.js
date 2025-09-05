@@ -25,6 +25,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		this.holding = false;
 		this.needsToUpdateHolding = true;
 		this.swiped = false;
+		this.isEdgeHit = false;
 	}
 
 	// Only used for progress adjustment

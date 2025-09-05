@@ -189,6 +189,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 			}
 			const lateBad = this.judgementWindows[note.type].bad[1];
 			if (time > note.time + lateBad) {
+				note.edgeHit = true;
 				note.edgeJudge('miss');
 			} else {
 				i++;
@@ -374,7 +375,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 				this.late++;
 			}
 		}
-		if (note.hitRelativeTime !== null && note.type !== 'drag') { // ugly special treatment for drag
+		if (note.hitRelativeTime !== null && !note.edgeHit) {
 			this.inaccuracies.push(note.hitRelativeTime);
 		}
 	}

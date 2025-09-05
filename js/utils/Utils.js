@@ -690,10 +690,10 @@ Sunniesnow.Utils = {
 		if (!Sunniesnow.Utils.isBrowser()) {
 			return false;
 		}
-		if (!document.fonts || !document.fonts.check) {
+		if (!document.fonts || !document.fonts.keys) {
 			Sunniesnow.Logs.warn('FontFaceSet API not available');
 			return false;
 		}
-		return document.fonts.check(`12px ${fontFamily}`)
+		return document.fonts.keys().some(e => e.family == fontFamily);
 	}
 };

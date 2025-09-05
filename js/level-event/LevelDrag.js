@@ -52,6 +52,7 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 
 	swipe(touch) {
 		this.swiped = true;
+		this.edgeHit = true;
 		this.touchedBy(touch);
 	}
 
