@@ -17,6 +17,9 @@ Sunniesnow.Assets = {
 	},
 
 	async loadFont(url, family) {
+		if (Sunniesnow.Utils.isFontAvailable(family)) {
+			return;
+		}
 		if (Sunniesnow.game.settings.avoidDownloadingFonts) {
 			Sunniesnow.Logs.warn(`Skipped downloading font ${family}`);
 			return;

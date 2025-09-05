@@ -684,5 +684,16 @@ Sunniesnow.Utils = {
 			return null;
 		}
 		return typeParam === 'f32' ? base : `${basicTypes[typeParam][0]}${base}`;
+	},
+
+	isFontAvailable(fontFamily) {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return false;
+		}
+		if (!document.fonts || !document.fonts.check) {
+			Sunniesnow.Logs.warn('FontFaceSet API not available');
+			return false;
+		}
+		return document.fonts.check(`12px ${fontFamily}`)
 	}
 };
