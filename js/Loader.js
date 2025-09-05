@@ -369,7 +369,6 @@ Sunniesnow.Loader = {
 	},
 
 	loadFilter() {
-		this.loadModule('FilterLiquid');
 		this.loadModule('Filter');
 	},
 

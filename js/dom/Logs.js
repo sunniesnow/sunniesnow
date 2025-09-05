@@ -17,7 +17,9 @@ Sunniesnow.Logs = {
 	error(msg, e) {
 		this.add(msg, 'error');
 		console.error(msg);
-		console.error(e);
+		if (e) {
+			console.error(e);
+		}
 		Sunniesnow.Loader.loadingChart = false;
 		Sunniesnow.Loader.loadingComplete = true;
 		Sunniesnow.game?.terminate();

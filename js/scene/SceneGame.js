@@ -189,8 +189,8 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		if (Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.VibrationManager.terminate();
 		}
-		this.pauseBoard.destroy({children: true});
-		this.pauseButton.destroy({children: true});
+		this.pauseBoard?.destroy({children: true});
+		this.pauseButton?.destroy({children: true});
 		this.judgementLine?.destroy({children: true});
 	}
 
