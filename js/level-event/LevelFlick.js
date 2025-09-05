@@ -32,7 +32,7 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 	maxFlickDistance() {
 		return Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.maxFlickDistance;
 	}
-	
+
 	// the angle range
 	angleRange() {
 		return [-Sunniesnow.game.settings.flickAngleRange, Sunniesnow.game.settings.flickAngleRange];

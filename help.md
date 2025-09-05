@@ -100,9 +100,9 @@ and other data are in **milliseconds**
 
 | | early bad | early good | early perfect | late perfect | late good | late bad |
 |:--|--:|--:|--:|--:|--:|--:|
-| tap | -400 | -300 | -110 | +150 | +300 | +400 |
-| drag | -400 | -300 | -110 | +150 | +300 | +400 |
-| flick | -400 | -400 | -300 | +150 | +300 | +400 |
+| tap | -400 | -300 | -120 | +120 | +300 | +400 |
+| drag | -400 | -300 | -120 | +120 | +300 | +400 |
+| flick | -400 | -400 | -300 | +120 | +300 | +400 |
 | hold (*start*) | -400 | -400 | -400 | +400 | +400 | +400 |
 | hold (*end*) | -&infin; | 0.4 | 0.7 | | | |
 
@@ -111,9 +111,9 @@ Data for the medium tier:
 | | early bad | early good | early perfect | late perfect | late good | late bad |
 |:--|--:|--:|--:|--:|--:|--:|
 | tap | -240 | -160 | -80 | +80 | +160 | +240 |
-| drag | -240 | -240 | -110 | +150 | +240 | +240 |
-| flick | -240 | -180 | -110 | +110 | +180 | +240 |
-| hold (*start*) | -240 | -240 | -110 | +110 | +240 | +240 |
+| drag | -240 | -240 | -120 | +120 | +240 | +240 |
+| flick | -240 | -180 | -120 | +120 | +180 | +240 |
+| hold (*start*) | -240 | -240 | -120 | +120 | +240 | +240 |
 | hold (*end*) | -&infin; | 0.7 | 0.7 | | | |
 
 Data for the strict tier:

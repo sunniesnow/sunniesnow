@@ -69,7 +69,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		if (Sunniesnow.game.settings.scroll) {
 			graphics.rect(-radius, 0, radius*2, Sunniesnow.Config.HEIGHT);
 		} else {
-			graphics.rect(-radius, -radius, radius*2, radius*2);
+			graphics.circle(0, 0, radius);
 		}
 		graphics.fill({color: this.mainColor, alpha: 0.1});
 		return graphics;

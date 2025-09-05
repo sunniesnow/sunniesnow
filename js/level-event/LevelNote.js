@@ -61,11 +61,8 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 			return true;
 		}
 		const r = Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.noteHitSize * this.event.size;
-		let result = Math.abs(this.event.x - x) < r;
-		if (!Sunniesnow.game.settings.scroll) {
-			result &&= Math.abs(this.event.y - y) < r;
-		}
-		return result;
+		const distance = Sunniesnow.game.settings.scroll ? Math.abs(this.event.x - x) : Math.hypot(this.event.x - x, this.event.y - y);
+		return distance < r;
 	}
 
 	// Hit without processing (see processHit()) or event dispatching

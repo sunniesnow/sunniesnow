@@ -147,17 +147,17 @@ Sunniesnow.Config = {
 	JUDGEMENT_WINDOWS_4: {
 		loose: {
 			tap: {
-				perfect: [-0.11, 0.15],
+				perfect: [-0.12, 0.12],
 				good: [-0.3, 0.3],
 				bad: [-0.4, 0.4]
 			},
 			drag: {
-				perfect: [-0.11, 0.15],
+				perfect: [-0.12, 0.12],
 				good: [-0.3, 0.3],
 				bad: [-0.4, 0.4]
 			},
 			flick: {
-				perfect: [-0.3, 0.15],
+				perfect: [-0.3, 0.12],
 				good: [-0.4, 0.3],
 				bad: [-0.4, 0.4],
 			},
@@ -179,17 +179,17 @@ Sunniesnow.Config = {
 				bad: [-0.24, 0.24]
 			},
 			drag: {
-				perfect: [-0.11, 0.15],
+				perfect: [-0.12, 0.12],
 				good: [-0.24, 0.24],
 				bad: [-0.24, 0.24]
 			},
 			flick: {
-				perfect: [-0.11, 0.11],
+				perfect: [-0.12, 0.12],
 				good: [-0.18, 0.18],
 				bad: [-0.24, 0.24]
 			},
 			hold: {
-				perfect: [-0.11, 0.11],
+				perfect: [-0.12, 0.12],
 				good: [-0.24, 0.24],
 				bad: [-0.24, 0.24]
 			},
