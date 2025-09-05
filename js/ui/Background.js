@@ -4,13 +4,29 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 	static DEFAULT_X = 0.5;
 	static DEFAULT_Y = 0.5;
 
+	// Make a special cache here because background cache hit seems especially beneficial
+	// but less so for other types of assets.
+	static cache = {};
+
 	static async load() {
-		this.originalTexture = await this.getBackgroundTexture();
-		const tempSprite = new PIXI.Sprite(this.originalTexture);
+		this.url = this.backgroundUrl();
+		if (this.url && this.url in this.cache) {
+			this.originalTexture = this.cache[this.url];
+		} else {
+			this.originalTexture = await this.getBackgroundTexture();
+			if (this.url) {
+				this.cache[this.url] = this.originalTexture;
+			}
+		}
+		this.texture = this.applyEffects(this.originalTexture);
+	}
+
+	static applyEffects(texture) {
+		const tempSprite = new PIXI.Sprite(texture);
 		tempSprite.anchor.set(0.5);
 		const width = Sunniesnow.Config.WIDTH;
 		const height = Sunniesnow.Config.HEIGHT;
-		tempSprite.scale.set(Math.max(width / this.originalTexture.width, height / this.originalTexture.height));
+		tempSprite.scale.set(Math.max(width / texture.width, height / texture.height));
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			const filter1 = new PIXI.BlurFilter({strength: Sunniesnow.game.settings.backgroundBlur, quality: 10});
 			const filter2 = new PIXI.ColorMatrixFilter();
@@ -22,11 +38,12 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		tempSprite.tint = [b, b, b];
 		const wrapper = new PIXI.Container();
 		wrapper.addChild(tempSprite);
-		this.texture = Sunniesnow.game.app.renderer.generateTexture(
+		const result = Sunniesnow.game.app.renderer.generateTexture(
 			wrapper,
 			{region: new PIXI.Rectangle(-width / 2, -height / 2, width, height)}
 		);
 		wrapper.destroy({children: true});
+		return result;
 	}
 
 	static backgroundUrl() {
@@ -55,12 +72,11 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 	}
 	
 	static async getBackgroundTexture() {
-		const url = this.backgroundUrl();
-		if (!url) {
+		if (!this.url) {
 			return PIXI.Texture.WHITE;
 		}
 		try {
-			return await Sunniesnow.Assets.loadTexture(url);
+			return await Sunniesnow.Assets.loadTexture(this.url);
 		} catch (err) {
 			const result = PIXI.Texture.WHITE;
 			Sunniesnow.Logs.warn(`Failed to load background: ${err.message ?? err}`, err);
