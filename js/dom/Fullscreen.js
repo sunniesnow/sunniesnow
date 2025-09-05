@@ -19,13 +19,6 @@ Sunniesnow.Fullscreen = {
 	},
 
 	enter() {
-		if (typeof navigator.standalone === 'boolean' && !navigator.standalone) {
-			Sunniesnow.Logs.warn(
-				'Consider ' +
-				'<a href="https://support.apple.com/guide/iphone/bookmark-favorite-webpages-iph42ab2f3a7/ios#iph4f9a47bbc">adding to home screen</a>' +
-				' to have a better experience on iOS.'
-			);
-		}
 		this.entering = true;
 		if (Sunniesnow.game.settings.floatAsFullscreen) {
 			Sunniesnow.game.canvas.classList.add('float-fullscreen');
