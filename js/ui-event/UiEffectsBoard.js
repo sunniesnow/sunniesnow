@@ -7,14 +7,20 @@ Sunniesnow.UiEffectsBoard = class UiEffectsBoard {
 			Sunniesnow.Utils.compactify(this.layers[layer].ui);
 		}
 		this.containers = new Map();
+		this.clear(true);
+	}
+
+	initAllEvents() {
 		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.EffectMultiple);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime(), e => e.disappearTime());
 		}
-		this.clear();
 	}
 
-	clear() {
+	clear(chartUpdate = false) {
+		if (chartUpdate) {
+			this.initAllEvents();
+		}
 		this.unappearedEvents = this.allEvents.slice();
 		this.currentEvents ??= [];
 		this.removeAll();

@@ -1,15 +1,21 @@
 Sunniesnow.VibrationWithMusic = class VibrationWithMusic {
 	constructor() {
+		this.clear(true);
+	}
+
+	initAllEvents() {
 		this.allEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.Note);
 		if (Sunniesnow.game.progressAdjustable) {
 			// e.vibrationStartTime() instead of e.vibrationStartTime() - Sunniesnow.Config.UI_PREPARATION_TIME
 			// reason similar to SeWithMusic
 			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.vibrationStartTime(), e => e.vibrationEndTime());
 		}
-		this.clear();
 	}
 
-	clear() {
+	clear(chartUpdate = false) {
+		if (chartUpdate) {
+			this.initAllEvents();
+		}
 		Sunniesnow.VibrationManager.clear();
 		this.unhitEvents = this.allEvents.slice();
 		this.holdingEvents = [];

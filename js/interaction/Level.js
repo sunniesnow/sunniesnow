@@ -308,10 +308,6 @@ Sunniesnow.Level = class Level extends EventTarget {
 	tryHitNote(note, touch, time) {
 		const {x, y} = touch.start();
 		const simultaneousNotes = note.event.simultaneousEvents.map(e => e.levelNote);
-		// Should we replace Euclidean distance with L-infinity distance?
-		// In some cases, a closer note may be out of the hit area while a farther note is in the hit area
-		// because the hit area is a square instead of a circle.
-		// Using L-infinity distance will solve this problem.
 		let [distance, angle] = this.distanceAndAngle(x, y, note.event);
 		let tappable = note.isTappableAt(touch, x, y);
 		for (const newNote of simultaneousNotes) {

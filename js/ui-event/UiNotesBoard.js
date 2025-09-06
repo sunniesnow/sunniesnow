@@ -2,17 +2,23 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 
 	constructor() {
 		super();
-		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.Note);
-		if (Sunniesnow.game.progressAdjustable) {
-			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME, e => e.disappearTime());
-		}
-		this.clear();
+		this.clear(true);
 		if (!Sunniesnow.game.settings.hideCircles) {
 			this.circles = new PIXI.Container();
 		}
 	}
 
-	clear() {
+	initAllEvents() {
+		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.Note);
+		if (Sunniesnow.game.progressAdjustable) {
+			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME, e => e.disappearTime());
+		}
+	}
+
+	clear(chartUpdate = false) {
+		if (chartUpdate) {
+			this.initAllEvents();
+		}
 		this.unappearedEvents = this.allEvents.slice();
 		this.uiEvents ??= [];
 		this.removeAll();

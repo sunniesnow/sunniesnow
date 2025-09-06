@@ -13,7 +13,7 @@ Sunniesnow.Music = {
 		// this.start is set in Sunniesnow.Chart.load()
 	},
 
-	// Called in Chart.load()
+	// Called in Chart.load() and Sscharter.onChartUpdate()
 	setStart() {
 		this.start = Sunniesnow.game.settings.start * this.duration;
 		for (const event of Sunniesnow.game.chart.eventsSortedByAppearTime) {

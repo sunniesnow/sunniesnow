@@ -1,6 +1,10 @@
 Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 	constructor() {
 		super();
+		this.clear(true);
+	}
+
+	initAllEvents() {
 		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.BgNote);
 		if (Sunniesnow.game.progressAdjustable) {
 			this.timeline = Sunniesnow.Utils.eventsTimeline(
@@ -9,10 +13,12 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 				e => e.disappearTime()
 			);
 		}
-		this.clear();
 	}
 
-	clear() {
+	clear(chartUpdate = false) {
+		if (chartUpdate) {
+			this.initAllEvents();
+		}
 		this.unappearedEvents = this.allEvents.slice();
 		this.uiEvents ??= [];
 		this.removeAll();

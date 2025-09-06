@@ -1,6 +1,10 @@
 Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	constructor() {
 		super();
+		this.clear(true);
+	}
+
+	initAllEvents() {
 		// [{id, events, appearTime, disappearTime, effects}, ...], sorted by events[0].time
 		this.allTipPointHeads = new Map();
 		for (const event of Sunniesnow.game.chart.events) {
@@ -31,10 +35,12 @@ Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 				this.allTipPointHeads, e => e.appearTime, e => e.disappearTime
 			);
 		}
-		this.clear();
 	}
 
-	clear() {
+	clear(chartUpdate = false) {
+		if (chartUpdate) {
+			this.initAllEvents();
+		}
 		this.unappearedTipPointHeads = this.allTipPointHeads.slice();
 		this.tipPoints ??= {};
 		this.removeAll();

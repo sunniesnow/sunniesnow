@@ -1,11 +1,7 @@
 Sunniesnow.UiImagesBoard = class UiImagesBoard {
 
 	constructor() {
-		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.Image);
-		if (Sunniesnow.game.progressAdjustable) {
-			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME, e => e.disappearTime());
-		}
-		this.clear();
+		this.clear(true);
 		this.layerAbove = {};
 		for (const above of Sunniesnow.Image.LAYER_ABOVE) {
 			this.layerAbove[above] = new PIXI.Container();
@@ -13,7 +9,17 @@ Sunniesnow.UiImagesBoard = class UiImagesBoard {
 		}
 	}
 
-	clear() {
+	initAllEvents() {
+		this.allEvents = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow.Image);
+		if (Sunniesnow.game.progressAdjustable) {
+			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allEvents, e => e.appearTime() - Sunniesnow.Config.UI_PREPARATION_TIME, e => e.disappearTime());
+		}
+	}
+
+	clear(chartUpdate = false) {
+		if (chartUpdate) {
+			this.initAllEvents();
+		}
 		this.unappearedEvents = this.allEvents.slice();
 		this.uiEvents ??= [];
 		this.removeAll();

@@ -194,20 +194,20 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.judgementLine?.destroy({children: true});
 	}
 
-	retry() {
+	retry(chartUpdate = false) {
 		Sunniesnow.game.level.finish();
 		this.fxBoard?.removeLevelEventListeners();
 		Sunniesnow.game.initLevel();
-		this.uiBgPatternBoard?.clear();
-		this.uiBgNotesBoard?.clear();
-		this.doubleLinesBoard?.clear();
-		this.uiNotesBoard?.clear();
-		this.tipPointsBoard?.clear();
+		this.uiBgPatternBoard?.clear(chartUpdate);
+		this.uiBgNotesBoard?.clear(chartUpdate);
+		this.doubleLinesBoard?.clear(chartUpdate);
+		this.uiNotesBoard?.clear(chartUpdate);
+		this.tipPointsBoard?.clear(chartUpdate);
 		this.fxBoard?.clear();
-		this.seWithMusic?.clear();
-		this.vibrationWithMusic?.clear();
-		this.uiImagesBoard?.clear();
-		this.uiEffectsBoard?.clear();
+		this.seWithMusic?.clear(chartUpdate);
+		this.vibrationWithMusic?.clear(chartUpdate);
+		this.uiImagesBoard?.clear(chartUpdate);
+		this.uiEffectsBoard?.clear(chartUpdate);
 		Sunniesnow.Music.playFromBeginning();
 	}
 
