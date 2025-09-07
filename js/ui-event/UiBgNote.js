@@ -129,10 +129,14 @@ const UiNoteMixin = new Sunniesnow.Mixin({
 				PIXI.CanvasTextMetrics.measureText(this.text.text, this.constructor.textStyle).width
 			);
 		}
-		this.text.style.fontSize = this.constructor.textStyle.fontSize * Math.min(
+		const newFontSize = this.constructor.textStyle.fontSize * Math.min(
 			1,
 			maxWidth / this.constructor.widthCache.get(this.text.text)
 		);
+		// https://github.com/pixijs/pixijs/issues/11664
+		if (this.text.style.fontSize !== newFontSize) {
+			this.text.style.fontSize = newFontSize;
+		}
 	},
 
 	updateTextFadingOut(progress) {

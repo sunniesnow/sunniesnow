@@ -49,10 +49,14 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 				PIXI.CanvasTextMetrics.measureText(this.text.text, this.constructor.style).width
 			);
 		}
-		this.text.style.fontSize = this.constructor.fontSize * Math.min(
+		const newFontSize = this.constructor.fontSize * Math.min(
 			1,
 			this.constructor.maxWidth / this.constructor.widthCache.get(this.text.text)
 		);
+		// https://github.com/pixijs/pixijs/issues/11664
+		if (this.text.style.fontSize !== newFontSize) {
+			this.text.style.fontSize = newFontSize;
+		}
 	}
 
 	updateFadingIn(progress, relativeTime) {
