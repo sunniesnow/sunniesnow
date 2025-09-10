@@ -380,10 +380,10 @@ Sunniesnow.Level = class Level extends EventTarget {
 		const {time, x, y} = touch.end();
 		for (let i = 0; i < this.unhitNotes.length; i++) {
 			const note = this.unhitNotes[i];
-			if (note.type !== 'drag') {
+			if (!note.swipe) {
 				continue;
 			}
-			if (time < note.time + this.judgementWindows.drag.bad[0]) {
+			if (time < note.time + note.earlyBad()) {
 				break;
 			}
 			if (note.isTappableAt(touch, x, y)) {
@@ -392,10 +392,10 @@ Sunniesnow.Level = class Level extends EventTarget {
 		}
 		for (let i = 0; i < this.holdingNotes.length; i++) {
 			const note = this.holdingNotes[i];
-			if (note.type !== 'drag') {
+			if (!note.swipe) {
 				continue;
 			}
-			if (time < note.endTime + this.judgementWindows.drag.bad[0]) {
+			if (time < note.endTime + note.earlyBad()) {
 				break;
 			}
 			if (note.isTappableAt(touch, x, y)) {

@@ -1,11 +1,10 @@
-Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
+Sunniesnow.UiDragFlick = class UiDragFlick extends Sunniesnow.UiNote {
 	static async load() {
-		this.radius = Sunniesnow.Config.NOTE_RADIUS;
-		this.geometry = this.createNoteBodyGeometry(0xfe6e4e, 0xffffff);
+		this.radius = Sunniesnow.Config.NOTE_RADIUS * 2/3;
+		this.geometry = this.createDragBodyGeometry(0xfe6e4e);
 		this.arrowGeometry = this.createArrowGeometry();
-		this.circleRadius = this.radius * 4;
+		this.circleRadius = this.radius * 6;
 		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
-		this.textStyle = this.createTextStyle();
 	}
 
 	static createArrowGeometry() {
@@ -32,10 +31,8 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
 		this.arrow = new PIXI.Graphics(this.constructor.arrowGeometry);
 		this.arrow.rotation = Sunniesnow.Config.chartMappingAngle(this.event.angle);
-		this.text = this.createText();
 		this.note = new PIXI.Container();
 		this.note.addChild(this.noteBody);
-		this.note.addChild(this.text);
 		this.note.addChild(this.arrow);
 		this.addChild(this.note);
 	}
@@ -44,11 +41,6 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		super.populateCircle();
 		this.circleGraphics = new PIXI.Graphics(this.constructor.circleGeometry);
 		this.circle.addChild(this.circleGraphics);
-	}
-
-	update(relativeTime) {
-		this.updateText(relativeTime);
-		super.update(relativeTime);
 	}
 
 	updateFadingIn(progress, relativeTime) {
@@ -72,7 +64,6 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 
 	updateFadingOut(progress, relativeTime) {
 		super.updateFadingOut(progress, relativeTime);
-		this.updateTextFadingOut(progress);
 		this.noteBody.visible = false;
 		if (this.circle) {
 			this.circleGraphics.visible = false;

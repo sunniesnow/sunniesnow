@@ -2,14 +2,14 @@ Sunniesnow.Assets = {
 	progresses: new Map(),
 
 	async loadTexture(url) {
-		let loadParser;
+		let parser;
 		// Reason for using Sunniesnow.ObjectUrl: https://github.com/pixijs/pixijs/issues/9568
 		if (Sunniesnow.ObjectUrl.types[url] === 'image/svg+xml' || PIXI.loadSvg.test(url)) {
-			loadParser = 'loadSVG';
+			parser = 'loadSVG';
 		} else {
-			loadParser = Sunniesnow.Utils.isBrowser() ? 'loadTextures' : 'loadNodeTexture';
+			parser = Sunniesnow.Utils.isBrowser() ? 'loadTextures' : 'loadNodeTexture';
 		}
-		const result = await this.loadPixiAssets(url, {loadParser});
+		const result = await this.loadPixiAssets(url, {parser});
 		if (!(result instanceof PIXI.Texture)) {
 			throw new Error('Failed to load texture');
 		}
@@ -25,7 +25,7 @@ Sunniesnow.Assets = {
 			return;
 		}
 		if (Sunniesnow.Utils.isBrowser()) {
-			const result = await this.loadPixiAssets(url, {loadParser: 'loadWebFont', data: {family}});
+			const result = await this.loadPixiAssets(url, {parser: 'loadWebFont', data: {family}});
 			if (!(result instanceof FontFace)) {
 				throw new Error('Failed to load font');
 			}
@@ -34,7 +34,7 @@ Sunniesnow.Assets = {
 			return await this.loadPixiAssets(
 				url,
 				{
-					loadParser: 'loadNodeFont',
+					parser: 'loadNodeFont',
 					// data: {family}, // https://github.com/Automattic/node-canvas/issues/2369
 					downloadToFs: true // https://github.com/pixijs-userland/node/issues/5
 				}

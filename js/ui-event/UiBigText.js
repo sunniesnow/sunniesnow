@@ -56,6 +56,9 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 		// https://github.com/pixijs/pixijs/issues/11664
 		if (this.text.style.fontSize !== newFontSize) {
 			this.text.style.fontSize = newFontSize;
+			// Normally when the text is not time-dependent, this will boost performance
+			// by preparing the texture before it actually appears on screen.
+			//Sunniesnow.game.app.prepare.upload(this.text.texture);
 		}
 	}
 

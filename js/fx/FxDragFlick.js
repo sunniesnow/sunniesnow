@@ -1,4 +1,4 @@
-Sunniesnow.FxDrag = class FxDrag extends Sunniesnow.FxTap {
+Sunniesnow.FxDragFlick = class FxDragFlick extends Sunniesnow.FxFlick {
 	static async load() {
 		this.radius = Sunniesnow.Config.NOTE_RADIUS * 2/3;
 		this.sparkLine = this.createSparkLine();

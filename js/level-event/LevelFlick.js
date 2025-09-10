@@ -52,7 +52,7 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		}
 		if (time - this.time > this.lateBad()) {
 			this.slow = true;
-			this.release(this.lateBad());
+			this.release(this.time + this.lateBad());
 			return;
 		}
 		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());

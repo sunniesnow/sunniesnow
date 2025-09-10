@@ -51,17 +51,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 	updateActive(progress, relativeTime) {
 		super.updateActive(progress, relativeTime);
 		this.note.scale.set(1);
-		if (!this.circle) {
-			return;
-		}
-		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
-		if (progress <= 1) {
-			this.circleGraphics.visible = true;
-			this.circleGraphics.scale.set(1 - (1-targetCircleScale) * progress);
-			this.circleGraphics.alpha = (1/3 + 2/3 * progress);
-		} else {
-			this.circleGraphics.visible = false;
-		}
+		this.updateCircle(progress);
 	}
 
 	updateFadingOut(progress, relativeTime) {

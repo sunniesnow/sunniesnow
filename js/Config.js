@@ -170,6 +170,11 @@ Sunniesnow.Config = {
 				perfect: 0.7,
 				good: 0.4,
 				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.3, 0.12],
+				good: [-0.4, 0.3],
+				bad: [-0.4, 0.4],
 			}
 		},
 		medium: {
@@ -197,6 +202,11 @@ Sunniesnow.Config = {
 				perfect: 0.7,
 				good: 0.7,
 				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.12, 0.12],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
 			}
 		},
 		strict: {
@@ -224,6 +234,11 @@ Sunniesnow.Config = {
 				perfect: 0.8,
 				good: 0.8,
 				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.1, 0.1],
+				good: [-0.15, 0.15],
+				bad: [-0.15, 0.15]
 			}
 		},
 		rigorous: {
@@ -251,6 +266,11 @@ Sunniesnow.Config = {
 				perfect: 0.8,
 				good: 0.8,
 				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.08, 0.08],
+				good: [-0.12, 0.12],
+				bad: [-0.12, 0.12]
 			}
 		}
 	},
@@ -281,6 +301,11 @@ Sunniesnow.Config = {
 				perfect: 0.7,
 				good: 0.4,
 				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
 			}
 		},
 		medium: {
@@ -308,6 +333,11 @@ Sunniesnow.Config = {
 				perfect: 0.7,
 				good: 0.7,
 				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.24, 0.24],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
 			}
 		},
 		strict: {
@@ -335,6 +365,11 @@ Sunniesnow.Config = {
 				perfect: 0.8,
 				good: 0.8,
 				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.15, 0.15],
+				good: [-0.15, 0.15],
+				bad: [-0.15, 0.15]
 			}
 		},
 		rigorous: {
@@ -362,6 +397,11 @@ Sunniesnow.Config = {
 				perfect: 0.8,
 				good: 0.8,
 				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.12, 0.12],
+				good: [-0.12, 0.12],
+				bad: [-0.12, 0.12]
 			}
 		}
 	},

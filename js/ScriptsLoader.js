@@ -80,8 +80,8 @@ Sunniesnow.ScriptsLoader = {
 
 Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
 	`jszip@3.10.1/dist/jszip${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	`pixi.js@8.11.0/dist/pixi${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	`pixi.js@8.11.0/dist/packages/advanced-blend-modes${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
+	`pixi.js@8.13.1/dist/pixi${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
+	`pixi.js@8.13.1/dist/packages/advanced-blend-modes${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
 	'mime@4.0.7/lite/+esm',
 	'marked@16.0.0/lib/marked.umd.js',
 	`dompurify@3.2.6/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
@@ -100,6 +100,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'audio/SeFlick',
 	'audio/SeHold',
 	'audio/SeDrag',
+	'audio/SeDragFlick',
 	'audio/SeWithMusic',
 
 	'touch/Touch',
@@ -161,6 +162,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'ui-event/UiFlick',
 	'ui-event/UiHold',
 	'ui-event/UiDrag',
+	'ui-event/UiDragFlick',
 	'ui-event/UiBgNote',
 	'ui-event/UiBgPattern',
 	'ui-event/UiBigText',
@@ -180,12 +182,14 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'fx/FxFlick',
 	'fx/FxHold',
 	'fx/FxDrag',
+	'fx/FxDragFlick',
 
 	'level-event/LevelNote',
 	'level-event/LevelTap',
 	'level-event/LevelFlick',
 	'level-event/LevelHold',
 	'level-event/LevelDrag',
+	'level-event/LevelDragFlick',
 
 	'chart/Chart',
 	'chart/Event',
@@ -197,6 +201,7 @@ Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
 	'chart/note/Flick',
 	'chart/note/Hold',
 	'chart/note/Drag',
+	'chart/note/DragFlick',
 	'chart/note/BgNote',
 	'chart/bg-pattern/BgPattern',
 	'chart/bg-pattern/BigText',
