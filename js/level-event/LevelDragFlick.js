@@ -81,9 +81,6 @@ Sunniesnow.LevelDragFlick = class LevelDragFlick extends Sunniesnow.LevelNote {
 	}
 
 	touchedBy(touch) {
-		if (!this.holding) {
-			super.hit(touch, touch.end().time);
-		}
 		this.trackingTouches.add(touch);
 	}
 
@@ -94,6 +91,10 @@ Sunniesnow.LevelDragFlick = class LevelDragFlick extends Sunniesnow.LevelNote {
 		this.swiped = true;
 		this.edgeHit = true;
 		this.touchedBy(touch);
+		if (this.highestJudgement === 'perfect') {
+			return;
+		}
+		this.checkFlick(touch);
 	}
 
 	updateHolding(time) {
@@ -132,44 +133,51 @@ Sunniesnow.LevelDragFlick = class LevelDragFlick extends Sunniesnow.LevelNote {
 			return;
 		}
 		for (const touch of this.trackingTouches) {
-			const {x, y} = touch.end();
-			for (let i = touch.history.length - 1; i >= 0; i--) {
-				const {x: lastX, y: lastY, time: lastTime} = touch.history[i];
-				if (!this.isTappableAt(touch, lastX, lastY)) {
+			this.checkFlick(touch);
+		}
+	}
+
+	checkFlick(touch) {
+		const {x, y} = touch.end();
+		for (let i = touch.history.length - 1; i >= 0; i--) {
+			const {x: lastX, y: lastY, time: lastTime} = touch.history[i];
+			if (!this.isTappableAt(touch, lastX, lastY)) {
+				continue;
+			}
+			const lastRelativeTime = lastTime - this.time;
+			if (lastRelativeTime < this.earlyBad()) {
+				break;
+			}
+			if (this.highestJudgement === 'good') {
+				if (lastRelativeTime > this.lateGood()) {
 					continue;
-				}
-				const lastRelativeTime = lastTime - this.time;
-				if (lastRelativeTime < this.earlyBad()) {
+				} else if (lastRelativeTime < this.earlyGood()) {
 					break;
 				}
-				if (this.highestJudgement === 'good') {
-					if (lastRelativeTime > this.lateGood()) {
-						continue;
-					} else if (lastRelativeTime < this.earlyGood()) {
-						break;
-					}
-				}
-				const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(x - lastX, y - lastY);
-				if (rho < this.minFlickDistance()) {
-					continue;
-				}
-				if (this.highestJudgement === 'miss') {
-					this.highestJudgement = 'bad';
-				}
-				const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
-				if (this.minFlickDistance() !== 0 && !Sunniesnow.Utils.between(angle, ...this.angleRange())) {
-					continue;
-				}
-				const newHighest = Sunniesnow.Utils.maxJudgement(
-					this.highestJudgement,
-					this.getJudgementByRelativeTime(lastRelativeTime)
-				);
-				if (newHighest !== this.highestJudgement) {
-					this.highestJudgement = newHighest;
-					this.hitRelativeTime = lastRelativeTime;
-					this.touch = touch;
-					this.determineEarlyLate();
-				}
+			}
+			const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(x - lastX, y - lastY);
+			if (rho < this.minFlickDistance()) {
+				continue;
+			}
+			if (this.highestJudgement === 'miss') {
+				this.highestJudgement = 'bad';
+			}
+			const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
+			if (this.minFlickDistance() !== 0 && !Sunniesnow.Utils.between(angle, ...this.angleRange())) {
+				continue;
+			}
+			if (!this.holding) {
+				super.hit(touch, lastTime);
+			}
+			const newHighest = Sunniesnow.Utils.maxJudgement(
+				this.highestJudgement,
+				this.getJudgementByRelativeTime(lastRelativeTime)
+			);
+			if (newHighest !== this.highestJudgement) {
+				this.highestJudgement = newHighest;
+				this.hitRelativeTime = lastRelativeTime;
+				this.touch = touch;
+				this.determineEarlyLate();
 			}
 		}
 	}
