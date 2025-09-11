@@ -105,6 +105,7 @@ and other data are in **milliseconds**
 | flick | -400 | -400 | -300 | +120 | +300 | +400 |
 | hold (*start*) | -400 | -400 | -400 | +400 | +400 | +400 |
 | hold (*end*) | -&infin; | 0.4 | 0.7 | | | |
+| drag-flick | -400 | -400 | -300 | +120 | +300 | +400 |
 
 Data for the medium tier:
 
@@ -115,6 +116,7 @@ Data for the medium tier:
 | flick | -240 | -180 | -120 | +120 | +180 | +240 |
 | hold (*start*) | -240 | -240 | -120 | +120 | +240 | +240 |
 | hold (*end*) | -&infin; | 0.7 | 0.7 | | | |
+| drag-flick | -240 | -240 | -120 | +120 | +240 | +240 |
 
 Data for the strict tier:
 
@@ -125,6 +127,7 @@ Data for the strict tier:
 | flick | -150 | -100 | -50 | +50 | +100 | +150 |
 | hold (*start*) | -150 | -100 | -50 | +50 | +100 | +150 |
 | hold (*end*) | -&infin; | 0.8 | 0.8 | | | |
+| drag-flick | -150 | -150 | -100 | +100 | +150 | +150 |
 
 Data for the rigorous tier:
 
@@ -135,6 +138,7 @@ Data for the rigorous tier:
 | flick | -100 | -60 | -30 | +30 | +60 | +100 |
 | hold (*start*) | -100 | -60 | -30 | +30 | +60 | +100 |
 | hold (*end*) | -&infin; | 0.8 | 0.8 | | | |
+| drag-flick | -120 | -120 | -80 | +80 | +120 | +120 |
 
 The interval for drag notes are **different** when [`lyrica-5`](#lyrica-5) is `true`:
 the perfect interval is the same as the bad interval.
@@ -166,8 +170,14 @@ and they will be used to determine the judgement time windows:
 - `judgement-windows-custom-hold-late-perfect`,
 - `judgement-windows-custom-hold-late-good`,
 - `judgement-windows-custom-hold-late-bad`,
-- `judgement-windows-custom-hold-end-early-good`, and
-- `judgement-windows-custom-hold-end-early-perfect`.
+- `judgement-windows-custom-hold-end-early-good`,
+- `judgement-windows-custom-hold-end-early-perfect`,
+- `judgement-windows-custom-drag-flick-early-bad`,
+- `judgement-windows-custom-drag-flick-early-good`,
+- `judgement-windows-custom-drag-flick-early-perfect`,
+- `judgement-windows-custom-drag-flick-late-perfect`,
+- `judgement-windows-custom-drag-flick-late-good`, and
+- `judgement-windows-custom-drag-flick-late-bad`.
 
 All the values are in seconds although they are entered in milliseconds,
 so you need to enter milliseconds in judgement settings UI,

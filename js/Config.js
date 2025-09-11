@@ -26,7 +26,7 @@ Sunniesnow.Config = {
 			return;
 		}
 		this.JUDGEMENT_WINDOWS = {};
-		for (const noteType of ['tap', 'drag', 'flick', 'hold']) {
+		for (const noteType of ['tap', 'drag', 'flick', 'hold', 'dragFlick']) {
 			this.JUDGEMENT_WINDOWS[noteType] = {};
 			let lastEarly = Infinity;
 			let lastLate = -Infinity;
