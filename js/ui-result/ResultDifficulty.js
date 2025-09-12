@@ -8,16 +8,14 @@ Sunniesnow.ResultDifficulty = class ResultDifficulty extends PIXI.Container {
 		this.difficultyNameWidth = Sunniesnow.ResultTitle.width / 2;
 		this.difficultyWidth = Sunniesnow.ResultTitle.width / 3;
 		const graphics = new PIXI.GraphicsContext();
+		graphics.moveTo(Sunniesnow.ResultTitle.width - this.difficultyNameWidth, Sunniesnow.ResultTitle.height /2);
 		graphics.arc(0, 0, Sunniesnow.ResultTitle.height /2, Math.PI/2, -Math.PI/2);
 		graphics.lineTo(Sunniesnow.ResultTitle.width - this.difficultyWidth, -Sunniesnow.ResultTitle.height /2);
-		graphics.lineTo(Sunniesnow.ResultTitle.width - this.difficultyNameWidth, Sunniesnow.ResultTitle.height /2);
 		graphics.closePath();
 		graphics.fill(Sunniesnow.Result.mainColor);
+		graphics.moveTo(Sunniesnow.ResultTitle.width - this.difficultyWidth, -Sunniesnow.ResultTitle.height /2);
 		graphics.arc(Sunniesnow.ResultTitle.width, 0, Sunniesnow.ResultTitle.height /2, -Math.PI/2, Math.PI/2);
 		graphics.lineTo(Sunniesnow.ResultTitle.width - this.difficultyNameWidth, Sunniesnow.ResultTitle.height /2);
-		graphics.lineTo(Sunniesnow.ResultTitle.width - this.difficultyWidth, -Sunniesnow.ResultTitle.height /2);
-		// remove this workaround line after it is fixed: https://github.com/pixijs/pixijs/issues/11526
-		graphics.lineTo(Sunniesnow.ResultTitle.width, -Sunniesnow.ResultTitle.height /2);
 		graphics.closePath();
 		graphics.fill(Sunniesnow.game.chart.difficultyColor);
 		return graphics;
