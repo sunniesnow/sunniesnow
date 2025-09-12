@@ -29,11 +29,15 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 
 	populate() {
 		super.populate();
+		this.label = `flick-${this.event.id}`;
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
+		this.noteBody.label = 'note-body';
 		this.arrow = new PIXI.Graphics(this.constructor.arrowGeometry);
+		this.arrow.label = 'arrow';
 		this.arrow.rotation = Sunniesnow.Config.chartMappingAngle(this.event.angle);
 		this.text = this.createText();
 		this.note = new PIXI.Container();
+		this.note.label = 'note';
 		this.note.addChild(this.noteBody);
 		this.note.addChild(this.text);
 		this.note.addChild(this.arrow);
@@ -43,6 +47,7 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	populateCircle() {
 		super.populateCircle();
 		this.circleGraphics = new PIXI.Graphics(this.constructor.circleGeometry);
+		this.circleGraphics.label = 'circle-graphics';
 		this.circle.addChild(this.circleGraphics);
 	}
 

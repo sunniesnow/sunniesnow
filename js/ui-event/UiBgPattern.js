@@ -10,6 +10,7 @@ Sunniesnow.UiBgPattern = class UiBgPattern extends Sunniesnow.UiEvent {
 
 	constructor(event) {
 		super(event);
+		this.label = `bg-pattern-${this.event.id}`;
 	}
 
 	update(relativeTime) {

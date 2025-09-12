@@ -9,6 +9,7 @@ Sunniesnow.JudgementLineBase = class JudgementLineBase extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'judgement-line';
 	}
 
 	update(delta) {

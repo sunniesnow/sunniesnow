@@ -18,12 +18,16 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 	}
 
 	populate() {
+		super.populate();
+		this.label = `hold-${this.event.id}`;
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
+		this.noteBody.label = 'note-body';
 		this.text = this.createText();
 		if (Sunniesnow.game.settings.scroll) {
 			this.createBar();
 		}
 		this.note = new PIXI.Container();
+		this.note.label = 'note';
 		this.createHalo();
 		this.note.addChild(this.noteBody);
 		this.note.addChild(this.text);
@@ -33,11 +37,13 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 	populateCircle() {
 		super.populateCircle();
 		this.circleGraphics = new PIXI.Graphics(this.constructor.circleGeometry);
+		this.circleGraphics.label = 'circle-graphics';
 		this.circle.addChild(this.circleGraphics);
 	}
 
 	createBar() {
 		this.bar = new PIXI.Graphics();
+		this.bar.label = 'bar';
 		this.bar.rect(-this.constructor.radius / 4, -1, this.constructor.radius / 2, 1);
 		this.bar.fill(0xd3e373);
 		this.bar.scale.y = this.event.duration * Sunniesnow.Config.SCROLL_SPEED;
@@ -46,7 +52,9 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 
 	createHalo() {
 		this.halo = new PIXI.Graphics(this.constructor.haloGeometry);
+		this.halo.label = 'halo';
 		this.haloMask = new PIXI.Graphics();
+		this.haloMask.label = 'halo-mask';
 		const r = this.constructor.haloRadius;
 		this.haloMask.rect(-r, -r, r*2, r*2);
 		this.haloMask.fill(0xffffff);

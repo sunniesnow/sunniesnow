@@ -6,6 +6,7 @@ Sunniesnow.DebugHud = class DebugHud extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'debug-hud';
 		this.text = new PIXI.Text({text: '', style: {
 			fontSize: Sunniesnow.Config.WIDTH / 60,
 			fill: '#ff00ff',
@@ -13,6 +14,7 @@ Sunniesnow.DebugHud = class DebugHud extends PIXI.Container {
 		}});
 		this.text.alpha = 0.7;
 		this.text.anchor.set(0, 1);
+		this.text.label = 'text';
 		this.addChild(this.text);
 		this.y = Sunniesnow.Config.HEIGHT;
 	}

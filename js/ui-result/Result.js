@@ -11,6 +11,7 @@ Sunniesnow.Result = class Result extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'result';
 		this.populateTitle();
 		this.populateDifficulty();
 		this.populateStatsAndCombo();

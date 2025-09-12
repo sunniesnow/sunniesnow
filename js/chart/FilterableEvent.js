@@ -1,7 +1,14 @@
 Sunniesnow.FilterableEvent = class FilterableEvent extends Sunniesnow.Event {
 	assignFilters(filters, offset) {
 		filters ??= [];
-		this.filterEvents = filters.map(data => Sunniesnow.FilterEvent.from(data, offset));
+		this.filterEvents = filters.map((data, i) => {
+			const result = Sunniesnow.FilterEvent.from(data, offset);
+			if (result) {
+				result.id = i;
+				result.event = this;
+			}
+			return result;
+		});
 		Sunniesnow.Utils.compactify(this.filterEvents);
 		this.filterEvents.sort((a, b) => a.time - b.time);
 	}

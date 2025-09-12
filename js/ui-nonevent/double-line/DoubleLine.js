@@ -9,6 +9,7 @@ Sunniesnow.DoubleLine = class DoubleLine extends Sunniesnow.DoubleLineBase {
 
 	populate() {
 		this.graphics = new PIXI.Graphics();
+		this.graphics.label = 'graphics';
 		this.addChild(this.graphics);
 	}
 

@@ -5,4 +5,9 @@ Sunniesnow.FxDragFlick = class FxDragFlick extends Sunniesnow.FxFlick {
 		this.explosionContourArc = this.createExplosionContourArc();
 		this.missHalo = this.createMissHalo();
 	}
+
+	populate() {
+		super.populate();
+		this.label = `fx-drag-flick-${this.levelNote.event.id}`;
+	}
 };

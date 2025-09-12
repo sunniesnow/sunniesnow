@@ -92,13 +92,16 @@ Sunniesnow.ResultRank = class ResultRank extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'result-rank';
 		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
+		this.background.label = 'background';
 		this.addChild(this.background);
 		if (Sunniesnow.game.level.apFcIndicator) {
 			if (Sunniesnow.game.settings.renderer !== 'canvas') {
 				this.createApFcGeometry();
 				this.frame = new PIXI.Mesh({geometry: this.apFcGeometry, shader: this.constructor.apFcShader});
 				this.frame.mask = new PIXI.Graphics(this.constructor.frameGeometry);
+				this.frame.mask.label = 'frame-mask';
 				this.addChild(this.frame.mask);
 			} else {
 				this.frame = new PIXI.Graphics(this.constructor.frameGeometry);
@@ -108,6 +111,7 @@ Sunniesnow.ResultRank = class ResultRank extends PIXI.Container {
 			this.frame = new PIXI.Graphics(this.constructor.frameGeometry);
 			this.frame.tint = Sunniesnow.Result.mainColor;
 		}
+		this.frame.label = 'frame';
 		this.addChild(this.frame);
 		this.text = new PIXI.Text({text: Sunniesnow.game.level.rank(), style: {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
@@ -115,6 +119,7 @@ Sunniesnow.ResultRank = class ResultRank extends PIXI.Container {
 			fill: '#fbfbff',
 			align: 'center'
 		}});
+		this.text.label = 'text';
 		this.text.anchor.set(0.5, 0.5);
 		this.addChild(this.text);
 	}

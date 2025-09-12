@@ -29,13 +29,16 @@ Sunniesnow.ResultDifficulty = class ResultDifficulty extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'result-difficulty';
 		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
+		this.background.label = 'background';
 		this.difficultyNameText = new PIXI.Text({text: Sunniesnow.game.chart.difficultyName, style: {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: Sunniesnow.ResultTitle.height / 2,
 			fill: '#43586e',
 			align: 'left'
 		}});
+		this.difficultyNameText.label = 'difficulty-name-text';
 		this.difficultyNameText.anchor.set(0, 0.5);
 		if (this.difficultyNameText.width > this.constructor.difficultyNameWidth) {
 			this.difficultyNameText.scale.set(this.constructor.difficultyNameWidth / this.difficultyNameText.width);
@@ -46,6 +49,7 @@ Sunniesnow.ResultDifficulty = class ResultDifficulty extends PIXI.Container {
 			fill: '#fbfbff',
 			align: 'right'
 		}});
+		this.difficultyText.label = 'difficulty-text';
 		if (this.difficultyText.width > this.constructor.difficultyWidth) {
 			this.difficultyText.scale.set(this.constructor.difficultyWidth / this.difficultyText.width);
 		}
@@ -55,6 +59,7 @@ Sunniesnow.ResultDifficulty = class ResultDifficulty extends PIXI.Container {
 			fontSize: Sunniesnow.ResultTitle.height / 4,
 			fill: '#fbfbff'
 		}});
+		this.difficultySupText.label = 'difficulty-sup-text';
 		this.difficultySupText.anchor.set(1, 1);
 		this.difficultySupText.x = Sunniesnow.ResultTitle.width;
 		this.difficultyText.x = this.difficultySupText.getBounds().x;

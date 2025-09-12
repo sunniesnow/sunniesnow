@@ -1,6 +1,7 @@
 Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 	constructor() {
 		super();
+		this.label = 'bg-notes-board';
 		this.clear(true);
 	}
 

@@ -1,6 +1,7 @@
 Sunniesnow.TipPointsBoard = class TipPointsBoard extends PIXI.Container {
 	constructor() {
 		super();
+		this.label = 'tip-points-board';
 		this.clear(true);
 	}
 

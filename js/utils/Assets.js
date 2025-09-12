@@ -5,9 +5,9 @@ Sunniesnow.Assets = {
 		let parser;
 		// Reason for using Sunniesnow.ObjectUrl: https://github.com/pixijs/pixijs/issues/9568
 		if (Sunniesnow.ObjectUrl.types[url] === 'image/svg+xml' || PIXI.loadSvg.test(url)) {
-			parser = 'loadSVG';
+			parser = 'svg';
 		} else {
-			parser = Sunniesnow.Utils.isBrowser() ? 'loadTextures' : 'loadNodeTexture';
+			parser = Sunniesnow.Utils.isBrowser() ? 'texture' : 'node-texture';
 		}
 		const result = await this.loadPixiAssets(url, {parser});
 		if (!(result instanceof PIXI.Texture)) {
@@ -25,7 +25,7 @@ Sunniesnow.Assets = {
 			return;
 		}
 		if (Sunniesnow.Utils.isBrowser()) {
-			const result = await this.loadPixiAssets(url, {parser: 'loadWebFont', data: {family}});
+			const result = await this.loadPixiAssets(url, {parser: 'web-font', data: {family}});
 			if (!(result instanceof FontFace)) {
 				throw new Error('Failed to load font');
 			}
@@ -34,7 +34,7 @@ Sunniesnow.Assets = {
 			return await this.loadPixiAssets(
 				url,
 				{
-					parser: 'loadNodeFont',
+					parser: 'node-font',
 					// data: {family}, // https://github.com/Automattic/node-canvas/issues/2369
 					downloadToFs: true // https://github.com/pixijs-userland/node/issues/5
 				}

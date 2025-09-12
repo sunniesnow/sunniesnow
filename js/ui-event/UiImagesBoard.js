@@ -5,6 +5,7 @@ Sunniesnow.UiImagesBoard = class UiImagesBoard {
 		this.layerAbove = {};
 		for (const above of Sunniesnow.Image.LAYER_ABOVE) {
 			this.layerAbove[above] = new PIXI.Container();
+			this.layerAbove[above].label = `images-board-layer-above-${Sunniesnow.Utils.camelToSlug(above)}`;
 			this.layerAbove[above].sortableChildren = true;
 		}
 	}

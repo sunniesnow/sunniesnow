@@ -59,6 +59,7 @@ Sunniesnow.UiEffectsBoard = class UiEffectsBoard {
 	add(event) {
 		const layers = event.layers();
 		const container = new PIXI.Container();
+		container.label = `effect-multiple-${event.id}`;
 		let added = false;
 		for (const layer of layers) {
 			if (this.layers[layer].event) {

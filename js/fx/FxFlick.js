@@ -1,5 +1,10 @@
 Sunniesnow.FxFlick = class FxFlick extends Sunniesnow.FxTap {
 
+	populate() {
+		super.populate();
+		this.label = `fx-flick-${this.levelNote.event.id}`;
+	}
+
 	populateSparks(count, minColor, maxColor) {
 		this.sparks = [];
 		for (let i = 0; i < count; i++) {

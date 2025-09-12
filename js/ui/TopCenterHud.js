@@ -30,8 +30,10 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 
 	populate() {
 		super.populate();
+		this.label = 'top-center-hud';
 		this.wrapper = new PIXI.Container();
 		this.wrapper.y = Sunniesnow.Config.WIDTH / 18;
+		this.wrapper.label = 'wrapper';
 		this.addChild(this.wrapper);
 		this.populateText();
 		this.populateLastJudgement();
@@ -45,6 +47,7 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 			align: 'center'
 		}});
 		this.text.anchor.set(0.5, 1);
+		this.text.label = 'text';
 		this.wrapper.addChild(this.text);
 	}
 
@@ -60,6 +63,8 @@ Sunniesnow.TopCenterHud = class TopCenterHud extends Sunniesnow.UiComponent {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC'
 		}});
 		this.lastJudgement.anchor.set(0.5, 0);
+		this.lastJudgement.label = 'last-judgement';
+		this.earlyLate.label = 'early-late';
 		this.wrapper.addChild(this.lastJudgement);
 		this.wrapper.addChild(this.earlyLate);
 	}

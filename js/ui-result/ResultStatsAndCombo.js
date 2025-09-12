@@ -34,6 +34,7 @@ Sunniesnow.ResultStatsAndCombo = class ResultStatsAndCombo extends PIXI.Containe
 	}
 
 	populate() {
+		this.label = 'result-stats-and-combo';
 		this.statsBackgrounds = {};
 		this.statsTexts = {};
 		this.stats = {};
@@ -61,6 +62,7 @@ Sunniesnow.ResultStatsAndCombo = class ResultStatsAndCombo extends PIXI.Containe
 
 	populateStats(judgement) {
 		this.statsBackgrounds[judgement] = new PIXI.Graphics(this.constructor.statsBackgroundGeometry);
+		this.statsBackgrounds[judgement].label = `stats-background-${judgement}`;
 		this.statsTexts[judgement] = new PIXI.Text({
 			text: Sunniesnow.Utils.judgementText(judgement) + '\n' + Sunniesnow.game.level[judgement],
 			style: {
@@ -70,8 +72,10 @@ Sunniesnow.ResultStatsAndCombo = class ResultStatsAndCombo extends PIXI.Containe
 				align: 'center'
 			}
 		});
+		this.statsTexts[judgement].label = `stats-text-${judgement}`;
 		this.statsTexts[judgement].anchor.set(0.5, 0.5);
 		this.stats[judgement] = new PIXI.Container();
+		this.stats[judgement].label = `stats-${judgement}`;
 		this.stats[judgement].addChild(this.statsBackgrounds[judgement]);
 		this.stats[judgement].addChild(this.statsTexts[judgement]);
 		this.addChild(this.stats[judgement]);
@@ -79,14 +83,17 @@ Sunniesnow.ResultStatsAndCombo = class ResultStatsAndCombo extends PIXI.Containe
 
 	populateCombo() {
 		this.comboBackground = new PIXI.Graphics(this.constructor.comboBackgroundGeometry);
+		this.comboBackground.label = 'combo-background';
 		this.comboText = new PIXI.Text({text: 'Combo\n' + Sunniesnow.game.level.maxCombo, style: {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.constructor.comboRadius / 3,
 			fill: '#43586e',
 			align: 'center'
 		}});
+		this.comboText.label = 'combo-text';
 		this.comboText.anchor.set(0.5, 0.5);
 		this.combo = new PIXI.Container();
+		this.combo.label = 'combo';
 		this.combo.addChild(this.comboBackground);
 		this.combo.addChild(this.comboText);
 		this.addChild(this.combo);

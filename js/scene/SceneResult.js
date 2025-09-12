@@ -2,6 +2,7 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 	// Some UIs are still useful after SceneGame terminates
 	constructor(legacyUis) {
 		super();
+		this.label = 'scene-result';
 		this.legacyUis = legacyUis;
 	}
 

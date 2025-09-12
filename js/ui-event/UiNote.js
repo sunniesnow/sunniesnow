@@ -18,6 +18,7 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 
 	populateCircle() {
 		this.circle = new PIXI.Container();
+		this.circle.label = `circle-${this.event.id}`;
 	}
 
 	updateState(relativeTime) {

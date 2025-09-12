@@ -30,13 +30,16 @@ Sunniesnow.ResultScore = class ResultScore extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'result-score';
 		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
+		this.background.label = 'background';
 		this.text = new PIXI.Text({text: Sunniesnow.game.level.score(), style: {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.constructor.height / 1.5,
 			fill: '#43586e',
 			align: 'center'
 		}});
+		this.text.label = 'text';
 		this.text.anchor.set(0.5, 0.5);
 		this.addChild(this.background);
 		this.addChild(this.text);

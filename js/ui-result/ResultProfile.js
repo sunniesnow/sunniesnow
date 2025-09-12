@@ -46,12 +46,14 @@ Sunniesnow.ResultProfile = class ResultProfile extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'result-profile';
 		this.populateAvatar();
 		this.populateNickname();
 	}
 
 	populateAvatar() {
 		this.avatar = new PIXI.Sprite(this.constructor.avatarTexture);
+		this.avatar.label = 'avatar';
 		this.avatar.anchor.set(0.5);
 		this.avatar.scale.set(Math.min(
 			this.constructor.radius/Math.sqrt(3)*4 / this.avatar.width,
@@ -68,6 +70,7 @@ Sunniesnow.ResultProfile = class ResultProfile extends PIXI.Container {
 			fill: '#fbfbff',
 			align: 'left'
 		}});
+		this.nickname.label = 'nickname';
 		this.nickname.anchor.set(0, 0.5);
 		this.nickname.x = this.avatar.x + this.constructor.radius*2;
 		this.addChild(this.nickname);

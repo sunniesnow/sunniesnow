@@ -9,13 +9,16 @@ Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
 
 	populate() {
 		super.populate();
+		this.label = `drag-${this.event.id}`;
 		this.note = new PIXI.Graphics(this.constructor.geometry);
+		this.note.label = 'note';
 		this.addChild(this.note);
 	}
 
 	populateCircle() {
 		super.populateCircle();
 		this.circleGraphics = new PIXI.Graphics(this.constructor.circleGeometry);
+		this.circleGraphics.label = 'circle-graphics';
 		this.circle.addChild(this.circleGraphics);
 	}
 

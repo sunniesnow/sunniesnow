@@ -1,8 +1,10 @@
 Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 	constructor() {
 		super();
+		this.label = 'fx-board';
 		this.presentFx = [];
 		this.frontLayer = new PIXI.RenderLayer();
+		this.frontLayer.label = 'fx-board-front-layer';
 		if (Sunniesnow.game.settings.hideFxInFront) {
 			this.frontLayer.visible = false;
 		}

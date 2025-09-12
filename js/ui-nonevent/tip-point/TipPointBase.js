@@ -40,6 +40,7 @@ Sunniesnow.TipPointBase = class TipPointBase extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = `tip-point-${this.events.map(e => e.id).join('-')}`;
 	}
 
 	update(time) {

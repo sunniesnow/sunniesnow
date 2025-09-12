@@ -1,5 +1,10 @@
 Sunniesnow.SceneLoading = class SceneLoading extends Sunniesnow.Scene {
 
+	constructor() {
+		super();
+		this.label = 'scene-loading';
+	}
+
 	start() {
 		super.start();
 		if (Sunniesnow.Utils.isBrowser()) {

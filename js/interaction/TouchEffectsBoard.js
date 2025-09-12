@@ -2,6 +2,7 @@ Sunniesnow.TouchEffectsBoard = class TouchEffectsBoard extends PIXI.Container {
 
 	constructor() {
 		super();
+		this.label = 'touch-effects-board';
 		this.presentTouchEffects = [];
 		this.addListeners();
 	}

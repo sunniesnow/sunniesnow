@@ -2,9 +2,11 @@ Sunniesnow.UiNotesBoard = class UiNotesBoard extends PIXI.Container {
 
 	constructor() {
 		super();
+		this.label = 'notes-board';
 		this.clear(true);
 		if (!Sunniesnow.game.settings.hideCircles) {
 			this.circles = new PIXI.Container();
+			this.circles.label = 'circles';
 		}
 	}
 

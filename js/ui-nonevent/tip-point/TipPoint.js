@@ -56,6 +56,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	}
 
 	populate() {
+		super.populate();
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			this.createTrail();
 		}
@@ -68,6 +69,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 
 	createTipPoint() {
 		this.tipPoint = new PIXI.Graphics(this.constructor.tipPointGeometry);
+		this.tipPoint.label = 'tip-point';
 		this.addChild(this.tipPoint);
 	}
 
@@ -77,11 +79,13 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 			geometry: this.trailGeometry = new PIXI.MeshGeometry(),
 			shader: this.constructor.trailShader,
 		});
+		this.trail.label = 'trail';
 		this.addChild(this.trail);
 	}
 
 	createConnections() {
 		this.connections = new PIXI.Graphics();
+		this.connections.label = 'connections';
 		this.connections.moveTo(this.checkpoints[0].x, 0);
 		for (const {x, time} of this.checkpoints.slice(1)) {
 			this.connections.lineTo(

@@ -19,9 +19,12 @@ Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 
 	populate() {
 		super.populate();
+		this.label = `bg-note-${this.event.id}`;
 		this.note = new PIXI.Container();
+		this.note.label = 'note';
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
-		this.text = Sunniesnow.UiTap.prototype.createText.call(this);
+		this.noteBody.label = 'note-body';
+		this.text = this.createText();
 		this.note.addChild(this.noteBody);
 		this.note.addChild(this.text);
 		this.addChild(this.note);
@@ -127,6 +130,7 @@ const UiNoteMixin = new Sunniesnow.Mixin({
 }, {
 	createText() {
 		const text = new PIXI.Text({text: this.event.text, style: this.constructor.textStyle.clone()});
+		text.label = 'text';
 		text.anchor.set(0.5, 0.5);
 		return text;
 	},

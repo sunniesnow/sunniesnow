@@ -26,18 +26,21 @@ Sunniesnow.ProgressBar = class ProgressBar extends Sunniesnow.UiComponent {
 
 	populate() {
 		super.populate();
+		this.label = 'progress-bar';
 		this.populateBackground();
 		this.populateBar();
 	}
 
 	populateBackground() {
 		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
+		this.background.label = 'background';
 		this.addChild(this.background);
 	}
 
 	populateBar() {
 		this.bar = new PIXI.Graphics(this.constructor.barGeometry);
 		this.bar.x = -Sunniesnow.Config.WIDTH / 2;
+		this.bar.label = 'bar';
 		this.addChild(this.bar);
 	}
 

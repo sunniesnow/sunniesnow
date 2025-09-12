@@ -18,9 +18,11 @@ Sunniesnow.ButtonPause = class ButtonPause extends Sunniesnow.ButtonPauseBase {
 
 	populate() {
 		super.populate();
+		this.label = 'button-pause';
 		this.graphics = new PIXI.Graphics(this.constructor.geometry);
 		this.graphics.x = Sunniesnow.Config.WIDTH / 30;
 		this.graphics.y = Sunniesnow.Config.WIDTH / 30;
+		this.graphics.label = 'graphics';
 		this.addChild(this.graphics);
 	}
 

@@ -4,6 +4,7 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 
 	constructor() {
 		super();
+		this.label = 'double-lines-board';
 		this.clear(true);
 	}
 

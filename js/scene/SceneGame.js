@@ -1,4 +1,9 @@
 Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
+	constructor() {
+		super();
+		this.label = 'scene-game';
+	}
+
 	start() {
 		super.start();
 		this.populateUiAndBoards();
@@ -89,7 +94,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 				imagesAboveCircles: this.uiImagesBoard?.layerAbove.circles,
 				tipPoints: this.tipPointsBoard,
 				imagesAboveTipPoints: this.uiImagesBoard?.layerAbove.tipPoints,
-				fxFront: this.fxBoard.frontLayer,
+				fxFront: this.fxBoard?.frontLayer,
 				imagesAboveFxFront: this.uiImagesBoard?.layerAbove.fxFront
 			});
 		}
@@ -159,7 +164,7 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 			this.uiImagesBoard?.layerAbove.circles,
 			this.tipPointsBoard,
 			this.uiImagesBoard?.layerAbove.tipPoints,
-			this.fxBoard.front,
+			this.fxBoard?.front,
 			this.uiImagesBoard?.layerAbove.fxFront,
 		]));
 	}
@@ -169,7 +174,6 @@ Sunniesnow.SceneGame = class SceneGame extends Sunniesnow.Scene {
 		this.vibrationWithMusic?.update();
 	}
 
-	// except fxBoard
 	updateBoards(delta) {
 		this.uiEffectsBoard?.update(delta);
 		this.uiImagesBoard?.update(delta);

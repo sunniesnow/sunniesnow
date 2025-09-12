@@ -39,12 +39,14 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 
 	populate() {
 		super.populate();
+		this.label = 'top-left-hud';
 		this.populateBackground();
 		this.populateText();
 	}
 
 	populateBackground() {
 		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
+		this.background.label = 'background';
 		this.addChild(this.background);
 	}
 
@@ -57,6 +59,7 @@ Sunniesnow.TopLeftHud = class TopLeftHud extends Sunniesnow.UiComponent {
 		this.text.x = Sunniesnow.Config.WIDTH / 15;
 		this.text.y = Sunniesnow.Config.WIDTH / 30;
 		this.text.anchor.set(0, 0.5);
+		this.text.label = 'text';
 		this.addChild(this.text);
 	}
 

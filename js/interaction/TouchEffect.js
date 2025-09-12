@@ -28,7 +28,9 @@ Sunniesnow.TouchEffect = class TouchEffect extends Sunniesnow.TouchEffectBase {
 
 	populate() {
 		super.populate();
+		this.label = `touch-effect-${this.touch.id}`;
 		this.sprite = new PIXI.Sprite(this.constructor.texture);
+		this.sprite.label = 'sprite';
 		this.sprite.anchor.set(0.5);
 		this.sprite.blendMode = 'add';
 		this.sprite.scale.set(this.constructor.initialScale);

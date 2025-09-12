@@ -2,6 +2,7 @@
 Sunniesnow.FilterSprite = class FilterSprite extends PIXI.Sprite {
 	constructor(filterEvent, resourceKey) {
 		super();
+		this.label = `filter-sprite-${filterEvent.event.id}-${filterEvent.label}-${filterEvent.id}-${resourceKey}`;
 		this.filterEvent = filterEvent;
 		this.resourceKey = resourceKey;
 		this.resource = filterEvent.filter.resources[resourceKey];

@@ -14,6 +14,7 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = `double-line-${this.event1.id}-${this.event2.id}`;
 	}
 
 	update(relativeTime) {

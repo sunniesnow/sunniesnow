@@ -24,7 +24,9 @@ Sunniesnow.UiDiamondGrid = class UiDiamondGrid extends Sunniesnow.UiBgPattern {
 
 	populate() {
 		super.populate();
+		this.label = `diamond-grid-${this.event.id}`;
 		this.pattern = new PIXI.Graphics(this.constructor.geometry);
+		this.pattern.label = 'pattern';
 		this.addChild(this.pattern);
 	}
 

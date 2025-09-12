@@ -28,6 +28,11 @@ Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 		return graphics;
 	}
 
+	populate() {
+		super.populate();
+		this.label = `fx-tap-${this.levelNote.event.id}`;
+	}
+
 	populateSparks(count, minColor, maxColor) {
 		this.sparks = [];
 		for (let i = 0; i < count; i++) {

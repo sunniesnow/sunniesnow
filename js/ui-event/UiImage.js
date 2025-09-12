@@ -15,11 +15,13 @@ Sunniesnow.UiImage = class UiImage extends Sunniesnow.UiEvent {
 
 	populate() {
 		super.populate();
+		this.label = `image-${this.event.id}`;
 		this.texture = Sunniesnow.StoryAssets.texture(this.event.filename);
 		if (!this.texture) {
 			return;
 		}
 		this.sprite = new PIXI.Sprite(this.texture);
+		this.sprite.label = 'sprite';
 		this.addChild(this.sprite);
 	}
 

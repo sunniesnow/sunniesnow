@@ -52,6 +52,7 @@ Sunniesnow.Game = class Game {
 			this.maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
 		}*/
 		this.app.ticker.add(this.mainTicker.bind(this));
+		this.app.stage.label = 'stage';
 		if (Sunniesnow.environment === 'development') {
 			// PIXI.initDevtools({app: this.app});
 			globalThis.__PIXI_APP__ = this.app;
@@ -191,6 +192,7 @@ Sunniesnow.Game = class Game {
 	// It will never get transformed itself, and it will not be rendered.
 	initAuxiliaryBoard() {
 		this.auxiliaryBoard = new PIXI.Container();
+		this.auxiliaryBoard.label = 'auxiliary-board';
 		this.auxiliaryBoard.renderable = false;
 		this.app.stage.addChild(this.auxiliaryBoard);
 	}

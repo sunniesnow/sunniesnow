@@ -39,6 +39,8 @@ Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 	}
 
 	populate() {
+		super.populate();
+		this.label = 'top-right-hud';
 		this.populateBackground();
 		this.populateText();
 		this.populateDifficultyName();
@@ -46,6 +48,7 @@ Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 
 	populateBackground() {
 		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
+		this.background.label = 'background';
 		this.addChild(this.background);
 	}
 
@@ -59,6 +62,7 @@ Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 		this.text.x = -Sunniesnow.Config.WIDTH / 30;
 		this.text.y = Sunniesnow.Config.WIDTH / 30;
 		this.text.anchor.set(1, 0.5);
+		this.text.label = 'text';
 		this.addChild(this.text);
 	}
 
@@ -71,6 +75,7 @@ Sunniesnow.TopRightHud = class TopRightHud extends Sunniesnow.UiComponent {
 		this.difficultyName.x = -Sunniesnow.Config.WIDTH / 4;
 		this.difficultyName.y = Sunniesnow.Config.WIDTH / 30;
 		this.difficultyName.anchor.set(0, 0.5);
+		this.difficultyName.label = 'difficulty-name';
 		this.addChild(this.difficultyName);
 	}
 

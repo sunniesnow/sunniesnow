@@ -31,8 +31,10 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 
 	populate() {
 		super.populate();
+		this.label = `big-text-${this.event.id}`;
 		this.text = new PIXI.Text({text: this.event.text, style: this.constructor.style.clone()});
 		this.text.anchor.set(0.5, 0.5);
+		this.text.label = 'text';
 		this.addChild(this.text);
 	}
 

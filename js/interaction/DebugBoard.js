@@ -11,6 +11,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	constructor() {
 		super();
+		this.label = 'debug-board';
 		this.touches = {};
 		this.endedTouches = new Set();
 		this.pinnedPoints = [];
@@ -143,7 +144,9 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	addTouchUi(touch) {
 		const id = touch.id;
 		const container = this.touches[id] = new PIXI.Container();
+		container.label = `touch-${id}`;
 		const touchUi = new PIXI.Graphics(this.constructor.touchGeometry);
+		touchUi.label = 'touch-ui';
 		container.addChild(touchUi);
 		container.touch = touch;
 		const text = container.text = new PIXI.Text({text: '', style: {
@@ -151,6 +154,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			fill: '#ff00ff',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 		}});
+		text.label = 'text';
 		text.anchor.set(0, 0.5);
 		container.addChild(text);
 		text.alpha = 0.5;
@@ -165,6 +169,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	pinPointByCoordinates(x, y) {
 		const pinnedPoint = new PIXI.Container();
+		pinnedPoint.label = 'pinned-point';
 		pinnedPoint.addChild(new PIXI.Graphics(this.constructor.pinnedPointGeometry));
 		pinnedPoint.alpha = 0.5;
 		this.addChild(pinnedPoint);
@@ -173,6 +178,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			fill: '#ff00ff',
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 		}});
+		text.label = 'text';
 		pinnedPoint.text = text;
 		pinnedPoint.addChild(text);
 		this.pinnedPoints.push(pinnedPoint);
@@ -325,6 +331,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 			fill: '#ff00ff',
 			align: 'center'
 		}});
+		earlyLateText.label = `early-late-text-${levelNote.event.id}`;
 		earlyLateText.anchor.set(0.5, 0.5);
 		[earlyLateText.x, earlyLateText.y] = Sunniesnow.Config.chartMapping(levelNote.event.x, levelNote.event.y);
 		this.addChild(earlyLateText);
@@ -346,6 +353,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 
 	createTouchArea(uiNote) {
 		const graphics = new PIXI.Graphics(this.constructor.touchAreaGeometry);
+		graphics.label = `touch-area-${uiNote.event.id}`;
 		graphics.position.set(...Sunniesnow.Config.chartMapping(uiNote.event.x, uiNote.event.y));
 		graphics.scale.set(uiNote.event.size);
 		if (Sunniesnow.game.settings.scroll) {

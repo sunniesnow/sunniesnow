@@ -30,6 +30,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	}
 
 	populate() {
+		this.label = 'result-additional-info';
 		this.createAllContentsWrapper();
 		this.createText();
 		if (Sunniesnow.game.settings.autoplay) {
@@ -43,6 +44,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 
 	createAllContentsWrapper() {
 		this.allContents = new PIXI.Container();
+		this.allContents.label = 'all-contents-wrapper';
 		this.allContents.visible = false;
 		this.addChild(this.allContents);
 	}
@@ -58,13 +60,16 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 
 	createSamplesDiagram() {
 		this.meanText = new PIXI.Text({text: 'μ', style: {...this.constructor.textStyle}});
+		this.meanText.label = 'mean-text';
 		this.meanText.anchor.set(0, 0.5);
 		this.sdText = new PIXI.Text({text: 'σ', style: {...this.constructor.textStyle}});
+		this.sdText.label = 'sd-text';
 		this.sdText.anchor.set(0, 0.5);
 
 		const textWidth = Math.max(this.meanText.width, this.sdText.width);
 		const diagramWidth = Sunniesnow.Config.WIDTH - textWidth;
 		this.samplesDiagram = new PIXI.Graphics();
+		this.samplesDiagram.label = 'samples-diagram';
 		const unit = this.constructor.samplesDiagramHeight / 4;
 		const thin = unit / 50;
 		const thick = unit / 30;
@@ -88,6 +93,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		const zeroY = this.sampleMean / this.sampleSd * unit + 2*unit;
 		if (Sunniesnow.Utils.between(zeroY, 0, 4*unit)) {
 			this.zeroText = new PIXI.Text({text: '0', style: { ...this.constructor.textStyle }});
+			this.zeroText.label = 'zero-text';
 			this.zeroText.anchor.set(0, 0.5);
 			this.samplesDiagram.stroke({width: thick, color: this.constructor.COLOR});
 			this.samplesDiagram.moveTo(0, zeroY);
@@ -116,10 +122,13 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 
 	createDistributionDiagram() {
 		this.meanText2 = new PIXI.Text({text: 'μ', style: {...this.constructor.textStyle}});
+		this.meanText2.label = 'mean-text-2';
 		this.meanText2.anchor.set(0.5, 1);
 		this.sdText2 = new PIXI.Text({text: 'σ', style: {...this.constructor.textStyle}});
+		this.sdText2.label = 'sd-text-2';
 		this.sdText2.anchor.set(0.5, 1);
 		this.zeroText2 = new PIXI.Text({text: '0', style: {...this.constructor.textStyle}});
+		this.zeroText2.label = 'zero-text-2';
 		this.zeroText2.anchor.set(0.5, 1);
 
 		const width = Sunniesnow.Config.WIDTH;
@@ -131,6 +140,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		this.sdText2.y = Sunniesnow.Config.HEIGHT;
 
 		this.distributionDiagram = new PIXI.Graphics();
+		this.distributionDiagram.label = 'distribution-diagram';
 		this.distributionDiagram.x = width / 2;
 		this.distributionDiagram.y = this.constructor.samplesDiagramHeight;
 		for (let i = -2; i <= 2; i++) {
@@ -186,12 +196,14 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 		const text = this.getTextContents();
 		style.fontSize = style.lineHeight = (Sunniesnow.Config.HEIGHT - this.constructor.samplesDiagramHeight) / Sunniesnow.Utils.countLines(text);
 		this.text = new PIXI.Text({text, style});
+		this.text.label = 'text';
 		this.text.y = this.constructor.samplesDiagramHeight;
 		this.allContents.addChild(this.text);
 	}
 
 	createRightText() {
 		this.rightText = new PIXI.Text({text: this.getRightTextContents(), style: {...this.constructor.textStyle, align: 'right'}});
+		this.rightText.label = 'right-text';
 		this.rightText.anchor.set(1, 0);
 		this.rightText.x = Sunniesnow.Config.WIDTH;
 		this.rightText.y = this.constructor.samplesDiagramHeight;

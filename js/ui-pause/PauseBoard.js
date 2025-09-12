@@ -6,6 +6,7 @@ Sunniesnow.PauseBoard = class PauseBoard extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'pause-board';
 		this.addChild(this.background = new Sunniesnow.PauseBackground());
 		this.addChild(this.resume = new Sunniesnow.ButtonResume(() => Sunniesnow.game.resume()));
 		this.addChild(this.retry = new Sunniesnow.ButtonRetry(() => Sunniesnow.game.retry()));

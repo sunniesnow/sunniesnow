@@ -22,13 +22,16 @@ Sunniesnow.ResultTitle = class ResultTitle extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'result-title';
 		this.background = new PIXI.Graphics(this.constructor.backgroundGeometry);
+		this.background.label = 'background';
 		this.text = new PIXI.Text({text: Sunniesnow.game.chart.title, style: {
 			fontFamily: 'Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.constructor.height / 2,
 			fill: '#43586e',
 			align: 'left'
 		}});
+		this.text.label = 'text';
 		this.text.anchor.set(0, 0.5);
 		if (this.text.width > this.constructor.width) {
 			this.text.scale.set(this.constructor.width / this.text.width);

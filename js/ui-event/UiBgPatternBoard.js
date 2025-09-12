@@ -2,6 +2,7 @@ Sunniesnow.UiBgPatternBoard = class UiBgPatternBoard extends PIXI.Container {
 
 	constructor() {
 		super();
+		this.label = 'bg-pattern-board';
 		this.clear(true);
 	}
 

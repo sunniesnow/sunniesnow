@@ -6,6 +6,7 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'loading-progress';
 		this.populateText();
 		this.populateProgressBar();
 	}
@@ -19,6 +20,7 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 		this.text.anchor.set(0.5);
 		this.text.x = Sunniesnow.Config.WIDTH / 2;
 		this.text.y = Sunniesnow.Config.HEIGHT / 4;
+		this.text.label = 'text';
 		this.addChild(this.text);
 	}
 
@@ -26,6 +28,7 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 		this.progressBar = new PIXI.Graphics();
 		this.progressBar.x = Sunniesnow.Config.WIDTH / 8;
 		this.progressBar.y = Sunniesnow.Config.HEIGHT / 2;
+		this.progressBar.label = 'progress-bar';
 		this.addChild(this.progressBar);
 	}
 
@@ -60,8 +63,10 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 
 	populateAssetProgressBar(name) {
 		const container = new PIXI.Container();
+		container.label = `asset-progress-bar-${name}`;
 		container.x = Sunniesnow.Config.WIDTH / 2;
 		const bar = new PIXI.Graphics();
+		bar.label = 'bar';
 		const text = new PIXI.Text({text: name, style: {
 			fontSize: Sunniesnow.Config.HEIGHT / 30,
 			fill: 'white',
@@ -69,6 +74,7 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 		}});
 		text.anchor.x = 0.5;
 		text.anchor.y = 1;
+		text.label = 'text';
 		container.addChild(bar);
 		container.addChild(text);
 		this.addChild(container);

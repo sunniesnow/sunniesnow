@@ -86,8 +86,10 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 
 	populate() {
 		super.populate();
+		this.label = 'background';
 		this.background = new PIXI.Sprite(this.constructor.texture);
 		this.background.anchor.set(0.5);
+		this.background.label = 'background';
 		this.addChild(this.background);
 	}
 };

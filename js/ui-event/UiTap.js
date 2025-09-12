@@ -13,9 +13,12 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 
 	populate() {
 		super.populate();
+		this.label = `tap-${this.event.id}`;
 		this.noteBody = new PIXI.Graphics(this.hasConnectedTap() ? this.constructor.doubleGeometry : this.constructor.geometry);
+		this.noteBody.label = 'note-body';
 		this.text = this.createText();
 		this.note = new PIXI.Container();
+		this.note.label = 'note';
 		this.note.addChild(this.noteBody)
 		this.note.addChild(this.text);
 		this.addChild(this.note);
@@ -24,6 +27,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 	populateCircle() {
 		super.populateCircle();
 		this.circleGraphics = new PIXI.Graphics(this.hasConnectedTap() ? this.constructor.doubleCircleGeometry : this.constructor.circleGeometry);
+		this.circleGraphics.label = 'circle-graphics';
 		this.circle.addChild(this.circleGraphics);
 	}
 

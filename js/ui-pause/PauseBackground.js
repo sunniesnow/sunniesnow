@@ -18,7 +18,9 @@ Sunniesnow.PauseBackground = class PauseBackground extends PIXI.Container {
 	}
 
 	populate() {
+		this.label = 'pause-background';
 		this.background = new PIXI.Graphics(this.constructor.geometry);
+		this.background.label = 'background';
 		this.background.y = Sunniesnow.Config.HEIGHT / 2;
 		this.addChild(this.background);
 	}
