@@ -24,6 +24,9 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 			if (!Sunniesnow.game.settings.doubleLineFlick && event instanceof Sunniesnow.Flick) {
 				return false;
 			}
+			if (!Sunniesnow.game.settings.doubleLineDragFlick && event instanceof Sunniesnow.DragFlick) {
+				return false;
+			}
 			return !!event.getConnectedNote();
 		});
 		if (Sunniesnow.game.progressAdjustable) {

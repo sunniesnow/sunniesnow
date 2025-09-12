@@ -56,6 +56,11 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		return 0;
 	}
 
+	// Relevant for overlapping flick judgement fix.
+	isFlickLike() {
+		return false;
+	}
+
 	// x, y are in chart coordinates
 	isTappableAt(touch, x, y) {
 		if (touch.wholeScreen) {

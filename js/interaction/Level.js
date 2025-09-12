@@ -321,7 +321,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 			condition = !tappable;
 			condition ||= (!note.onlyOnePerTouch() || newDistance < distance) && newNote.onlyOnePerTouch();
 			condition ||= !note.onlyOnePerTouch() && !newNote.onlyOnePerTouch() && newDistance < distance;
-			if (note.type === 'flick' && newNote.type === 'flick' && newDistance === distance && Sunniesnow.game.settings.overlappingFlickFix) {
+			if (note.isFlickLike() && newNote.isFlickLike() && newDistance === distance && Sunniesnow.game.settings.overlappingFlickFix) {
 				condition ||= Sunniesnow.Utils.angleDistance(newNote.event.angle, newAngle) < Sunniesnow.Utils.angleDistance(note.event.angle, angle);
 			}
 			if (condition) {

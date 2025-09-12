@@ -7,6 +7,10 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 
 	static AUTO_FINISHES_HOLDING = false
 
+	isFlickLike() {
+		return true;
+	}
+
 	determineJudgement() {
 		if (!this.touch || this.touch.wholeScreen) {
 			super.determineJudgement();

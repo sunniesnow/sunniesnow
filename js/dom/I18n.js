@@ -538,6 +538,7 @@ Sunniesnow.I18n = {
 			doubleLineHold: ' Hold',
 			doubleLineDrag: ' Drag',
 			doubleLineFlick: ' Flick',
+			doubleLineDragFlick: ' Drag-flick',
 			hideFxInFront: ' Hide FX in front of notes',
 			hideFxPerfect: ' Hide FX of perfect judgement',
 			hideFxHoldStart: ' Hide FX of start of hold notes',
@@ -580,6 +581,7 @@ Sunniesnow.I18n = {
 			holdVibrationTime: ['Hold vibration time: ', 'ms'],
 			holdVibrationPeriod: ['Hold vibration period: ', 'ms'],
 			holdVibrationDutyCycle: 'Hold vibration duty cycle: ',
+			dragFlickVibrationTime: ['Drag-flick vibration time: ', 'ms'],
 
 			scroll: ' Enable scroll mode',
 			autoplay: ' Autoplay',
@@ -720,6 +722,7 @@ Sunniesnow.I18n = {
 			doubleLineHold: ' hold',
 			doubleLineDrag: ' drag',
 			doubleLineFlick: ' flick',
+			doubleLineDragFlick: ' drag-flick',
 			hideFxInFront: ' 隐藏音符前的 FX',
 			hideFxPerfect: ' 隐藏 perfect 判定的 FX',
 			hideFxHoldStart: ' 隐藏 hold 音符开始的 FX',
@@ -762,6 +765,7 @@ Sunniesnow.I18n = {
 			holdVibrationTime: ['hold 音符振动时间: ', 'ms'],
 			holdVibrationPeriod: ['hold 音符振动周期: ', 'ms'],
 			holdVibrationDutyCycle: 'hold 音符振动占空比: ',
+			dragFlickVibrationTime: ['drag-flick 音符振动时间: ', 'ms'],
 
 			scroll: ' 启用下落式模式',
 			autoplay: ' 自动游玩',
@@ -909,6 +913,7 @@ Sunniesnow.I18n = {
 			doubleLineHold: ' hold',
 			doubleLineDrag: ' drag',
 			doubleLineFlick: ' flick',
+			doubleLineDragFlick: undefined,
 			hideFxInFront: ' ノートの前に FX を隠す',
 			hideFxPerfect: ' perfect 判定の FX を隠す',
 			hideFxHoldStart: ' hold ノート始める時の FX を隠す',
@@ -951,6 +956,7 @@ Sunniesnow.I18n = {
 			holdVibrationTime: undefined,
 			holdVibrationPeriod: undefined,
 			holdVibrationDutyCycle: undefined,
+			dragFlickVibrationTime: undefined,
 
 			scroll: ' スクロールモードを有効にする',
 			autoplay: ' オートプレイ',

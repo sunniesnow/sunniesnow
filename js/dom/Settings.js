@@ -172,6 +172,7 @@ Sunniesnow.Settings = {
 			doubleLineHold: this.readCheckbox('double-line-hold'),
 			doubleLineDrag: this.readCheckbox('double-line-drag'),
 			doubleLineFlick: this.readCheckbox('double-line-flick'),
+			doubleLineDragFlick: this.readCheckbox('double-line-drag-flick'),
 			hideFxInFront: this.readCheckbox('hide-fx-in-front'),
 			hideFxPerfect: this.readCheckbox('hide-fx-perfect'),
 			hideFxHoldStart: this.readCheckbox('hide-fx-hold-start'),
@@ -211,6 +212,7 @@ Sunniesnow.Settings = {
 			holdVibrationTime: this.readValue('hold-vibration-time'),
 			holdVibrationPeriod: this.readValue('hold-vibration-period'),
 			holdVibrationDutyCycle: this.readValue('hold-vibration-duty-cycle'),
+			dragFlickVibrationTime: this.readValue('drag-flick-vibration-time'),
 
 			// game settings
 			scroll: this.readCheckbox('scroll'),
@@ -362,6 +364,7 @@ Sunniesnow.Settings = {
 		this.writeCheckbox('double-line-hold', d('doubleLineHold'));
 		this.writeCheckbox('double-line-drag', d('doubleLineDrag'));
 		this.writeCheckbox('double-line-flick', d('doubleLineFlick'));
+		this.writeCheckbox('double-line-drag-flick', d('doubleLineDragFlick'));
 		this.writeCheckbox('hide-fx-in-front', d('hideFxInFront'));
 		this.writeCheckbox('hide-fx-perfect', d('hideFxPerfect'));
 		this.writeCheckbox('hide-fx-hold-start', d('hideFxHoldStart'));
@@ -398,6 +401,7 @@ Sunniesnow.Settings = {
 		this.writeValue('hold-vibration-time', d('holdVibrationTime'));
 		this.writeValue('hold-vibration-period', d('holdVibrationPeriod'));
 		this.writeValue('hold-vibration-duty-cycle', d('holdVibrationDutyCycle'));
+		this.writeValue('drag-flick-vibration-time', d('dragFlickVibrationTime'));
 
 		this.writeCheckbox('scroll', d('scroll'));
 		this.writeCheckbox('autoplay', d('autoplay'));

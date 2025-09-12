@@ -21,6 +21,10 @@ Sunniesnow.LevelDragFlick = class LevelDragFlick extends Sunniesnow.LevelNote {
 		return Sunniesnow.game.settings.lyrica5 ? -1 : super.judgementPriority();
 	}
 
+	isFlickLike() {
+		return true;
+	}
+
 	determineJudgement() {
 		if (this.designatedTouch) {
 			this.determineJudgementWithDesignatedTouch();

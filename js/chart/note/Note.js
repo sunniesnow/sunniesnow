@@ -69,6 +69,7 @@ Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 			condition ||= event instanceof Sunniesnow.Drag && Sunniesnow.game.settings.doubleLineDrag;
 			condition ||= event instanceof Sunniesnow.Hold && Sunniesnow.game.settings.doubleLineHold;
 			condition ||= event instanceof Sunniesnow.Flick && Sunniesnow.game.settings.doubleLineFlick;
+			condition ||= event instanceof Sunniesnow.DragFlick && Sunniesnow.game.settings.doubleLineDragFlick;
 			if (!condition) {
 				continue;
 			}

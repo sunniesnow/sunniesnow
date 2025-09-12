@@ -17,6 +17,6 @@ Sunniesnow.DragFlick = class DragFlick extends Sunniesnow.Note {
 	}
 
 	vibrationTime() {
-		return Sunniesnow.game.settings.dragVibrationTime;
+		return Sunniesnow.game.settings.dragFlickVibrationTime;
 	}
 };

@@ -569,6 +569,14 @@ Enable simultaneity hints for drag notes.
 
 Enable simultaneity hints for flick notes.
 
+##### Drag-flick
+{:#double-line-drag-flick}
+
+- **Setting id**: `double-line-drag-flick`.
+- **Possible values**: `true`, `false`.
+
+Enable simultaneity hints for drag-flick notes.
+
 #### FX options
 
 ##### Hide FX in front of notes
@@ -921,6 +929,16 @@ The duty cycle is the ratio of the duration of the vibration to the period,
 so the duration of each vibration during holding a hold note
 is the value of [`hold-vibration-period`](#hold-vibration-period) times the duty cycle.
 This setting is **unrelated** to [`hold-vibration-time`](#hold-vibration-time).
+
+##### Drag-flick vibration time
+
+- **Setting id**: `drag-flick-vibration-time`.
+- **Possible values**: Any number greater than or equal to 0.
+
+This setting is used to set the duration of the vibration of hitting a drag-flick note.
+A value of zero is equivalent to disabling the vibration for drag-flick notes.
+Different from other time-related settings, the internal value of this setting is in milliseconds,
+while other time-related settings are in seconds.
 
 ### Game settings
 
