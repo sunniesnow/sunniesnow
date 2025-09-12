@@ -139,7 +139,8 @@ Sunniesnow.Game = class Game {
 		}
 		try {
 			this.app.stop();
-			this.app.destroy();
+			// https://github.com/pixijs/pixijs/discussions/11678
+			this.app.destroy({releaseGlobalResources: true});
 		} catch (err) {
 			Sunniesnow.Logs.error(`Failed to stop game: ${err.message ?? err}`, err);
 		}
