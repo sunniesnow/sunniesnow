@@ -47,7 +47,7 @@ Sunniesnow.SettingZipEntry = class SettingZipEntry extends Sunniesnow.SettingSel
 		option.innerText = value;
 		option.defaultSelected = this.element.childElementCount === 0;
 		this.element.appendChild(option);
-		if (this.previousValue === value) {
+		if (!this.element.value || this.previousValue === value) {
 			this.element.value = value;
 		}
 	}
@@ -78,12 +78,9 @@ Sunniesnow.SettingZipEntry = class SettingZipEntry extends Sunniesnow.SettingSel
 		if (this.element.disabled) {
 			return null;
 		}
-		if (!this.zipSetting.zip) {
-			await this.zipSetting.getAsync();
-		}
-		const blob = await (await this.zipSetting.getAsync()).files[super.get()]?.async('blob');
-		if (blob) {
-			return new Blob([blob], {type: mime.getType(super.get()) ?? 'application/octet-stream'});
+		const buffer = await (await this.zipSetting.getAsync()).files[super.get()]?.async('arraybuffer');
+		if (buffer) {
+			return new Blob([buffer], {type: mime.getType(super.get()) ?? 'application/octet-stream'});
 		}
 	}
 };

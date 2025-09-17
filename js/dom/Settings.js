@@ -1,13 +1,13 @@
 Sunniesnow.Settings = {
 
 	async load() {
-		if (Sunniesnow.Utils.isBrowser()) {
-			this.saveSettings();
-			Sunniesnow.game.savedSettings = this.saved;
-		}
 		await this.readSettings((received, total, url) => {
 			// TODO
 		});
+		if (Sunniesnow.Utils.isBrowser()) {
+			await this.saveSettings();
+			Sunniesnow.game.savedSettings = this.saved;
+		}
 		this.tryAvoidingNoBackground();
 		Sunniesnow.game.progressAdjustable = Sunniesnow.game.settings.progressAdjustable && Sunniesnow.game.settings.autoplay;
 	},
@@ -32,6 +32,12 @@ Sunniesnow.Settings = {
 				this.writeSavedChartOffset(this.s.levelFileOnline.save());
 			} else {
 				this.s.chartOffset.set(0);
+			}
+			this.clearLevelReadme();
+			for (const [filename, file] of Object.entries(this.s.levelFile.zip.files)) {
+				if (Sunniesnow.Utils.needsDisplayTextFile(filename)) {
+					file.async('text').then(text => this.fillLevelReadme(filename, text));
+				}
 			}
 		});
 	},
@@ -59,6 +65,10 @@ Sunniesnow.Settings = {
 			element.appendChild(pre);
 		}
 		document.getElementById('level-readme').appendChild(details);
+	},
+
+	clearLevelReadme() {
+		document.getElementById('level-readme').innerHTML = '';
 	},
 
 	async readSettings(onProgress) {

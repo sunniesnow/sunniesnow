@@ -47,7 +47,6 @@ Sunniesnow.SettingOnline = class SettingOnline extends Sunniesnow.SettingText {
 				this.rejects.push(reject);
 			});
 		}
-		this.dirty = false;
 		this.downloading = true;
 		if (this.progressElement) {
 			this.progressElement.textContent = '0% (0 / ?)';
@@ -91,6 +90,7 @@ Sunniesnow.SettingOnline = class SettingOnline extends Sunniesnow.SettingText {
 			this.resolves.shift()(this.cache);
 		}
 		this.rejects.length = 0;
+		this.dirty = false;
 		return this.cache;
 	}
 
