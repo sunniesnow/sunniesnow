@@ -4,10 +4,6 @@ Sunniesnow.MiscDom = {
 		document.getElementById('refresh').addEventListener('click', event => {
 			location.reload(true);
 		});
-		document.getElementById('lang').addEventListener('click', event => {
-			Sunniesnow.I18n.setLang();
-			Sunniesnow.I18n.apply();
-		});
 		document.getElementById('delete-settings').addEventListener('click', event => {
 			Sunniesnow.Settings.deleteSavedSettings();
 		});
@@ -106,6 +102,7 @@ Sunniesnow.MiscDom = {
 		script.remove();
 	},
 
+	// TODO: fix
 	async offsetWizard() {
 		Sunniesnow.Settings.writeRadio('level-file', 'online');
 		Sunniesnow.Settings.writeValue('level-file-online', 'offset-wizard');
@@ -139,17 +136,6 @@ Sunniesnow.MiscDom = {
 			}
 		});
 		observer.observe(table);
-	},
-
-	associateLabels(parent = document) {
-		const inputs = parent.querySelectorAll('input[type="radio"], input[type="checkbox"]');
-		for (const input of inputs) {
-			const label = input.nextElementSibling;
-			if (!label || label.tagName !== 'LABEL' || label.htmlFor === input.id) {
-				continue;
-			}
-			label.addEventListener('click', event => input.click());
-		}
 	},
 
 	removeSiteLoadingNotice() {

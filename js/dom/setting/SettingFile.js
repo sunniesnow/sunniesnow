@@ -2,9 +2,14 @@ Sunniesnow.SettingFile = class SettingFile extends Sunniesnow.Setting {
 	constructor(constructor, element) {
 		super(constructor, element);
 		this.manualValue = null;
+		this.element.addEventListener('change', event => {
+			this.dirty = true;
+			this.dispatchEvent(new Event('change'));
+		});
 	}
 
 	get() {
+		this.dirty = false;
 		const file = this.element.files[0];
 		if (file) {
 			return file;
@@ -19,6 +24,7 @@ Sunniesnow.SettingFile = class SettingFile extends Sunniesnow.Setting {
 	}
 
 	async getAsync(onProgress) {
+		this.dirty = false;
 		if (this.element.disabled) {
 			return null;
 		}
@@ -43,6 +49,14 @@ Sunniesnow.SettingFile = class SettingFile extends Sunniesnow.Setting {
 		const file = this.element.files[0];
 		if (file) {
 			this.manualValue = Sunniesnow.Utils.blobToBase64Sync(file);
+		}
+		return this.manualValue;
+	}
+
+	async saveAsync() {
+		const file = this.element.files[0];
+		if (file) {
+			this.manualValue = await Sunniesnow.Utils.blobToBase64(file);
 		}
 		return this.manualValue;
 	}

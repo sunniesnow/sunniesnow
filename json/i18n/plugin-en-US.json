@@ -1,0 +1,13 @@
+{
+	"directReplacements": {
+		"plugin-button": "Load",
+		"plugin-list-insert": "Insert",
+		"plugin-list-remove": "Remove",
+		"plugin-list-move-up": "Move up",
+		"plugin-list-move-down": "Move down"
+	},
+	"labels": {
+		"plugin-online": "Online: ",
+		"plugin-upload": "Upload: "
+	}
+}

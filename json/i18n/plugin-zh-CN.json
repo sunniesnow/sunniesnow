@@ -1,0 +1,13 @@
+{
+	"directReplacements": {
+		"plugin-button": "加载",
+		"plugin-list-insert": "插入",
+		"plugin-list-remove": "删除",
+		"plugin-list-move-up": "向上移动",
+		"plugin-list-move-down": "向下移动"
+	},
+	"labels": {
+		"plugin-online": "在线: ",
+		"plugin-upload": "上传: "
+	}
+}

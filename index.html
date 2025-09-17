@@ -8,7 +8,7 @@ description: Sunniesnow is a web rhythm game
 <h1>Sunniesnow</h1>
 <div id="loading">Loading site resources...</div>
 
-<div id="main-wrapper" style="display: none;">
+<div id="main-wrapper" style="display: none;" data-i18n="main">
 
 <div id="main-settings" data-type="collection">
 
@@ -861,7 +861,7 @@ description: Sunniesnow is a web rhythm game
 		<legend id="plugins-category"></legend>
 
 		<div id="plugin-list" data-type="list" data-list-template="plugin-list-item-" data-list-buttons="plugin-list-buttons">
-			<div id="plugin-list-item-" data-type="collection" data-list-item-buttons="plugin-list-item-buttons-">
+			<div id="plugin-list-item-" data-type="collection" data-list-item-buttons="plugin-list-item-buttons-" data-i18n="plugin" data-i18n-suffix="-">
 				<div>
 					<input type="radio" id="plugin-online-radio-" name="plugin-" value="online" checked data-type="zip" data-input="plugin-online-" data-load-button="plugin-button-">
 					<input type="text" id="plugin-online-" placeholder="empty" data-prerequisite="plugin-online-radio-" data-downloading="plugin-downloading-" data-type="online" data-base-path="plugin" data-suffix=".ssp">
@@ -963,7 +963,6 @@ description: Sunniesnow is a web rhythm game
 		</div>
 		<div>
 			<select id="lang-select"></select>
-			<button id="lang"></button>
 		</div>
 	</fieldset>
 

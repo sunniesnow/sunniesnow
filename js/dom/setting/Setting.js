@@ -40,6 +40,10 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 		return this.get();
 	}
 
+	async saveAsync() {
+		return this.save();
+	}
+
 	// Load the value from localStorage, nullable.
 	load(value) {
 		if (value == null || typeof value === 'number' && isNaN(value)) {

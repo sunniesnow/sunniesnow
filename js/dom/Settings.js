@@ -1,7 +1,6 @@
 Sunniesnow.Settings = {
 
 	async load() {
-		this.tryAvoidingNoBackground();
 		if (Sunniesnow.Utils.isBrowser()) {
 			this.saveSettings();
 			Sunniesnow.game.savedSettings = this.saved;
@@ -9,6 +8,7 @@ Sunniesnow.Settings = {
 		await this.readSettings((received, total, url) => {
 			// TODO
 		});
+		this.tryAvoidingNoBackground();
 		Sunniesnow.game.progressAdjustable = Sunniesnow.game.settings.progressAdjustable && Sunniesnow.game.settings.autoplay;
 	},
 
@@ -24,6 +24,7 @@ Sunniesnow.Settings = {
 		for (const [settingId, setting] of this.mainSettings.mapSettingIdToSetting) {
 			this.s[Sunniesnow.Utils.slugToCamel(settingId)] = setting;
 		}
+		this.s.langSelect = new Sunniesnow.SettingSelect(null, document.getElementById('lang-select'));
 		this.s.importSettings = new Sunniesnow.SettingFile(null, document.getElementById('import-settings'));
 		this.s.importChartOffsets = new Sunniesnow.SettingFile(null, document.getElementById('import-chart-offsets'));
 		this.s.levelFile.addEventListener('ziploaded', event => {
@@ -98,7 +99,7 @@ Sunniesnow.Settings = {
 	},
 
 	async saveSettings() {
-		this.saved = this.mainSettings.save();
+		this.saved = await this.mainSettings.saveAsync();
 		delete this.saved.chartOffset;
 		try {
 			localStorage.setItem('settings', JSON.stringify(this.saved));

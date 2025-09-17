@@ -1,0 +1,13 @@
+{
+	"directReplacements": {
+		"plugin-button": null,
+		"plugin-list-insert": null,
+		"plugin-list-remove": "削除",
+		"plugin-list-move-up": null,
+		"plugin-list-move-down": null
+	},
+	"labels": {
+		"plugin-online": "オンライン: ",
+		"plugin-upload": "アップロード: "
+	}
+}

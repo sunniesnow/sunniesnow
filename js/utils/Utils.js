@@ -581,7 +581,7 @@ Sunniesnow.Utils = {
 
 	// Why the fuck does the Crypto API require secure context???
 	sha256(arrayBuffer) {
-		if (arrayBuffer instanceof String) {
+		if (typeof arrayBuffer === 'string') {
 			arrayBuffer = new TextEncoder().encode(arrayBuffer);
 		}
 

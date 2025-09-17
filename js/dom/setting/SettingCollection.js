@@ -131,6 +131,15 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 		return result;
 	}
 
+	async saveAsync() {
+		const result = {};
+		await Promise.all(Array.from(this.mapSettingIdToSetting).map(async ([id, setting]) => {
+			// the conversion between slug and camel is to keep backward compatibility
+			result[Sunniesnow.Utils.slugToCamel(id)] = await setting.saveAsync();
+		}));
+		return result;
+	}
+
 	load(value) {
 		if (!value) {
 			return;

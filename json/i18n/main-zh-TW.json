@@ -1,0 +1,12 @@
+{
+	"directReplacements": {
+		"level-file-button": "載入"
+	},
+	
+	"labels": {
+		"level-file-online": "線上: ",
+		"level-file-upload": "上傳: ",
+		"music-select": "音樂: ",
+		"chart-select": "譜面: "
+	}
+}

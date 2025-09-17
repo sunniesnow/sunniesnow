@@ -1,0 +1,10 @@
+{
+	"directReplacements": {
+		"plugin-list-remove": "刪除"
+	},
+
+	"labels": {
+		"plugin-online": "線上: ",
+		"plugin-upload": "上傳: "
+	}
+}

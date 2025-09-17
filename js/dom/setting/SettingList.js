@@ -18,18 +18,18 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		this.lastElement = this.template;
 	}
 
-	newButton(name, onclick) {
+	newButton(idInfix, onclick, index) {
 		const button = document.createElement('button');
+		button.id = `${this.id}-${idInfix}${index != null ? `-${index}` : ''}`;
 		button.type = 'button';
-		button.textContent = name; // TODO: i18n
 		button.addEventListener('click', onclick);
 		return button;
 	}
 
 	populateButtons() {
 		const buttonsContainer = this.collection.getElementById(this.element.dataset.listButtons);
-		this.addButton = this.newButton('Add', () => this.addItem());
-		this.clearButton = this.newButton('Clear', () => this.clearItems());
+		this.addButton = this.newButton('add', () => this.addItem());
+		this.clearButton = this.newButton('clear', () => this.clearItems());
 		buttonsContainer.appendChild(this.addButton);
 		buttonsContainer.appendChild(this.clearButton);
 	}
@@ -81,16 +81,19 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		}
 		const item = new Sunniesnow.SettingCollection(this.collection, itemElement, true);
 		const buttonsContainer = itemElement.querySelector('#' + itemElement.dataset.listItemButtons);
-		item.moveUpButton = this.newButton('Move up', () => this.moveItemUp(item));
-		item.moveDownButton = this.newButton('Move down', () => this.moveItemDown(item));
-		item.insertButton = this.newButton('Insert', () => this.insertItem(item));
-		item.removeButton = this.newButton('Remove', () => this.removeItem(item));
+		item.moveUpButton = this.newButton('move-up', () => this.moveItemUp(item), index);
+		item.moveDownButton = this.newButton('move-down', () => this.moveItemDown(item), index);
+		item.insertButton = this.newButton('insert', () => this.insertItem(item), index);
+		item.removeButton = this.newButton('remove', () => this.removeItem(item), index);
 		buttonsContainer.appendChild(item.moveUpButton);
 		buttonsContainer.appendChild(item.moveDownButton);
 		buttonsContainer.appendChild(item.insertButton);
 		buttonsContainer.appendChild(item.removeButton);
 		this.items[index] = item;
 		this.refresh();
+		if (itemElement.dataset.i18n) {
+			Sunniesnow.I18n.apply(itemElement);
+		}
 		return item;
 	}
 
@@ -178,6 +181,10 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 
 	save() {
 		return this.items.map(item => item.save());
+	}
+
+	async saveAsync() {
+		return Promise.all(this.items.map(item => item.saveAsync()));
 	}
 
 	load(value) {
