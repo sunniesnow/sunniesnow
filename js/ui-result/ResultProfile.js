@@ -5,32 +5,11 @@ Sunniesnow.ResultProfile = class ResultProfile extends PIXI.Container {
 		this.avatarTexture = await this.createAvatarTexture();
 	}
 
-	static async avatarUrl() {
-		let blob;
-		switch (Sunniesnow.game.settings.avatar) {
-			case 'none':
-				return null;
-			case 'online':
-				return Sunniesnow.Utils.url('avatar', Sunniesnow.game.settings.avatarOnline);
-			case 'upload':
-				blob = Sunniesnow.game.settings.avatarUpload;
-				if (!blob) {
-					Sunniesnow.Logs.warn('No avatar provided');
-					return;
-				}
-				break;
-			case 'gravatar':
-				const hash = await Sunniesnow.Utils.sha256(Sunniesnow.game.settings.avatarGravatar);
-				return hash && `https://gravatar.com/avatar/${hash}`;
-		}
-		return Sunniesnow.ObjectUrl.create(blob);
-	}
-
 	static async createAvatarTexture() {
-		const url = await this.avatarUrl();
-		if (!url) {
+		if (!Sunniesnow.game.settings.avatar) {
 			return PIXI.Texture.EMPTY;
 		}
+		const url = Sunniesnow.ObjectUrl.create(Sunniesnow.game.settings.avatar);
 		try {
 			return await Sunniesnow.Assets.loadTexture(url);
 		} catch (err) {

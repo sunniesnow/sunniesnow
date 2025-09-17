@@ -29,7 +29,7 @@ Sunniesnow.Imgur = {
 	async uploadImage(title, description, blob) {
 		let hash;
 		if (this.db) {
-			hash = await Sunniesnow.Utils.sha256(blob);
+			hash = Sunniesnow.Utils.sha256(await blob.arrayBuffer());
 			if (!hash) {
 				return null;
 			}
@@ -93,16 +93,16 @@ Sunniesnow.Imgur = {
 	},
 
 	async backgroundFromLevel() {
-		if (Sunniesnow.game.settings.background != 'from-level') {
+		if (Sunniesnow.game.savedSettings.background != 'from-level') {
 			return null;
 		}
 		if (!Sunniesnow.game.settings.backgroundFromLevel) {
 			return null;
 		}
 		let levelName;
-		switch (Sunniesnow.game.settings.levelFile) {
+		switch (Sunniesnow.game.savedSettings.levelFile) {
 			case 'online':
-				levelName = Sunniesnow.game.settings.levelFileOnline;
+				levelName = Sunniesnow.game.savedSettings.levelFileOnline;
 				break;
 			case 'upload':
 				levelName = Sunniesnow.game.settings.levelFileUpload.name;
@@ -112,7 +112,7 @@ Sunniesnow.Imgur = {
 			return await this.uploadImage(
 				Sunniesnow.game.chart.title,
 				`${levelName}/${Sunniesnow.game.settings.backgroundFromLevel}`,
-				Sunniesnow.game.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel]
+				Sunniesnow.game.settings.backgroundFromLevel
 			);
 		} catch (err) {
 			Sunniesnow.Logs.warn(`Failed to generate background image URL: ${err.message ?? err}`, err);

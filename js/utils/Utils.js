@@ -9,12 +9,19 @@ Sunniesnow.Utils = {
 	},
 
 	url(basePath, text, suffix = '') {
-		if (Sunniesnow.Utils.isValidUrl(text)) {
+		if (!basePath || Sunniesnow.Utils.isValidUrl(text)) {
 			return text;
 		} else {
-			let result = `${Sunniesnow.Config.SERVER_BASE_URL}/${basePath}/${text.endsWith(suffix) ? text : text + suffix}`;
-			if (Sunniesnow.authentication) {
-				result += `${result.includes('?') ? '&' : '?'}authentication=${Sunniesnow.authentication}`;
+			let authentication = '';
+			if (!Sunniesnow.Utils.isValidUrl(basePath)) {
+				basePath =  `${Sunniesnow.Config.SERVER_BASE_URL}/${basePath}`;
+				if (Sunniesnow.authentication) {
+					authentication = `authentication=${Sunniesnow.authentication}`;
+				}
+			}
+			let result = `${basePath}/${text.endsWith(suffix) ? text : text + suffix}`;
+			if (authentication) {
+				result += `${result.includes('?') ? '&' : '?'}${authentication}`;
 			}
 			return result;
 		}
@@ -346,7 +353,7 @@ Sunniesnow.Utils = {
 		img.src = '';
 		element.appendChild(img);
 		return new Promise((resolve, reject) => img.addEventListener('error', event => {
-			element.removeChild(img);
+			img.remove();
 			resolve();
 		}));
 	},
@@ -572,19 +579,114 @@ Sunniesnow.Utils = {
 		].some(regexp => regexp.test(hostname));
 	},
 
-	async sha256(data) {
-		if (!crypto?.subtle) {
-			Sunniesnow.Logs.warn('Crypto.subtle API not available');
-			return null;
+	// Why the fuck does the Crypto API require secure context???
+	sha256(arrayBuffer) {
+		if (arrayBuffer instanceof String) {
+			arrayBuffer = new TextEncoder().encode(arrayBuffer);
 		}
-		if (typeof data === 'string') {
-			data = new TextEncoder().encode(data);
-		} else if (data instanceof Blob) {
-			data = await data.arrayBuffer();
+
+		// constants
+		const K = new Uint32Array([
+			0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+			0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+			0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+			0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+			0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+			0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+			0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+			0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
+		]);
+
+		// helpers
+		const ROTR = (x, n) => (x >>> n) | (x << (32 - n));
+		const Σ0 = x => (ROTR(x, 2) ^ ROTR(x, 13) ^ ROTR(x, 22)) >>> 0;
+		const Σ1 = x => (ROTR(x, 6) ^ ROTR(x, 11) ^ ROTR(x, 25)) >>> 0;
+		const σ0 = x => (ROTR(x, 7) ^ ROTR(x, 18) ^ (x >>> 3)) >>> 0;
+		const σ1 = x => (ROTR(x, 17) ^ ROTR(x, 19) ^ (x >>> 10)) >>> 0;
+		const Ch = (x, y, z) => ((x & y) ^ (~x & z)) >>> 0;
+		const Maj = (x, y, z) => ((x & y) ^ (x & z) ^ (y & z)) >>> 0;
+		const add = (...args) => {
+			let s = 0 >>> 0;
+			for (let a of args) s = (s + (a >>> 0)) >>> 0;
+			return s;
+		};
+
+		// initial hash values
+		let H = new Uint32Array([
+			0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,
+			0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19
+		]);
+
+		const bytes = new Uint8Array(arrayBuffer);
+		const origBitLenHi = Math.floor((bytes.length * 8) / 0x100000000);
+		const origBitLenLo = (bytes.length * 8) >>> 0;
+
+		// padding
+		const withOne = new Uint8Array(bytes.length + 1);
+		withOne.set(bytes);
+		withOne[bytes.length] = 0x80;
+
+		// total length after padding must be congruent to 56 (mod 64) before appending 8-byte length
+		let paddedLen = withOne.length;
+		while ((paddedLen % 64) !== 56) paddedLen++;
+		const padded = new Uint8Array(paddedLen + 8);
+		padded.set(withOne);
+		// append 64-bit big-endian length
+		// high 32 bits
+		padded[paddedLen + 0] = (origBitLenHi >>> 24) & 0xff;
+		padded[paddedLen + 1] = (origBitLenHi >>> 16) & 0xff;
+		padded[paddedLen + 2] = (origBitLenHi >>> 8) & 0xff;
+		padded[paddedLen + 3] = (origBitLenHi >>> 0) & 0xff;
+		// low 32 bits
+		padded[paddedLen + 4] = (origBitLenLo >>> 24) & 0xff;
+		padded[paddedLen + 5] = (origBitLenLo >>> 16) & 0xff;
+		padded[paddedLen + 6] = (origBitLenLo >>> 8) & 0xff;
+		padded[paddedLen + 7] = (origBitLenLo >>> 0) & 0xff;
+
+		// process each 512-bit chunk
+		const W = new Uint32Array(64);
+		for (let i = 0; i < padded.length; i += 64) {
+			// prepare message schedule
+			for (let t = 0; t < 16; t++) {
+				const j = i + t * 4;
+				W[t] = ((padded[j] << 24) | (padded[j + 1] << 16) | (padded[j + 2] << 8) | (padded[j + 3])) >>> 0;
+			}
+			for (let t = 16; t < 64; t++) {
+				W[t] = add(σ1(W[t - 2]), W[t - 7], σ0(W[t - 15]), W[t - 16]);
+			}
+
+			let a = H[0], b = H[1], c = H[2], d = H[3];
+			let e = H[4], f = H[5], g = H[6], h = H[7];
+
+			for (let t = 0; t < 64; t++) {
+				const T1 = add(h, Σ1(e), Ch(e, f, g), K[t], W[t]);
+				const T2 = add(Σ0(a), Maj(a, b, c));
+				h = g;
+				g = f;
+				f = e;
+				e = add(d, T1);
+				d = c;
+				c = b;
+				b = a;
+				a = add(T1, T2);
+			}
+
+			H[0] = add(H[0], a);
+			H[1] = add(H[1], b);
+			H[2] = add(H[2], c);
+			H[3] = add(H[3], d);
+			H[4] = add(H[4], e);
+			H[5] = add(H[5], f);
+			H[6] = add(H[6], g);
+			H[7] = add(H[7], h);
 		}
-		const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-		const array = Array.from(new Uint8Array(hashBuffer))
-		return array.map(b => b.toString(16).padStart(2, '0')).join('');
+
+		// produce hex string
+		let hex = "";
+		for (let i = 0; i < H.length; i++) {
+			hex += ("00000000" + H[i].toString(16)).slice(-8);
+		}
+		return hex;
 	},
 
 	arrayDifference(array) {

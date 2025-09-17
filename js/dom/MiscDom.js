@@ -1,27 +1,6 @@
 Sunniesnow.MiscDom = {
 
 	addEventListeners() {
-		const levelFileOnline = document.getElementById('level-file-online')
-		levelFileOnline.addEventListener('keydown', event => {
-			if (event.key === 'Enter') {
-				Sunniesnow.Loader.triggerLoadChart();
-			}
-		});
-		levelFileOnline.addEventListener('input', event => {
-			Sunniesnow.Loader.interruptLevelLoad();
-		});
-		document.getElementById('level-file-button').addEventListener('click', event => {
-			Sunniesnow.Loader.triggerLoadChart();
-		});
-		document.getElementById('level-file-upload').addEventListener('change', event => {
-			Sunniesnow.Settings.markManual('level-file-upload');
-			Sunniesnow.Loader.triggerLoadChart();
-		});
-		['background-upload', 'fx-upload', 'skin-upload', 'se-upload'].forEach(elementId => {
-			document.getElementById(elementId).addEventListener('change', event => {
-				Sunniesnow.Settings.markManual(elementId);
-			});
-		});
 		document.getElementById('refresh').addEventListener('click', event => {
 			location.reload(true);
 		});
@@ -160,14 +139,6 @@ Sunniesnow.MiscDom = {
 			}
 		});
 		observer.observe(table);
-
-		const radio = document.getElementById('judgement-windows-custom-radio');
-		const radios = document.getElementsByName(radio.name);
-		const listener = () => (wrapper.style.display = radio.checked ? '' : 'none');
-		for (const otherRadio of radios) {
-			otherRadio.addEventListener("change", listener);
-		}
-		listener();
 	},
 
 	associateLabels(parent = document) {

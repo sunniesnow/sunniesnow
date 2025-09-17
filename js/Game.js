@@ -1,10 +1,5 @@
 Sunniesnow.Game = class Game {
 	static run() {
-		if (Sunniesnow.Loader.loadingChart) {
-			Sunniesnow.Logs.warn('Waiting for level file to load')
-			Sunniesnow.Loader.addChartLoadListener(() => this.run());
-			return;
-		}
 		if (Sunniesnow.game) {
 			if (!Sunniesnow.Loader.loadingComplete) {
 				Sunniesnow.Logs.warn('Still loading');

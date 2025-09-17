@@ -114,7 +114,7 @@ Sunniesnow.I18n = {
 			fontsCategory: 'Fonts',
 			contextMenuCategory: 'Context menu',
 			pluginsCategory: 'Plugins',
-			pluginAddButton: 'Add',
+			//pluginAddButton: 'Add',
 			rendererCategory: 'Renderer',
 			webglCategory: 'WebGL options',
 			glVersionIntroducer: 'WebGL version:',
@@ -271,7 +271,7 @@ Sunniesnow.I18n = {
 			fontsCategory: '字体',
 			contextMenuCategory: '右键菜单',
 			pluginsCategory: '插件',
-			pluginAddButton: '添加',
+			//pluginAddButton: '添加',
 			rendererCategory: '渲染器',
 			webglCategory: 'WebGL 选项',
 			glVersionIntroducer: 'WebGL 版本:',
@@ -432,7 +432,7 @@ Sunniesnow.I18n = {
 			fontsCategory: 'フォント',
 			contextMenuCategory: 'コンテキストメニュー',
 			pluginsCategory: 'プラグイン',
-			pluginAddButton: '追加',
+			//pluginAddButton: '追加',
 			rendererCategory: 'レンダラー',
 			webglCategory: 'WebGL レンダラー',
 			glVersionIntroducer: undefined,
@@ -1093,7 +1093,6 @@ Sunniesnow.I18n = {
 	apply() {
 		this.applyLabels();
 		this.applyDirectReplacements();
-		this.applyPlugins();
 	},
 
 	applyLabel(id, labelContents, outArray) {
@@ -1134,31 +1133,6 @@ Sunniesnow.I18n = {
 			const id = Sunniesnow.Utils.camelToSlug(key);
 			const node = document.getElementById(id);
 			node.innerHTML = directReplacements[key];
-		}
-	},
-
-	applyPlugin(id) {
-		const labels = this.PLUGIN_LABELS[this.LANGUAGE];
-		if (this.pluginLabelNodes[id]) {
-			this.pluginLabelNodes[id].forEach(node => node.remove());
-		}
-		this.pluginLabelNodes[id] = [];
-		for (const key in labels) {
-			this.applyLabel(`plugin-${id}-${Sunniesnow.Utils.camelToSlug(key)}`, labels[key], this.pluginLabelNodes[id]);
-		}
-		const directReplacements = this.PLUGIN_DIRECT_REPLACEMENTS[this.LANGUAGE];
-		for (const key in directReplacements) {
-			const node = document.getElementById(`plugin-${id}-${Sunniesnow.Utils.camelToSlug(key)}`);
-			node.innerHTML = directReplacements[key];
-		}
-	},
-
-	applyPlugins() {
-		for (let i = 0; i < Sunniesnow.Plugin.additionalTotal; i++) {
-			if (!document.getElementById(`plugin-${i}`)) {
-				continue;
-			}
-			this.applyPlugin(i);
 		}
 	},
 

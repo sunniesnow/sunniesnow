@@ -4,20 +4,8 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 	static DEFAULT_X = 0.5;
 	static DEFAULT_Y = 0.5;
 
-	// Make a special cache here because background cache hit seems especially beneficial
-	// but less so for other types of assets.
-	static cache = {};
-
 	static async load() {
-		this.url = this.backgroundUrl();
-		if (this.url && this.url in this.cache) {
-			this.originalTexture = this.cache[this.url];
-		} else {
-			this.originalTexture = await this.getBackgroundTexture();
-			if (this.url) {
-				this.cache[this.url] = this.originalTexture;
-			}
-		}
+		this.originalTexture = await this.getBackgroundTexture();
 		this.texture = this.applyEffects(this.originalTexture);
 	}
 
@@ -45,38 +33,14 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		wrapper.destroy({children: true});
 		return result;
 	}
-
-	static backgroundUrl() {
-		let blob;
-		switch (Sunniesnow.game.settings.background) {
-			case 'none':
-				return null;
-			case 'online':
-				return Sunniesnow.Utils.url('background', Sunniesnow.game.settings.backgroundOnline);
-			case 'from-level':
-				blob = Sunniesnow.game.loaded.chart.backgrounds[Sunniesnow.game.settings.backgroundFromLevel];
-				if (!blob) {
-					Sunniesnow.Logs.warn('No background provided');
-					return;
-				}
-				break;
-			case 'upload':
-				blob = Sunniesnow.game.settings.backgroundUpload;
-				if (!blob) {
-					Sunniesnow.Logs.warn('No background provided');
-					return;
-				}
-				break;
-		}
-		return Sunniesnow.ObjectUrl.create(blob);
-	}
 	
 	static async getBackgroundTexture() {
-		if (!this.url) {
+		if (!Sunniesnow.game.settings.background) {
 			return PIXI.Texture.WHITE;
 		}
+		const url = Sunniesnow.ObjectUrl.create(Sunniesnow.game.settings.background);
 		try {
-			return await Sunniesnow.Assets.loadTexture(this.url);
+			return await Sunniesnow.Assets.loadTexture(url);
 		} catch (err) {
 			const result = PIXI.Texture.WHITE;
 			Sunniesnow.Logs.warn(`Failed to load background: ${err.message ?? err}`, err);

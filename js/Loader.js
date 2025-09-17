@@ -1,256 +1,4 @@
 Sunniesnow.Loader = {
-	loaded: {
-		chart: {
-			zip: null,
-
-			// 'online' or 'upload'
-			source: null,
-
-			// online: the string filled in level-file-online
-			// upload: the file object
-			sourceContents: null,
-
-			// chart files in JSON contained in the loaded .ssc file.
-			// keys: filename
-			// values: JSON object
-			charts: {},
-
-			// music files contained in the .ssc file.
-			// keys: filename
-			// values: ArrayBuffer
-			music: {},
-
-			// background image files contained in the .ssc file.
-			// keys: filename
-			// values: Blob
-			backgrounds: {}
-		},
-
-		// id: {source: 'online' | 'upload', sourceContents: string | File}
-		plugins: {}
-	},
-
-	chartLoadListeners: [],
-
-	triggerLoadChart() {
-		if (this.loadingChart) {
-			return;
-		}
-		this.loadingChart = true;
-		return this.loadChart(true).then(() => {
-			this.loadingChart = false;
-			this.onChartLoad();
-		}).catch(reason => {
-			this.loadingChart = false;
-			throw reason;
-		});
-	},
-
-	interruptLevelLoad() {
-		Sunniesnow.Settings.clearToFill();
-		Sunniesnow.Fetcher.interrupt();
-	},
-	
-	async loadChart(force = false) {
-		let file;
-		let sourceContents;
-		let sourceType;
-		if (force) {
-			sourceType = Sunniesnow.Settings.readRadio('level-file');
-		} else {
-			sourceType = Sunniesnow.game?.settings.levelFile ?? Sunniesnow.Settings.readRadio('level-file');
-		}
-		switch (sourceType) {
-			case 'online':
-				if (force) {
-					sourceContents = Sunniesnow.Settings.readValue('level-file-online');
-				} else {
-					sourceContents = Sunniesnow.game?.settings.levelFileOnline ?? Sunniesnow.Settings.readValue('level-file-online');
-				}
-				if (!force && this.loaded.chart.source === 'online' && this.loaded.chart.sourceContents === sourceContents) {
-					return;
-				}
-				this.clearChart();
-				this.loaded.chart.source = 'online';
-				this.loaded.chart.sourceContents = sourceContents;
-				const url = Sunniesnow.Utils.url('chart', sourceContents, '.ssc');
-				try {
-					file = await Sunniesnow.Fetcher.blob(url, 'level-file-downloading');
-				} catch (e) {
-					this.loaded.chart.source = null;
-					this.loaded.chart.sourceContents = null;
-					Sunniesnow.Logs.error(`Failed to load level ${sourceContents}: ${e.message ?? e}`, e);
-				}
-				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Settings.writeSavedChartOffset(sourceContents);
-				}
-				break;
-			case 'upload':
-				if (force) {
-					sourceContents = Sunniesnow.Settings.actualLevelFileUpload();
-				} else {
-					sourceContents = Sunniesnow.game?.settings.levelFileUpload ?? Sunniesnow.Settings.actualLevelFileUpload();
-				}
-				if (!force && this.loaded.chart.source === 'upload' && this.loaded.chart.sourceContents === sourceContents) {
-					return;
-				}
-				this.clearChart();
-				this.loaded.chart.source = 'upload';
-				file = this.loaded.chart.sourceContents = sourceContents;
-				break;
-		}
-		if (!file) {
-			Sunniesnow.Logs.warn('No chart to load');
-			return;
-		}
-		let zip;
-		try {
-			zip = await JSZip.loadAsync(file);
-		} catch (e) {
-			Sunniesnow.Logs.warn('Failed to load chart: cannot read as zip', e);
-			return;
-		}
-		this.loaded.chart.zip = zip;
-		for (const filename in zip.files) {
-			if (filename.includes('/')) {
-				continue;
-			}
-			const zipObject = zip.files[filename];
-			if (zipObject.dir) {
-				continue;
-			}
-			const type = mime.getType(filename);
-			if (type?.startsWith('audio')) {
-				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Settings.fillMusicSelect(filename);
-				}
-				this.loaded.chart.music[filename] = await zipObject.async('arraybuffer');
-			} else if (type?.startsWith('image')) {
-				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Settings.fillBackgroundSelect(filename);
-				}
-				const blob = new Blob([await zipObject.async('blob')], {type});
-				this.loaded.chart.backgrounds[filename] = blob;
-			} else if (type?.endsWith('json')) {
-				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Settings.fillChartSelect(filename);
-				}
-				this.loaded.chart.charts[filename] = JSON.parse(await zipObject.async('string'));
-			} else if (Sunniesnow.Utils.needsDisplayTextFile(filename)) {
-				if (Sunniesnow.Utils.isBrowser()) {
-					Sunniesnow.Settings.fillLevelReadme(filename, await zipObject.async('string'));
-				}
-			} else {
-				Sunniesnow.Logs.warn(`Cannot determine type of ${filename}`)
-			}
-		}
-		if (Sunniesnow.Utils.isBrowser()) {
-			await Sunniesnow.Settings.untilSelectsLoaded();
-			Sunniesnow.Settings.tryAvoidingNoBackground();
-		}
-		if (Sunniesnow.game?.settings) {
-			if (Sunniesnow.Utils.isBrowser()) {
-				Sunniesnow.game.settings.musicSelect = Sunniesnow.Settings.readValue('music-select');
-				Sunniesnow.game.settings.chartSelect = Sunniesnow.Settings.readValue('chart-select');
-				Sunniesnow.game.settings.backgroundFromLevel ||= Sunniesnow.Settings.readValue('background-from-level');
-			} else {
-				Sunniesnow.game.settings.musicSelect ||= Object.keys(this.loaded.chart.music)[0];
-				Sunniesnow.game.settings.chartSelect ||= Object.keys(this.loaded.chart.charts)[0];
-				Sunniesnow.game.settings.backgroundFromLevel ||= Object.keys(this.loaded.chart.backgrounds)[0];
-			}
-		}
-	},
-
-	onChartLoad() {
-		while (this.chartLoadListeners.length) {
-			this.chartLoadListeners.shift()();
-		}
-	},
-
-	addChartLoadListener(listener) {
-		this.chartLoadListeners.push(listener);
-	},
-	
-	clearChart() {
-		this.loaded.chart.zip = null;
-		this.loaded.chart.charts = {};
-		this.loaded.chart.music = {};
-		this.loaded.chart.backgrounds = {};
-		if (!Sunniesnow.Utils.isBrowser()) {
-			return;
-		}
-		Sunniesnow.Settings.clearSelect('music-select');
-		Sunniesnow.Settings.clearSelect('chart-select');
-		Sunniesnow.Settings.clearSelect('background-from-level');
-		document.getElementById('level-readme').innerHTML = '';
-	},
-
-	cloneLoaded() {
-		return {
-			chart: {
-				zip: this.loaded.chart.zip,
-				source: this.loaded.chart.source,
-				sourceContents: this.loaded.chart.sourceContents,
-				charts: {...this.loaded.chart.charts},
-				music: {...this.loaded.chart.music},
-				backgrounds: {...this.loaded.chart.backgrounds}
-			},
-			plugins: {...this.loaded.plugins}
-		};
-	},
-
-	async pluginBlob(id) {
-		let source, basePath, online, upload, downloading;
-		switch (id) {
-			case 'skin':
-				source = Sunniesnow.game.settings.skin;
-				basePath = 'skin';
-				online = Sunniesnow.game.settings.skinOnline;
-				upload = Sunniesnow.game.settings.skinUpload;
-				downloading = 'skin-downloading';
-				break;
-			case 'fx':
-				source = Sunniesnow.game.settings.fx;
-				basePath = 'fx';
-				online = Sunniesnow.game.settings.fxOnline;
-				upload = Sunniesnow.game.settings.fxUpload;
-				downloading = 'fx-downloading';
-				break;
-			case 'se':
-				source = Sunniesnow.game.settings.se;
-				basePath = 'se';
-				online = Sunniesnow.game.settings.seOnline;
-				upload = Sunniesnow.game.settings.seUpload;
-				downloading = 'se-downloading';
-				break;
-			default:
-				source = Sunniesnow.game.settings.plugin[id];
-				basePath = 'plugin';
-				online = Sunniesnow.game.settings.pluginOnline[id];
-				upload = Sunniesnow.game.settings.pluginUpload[id];
-				downloading = `plugin-${id}-downloading`;
-		}
-		switch (source) {
-			case 'online':
-				const loaded = this.loaded.plugins[id];
-				if (loaded?.source === 'online' && loaded.sourceContents === online) {
-					if (Sunniesnow.Plugin.plugins[id]) {
-						return Sunniesnow.Plugin.plugins[id].blob;
-					}
-				} else {
-					this.loaded.plugins[id] = {source: 'online', sourceContents: online};
-				}
-				try {
-					return await Sunniesnow.Fetcher.blob(Sunniesnow.Utils.url(basePath, online, '.ssp'), downloading);
-				} catch (e) {
-					Sunniesnow.Logs.warn(`Failed to download plugin ${id}: ${e.message ?? e}`, e);
-					return null;
-				}
-			case 'upload':
-				this.loaded.plugins[id] = {source: 'upload', sourceContents: upload};
-				return upload;
-		}
-	},
 
 	async loadModules() {
 		this.loadingModulesComplete = false;
@@ -258,7 +6,6 @@ Sunniesnow.Loader = {
 		this.targetLoadingModulesProgress = 0;
 		this.modulesQueue = [];
 		this.loadMeta();
-		this.loadDom();
 		this.loadFilter();
 		this.loadAudioAndChart();
 		this.loadTouch();
@@ -278,10 +25,9 @@ Sunniesnow.Loader = {
 	},
 
 	loadMeta() {
+		this.loadModule('Settings');
 		this.loadModule('Config');
-	},
-
-	loadDom() {
+		this.loadModule('Plugin');
 		this.loadModule('SpinUp');
 	},
 
@@ -398,15 +144,11 @@ Sunniesnow.Loader = {
 		this.targetLoadingModulesProgress++;
 	},
 
-	updateLoadingModules() {
-		this.loadingText = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress} (${this.currentlyLoadingModule})`;
-	},
-
 	async loadPlugins() {
 		this.loadingPluginsProgress = 0;
 		this.targetLoadingPluginsProgress = 0;
 		this.loadingPluginsComplete = false;
-		for (const id of ['skin', 'fx', 'se', ...Object.keys(Sunniesnow.game.settings.plugin)]) {
+		for (const id of ['skin', 'fx', 'se', ...Object.keys(Sunniesnow.Settings.s.pluginList)]) {
 			this.targetLoadingPluginsProgress++;
 			try {
 				await Sunniesnow.Plugin.loadPlugin(id);
@@ -430,37 +172,13 @@ Sunniesnow.Loader = {
 		this.loadingText = `Loading plugins: ${this.loadingPluginsProgress}/${this.targetLoadingPluginsProgress}`;
 	},
 
-	updateLoadingChart() {
-		if (!Sunniesnow.Utils.isBrowser()) {
-			return;
-		}
-		this.loadingText = 'Loading level';
-	},
-
 	async load() {
 		let element;
 		if (Sunniesnow.Utils.isBrowser()) {
 			element = document.getElementById('loading-progress');
 			element.style.display = '';
-			Sunniesnow.Settings.readSettings();
-			Sunniesnow.game.progressAdjustable = Sunniesnow.game.settings.progressAdjustable && Sunniesnow.game.settings.autoplay;
 		}
 		this.loadingComplete = false;
-		if (Sunniesnow.game.settings.levelFile === 'online' && this.loaded.chart.sourceContents !== Sunniesnow.game.settings.levelFileOnline) {
-			Sunniesnow.Logs.warn('Level file not loaded, waiting');
-			await this.loadChart()
-		}
-		// When the user clicks the "Load" button in DOM, Sunniesnow.Loader.loaded will be altered.
-		// Therefore, we need to save a clone of it in Sunniesnow.game.loaded.
-		Sunniesnow.game.loaded = this.cloneLoaded();
-		if (Sunniesnow.Utils.isBrowser()) {
-			Sunniesnow.Settings.saveSettings();
-			if (this.loaded.chart.source === 'online') {
-				Sunniesnow.Settings.saveChartOffset(this.loaded.chart.sourceContents);
-			}
-		}
-		this.loadingChartComplete = true;
-		await this.loadPlugins();
 		await this.loadModules();
 		this.loadingComplete = true;
 		if (element) {
@@ -468,18 +186,8 @@ Sunniesnow.Loader = {
 		}
 	},
 
-	clearLocalStorage() {
-		localStorage.removeItem('settings');
-	},
-
 	updateLoading() {
-		if (this.loadingPluginsComplete) {
-			this.updateLoadingModules();
-		} else if (this.loadingChartComplete) {
-			this.updateLoadingPlugins();
-		} else {
-			this.updateLoadingChart();
-		}
+		this.loadingText = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress} (${this.currentlyLoadingModule})`;
 		if (Sunniesnow.Utils.isBrowser()) {
 			const element = document.getElementById('loading-progress');
 			element.textContent = this.loadingText;

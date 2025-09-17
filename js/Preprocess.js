@@ -13,17 +13,14 @@ Sunniesnow.Preprocess = {
 		}
 	},
 
-	async preprocess() {
+	preprocess() {
 		Sunniesnow.I18n.setLang();
 		Sunniesnow.MiscDom.addScrollbarToAndroidWebView();
 		Sunniesnow.MiscDom.adjustCustomJudgementWindowsTable();
 		Sunniesnow.I18n.apply();
 		Sunniesnow.MiscDom.associateLabels();
 		Sunniesnow.I18n.populateLangOptions();
-		Sunniesnow.Settings.setDeviceDependentDefaults();
-		await Sunniesnow.Settings.writeSavedSettings();
-		Sunniesnow.Settings.setTextInputs();
-		Sunniesnow.Settings.associateDomElements();
+		Sunniesnow.Settings.init();
 		Sunniesnow.PinnedCoordinates.init();
 		Sunniesnow.MiscDom.addEventListeners();
 		Sunniesnow.MiscDom.removeSiteLoadingNotice();
@@ -31,7 +28,7 @@ Sunniesnow.Preprocess = {
 
 	async run() {
 		Sunniesnow.Patches.apply();
-		await this.preprocess();
+		this.preprocess();
 		this.readUrlParams();
 		await this.registerServiceWorker();
 	},

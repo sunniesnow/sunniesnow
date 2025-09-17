@@ -4,7 +4,7 @@ Sunniesnow.StoryAssets = {
 		if (Object.hasOwn(this.assets, filename)) {
 			return !!this.assets[filename];
 		}
-		const zipFiles = Sunniesnow.game.loaded.chart.zip.files;
+		const zipFiles = Sunniesnow.game.settings.levelFile.files;
 		const zipEntry = `story/${filename}`;
 		if (!Object.hasOwn(zipFiles, zipEntry)) {
 			Sunniesnow.Logs.warn(`Image \`${filename}\` not found in the level file`);

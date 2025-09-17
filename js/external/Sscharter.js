@@ -1,6 +1,9 @@
 Sunniesnow.Sscharter = {
 	async connect(data) {
-		if (!Sunniesnow.Utils.isValidUrl(Sunniesnow.game.loaded.chart.sourceContents)) {
+		if (Sunniesnow.game.savedSettings.levelFile !== 'online') {
+			return;
+		}
+		if (!Sunniesnow.Utils.isValidUrl(Sunniesnow.game.savedSettings.levelFileOnline)) {
 			return;
 		}
 		if (!(typeof data === 'object' && 'version' in data && 'port' in data)) {
@@ -11,7 +14,7 @@ Sunniesnow.Sscharter = {
 		const {version, port} = data;
 		this.version = version;
 		this.port = port;
-		this.host = new URL(Sunniesnow.game.loaded.chart.sourceContents).hostname;
+		this.host = new URL(Sunniesnow.game.savedSettings.levelFileOnline).hostname;
 		this.url = `ws://${this.host}:${this.port}`;
 		this.socket = new WebSocket(this.url);
 		this.addListeners();
@@ -51,7 +54,7 @@ Sunniesnow.Sscharter = {
 
 	onUpdate({onlyCharts}) {
 		Sunniesnow.Logs.info('Chart update is received from sscharter');
-		Sunniesnow.Loader.triggerLoadChart();
+		Sunniesnow.Settings.s.levelFileOnline.dirty = true;
 		if (Sunniesnow.game.settings.sscharterLiveRestart) {
 			Sunniesnow.game.window.focus();
 			if (onlyCharts) {

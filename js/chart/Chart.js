@@ -16,7 +16,7 @@ Sunniesnow.Chart = class Chart {
 	}
 
 	static async load() {
-		Sunniesnow.game.chart = new this(Sunniesnow.game.loaded.chart.charts[Sunniesnow.game.settings.chartSelect]);
+		Sunniesnow.game.chart = new this(JSON.parse(await Sunniesnow.game.settings.chartSelect.text()));
 		await Sunniesnow.game.chart.readSscharterInfo();
 		await Sunniesnow.game.chart.checkAndLoadFilters();
 		Sunniesnow.Music.setStart();
