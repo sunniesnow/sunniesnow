@@ -133,43 +133,16 @@ Sunniesnow.Loader = {
 				return;
 			}
 			this.currentlyLoadingModule = name;
+			this.updateLoading();
 			try {
 				await Sunniesnow[name].load();
 				Sunniesnow[name].loaded = true;
 			} catch (e) {
-				Sunniesnow.Logs.error(`Failed to load Sunniesnow.${name}: ${e}`, e);
+				Sunniesnow.Logs.error(`Failed to load ${name}: ${e}`, e);
 			}
 			this.loadingModulesProgress++;
 		});
 		this.targetLoadingModulesProgress++;
-	},
-
-	async loadPlugins() {
-		this.loadingPluginsProgress = 0;
-		this.targetLoadingPluginsProgress = 0;
-		this.loadingPluginsComplete = false;
-		for (const id of ['skin', 'fx', 'se', ...Object.keys(Sunniesnow.Settings.s.pluginList)]) {
-			this.targetLoadingPluginsProgress++;
-			try {
-				await Sunniesnow.Plugin.loadPlugin(id);
-			} catch (e) {
-				Sunniesnow.Logs.warn(`Failed to load plugin ${id}: ${e.message ?? e}`, e);
-			}
-			this.loadingPluginsProgress++;
-		}
-		await Sunniesnow.Plugin.reset();
-		await Sunniesnow.Plugin.applyPlugins();
-		this.loadingPluginsComplete = true;
-	},
-
-	updateLoadingPlugins() {
-		if (!Sunniesnow.Utils.isBrowser()) {
-			if (this.loadingPluginsComplete) {
-				this.loadModules();
-			}
-			return;
-		}
-		this.loadingText = `Loading plugins: ${this.loadingPluginsProgress}/${this.targetLoadingPluginsProgress}`;
 	},
 
 	async load() {

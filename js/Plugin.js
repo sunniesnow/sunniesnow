@@ -1,73 +1,101 @@
 Sunniesnow.Plugin = class Plugin {
 
-	static now = null;
 	static plugins = {};
-	static needsReset = false;
 
-	constructor(id, blob) {
-		this.id = id;
-		this.blob = blob;
-		this.blobs = {};
-		this.loadListeners = [];
-		this.loaded = false;
-		this.loading = false;
-		this.applied = false;
+	static async load() {
+		if (this.needsReset()) {
+			await this.reset();
+			await this.loadPlugins();
+			await this.applyPlugins();
+		}
+		await this.runMainFunctions();
+	}
+
+	static needsReset() {
+		const allId = new Set();
+		for (const id of ['skin', 'fx', 'se']) {
+			// Use != to make sure undefined and null are treated the same
+			if (this.plugins[id]?.zip != Sunniesnow.game.settings[id]) {
+				return true;
+			}
+			allId.add(id);
+		}
+		for (const [id, {plugin: zip}] of Sunniesnow.game.settings.pluginList.entries()) {
+			if (this.plugins[id]?.zip != zip) {
+				return true;
+			}
+			allId.add(id.toString());
+		}
+		return Object.keys(this.plugins).some(id => !allId.has(id));
+	}
+
+	static async loadPlugins() {
+		this.plugins = {};
+		for (const id of ['skin', 'fx', 'se']) {
+			await this.loadPlugin(id, Sunniesnow.game.settings[id]);
+		}
+		for (const [id, {plugin: zip}] of Sunniesnow.game.settings.pluginList.entries()) {
+			await this.loadPlugin(id, zip);
+		}
+	}
+
+	static async loadPlugin(id, zip) {
+		if (!zip) {
+			return;
+		}
+		this.plugins[id] = new this(id, zip);
+		try {
+			await this.plugins[id].load();
+		} catch (e) {
+			delete this.plugins[id];
+			Sunniesnow.Logs.error(`Failed to load plugin ${id}: ${e}`, e);
+		}
+	}
+
+	static async applyPlugins() {
+		for (const id in this.plugins) {
+			try {
+				await this.plugins[id].apply();
+			} catch (e) {
+				Sunniesnow.Logs.error(`Failed to apply plugin ${id}: ${e}`, e);
+			}
+		}
 	}
 
 	static async reset() {
-		if (!this.needsReset) {
-			return;
-		}
+		document.getElementById('plugins-readme').innerHTML = '';
 		await Sunniesnow.ScriptsLoader.runSiteScripts(Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS);
-		this.needsReset = false;
 	}
 
-	static async load(id, blob) {
-		if (blob) {
-			if (this.plugins[id]?.blob !== blob) {
-				if (this.plugins[id]) {
-					this.plugins[id].deleteReadmeDom();
-					this.needsReset = true;
-				}
-				this.plugins[id] = new this(id, blob);
+	static async runMainFunctions() {
+		for (const id in this.plugins) {
+			try {
+				await this.plugins[id].main?.();
+			} catch (e) {
+				Sunniesnow.Logs.error(`Failed to run the main function of plugin ${id}: ${e}`, e);
 			}
-			await this.plugins[id].load();
-		} else {
-			if (this.plugins[id]) {
-				this.needsReset = true;
-				this.plugins[id].deleteReadmeDom();
-			}
-			delete this.plugins[id];
 		}
+	}
+
+	constructor(id, zip) {
+		this.id = id;
+		this.zip = zip;
+		this.blobs = {};
 	}
 
 	async load() {
-		if (this.loaded) {
-			this.onLoad();
-			return;
-		}
-		this.loading = true;
-		let zip;
-		try {
-			zip = await JSZip.loadAsync(this.blob);
-		} catch (e) {
-			Sunniesnow.Logs.warn(`Failed to load plugin ${this.id}: cannot read as zip`, e);
-			return;
-		}
-		if (Sunniesnow.Utils.isBrowser()) {
-			this.createReadmeDom();
-		}
-		for (const filename in zip.files) {
-			const zipObject = zip.files[filename];
+		this.createReadmeDom();
+		for (const filename in this.zip.files) {
+			const zipObject = this.zip.files[filename];
 			if (zipObject.dir) {
 				continue;
 			}
-			this.blobs[filename] = await zipObject.async('blob');
+			this.blobs[filename] = new Blob([await zipObject.async('arraybuffer')], {type: mime.getType(filename) ?? 'application/octet-stream'});
 			if (Sunniesnow.Utils.isBrowser() && Sunniesnow.Utils.needsDisplayTextFile(filename)) {
-				this.fillReadme(filename, await zipObject.async('text'));
+				this.fillReadme(filename, await this.blobs[filename].text());
 			}
 		}
-		this.onLoad();
+		await this.apply();
 	}
 
 	createReadmeDom() {
@@ -109,88 +137,12 @@ Sunniesnow.Plugin = class Plugin {
 
 	async apply() {
 		this.constructor.now = this;
-		if (!this.applied) {
-			const blob = this.blobs['main.js'];
-			if (!blob) {
-				Sunniesnow.Logs.warn(`Plugin ${this.id} does not have a main.js`);
-				this.constructor.now = null;
-				return;
-			}
+		const blob = this.blobs['main.js'];
+		if (blob) {
 			Sunniesnow.ScriptsLoader.runScriptFromString(await blob.text(), `plugin-${this.id}/main.js`);
-			this.applied = true;
+		} else {
+			Sunniesnow.Logs.warn(`Plugin ${this.id} does not have a main.js`);
 		}
-		await this.main?.();
 		this.constructor.now = null;
-	}
-
-	addLoadListener(listener) {
-		this.loadListeners.push(listener);
-	}
-
-	onLoad() {
-		this.loading = false;
-		this.loaded = true;
-		for (const listener of this.loadListeners) {
-			listener();
-		}
-	}
-
-	static html(n) {
-		const result = document.createElement('div');
-		result.id = `plugin-${n}`;
-		result.innerHTML = `
-			<div>
-				<input type="radio" id="plugin-${n}-online-radio" name="plugin-${n}" value="online" checked>
-				<input type="text" id="plugin-${n}-online" placeholder="empty">
-				<span id="plugin-${n}-downloading"></span>
-			</div>
-
-			<div>
-				<input type="radio" id="plugin-${n}-upload-radio" name="plugin-${n}" value="upload">
-				<input type="file" id="plugin-${n}-upload" accept=".ssp" onchange="Sunniesnow.Loader.markManual('plugin-${n}-upload');">
-			</div>
-
-			<div>
-				<button type="button" id="plugin-${n}-delete" onclick="Sunniesnow.Plugin.deleteDomElement(${n})"></button>
-			</div>
-
-			<hr>
-		`;
-		return result;
-	}
-
-	static addDomElement(n) {
-		if (n === undefined) {
-			n = this.additionalTotal ||= 0;
-		}
-		const node = this.html(n);
-		document.getElementById('plugin-list').appendChild(node);
-		Sunniesnow.Settings.associateRadio(`plugin-${n}-online-radio`, `plugin-${n}-online`);
-		Sunniesnow.Settings.associateRadio(`plugin-${n}-upload-radio`, `plugin-${n}-upload`);
-		Sunniesnow.Settings.setTextInput(`plugin-${n}-online`);
-		Sunniesnow.I18n.applyPlugin(n);
-		Sunniesnow.MiscDom.associateLabels(node);
-		this.additionalTotal = Math.max(this.additionalTotal || 0, n) + 1;
-	}
-
-	static deleteDomElement(n) {
-		const listElement = document.getElementById('plugin-list');
-		const pluginElement = document.getElementById(`plugin-${n}`);
-		listElement.removeChild(pluginElement);
-	}
-
-	static clearDomElements() {
-		this.additionalTotal = 0;
-		document.getElementById('plugin-list').innerHTML = '';
-	}
-
-	static async loadPlugin(id) {
-		await this.load(id, await Sunniesnow.Loader.pluginBlob(id));
-	}
-
-	static async applyPlugins() {
-		for (const id in this.plugins) {
-			await this.plugins[id].apply();
-		}
 	}
 };

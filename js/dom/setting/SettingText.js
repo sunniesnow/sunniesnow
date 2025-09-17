@@ -1,6 +1,6 @@
 Sunniesnow.SettingText = class SettingText extends Sunniesnow.Setting {
-	constructor(collection, element) {
-		super(collection, element);
+	constructor(collection, element, idSuffix = '') {
+		super(collection, element, idSuffix);
 		element.spellcheck = false;
 		element.autocomplete = 'off';
 		element.autocorrect = 'off';

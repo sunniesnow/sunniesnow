@@ -1,6 +1,6 @@
 Sunniesnow.SettingBlob = class SettingBlob extends Sunniesnow.SettingRadio {
-	constructor(collection, elements) {
-		super(collection, elements);
+	constructor(collection, elements, idSuffix = '') {
+		super(collection, elements, idSuffix);
 		for (const element of this.elements) {
 			element.addEventListener('change', () => {
 				this.selectionDirty = true;
@@ -15,9 +15,14 @@ Sunniesnow.SettingBlob = class SettingBlob extends Sunniesnow.SettingRadio {
 
 	activeSetting() {
 		for (const element of this.elements) {
-			if (element.checked) {
-				return this.collection.mapSettingIdToSetting.get(element.dataset.input);
+			if (!element.checked) {
+				continue;
 			}
+			let id = element.dataset.input;
+			if (this.idSuffix && id.endsWith(this.idSuffix)) {
+				id = id.slice(0, -this.idSuffix.length);
+			}
+			return this.collection.mapSettingIdToSetting.get(id);
 		}
 	}
 

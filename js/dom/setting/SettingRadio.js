@@ -1,6 +1,6 @@
 Sunniesnow.SettingRadio = class SettingRadio extends Sunniesnow.Setting {
-	constructor(collection, element) {
-		super(collection, element);
+	constructor(collection, element, idSuffix = '') {
+		super(collection, element, idSuffix);
 		delete this.element;
 		this.setId(element.name);
 		this.elements = collection.getElementsByName(element.name);

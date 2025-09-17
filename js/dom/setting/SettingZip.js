@@ -1,6 +1,6 @@
 Sunniesnow.SettingZip = class SettingZip extends Sunniesnow.SettingBlob {
-	constructor(collection, element) {
-		super(collection, element);
+	constructor(collection, element, idSuffix = '') {
+		super(collection, element, idSuffix);
 		this.zipEntrySettings = [];
 		this.loadButton = collection.getElementById(this.elements[0].dataset.loadButton);
 		this.loadButton?.addEventListener('click', () => this.getAsync());

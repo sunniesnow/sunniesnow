@@ -1,7 +1,6 @@
 Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Setting {
-	constructor(collection, element, inList = false) {
-		super(collection, element);
-		this.inList = inList;
+	constructor(collection, element, idSuffix = '') {
+		super(collection, element, idSuffix);
 		this.mapElementIdToSetting = new Map();
 		this.mapSettingIdToSetting = new Map();
 		this.processElements();
@@ -58,7 +57,7 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 						break;
 				}
 			}
-			const setting = new settingClass(this.collection ?? this, element);
+			const setting = new settingClass(this, element, this.idSuffix);
 			this.mapSettingIdToSetting.set(setting.id, setting);
 		}
 	}

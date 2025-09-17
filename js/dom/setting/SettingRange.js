@@ -1,6 +1,6 @@
 Sunniesnow.SettingRange = class SettingRange extends Sunniesnow.Setting {
-	constructor(collection, element) {
-		super(collection, element);
+	constructor(collection, element, idSuffix = '') {
+		super(collection, element, idSuffix);
 		if (!element.dataset.output) {
 			return;
 		}

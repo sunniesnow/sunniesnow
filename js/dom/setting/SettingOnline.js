@@ -1,6 +1,6 @@
 Sunniesnow.SettingOnline = class SettingOnline extends Sunniesnow.SettingText {
-	constructor(collection, element) {
-		super(collection, element);
+	constructor(collection, element, idSuffix = '') {
+		super(collection, element, idSuffix);
 		this.progressElement = element.dataset.downloading && collection.getElementById(element.dataset.downloading);
 		this.element.addEventListener('input', () => {
 			this.dirty = true;

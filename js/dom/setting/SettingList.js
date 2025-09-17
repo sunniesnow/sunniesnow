@@ -1,7 +1,7 @@
 Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 
-	constructor(collection, element) {
-		super(collection, element);
+	constructor(collection, element, idSuffix = '') {
+		super(collection, element, idSuffix);
 		this.items = [];
 		this.readTemplate();
 		this.populateButtons();
@@ -20,7 +20,7 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 
 	newButton(idInfix, onclick, index) {
 		const button = document.createElement('button');
-		button.id = `${this.id}-${idInfix}${index != null ? `-${index}` : ''}`;
+		button.id = `${this.id}${this.idSuffix}-${idInfix}${index != null ? `-${index}` : ''}`;
 		button.type = 'button';
 		button.addEventListener('click', onclick);
 		return button;
@@ -35,6 +35,10 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 	}
 
 	modifyAttributes(element, index, oldIndex = null) {
+		if (element instanceof Sunniesnow.SettingCollection) {
+			element.idSuffix = `${this.idSuffix}-${index}`;
+			element = element.element;
+		}
 		const oldSuffix = oldIndex == null ? /-$/ : new RegExp(`-${oldIndex}$`);
 		const newSuffix = `-${index}`;
 		for (const attr of element.getAttributeNames()) {
@@ -79,7 +83,7 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 				this.element.appendChild(itemElement);
 			}
 		}
-		const item = new Sunniesnow.SettingCollection(this.collection, itemElement, true);
+		const item = new Sunniesnow.SettingCollection(this.collection, itemElement, `${this.idSuffix}-${index}`);
 		const buttonsContainer = itemElement.querySelector('#' + itemElement.dataset.listItemButtons);
 		item.moveUpButton = this.newButton('move-up', () => this.moveItemUp(item), index);
 		item.moveDownButton = this.newButton('move-down', () => this.moveItemDown(item), index);
@@ -91,7 +95,7 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		buttonsContainer.appendChild(item.removeButton);
 		this.items[index] = item;
 		this.refresh();
-		if (itemElement.dataset.i18n) {
+		if (itemElement.dataset.i18n && Sunniesnow.I18n.lang) {
 			Sunniesnow.I18n.apply(itemElement);
 		}
 		return item;
@@ -118,9 +122,9 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		this.element.insertBefore(item.element, this.items[index - 1].element);
 		this.items[index] = this.items[index - 1];
 		this.items[index - 1] = item;
-		this.modifyAttributes(item.element, this.items.length, index);
-		this.modifyAttributes(this.items[index].element, index, index - 1);
-		this.modifyAttributes(item.element, index - 1, this.items.length);
+		this.modifyAttributes(item, this.items.length, index);
+		this.modifyAttributes(this.items[index], index, index - 1);
+		this.modifyAttributes(item, index - 1, this.items.length);
 		this.refresh();
 	}
 
@@ -135,9 +139,9 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		this.element.insertBefore(this.items[index + 1].element, item.element);
 		this.items[index] = this.items[index + 1];
 		this.items[index + 1] = item;
-		this.modifyAttributes(item.element, this.items.length, index);
-		this.modifyAttributes(this.items[index].element, index, index + 1);
-		this.modifyAttributes(item.element, index + 1, this.items.length);
+		this.modifyAttributes(item, this.items.length, index);
+		this.modifyAttributes(this.items[index], index, index + 1);
+		this.modifyAttributes(item, index + 1, this.items.length);
 		this.refresh();
 	}
 
@@ -157,7 +161,7 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		item.element.remove();
 		this.items.splice(index, 1);
 		for (let i = index; i < this.items.length; i++) {
-			this.modifyAttributes(this.items[i].element, i, i + 1);
+			this.modifyAttributes(this.items[i], i, i + 1);
 		}
 		this.refresh();
 	}

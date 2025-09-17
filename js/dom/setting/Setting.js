@@ -1,7 +1,8 @@
 Sunniesnow.Setting = class Setting extends EventTarget {
 
-	constructor(collection, element) {
+	constructor(collection, element, idSuffix = '') {
 		super();
+		this.idSuffix = idSuffix;
 		this.collection = collection;
 		this.element = element;
 		this.setId(element.id);
@@ -14,9 +15,8 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 	}
 
 	setId(id) {
-		if (this.collection?.inList) {
-			const match = id.match(/^(.*?)(-\d+)?$/);
-			id = match[1];
+		if (this.idSuffix && id.endsWith(this.idSuffix)) {
+			id = id.slice(0, -this.idSuffix.length);
 		}
 		this.id = id;
 	}

@@ -1,6 +1,6 @@
 Sunniesnow.SettingFile = class SettingFile extends Sunniesnow.Setting {
-	constructor(constructor, element) {
-		super(constructor, element);
+	constructor(constructor, element, idSuffix = '') {
+		super(constructor, element, idSuffix);
 		this.manualValue = null;
 		this.element.addEventListener('change', event => {
 			this.dirty = true;
