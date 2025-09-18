@@ -102,7 +102,7 @@ Sunniesnow.Chart = class Chart {
 
 	eventsPostProcess() {
 		if (this.events.length === 0) {
-			Sunniesnow.Logs.error('There are no events in the chart in the specified range');
+			throw new Error('There are no events in the chart in the specified range');
 		}
 		this.events.sort((a, b) => a.time - b.time);
 		this.stripEvents();

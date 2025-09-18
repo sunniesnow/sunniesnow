@@ -6,6 +6,9 @@ Sunniesnow.SettingZipEntry = class SettingZipEntry extends Sunniesnow.SettingSel
 				return null;
 			}
 			const zip = await this.setting.zipSetting.get();
+			if (!zip) {
+				return null;
+			}
 			value = this.setting.value(); // because loading zip may change the value
 			const buffer = await zip.files[value]?.async('arraybuffer');
 			if (buffer) {

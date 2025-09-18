@@ -90,6 +90,11 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 		let result = this.value();
 		for (const hook of this.hooks) {
 			if (result == null) {
+				this.currentHook = null;
+				while (this.resolves.length > 0) {
+					this.resolves.shift()(result);
+				}
+				this.rejects.length = 0;
 				return result;
 			}
 			this.currentHook = hook;

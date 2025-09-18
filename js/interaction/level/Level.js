@@ -34,7 +34,6 @@ Sunniesnow.Level = class Level extends EventTarget {
 			}
 		}
 		if (this.unhitNotes.length === 0) {
-			Sunniesnow.Logs.error('No notes in the chart');
 			throw new Error('No notes in the chart');
 		}
 		this.unhitNotes.sort((a, b) => a.time - b.time || b.judgementPriority() - a.judgementPriority());

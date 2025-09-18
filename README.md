@@ -24,9 +24,10 @@ You can see the built files in the `_site` directory.
 
 > [!NOTE]
 > Because Imgur blocks requests with `Origin` being localhost,
-> and because the `Crypto.subtle` API is not available in insecure contexts,
-> you must enable HTTPS support for some functionalities to work
-> (e.g., Discord Rich Presence).
+> when testing related features (e.g. Discord Rich Presence),
+> you may want to use a different hostname instead of `localhost`.
+
+> [!NOTE]
 > You can enable HTTPS support by setting `JEKYLL_SSL=1` and trusting the generated certificate at `_ssl/ca.crt` in the browser.
 > The generated server certificate can be used to enable HTTPS
 > with the hostname `jekyll.local`,

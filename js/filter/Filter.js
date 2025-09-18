@@ -3,7 +3,7 @@ Sunniesnow.Filter = class Filter {
 		if (Sunniesnow.game.settings.disableOrnament) {
 			return;
 		}
-		this.liquid = new Sunniesnow.FilterLiquid();
+		this.liquid ??= new Sunniesnow.FilterLiquid();
 	}
 
 	static from(label, data) {

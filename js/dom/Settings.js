@@ -6,6 +6,9 @@ Sunniesnow.Settings = {
 			await this.saveSettings();
 			Sunniesnow.game.savedSettings = this.saved;
 		}
+		if (!Sunniesnow.game.settings.levelFile) {
+			throw new Error('No level loaded');
+		}
 		this.tryAvoidingNoBackground();
 		Sunniesnow.game.progressAdjustable = Sunniesnow.game.settings.progressAdjustable && Sunniesnow.game.settings.autoplay;
 	},

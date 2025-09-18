@@ -20,9 +20,7 @@ Sunniesnow.Logs = {
 		if (e) {
 			console.error(e);
 		}
-		Sunniesnow.Loader.loadingChart = false;
 		Sunniesnow.Loader.loadingComplete = true;
-		Sunniesnow.game?.terminate();
 	},
 
 	info(msg) {

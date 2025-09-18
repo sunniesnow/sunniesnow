@@ -137,8 +137,10 @@ Sunniesnow.Loader = {
 			try {
 				await Sunniesnow[name].load();
 				Sunniesnow[name].loaded = true;
+				this.currentlyLoadingModule = null;
 			} catch (e) {
 				Sunniesnow.Logs.error(`Failed to load ${name}: ${e}`, e);
+				Sunniesnow.game.terminate();
 			}
 			this.loadingModulesProgress++;
 		});
@@ -160,7 +162,11 @@ Sunniesnow.Loader = {
 	},
 
 	updateLoading() {
-		this.loadingText = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress} (${this.currentlyLoadingModule})`;
+		if (this.currentlyLoadingModule) {
+			this.loadingText = `Loading modules: ${this.loadingModulesProgress}/${this.targetLoadingModulesProgress} (${this.currentlyLoadingModule})`;
+		} else {
+			this.loadingText = 'Finalizing...';
+		}
 		if (Sunniesnow.Utils.isBrowser()) {
 			const element = document.getElementById('loading-progress');
 			element.textContent = this.loadingText;
