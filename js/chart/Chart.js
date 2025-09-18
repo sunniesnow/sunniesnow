@@ -16,7 +16,7 @@ Sunniesnow.Chart = class Chart {
 	}
 
 	static async load() {
-		Sunniesnow.game.chart = new this(JSON.parse(await Sunniesnow.game.settings.chartSelect.text()));
+		Sunniesnow.game.chart = new this(Sunniesnow.game.settings.chartSelect);
 		await Sunniesnow.game.chart.readSscharterInfo();
 		await Sunniesnow.game.chart.checkAndLoadFilters();
 		Sunniesnow.Music.setStart();
@@ -27,7 +27,7 @@ Sunniesnow.Chart = class Chart {
 
 	constructor(data) {
 		if (!data) {
-			Sunniesnow.Logs.error('There is no chart');
+			throw new Error('There is no chart');
 		}
 		this.data = data;
 		this.readMeta();

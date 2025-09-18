@@ -1,6 +1,5 @@
 Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Setting {
-	constructor(collection, element, idSuffix = '') {
-		super(collection, element, idSuffix);
+	postInit() {
 		this.mapElementIdToSetting = new Map();
 		this.mapSettingIdToSetting = new Map();
 		this.processElements();
@@ -96,19 +95,19 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 		}
 	}
 
-	get() {
+	value() {
 		const result = {};
 		for (const [id, setting] of this.mapSettingIdToSetting) {
-			result[id] = setting.get();
+			result[id] = setting.value();
 		}
 		return result;
 	}
 
-	async getAsync(onProgress) {
+	async get() {
 		const result = {};
 		await Promise.all(Array.from(this.mapSettingIdToSetting).map(async ([id, setting]) => {
 			// the conversion between slug and camel is to keep backward compatibility
-			result[Sunniesnow.Utils.slugToCamel(id)] = await setting.getAsync(onProgress);
+			result[Sunniesnow.Utils.slugToCamel(id)] = await setting.get();
 		}));
 		return result;
 	}
@@ -121,20 +120,11 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 		}
 	}
 
-	save() {
-		const result = {};
-		for (const [id, setting] of this.mapSettingIdToSetting) {
-			// the conversion between slug and camel is to keep backward compatibility
-			result[Sunniesnow.Utils.slugToCamel(id)] = setting.save();
-		}
-		return result;
-	}
-
-	async saveAsync() {
+	async save() {
 		const result = {};
 		await Promise.all(Array.from(this.mapSettingIdToSetting).map(async ([id, setting]) => {
 			// the conversion between slug and camel is to keep backward compatibility
-			result[Sunniesnow.Utils.slugToCamel(id)] = await setting.saveAsync();
+			result[Sunniesnow.Utils.slugToCamel(id)] = await setting.save();
 		}));
 		return result;
 	}
@@ -150,16 +140,6 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 				setting.load(value[id]);
 			} else {
 				Sunniesnow.Logs.warn(`Unknown setting ID: ${settingId}`);
-			}
-		}
-	}
-
-	clearDownloadingProgresses() {
-		for (const setting of this.mapSettingIdToSetting.values()) {
-			if (setting instanceof Sunniesnow.SettingOnline) {
-				setting.clearDownloadingProgress();
-			} else if (setting instanceof Sunniesnow.SettingCollection || setting instanceof Sunniesnow.SettingList) {
-				setting.clearDownloadingProgresses();
 			}
 		}
 	}

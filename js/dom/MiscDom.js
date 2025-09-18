@@ -141,6 +141,9 @@ Sunniesnow.MiscDom = {
 	removeSiteLoadingNotice() {
 		document.getElementById('loading').remove();
 		document.getElementById('main-wrapper').style.display = '';
-	}
+	},
 
+	clearDownloadingProgresses() {
+		Array.from(document.getElementsByClassName('downloading-progress')).forEach(e => e.innerHTML = '');
+	}
 };

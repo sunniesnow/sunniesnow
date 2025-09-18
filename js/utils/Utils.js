@@ -689,6 +689,20 @@ Sunniesnow.Utils = {
 		return hex;
 	},
 
+	async sha256Async(data) {
+		if (!crypto?.subtle) {
+			return this.sha256(data);
+		}
+		if (typeof data === 'string') {
+			data = new TextEncoder().encode(data);
+		} else if (data instanceof Blob) {
+			data = await data.arrayBuffer();
+		}
+		const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+		const array = Array.from(new Uint8Array(hashBuffer))
+		return array.map(b => b.toString(16).padStart(2, '0')).join('');
+	},
+
 	arrayDifference(array) {
 		const result = [];
 		for (let i = 0; i < array.length - 1; i++) {

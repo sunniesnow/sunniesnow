@@ -50,17 +50,12 @@ Sunniesnow.Audio = class Audio {
 			this.playingAudios.splice(index, 1);
 		}
 	}
-	
+
+	// This method is used in se plugins, but I want to remove it eventually.
 	static async fromArrayBuffer(arrayBuffer, volume = 1, playbackRate = 1) {
-		// See https://github.com/WebAudio/web-audio-api/issues/1175#issuecomment-320502059.
-		// Otherwise, we cannot start the game again after the first time.
+		// https://github.com/WebAudio/web-audio-api/issues/1175#issuecomment-320502059.
 		arrayBuffer = arrayBuffer.slice();
-		let audioBuffer;
-		try {
-			audioBuffer = await Sunniesnow.Assets.audioDecode(arrayBuffer, this.context);
-		} catch (audioDecodeError) {
-			Sunniesnow.Logs.error(`Failed to decode audio data, ${audioDecodeError}`, audioDecodeError);
-		}
+		const audioBuffer = await Sunniesnow.Assets.audioDecode(arrayBuffer, this.context);
 		return new this(audioBuffer, volume, playbackRate);
 	}
 

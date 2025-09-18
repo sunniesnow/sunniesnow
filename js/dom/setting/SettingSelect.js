@@ -1,10 +1,9 @@
 Sunniesnow.SettingSelect = class SettingSelect extends Sunniesnow.Setting {
-	constructor(collection, element, idSuffix = '') {
-		super(collection, element, idSuffix);
-		this.element.addEventListener('change', event => this.dispatchEvent(new Event('change')));
+	postInit() {
+		this.dirtyOn('change');
 	}
 
-	get() {
+	value() {
 		return this.element.value;
 	}
 

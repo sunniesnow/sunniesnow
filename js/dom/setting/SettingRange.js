@@ -1,16 +1,16 @@
 Sunniesnow.SettingRange = class SettingRange extends Sunniesnow.Setting {
-	constructor(collection, element, idSuffix = '') {
-		super(collection, element, idSuffix);
-		if (!element.dataset.output) {
+	postInit() {
+		this.dirtyOn('input');
+		if (!this.element.dataset.output) {
 			return;
 		}
-		const output = collection.getElementById(element.dataset.output);
-		const listener = () => output.innerText = element.value;
-		element.addEventListener('input', listener);
+		const output = this.collection.getElementById(this.element.dataset.output);
+		const listener = () => output.innerText = this.element.value;
+		this.element.addEventListener('input', listener);
 		listener();
 	}
 
-	get() {
+	value() {
 		return Number(this.element.value);
 	}
 

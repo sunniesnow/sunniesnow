@@ -1,19 +1,31 @@
 Sunniesnow.SettingZipEntry = class SettingZipEntry extends Sunniesnow.SettingSelect {
+
+	static Hook = class HookZipEntry extends Sunniesnow.Hook {
+		async apply(value) {
+			if (this.setting.element.disabled) {
+				return null;
+			}
+			const zip = await this.setting.zipSetting.get();
+			value = this.setting.value(); // because loading zip may change the value
+			const buffer = await zip.files[value]?.async('arraybuffer');
+			if (buffer) {
+				return new Blob([buffer], {type: mime.getType(value) ?? 'application/octet-stream'});
+			}
+		}
+	}
+
 	secondRound() {
-		this.zipSetting = this.collection.mapSettingIdToSetting.get(this.element.dataset.source);
-		this.zipSetting.zipEntrySettings.push(this);
+		super.secondRound();
+		this.zipSetting = this.refer(this.element.dataset.source);
+		this.zipSetting.addEventListener('change', event => this.markDirty());
 	}
 
 	onZipStartLoading() {
 		this.clearOptions();
 	}
 
-	onZipLoaded() {
+	onZipLoaded(zip) {
 		const accept = this.element.dataset.accept;
-		const zip = this.zipSetting.zip;
-		if (!zip) {
-			return;
-		}
 		for (const filename in zip.files) {
 			if (filename.includes('/')) {
 				continue;
@@ -52,14 +64,6 @@ Sunniesnow.SettingZipEntry = class SettingZipEntry extends Sunniesnow.SettingSel
 		}
 	}
 
-	selected() {
-		return super.get();
-	}
-
-	save() {
-		return super.get();
-	}
-
 	set(value) {
 		for (const option of this.element.children) {
 			if (option.value === value) {
@@ -70,17 +74,8 @@ Sunniesnow.SettingZipEntry = class SettingZipEntry extends Sunniesnow.SettingSel
 		this.previousValue = value;
 	}
 
-	get() {
-		throw new Error('Synchronous get() is not supported');
-	}
-
-	async getAsync() {
-		if (this.element.disabled) {
-			return null;
-		}
-		const buffer = await (await this.zipSetting.getAsync()).files[super.get()]?.async('arraybuffer');
-		if (buffer) {
-			return new Blob([buffer], {type: mime.getType(super.get()) ?? 'application/octet-stream'});
-		}
+	setUpHooks() {
+		super.setUpHooks();
+		this.hooks.unshift(new this.constructor.Hook(this));
 	}
 };

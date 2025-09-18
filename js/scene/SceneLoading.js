@@ -28,7 +28,7 @@ Sunniesnow.SceneLoading = class SceneLoading extends Sunniesnow.Scene {
 		super.terminate();
 		if (Sunniesnow.Utils.isBrowser()) {
 			document.activeElement.blur();
-			Sunniesnow.Settings.clearDownloadingProgresses();
+			Sunniesnow.MiscDom.clearDownloadingProgresses();
 		}
 		Sunniesnow.game.postLoading();
 	}

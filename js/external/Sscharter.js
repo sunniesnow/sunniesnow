@@ -67,7 +67,7 @@ Sunniesnow.Sscharter = {
 
 	async onChartUpdate({name, chart}) {
 		Sunniesnow.Logs.info(`Chart ${name}.json is updated from sscharter`);
-		if (Sunniesnow.game.settings.chartSelect !== name + '.json') {
+		if (Sunniesnow.game.savedSettings.chartSelect !== name + '.json') {
 			return;
 		}
 		// See Sunniesnow.Chart.load
@@ -102,6 +102,6 @@ Sunniesnow.Sscharter = {
 		if (!this.socket) {
 			return;
 		}
-		this.socket.send(JSON.stringify({type: 'eventInfoTip', id: event.id, chart: Sunniesnow.game.settings.chartSelect}));
+		this.socket.send(JSON.stringify({type: 'eventInfoTip', id: event.id, chart: Sunniesnow.game.savedSettings.chartSelect}));
 	}
 };

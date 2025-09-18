@@ -1,5 +1,9 @@
 Sunniesnow.SettingNumber = class SettingNumber extends Sunniesnow.Setting {
-	get() {
+	postInit() {
+		this.dirtyOn('change');
+	}
+
+	value() {
 		let {id, value, min, max, dataset: {multiplier}} = this.element;
 		value = Number(value);
 		if (isNaN(value)) {

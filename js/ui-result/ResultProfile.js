@@ -2,21 +2,7 @@ Sunniesnow.ResultProfile = class ResultProfile extends PIXI.Container {
 
 	static async load() {
 		this.radius = Sunniesnow.Config.WIDTH / 45;
-		this.avatarTexture = await this.createAvatarTexture();
-	}
-
-	static async createAvatarTexture() {
-		if (!Sunniesnow.game.settings.avatar) {
-			return PIXI.Texture.EMPTY;
-		}
-		const url = Sunniesnow.ObjectUrl.create(Sunniesnow.game.settings.avatar);
-		try {
-			return await Sunniesnow.Assets.loadTexture(url);
-		} catch (err) {
-			const result = PIXI.Texture.EMPTY;
-			Sunniesnow.Logs.warn(`Failed to load avatar: ${err.message ?? err}`, err);
-			return result;
-		}
+		this.avatarTexture = Sunniesnow.game.settings.avatar ?? PIXI.Texture.EMPTY;
 	}
 
 	constructor() {

@@ -1,9 +1,7 @@
 Sunniesnow.Settings = {
 
 	async load() {
-		await this.readSettings((received, total, url) => {
-			// TODO
-		});
+		await this.readSettings();
 		if (Sunniesnow.Utils.isBrowser()) {
 			await this.saveSettings();
 			Sunniesnow.game.savedSettings = this.saved;
@@ -28,8 +26,8 @@ Sunniesnow.Settings = {
 		this.s.importSettings = new Sunniesnow.SettingFile(null, document.getElementById('import-settings'));
 		this.s.importChartOffsets = new Sunniesnow.SettingFile(null, document.getElementById('import-chart-offsets'));
 		this.s.levelFile.addEventListener('ziploaded', event => {
-			if (this.s.levelFile.save() === 'online') {
-				this.writeSavedChartOffset(this.s.levelFileOnline.save());
+			if (this.s.levelFile.value() === 'online') {
+				this.writeSavedChartOffset(this.s.levelFileOnline.value());
 			} else {
 				this.s.chartOffset.set(0);
 			}
@@ -43,7 +41,7 @@ Sunniesnow.Settings = {
 	},
 
 	tryAvoidingNoBackground() {
-		if (this.s.background.save() === 'from-level' && !this.s.backgroundFromLevel.save()) {
+		if (this.s.background.value() === 'from-level' && !this.s.backgroundFromLevel.value()) {
 			this.s.background.set('online');
 		}
 	},
@@ -71,8 +69,8 @@ Sunniesnow.Settings = {
 		document.getElementById('level-readme').innerHTML = '';
 	},
 
-	async readSettings(onProgress) {
-		Sunniesnow.game.settings = await this.mainSettings.getAsync(onProgress);
+	async readSettings() {
+		Sunniesnow.game.settings = await this.mainSettings.get();
 	},
 
 	writeSavedSettings() {
@@ -88,7 +86,7 @@ Sunniesnow.Settings = {
 		if (!chartOffsets) {
 			chartOffsets = {};
 		}
-		chartOffsets[key] = this.s.chartOffset.save();
+		chartOffsets[key] = this.s.chartOffset.value();
 		try {
 			localStorage.setItem('chartOffsets', JSON.stringify(chartOffsets));
 		} catch (e) {
@@ -109,15 +107,15 @@ Sunniesnow.Settings = {
 	},
 
 	async saveSettings() {
-		this.saved = await this.mainSettings.saveAsync();
+		this.saved = await this.mainSettings.save();
 		delete this.saved.chartOffset;
 		try {
 			localStorage.setItem('settings', JSON.stringify(this.saved));
 		} catch (e) {
 			Sunniesnow.Logs.warn(`Failed to save settings: ${e.message ? e.message : e}`);
 		}
-		if (this.s.levelFile.save() === 'online') {
-			this.saveChartOffset(this.s.levelFileOnline.save());
+		if (this.s.levelFile.value() === 'online') {
+			this.saveChartOffset(this.s.levelFileOnline.value());
 		}
 	},
 
@@ -201,9 +199,4 @@ Sunniesnow.Settings = {
 			this.s.floatAsFullscreen.set(true);
 		}
 	},
-
-	clearDownloadingProgresses() {
-		this.mainSettings.clearDownloadingProgresses();
-	}
-
 };

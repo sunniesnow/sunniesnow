@@ -5,8 +5,7 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 	static DEFAULT_Y = 0.5;
 
 	static async load() {
-		this.originalTexture = await this.getBackgroundTexture();
-		this.texture = this.applyEffects(this.originalTexture);
+		this.texture = this.applyEffects(Sunniesnow.game.settings.background ?? PIXI.Texture.WHITE);
 	}
 
 	static applyEffects(texture) {
@@ -34,20 +33,6 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		return result;
 	}
 	
-	static async getBackgroundTexture() {
-		if (!Sunniesnow.game.settings.background) {
-			return PIXI.Texture.WHITE;
-		}
-		const url = Sunniesnow.ObjectUrl.create(Sunniesnow.game.settings.background);
-		try {
-			return await Sunniesnow.Assets.loadTexture(url);
-		} catch (err) {
-			const result = PIXI.Texture.WHITE;
-			Sunniesnow.Logs.warn(`Failed to load background: ${err.message ?? err}`, err);
-			return result;
-		}
-	}
-
 	populate() {
 		super.populate();
 		this.label = 'background';

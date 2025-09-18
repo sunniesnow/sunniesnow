@@ -1,7 +1,5 @@
 Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
-
-	constructor(collection, element, idSuffix = '') {
-		super(collection, element, idSuffix);
+	postInit() {
 		this.items = [];
 		this.readTemplate();
 		this.populateButtons();
@@ -166,12 +164,12 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		this.refresh();
 	}
 
-	get() {
-		return this.items.map(item => item.get());
+	value() {
+		return this.items.map(item => item.value());
 	}
 
-	async getAsync(onProgress) {
-		return Promise.all(this.items.map(item => item.getAsync(onProgress)));
+	async get() {
+		return Promise.all(this.items.map(item => item.get()));
 	}
 
 	set(value) {
@@ -183,12 +181,8 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		this.refresh();
 	}
 
-	save() {
-		return this.items.map(item => item.save());
-	}
-
-	async saveAsync() {
-		return Promise.all(this.items.map(item => item.saveAsync()));
+	async save() {
+		return Promise.all(this.items.map(item => item.save()));
 	}
 
 	load(value) {
@@ -201,11 +195,5 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		}
 		value.forEach((v, i) => this.items[i].load(v));
 		this.refresh();
-	}
-
-	clearDownloadingProgresses() {
-		for (const item of this.items) {
-			item.clearDownloadingProgresses();
-		}
 	}
 };

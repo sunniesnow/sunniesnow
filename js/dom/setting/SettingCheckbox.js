@@ -1,5 +1,5 @@
 Sunniesnow.SettingCheckbox = class SettingCheckbox extends Sunniesnow.Setting {
-	get() {
+	value() {
 		return this.element.checked;
 	}
 

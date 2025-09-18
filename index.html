@@ -16,13 +16,12 @@ description: Sunniesnow is a web rhythm game
 	<legend id="level-file-category"></legend>
 
 	<div>
-		<input type="radio" id="level-file-online-radio" name="level-file" value="online" checked data-type="zip" data-input="level-file-online" data-load-button="level-file-button">
-		<input type="text" id="level-file-online" placeholder="sunniesnow-sample" data-prerequisite="level-file-online-radio" data-downloading="level-file-downloading" data-type="online" data-base-path="chart" data-suffix=".ssc">
-		<span id="level-file-downloading"></span>
+		<input type="radio" id="level-file-online-radio" name="level-file" value="online" checked data-hooks="radio-input|zip" data-input="level-file-online" data-load-button="level-file-button">
+		<input type="text" id="level-file-online" placeholder="sunniesnow-sample" data-prerequisite="level-file-online-radio" data-hooks="online(chart,.ssc)">
 	</div>
 
 	<div>
-		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload" data-type="zip" data-input="level-file-upload" data-load-button="level-file-button">
+		<input type="radio" id="level-file-upload-radio" name="level-file" value="upload" data-input="level-file-upload">
 		<input type="file" id="level-file-upload" accept=".ssc" data-prerequisite="level-file-upload-radio">
 	</div>
 
@@ -30,8 +29,8 @@ description: Sunniesnow is a web rhythm game
 </fieldset>
 
 <div>
-	<select id="music-select" data-type="zip-entry" data-source="level-file" data-accept="audio/*"></select>
-	<select id="chart-select" data-type="zip-entry" data-source="level-file" data-accept=".json"></select>
+	<select id="music-select" data-type="zip-entry" data-source="level-file" data-accept="audio/*" data-hooks="audio"></select>
+	<select id="chart-select" data-type="zip-entry" data-source="level-file" data-accept=".json" data-hooks="json"></select>
 </div>
 
 <details>
@@ -209,22 +208,21 @@ description: Sunniesnow is a web rhythm game
 		<legend id="background-category"></legend>
 
 		<div>
-			<input type="radio" id="background-none-radio" name="background" value="none" data-type="blob">
+			<input type="radio" id="background-none-radio" name="background" value="none" data-hooks="radio-input|texture">
 		</div>
 
 		<div>
-			<input type="radio" id="background-online-radio" name="background" value="online" data-type="blob" data-input="background-online">
-			<input type="text" id="background-online" value="default.svg" data-prerequisite="background-online-radio" data-downloading="background-downloading" data-type="online" data-base-path="background">
-			<span id="background-downloading"></span>
+			<input type="radio" id="background-online-radio" name="background" value="online" data-input="background-online">
+			<input type="text" id="background-online" value="default.svg" data-prerequisite="background-online-radio" data-hooks="online(background)">
 		</div>
 
 		<div>
-			<input type="radio" id="background-from-level-radio" name="background" value="from-level" checked data-type="blob" data-input="background-from-level">
+			<input type="radio" id="background-from-level-radio" name="background" value="from-level" checked data-input="background-from-level">
 			<select id="background-from-level" data-prerequisite="background-from-level-radio" data-type="zip-entry" data-source="level-file" data-accept="image/*"></select>
 		</div>
 
 		<div>
-			<input type="radio" id="background-upload-radio" name="background" value="upload" data-type="blob" data-input="background-upload">
+			<input type="radio" id="background-upload-radio" name="background" value="upload" data-input="background-upload">
 			<input type="file" id="background-upload" accept="image/*" data-prerequisite="background-upload-radio">
 		</div>
 	</fieldset>
@@ -247,17 +245,16 @@ description: Sunniesnow is a web rhythm game
 		<legend id="fx-category"></legend>
 
 		<div>
-			<input type="radio" id="fx-default-radio" name="fx" value="default" checked data-type="zip">
+			<input type="radio" id="fx-default-radio" name="fx" value="default" checked data-hooks="radio-input|zip">
 		</div>
 	
 		<div>
-			<input type="radio" id="fx-online-radio" name="fx" value="online" data-type="zip" data-input="fx-online">
-			<input type="text" id="fx-online" placeholder="empty" data-prerequisite="fx-online-radio" data-downloading="fx-downloading" data-type="online" data-base-path="fx" data-suffix=".ssp">
-			<span id="fx-downloading"></span>
+			<input type="radio" id="fx-online-radio" name="fx" value="online" data-input="fx-online">
+			<input type="text" id="fx-online" placeholder="empty" data-prerequisite="fx-online-radio" data-hooks="online(fx,.ssp)">
 		</div>
 	
 		<div>
-			<input type="radio" id="fx-upload-radio" name="fx" value="upload" data-type="zip" data-input="fx-upload">
+			<input type="radio" id="fx-upload-radio" name="fx" value="upload" data-input="fx-upload">
 			<input type="file" id="fx-upload" accept=".ssp" data-prerequisite="fx-upload-radio">
 		</div>
 	</fieldset>
@@ -266,17 +263,16 @@ description: Sunniesnow is a web rhythm game
 		<legend id="skin-category"></legend>
 
 		<div>
-			<input type="radio" id="skin-default-radio" name="skin" value="default" checked data-type="zip">
+			<input type="radio" id="skin-default-radio" name="skin" value="default" checked data-hooks="radio-input|zip">
 		</div>
 
 		<div>
-			<input type="radio" id="skin-online-radio" name="skin" value="online" data-type="zip" data-input="skin-online">
-			<input type="text" id="skin-online" placeholder="empty" data-prerequisite="skin-online-radio" data-downloading="skin-downloading" data-type="online" data-base-path="skin" data-suffix=".ssp">
-			<span id="skin-downloading"></span>
+			<input type="radio" id="skin-online-radio" name="skin" value="online" data-input="skin-online">
+			<input type="text" id="skin-online" placeholder="empty" data-prerequisite="skin-online-radio" data-hooks="online(skin,.ssp)">
 		</div>
 
 		<div>
-			<input type="radio" id="skin-upload-radio" name="skin" value="upload" data-type="zip" data-input="skin-upload">
+			<input type="radio" id="skin-upload-radio" name="skin" value="upload" data-input="skin-upload">
 			<input type="file" id="skin-upload" accept=".ssp" data-prerequisite="skin-upload-radio">
 		</div>
 	</fieldset>
@@ -361,11 +357,11 @@ description: Sunniesnow is a web rhythm game
 		<legend id="scroll-visual-category"></legend>
 
 		<div>
-			<input type="number" id="scroll-judgement-line" value="0.8" step="0.05">
+			<input type="number" id="scroll-judgement-line" value="0.8" step="0.05" data-prerequisite="scroll">
 		</div>
 
 		<div>
-			<input type="number" id="scroll-distance" value="1" step="0.1">
+			<input type="number" id="scroll-distance" value="1" step="0.1" data-prerequisite="scroll">
 		</div>
 	</fieldset>
 
@@ -434,17 +430,16 @@ description: Sunniesnow is a web rhythm game
 		<legend id="se-category"></legend>
 
 		<div>
-			<input type="radio" id="se-default-radio" name="se" value="default" checked data-type="zip">
+			<input type="radio" id="se-default-radio" name="se" value="default" checked data-hooks="radio-input|zip">
 		</div>
 
 		<div>
-			<input type="radio" id="se-online-radio" name="se" value="online" data-type="zip" data-input="se-online">
-			<input type="text" id="se-online" placeholder="empty" data-prerequisite="se-online-radio" data-downloading="se-downloading" data-type="online" data-base-path="se" data-suffix=".ssp">
-			<span id="se-downloading"></span>
+			<input type="radio" id="se-online-radio" name="se" value="online" data-input="se-online">
+			<input type="text" id="se-online" placeholder="empty" data-prerequisite="se-online-radio" data-hooks="online(se,.ssp)">
 		</div>
 
 		<div>
-			<input type="radio" id="se-upload-radio" name="se" value="upload" data-type="zip" data-input="se-upload">
+			<input type="radio" id="se-upload-radio" name="se" value="upload" data-input="se-upload">
 			<input type="file" id="se-upload" accept=".ssp" data-prerequisite="se-upload-radio">
 		</div>
 	</fieldset>
@@ -672,11 +667,11 @@ description: Sunniesnow is a web rhythm game
 		</div>
 
 		<div>
-			<input type="text" id="exclude-keys" value="Escape PrintScreen Alt Control Fn Meta F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12" data-prerequisite="enable-keyboard" data-type="key-list">
+			<input type="text" id="exclude-keys" value="Escape PrintScreen Alt Control Fn Meta F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12" data-prerequisite="enable-keyboard" data-hooks="space-list(Spacebar)">
 		</div>
 
 		<div>
-			<input type="text" id="pause-keys" value="`" data-prerequisite="enable-keyboard" data-type="key-list">
+			<input type="text" id="pause-keys" value="`" data-prerequisite="enable-keyboard" data-hooks="space-list(Spacebar)">
 		</div>
 
 		<div>
@@ -696,11 +691,11 @@ description: Sunniesnow is a web rhythm game
 		</div>
 
 		<div>
-			<input type="text" id="exclude-buttons" value="" data-prerequisite="enable-mouse" data-type="button-list">
+			<input type="text" id="exclude-buttons" value="" data-prerequisite="enable-mouse" data-hooks="space-list">
 		</div>
 
 		<div>
-			<input type="text" id="pause-buttons" value="" data-prerequisite="enable-mouse" data-type="button-list">
+			<input type="text" id="pause-buttons" value="" data-prerequisite="enable-mouse" data-hooks="space-list">
 		</div>
 
 		<div>
@@ -740,23 +735,22 @@ description: Sunniesnow is a web rhythm game
 		<legend id="avatar-category"></legend>
 
 		<div>
-			<input type="radio" id="avatar-none-radio" name="avatar" value="none" data-type="blob">
+			<input type="radio" id="avatar-none-radio" name="avatar" value="none" data-hooks="radio-input|texture">
 		</div>
 
 		<div>
-			<input type="radio" id="avatar-online-radio" name="avatar" value="online" checked data-type="blob" data-input="avatar-online">
-			<input type="text" id="avatar-online" value="default.svg" data-prerequisite="avatar-online-radio" data-downloading="avatar-downloading" data-type="online" data-base-path="avatar">
-			<span id="avatar-downloading"></span>
+			<input type="radio" id="avatar-online-radio" name="avatar" value="online" checked data-input="avatar-online">
+			<input type="text" id="avatar-online" value="default.svg" data-prerequisite="avatar-online-radio" data-hooks="online(avatar)">
 		</div>
 
 		<div>
-			<input type="radio" id="avatar-upload-radio" name="avatar" value="upload" data-type="blob" data-input="avatar-upload">
+			<input type="radio" id="avatar-upload-radio" name="avatar" value="upload" data-input="avatar-upload">
 			<input type="file" id="avatar-upload" accept="image/*" data-prerequisite="avatar-upload-radio">
 		</div>
 
 		<div>
-			<input type="radio" id="avatar-gravatar-radio" name="avatar" value="gravatar" data-type="blob" data-input="avatar-gravatar">
-			<input type="email" id="avatar-gravatar" placeholder="email@example.com" data-prerequisite="avatar-gravatar-radio" data-downloading="avatar-gravatar-downloading" data-type="gravatar">
+			<input type="radio" id="avatar-gravatar-radio" name="avatar" value="gravatar" data-input="avatar-gravatar">
+			<input type="email" id="avatar-gravatar" placeholder="email@example.com" data-prerequisite="avatar-gravatar-radio" data-hooks="sha256|online(https://gravatar.com/avatar,avatar-gravatar-downloading)">
 			<span id="avatar-gravatar-downloading"></span>
 		</div>
 	</fieldset>
@@ -863,13 +857,12 @@ description: Sunniesnow is a web rhythm game
 		<div id="plugin-list" data-type="list" data-list-template="plugin-list-item-" data-list-buttons="plugin-list-buttons">
 			<div id="plugin-list-item-" data-type="collection" data-list-item-buttons="plugin-list-item-buttons-" data-i18n="plugin" data-i18n-suffix="-">
 				<div>
-					<input type="radio" id="plugin-online-radio-" name="plugin-" value="online" checked data-type="zip" data-input="plugin-online-" data-load-button="plugin-button-">
-					<input type="text" id="plugin-online-" placeholder="empty" data-prerequisite="plugin-online-radio-" data-downloading="plugin-downloading-" data-type="online" data-base-path="plugin" data-suffix=".ssp">
-					<span id="plugin-downloading-"></span>
+					<input type="radio" id="plugin-online-radio-" name="plugin-" value="online" checked data-hooks="radio-input|zip" data-input="plugin-online-" data-load-button="plugin-button-">
+					<input type="text" id="plugin-online-" placeholder="empty" data-prerequisite="plugin-online-radio-" data-downloading="plugin-downloading-" data-hooks="online(plugin,.ssp)">
 				</div>
 
 				<div>
-					<input type="radio" id="plugin-upload-radio-" name="plugin-" value="upload" data-type="zip" data-input="plugin-upload-" data-load-button="plugin-button-">
+					<input type="radio" id="plugin-upload-radio-" name="plugin-" value="upload" data-input="plugin-upload-">
 					<input type="file" id="plugin-upload-" accept=".ssp" data-prerequisite="plugin-upload-radio-">
 				</div>
 
@@ -975,7 +968,7 @@ description: Sunniesnow is a web rhythm game
 			<button type="button" id="export-settings"></button>
 		</div>
 		<div>
-			<input type="file" id="import-settings">
+			<input type="file" id="import-settings" data-hooks="json">
 		</div>
 	</fieldset>
 
@@ -988,7 +981,7 @@ description: Sunniesnow is a web rhythm game
 			<button type="button" id="export-chart-offsets"></button>
 		</div>
 		<div>
-			<input type="file" id="import-chart-offsets">
+			<input type="file" id="import-chart-offsets" data-hooks="json">
 		</div>
 		<div>
 			<button type="button" id="offset-wizard"></button>
