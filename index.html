@@ -952,7 +952,7 @@ description: Sunniesnow is a web rhythm game
 	<fieldset>
 		<legend id="webpage-category"></legend>
 		<div>
-			<button type="button" id="refresh"></button>
+			<button type="button" id="refresh" onclick="location.reload(true);"></button>
 		</div>
 		<div>
 			<select id="lang-select"></select>
@@ -962,29 +962,29 @@ description: Sunniesnow is a web rhythm game
 	<fieldset>
 		<legend id="settings-category"></legend>
 		<div>
-			<button type="button" id="delete-settings"></button>
+			<button type="button" id="delete-settings" onclick="Sunniesnow.Settings.deleteSavedSettings();"></button>
 		</div>
 		<div>
-			<button type="button" id="export-settings"></button>
+			<button type="button" id="export-settings" onclick="Sunniesnow.Settings.exportSavedSettings();"></button>
 		</div>
 		<div>
-			<input type="file" id="import-settings" data-hooks="json">
+			<input type="file" id="import-settings" data-hooks="json" onchange="Sunniesnow.Settings.importSettings();">
 		</div>
 	</fieldset>
 
 	<fieldset>
 		<legend id="offsets-category"></legend>
 		<div>
-			<button type="button" id="delete-chart-offsets"></button>
+			<button type="button" id="delete-chart-offsets" onclick="Sunniesnow.Settings.deleteSavedChartOffsets();"></button>
 		</div>
 		<div>
-			<button type="button" id="export-chart-offsets"></button>
+			<button type="button" id="export-chart-offsets" onclick="Sunniesnow.Settings.exportSavedChartOffsets();"></button>
 		</div>
 		<div>
-			<input type="file" id="import-chart-offsets" data-hooks="json">
+			<input type="file" id="import-chart-offsets" data-hooks="json" onchange="Sunniesnow.Settings.importChartOffsets();">
 		</div>
 		<div>
-			<button type="button" id="offset-wizard"></button>
+			<button type="button" id="offset-wizard" onclick="Sunniesnow.Game.offsetWizard();"></button>
 		</div>
 	</fieldset>
 
@@ -992,15 +992,15 @@ description: Sunniesnow is a web rhythm game
 		<legend id="service-worker-category"></legend>
 
 		<div>
-			<button type="button" id="delete-online-caches"></button>
+			<button type="button" id="delete-online-caches" onclick="Sunniesnow.CacheManager.deleteOnlineCaches();"></button>
 		</div>
 		
 		<div>
-			<button type="button" id="delete-site-caches"></button>
+			<button type="button" id="delete-site-caches" onclick="Sunniesnow.CacheManager.deleteSiteCaches();"></button>
 		</div>
 
 		<div>
-			<button type="button" id="delete-external-caches"></button>
+			<button type="button" id="delete-external-caches" onclick="Sunniesnow.CacheManager.deleteExternalCaches();"></button>
 		</div>
 	</fieldset>
 
@@ -1008,7 +1008,7 @@ description: Sunniesnow is a web rhythm game
 		<legend id="logs-category"></legend>
 
 		<div>
-			<button type="button" id="logs-clear"></button>
+			<button type="button" id="logs-clear" onclick="Sunniesnow.Logs.clear();"></button>
 		</div>
 	</fieldset>
 
@@ -1016,9 +1016,9 @@ description: Sunniesnow is a web rhythm game
 		<legend id="operations-debug-category"></legend>
 
 		<div>
-			<button type="button" id="vconsole-setup"></button>
-			<button type="button" id="vconsole-hide"></button>
-			<button type="button" id="vconsole-destroy"></button>
+			<button type="button" id="vconsole-setup" onclick="Sunniesnow.VConsole.setup();"></button>
+			<button type="button" id="vconsole-hide" onclick="Sunniesnow.VConsole.hide();"></button>
+			<button type="button" id="vconsole-destroy" onclick="Sunniesnow.VConsole.destroy();"></button>
 		</div>
 	</fieldset>
 
@@ -1029,7 +1029,7 @@ description: Sunniesnow is a web rhythm game
 			<input type="number" id="cover-theme-image-x" placeholder="x">
 			<input type="number" id="cover-theme-image-y" placeholder="y">
 			<input type="number" id="cover-theme-image-width" placeholder="width">
-			<button type="button" id="cover-generate"></button>
+			<button type="button" id="cover-generate" onclick="Sunniesnow.CoverGenerator.download();"></button>
 		</div>
 	</fieldset>
 
@@ -1037,22 +1037,22 @@ description: Sunniesnow is a web rhythm game
 		<legend id="game-category"></legend>
 
 		<div>
-			<button type="button" id="game-start"></button>
-			<button type="button" id="game-stop"></button>
+			<button type="button" id="game-start" onclick="Sunniesnow.Game.run();"></button>
+			<button type="button" id="game-stop" onclick="Sunniesnow.game?.terminate();"></button>
 		</div>
 
 		<div>
-			<button type="button" id="game-pause"></button>
-			<button type="button" id="game-resume"></button>
-			<button type="button" id="game-retry"></button>
-			<button type="button" id="game-fullscreen"></button>
-			<button type="button" id="game-toggle-pause-ui"></button>
+			<button type="button" id="game-pause" onclick="Sunniesnow.game?.pause();"></button>
+			<button type="button" id="game-resume" onclick="Sunniesnow.game?.resume();"></button>
+			<button type="button" id="game-retry" onclick="Sunniesnow.game?.retry();"></button>
+			<button type="button" id="game-fullscreen" onclick="Sunniesnow.Fullscreen.toggle();"></button>
+			<button type="button" id="game-toggle-pause-ui" onclick="Sunniesnow.game?.togglePauseUi();"></button>
 		</div>
 	</fieldset>
 </details>
 
-<button type="button" id="start-button"></button>
-<button type="button" id="stop-button"></button>
+<button type="button" id="start-button" onclick="Sunniesnow.Game.run();"></button>
+<button type="button" id="stop-button" onclick="Sunniesnow.game?.terminate();"></button>
 <a href="help.html" target="_blank" id="help"></a>
 
 <div id="loading-progress"></div>

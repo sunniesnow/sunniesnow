@@ -1,5 +1,7 @@
-Sunniesnow.Preprocess = {
+Sunniesnow.ParamsProcessor = {
 
+	// Functions here can be async, but they are not awaited.
+	// Only URL parameters that do not match a setting key should be looked up here.
 	EXTRA_URL_PARAMS: {
 		instantStart(value) {
 			Sunniesnow.Game.run();
@@ -8,12 +10,13 @@ Sunniesnow.Preprocess = {
 			// Do nothing.
 			// Do not populate Sunniesnow.vscodeBrowserReqId here because
 			// this file itself may be cached by VS Code simple browser
-			// and because Sunniesnow.ScriptsLoader needs it before Sunniesnow.Preprocess.run().
+			// and because Sunniesnow.ScriptsLoader needs it before ParamsProcessor.processUrlParams().
 			// Sunniesnow.vscodeBrowserReqId is populated in _head.html instead.
 		}
 	},
 
-	async preprocess() {
+	async run() {
+		Sunniesnow.Patches.apply();
 		Sunniesnow.MiscDom.addScrollbarToAndroidWebView();
 		Sunniesnow.MiscDom.adjustCustomJudgementWindowsTable();
 		Sunniesnow.Settings.init();
@@ -22,16 +25,11 @@ Sunniesnow.Preprocess = {
 		Sunniesnow.PinnedCoordinates.init();
 		Sunniesnow.MiscDom.addEventListeners();
 		Sunniesnow.MiscDom.removeSiteLoadingNotice();
+		this.processUrlParams();
+		await Sunniesnow.CacheManager.registerServiceWorker();
 	},
 
-	async run() {
-		Sunniesnow.Patches.apply();
-		await this.preprocess();
-		this.readUrlParams();
-		await this.registerServiceWorker();
-	},
-
-	readUrlParams() {
+	processUrlParams() {
 		const params = Sunniesnow.Utils.urlSearchParamsObject();
 		const processedParams = {};
 		for (const key in this.EXTRA_URL_PARAMS) {
@@ -45,27 +43,4 @@ Sunniesnow.Preprocess = {
 			this.EXTRA_URL_PARAMS[key].call(this, processedParams[key]);
 		}
 	},
-
-	async registerServiceWorker() {
-		const sw = navigator.serviceWorker;
-		if (!sw) {
-			Sunniesnow.Logs.warn('Service worker is not supported on this browser')
-			return;
-		}
-		try {
-			if (Sunniesnow.serviceWorkerRegistration) {
-				Sunniesnow.serviceWorkerRegistration = await Sunniesnow.serviceWorkerRegistration.update();
-			} else {
-				const base = Sunniesnow.Utils.base();
-				let swUrl = `${base}/service-worker.js`;
-				if (Sunniesnow.vscodeBrowserReqId) {
-					swUrl += `?vscodeBrowserReqId=${Sunniesnow.vscodeBrowser}`;
-				}
-				Sunniesnow.serviceWorkerRegistration = await sw.register(swUrl, {scope: `${base}/`});
-			}
-		} catch (error) {
-			Sunniesnow.Logs.warn(`Failed to register service worker: ${error}`, error);
-		}
-	}
-
 };

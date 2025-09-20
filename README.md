@@ -1,12 +1,50 @@
 # Sunniesnow
 
 A web rhythm game.
-[Play the game online.](https://sunniesnow.github.io/game)
+Play the game online:
+[stable branch](https://sunniesnow.github.io/game),
+[master branch](https://sunniesnow.github.io/game-unstable).
+
+## Browser recommendations
+
+On desktop, any modern browser should work,
+and any browser-specific issues are considered bugs and should be reported.
+
+On Android, any modern browser should largely work
+but may not have good enough WebGL performance for the game to run smoothly.
+Recommended browsers are WebView-based browsers,
+and examples include Fulguris, Via, Opera GX, etc.
+
+On iOS, any browser that you can get from App Store probably
+have good enough performance for the game to run smoothly,
+but there is a bug in the WebKit engine used by Safari and most browsers
+on iOS that makes the game hardly playable
+(to elaborate, when a `touchend` event and a `touchstart` event should happen at roughly the same time,
+the `touchstart` event may not be fired at all).
+Fortunately, *some* of the WebView-based browsers on iOS do not have this bug,
+and examples include Via and QQ browser.
+Reporting more examples to be included here is appreciated.
+
+## Stable branch vs. master branch
+
+The master branch is currently under active development,
+so it probably has some undiscovered bugs.
+To ensure that players' gaming experiences cannot be easily affected by the development,
+the stable branch is used to keep an old version of the game
+that has been extensively tested and is considered to have no major bugs.
+Both versions are live on the website:
+[/game](https://sunniesnow.github.io/game) for the stable branch
+and [/game-unstable](https://sunniesnow.github.io/game-unstable) for the master branch.
+
+New features and insignificant bug fixes are only added to the master branch.
+Only significant bug fixes will be backported to the stable branch.
 
 ## Serve the game locally
 
 > [!NOTE]
 > If you play the game in this way, you still need internet access.
+> However, a feature to use a vendor in place of a CDN for external scripts
+> may be added in the future to allow full offline usage.
 
 [Install Ruby](https://www.ruby-lang.org/en/documentation/installation), and then run
 
@@ -25,7 +63,8 @@ You can see the built files in the `_site` directory.
 > [!NOTE]
 > Because Imgur blocks requests with `Origin` being localhost,
 > when testing related features (e.g. Discord Rich Presence),
-> you may want to use a different hostname instead of `localhost`.
+> you may want to use a different hostname instead of `localhost`
+> to access the locally served site.
 
 > [!NOTE]
 > You can enable HTTPS support by setting `JEKYLL_SSL=1` and trusting the generated certificate at `_ssl/ca.crt` in the browser.
@@ -40,6 +79,14 @@ You can see the built files in the `_site` directory.
 I do not think anyone would want to do this,
 but [sunniesnow-record](https://github.com/sunniesnow/sunniesnow-record) does this.
 Look at its source codes for reference.
+
+## Other development notes
+
+The entrypoint script can be found at `_head.html`.
+
+There are two main logics: the DOM main logic and the game main logic.
+The main function of the DOM main logic is `Sunniesnow.MiscDom.main()`,
+and the main function of the game main logic is `Sunniesnow.Game.run()`.
 
 ## License notice
 

@@ -5,11 +5,27 @@ Sunniesnow.Game = class Game {
 				Sunniesnow.Logs.warn('Still loading');
 				return;
 			}
-			Sunniesnow.game.terminate();
+			try {
+				Sunniesnow.game.terminate();
+			} catch (e) {
+				Sunniesnow.Logs.error(`Failed to terminate the previous game: ${e}`, e);
+			}
 		}
-		Sunniesnow.Logs.clear();
 		Sunniesnow.game = new this();
 		Sunniesnow.Loader.load();
+	}
+
+	// TODO: fix
+	static async offsetWizard() {
+		Sunniesnow.Settings.writeRadio('level-file', 'online');
+		Sunniesnow.Settings.writeValue('level-file-online', 'offset-wizard');
+		await Sunniesnow.Loader.loadChart();
+		this.run();
+		Object.assign(Sunniesnow.game.settings, {
+			volumeSe: 0,
+			autoplay: false,
+			chartOffset: 0
+		});
 	}
 
 	mainTicker({deltaTime}) {
@@ -132,14 +148,10 @@ Sunniesnow.Game = class Game {
 		if (!this.app) {
 			return;
 		}
-		try {
-			this.app.stop();
-			// https://github.com/pixijs/pixijs/discussions/11678
-			this.app.destroy({releaseGlobalResources: true});
-		} catch (err) {
-			Sunniesnow.Logs.error(`Failed to stop game: ${err.message ?? err}`, err);
-		}
-		Sunniesnow.game = null;
+		this.app.stop();
+		this.app.destroy({
+			releaseGlobalResources: true // https://github.com/pixijs/pixijs/discussions/11678
+		});
 	}
 
 	pause() {
@@ -154,6 +166,10 @@ Sunniesnow.Game = class Game {
 	togglePausing() {
 		Sunniesnow.Music.togglePausing();
 		this.hidePauseUi = this.settings.hidePauseUi;
+	}
+
+	togglePauseUi() {
+		this.hidePauseUi = !this.hidePauseUi;
 	}
 
 	retry() {

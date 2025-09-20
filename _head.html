@@ -13,6 +13,8 @@
 <link rel="stylesheet" href="css/style.css{{ affix }}">
 
 <script>
+	// Put all parameters that need to be passed by the static site generator here.
+	// Any other JS files should be agnostic to the static site generator.
 	Sunniesnow = {
 		vscodeBrowserReqId: location.search.match(/^\?.*vscodeBrowserReqId=(\d+)/)?.[1],
 		environment: '{{ jekyll.environment }}',
@@ -25,5 +27,5 @@
 <script src="js/ScriptsLoader.js{{ affix }}"></script>
 <script type="module">
 	await Sunniesnow.ScriptsLoader.initAndRunAllScripts();
-	await Sunniesnow.Preprocess.run();
+	await Sunniesnow.MiscDom.main();
 </script>

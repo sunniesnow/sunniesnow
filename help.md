@@ -1238,7 +1238,7 @@ This setting is **only** useful when [`enable-keyboard`](#enable-keyboard) is `t
 ##### Exclude keys
 
 - **Setting id**: `exclude-keys`.
-- **Possible values**: A list of keyboard keys seperated by spaces.
+- **Possible values**: A list of keyboard keys separated by spaces.
 
 This setting is used to set which keyboard keys should be excluded.
 This applies to **all** scenes including the main gameplay scene, the pause menu, and the results scene.
@@ -1253,7 +1253,7 @@ This setting is **only** useful when [`enable-keyboard`](#enable-keyboard) is `t
 ##### Pause keys
 
 - **Setting id**: `pause-keys`.
-- **Possible values**: A list of keyboard keys seperated by spaces.
+- **Possible values**: A list of keyboard keys separated by spaces.
 
 This setting is used to set which keyboard keys may be used to pause the music
 **even if** the mouse cursor is not pointing at the pause button
@@ -1312,7 +1312,7 @@ This setting is **only** useful when [`enable-mouse`](#enable-mouse) is `true`.
 {:#exclude-buttons}
 
 - **Setting id**: `exclude-buttons`.
-- **Possible values**: A list of mouse buttons seperated by spaces.
+- **Possible values**: A list of mouse buttons separated by spaces.
 
 This setting is used to set which mouse buttons should be excluded.
 This applies to **all** scenes including the main gameplay scene, the pause menu, and the results scene.
@@ -1331,7 +1331,7 @@ Because the list is short, here is the full list:
 {:#pause-buttons}
 
 - **Setting id**: `pause-buttons`.
-- **Possible values**: A list of mouse buttons seperated by spaces.
+- **Possible values**: A list of mouse buttons separated by spaces.
 
 This setting is used to set which mouse buttons may be used to pause the music
 **even if** the mouse cursor is not pointing at the pause button
