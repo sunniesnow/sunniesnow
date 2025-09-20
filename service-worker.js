@@ -1,21 +1,17 @@
 self.Sunniesnow = {};
-importScripts('js/utils/Utils.js');
-importScripts('js/ScriptsLoader.js');
-const {CDN_PREFIX, CDN_SCRIPTS, SITE_SCRIPTS} = Sunniesnow.ScriptsLoader;
+importScripts('js/utils/Utils.js', 'js/ScriptsLoader.js');
 
-const base = Sunniesnow.Utils.base();
-
+const {CDN_PREFIX} = Sunniesnow.ScriptsLoader;
+const BASE = Sunniesnow.Utils.base();
 const ONLINE_HOST = atob('c3Vubmllc25vdy1jb21tdW5pdHkuNzU3MzY4MDgueHl6');
-const SITE_RESOURCES = [
-	...SITE_SCRIPTS,
-	`${base}/css/style.css`,
-	`${base}/json/manifest.json`,
-	`${base}/index.html`,
-	`${base}/help.html`,
-	`${base}/`,
-	`${base}/popup`,
-	`${base}/popup/index.html`,
-	`${base}/popup/style.css`,
+const EXTRA_SITE_RESOURCES = [ // paths not included in ScriptsLoader.{cdnScripts,siteScripts,siteJson}
+	`${BASE}/css/style.css`,
+	`${BASE}/index.html`,
+	`${BASE}/help.html`,
+	`${BASE}/`,
+	`${BASE}/popup`,
+	`${BASE}/popup/index.html`,
+	`${BASE}/popup/style.css`,
 	'/favicon.ico',
 	'/favicon.svg',
 ];
@@ -27,9 +23,14 @@ const STORAGE_NAMES = [SITE_STORAGE_NAME, ONLINE_STORAGE_NAME, EXTERNAL_STORAGE_
 
 self.addEventListener('install', event => {
 	skipWaiting();
-	event.waitUntil(caches.open(SITE_STORAGE_NAME).then(
-		cache => cache.addAll([...CDN_SCRIPTS, ...SITE_RESOURCES])
-	));
+	event.waitUntil(Sunniesnow.ScriptsLoader.init().then(
+		() => caches.open(SITE_STORAGE_NAME)
+	).then(cache => cache.addAll([
+		...Sunniesnow.ScriptsLoader.cdnScripts.map(({path}) => path),
+		...Sunniesnow.ScriptsLoader.siteScripts.map(({path}) => path),
+		...Sunniesnow.ScriptsLoader.siteJson.map(path => `${BASE}/json/${path}.json`),
+		...EXTRA_SITE_RESOURCES
+	])));
 });
 
 self.addEventListener('activate', event => {
@@ -38,6 +39,16 @@ self.addEventListener('activate', event => {
 		key => STORAGE_NAMES.includes(key) || caches.delete(key)
 	))));
 });
+
+function isSiteResource(url) {
+	if (Sunniesnow.ScriptsLoader.cdnScripts?.some(({path}) => url.href === path)) {
+		return true;
+	}
+	if (url.origin !== location.origin) {
+		return false;
+	}
+	return url.pathname.startsWith(BASE) || EXTRA_SITE_RESOURCES.includes(url.pathname);
+}
 
 self.addEventListener('fetch', event => {
 	const oldRequest = event.request;
@@ -54,7 +65,7 @@ self.addEventListener('fetch', event => {
 			let cacheKey;
 			if (url.host === ONLINE_HOST) {
 				cacheKey = ONLINE_STORAGE_NAME;
-			} else if (url.href.startsWith(CDN_PREFIX) || SITE_RESOURCES.includes(url.pathname) || url.pathname.startsWith(Sunniesnow.Utils.dirname(location.pathname))) {
+			} else if (isSiteResource(url)) {
 				cacheKey = SITE_STORAGE_NAME;
 			} else if (!Sunniesnow.Utils.isPrivate(url.hostname)) {
 				cacheKey = EXTERNAL_STORAGE_NAME;

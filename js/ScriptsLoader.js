@@ -1,307 +1,97 @@
 Sunniesnow.ScriptsLoader = {
+	CDN_PREFIX: 'https://fastly.jsdelivr.net/npm',
 
-	CDN_PREFIX: 'https://fastly.jsdelivr.net/npm/',
-	SITE_PREFIX: `${Sunniesnow.Utils.base()}/js/`,
+	incarnation: Sunniesnow.ScriptsLoader,
 	polyfill: {keys: [], values: []},
 
-	setPolyfill(polyfill) {
-		[this.polyfill.keys, this.polyfill.values] = Sunniesnow.Utils.transposeArray(Object.entries(polyfill));
-	},
-
-	async runAllScripts() {
-		await this.runCdnScripts();
-		await this.runSiteScripts();
-	},
-
-	async runCdnScripts() {
-		for (const scriptPath of this.CDN_SCRIPTS) {
-			await this.runModule(scriptPath);
-		}
-	},
-
-	async runSiteScripts(scriptPaths = this.SITE_SCRIPTS) {
-		for (const [script, scriptPath] of await this.scriptContents(scriptPaths)) {
-			this.runScriptFromString(script, scriptPath);
-		}
-	},
-
-	async scriptContents(scriptPaths) {
-		return Promise.all(scriptPaths.map(async scriptPath => {
-			return [await this.fetchText(scriptPath), scriptPath];
-		}));
-	},
-
-	async runScript(scriptPath) {
-		const script = await this.fetchText(scriptPath);
-		this.runScriptFromString(script, scriptPath)
-	},
-
-	async runModule(scriptPath) {
-		if (scriptPath.endsWith('+esm')) {
-			let module = await import(scriptPath);
-			module = module.default ?? module;
-			const moduleName = scriptPath.includes('/@pixi/') ? 'PIXI' : Sunniesnow.Utils.slugToCamel(scriptPath.match(/\/([^/]+)@/)[1]);
-			if (globalThis[moduleName]) {
-				Object.assign(globalThis[moduleName], module);
-			} else {
-				globalThis[moduleName] = module;
-			}
-		} else {
-			const script = await this.fetchText(scriptPath);
-			// use indirect eval to run in global scope
-			eval?.(script + `\n//# sourceURL=${this.sourceUrl(scriptPath)}`);
-		}
-	},
-
-	async fetchText(path) {
+	async init() {
 		// https://github.com/microsoft/vscode/issues/205105
 		// https://github.com/microsoft/vscode/blob/7e805145f76dea04d774cb14b7bc85366c02e79d/extensions/simple-browser/preview-src/index.ts#L96-L98
 		// VS Code use this search parameter to bust the cache for the main webpage,
 		// but the caches for the resources that it request are not busted.
 		// Here is the workaround.
-		// Will service worker be blown up? I do not know.
-		if (Sunniesnow.vscodeBrowserReqId) {
-			path += `?vscodeBrowserReqId=${Sunniesnow.vscodeBrowserReqId}`;
+		this.reqIdSuffix = Sunniesnow.vscodeBrowserReqId ? `?vscodeBrowserReqId=${Sunniesnow.vscodeBrowserReqId}` : '';
+		this.data = await this.json('scripts');
+		this.cdnScripts = this.data.npmScripts.map(({path, pathMin, esm}) => {
+			if (Sunniesnow.environment === 'production' && pathMin) {
+				path = pathMin;
+			}
+			path = `${this.CDN_PREFIX}/${
+				path.replaceAll(/\$(\w+)/g, (match, varName) => this.data.npmLock[varName])
+			}${this.reqIdSuffix}`;
+			return {path, esm};
+		});
+		const mapSite = async path => {
+			path = `${Sunniesnow.Utils.base()}/js/${path}.js${this.reqIdSuffix}`;
+			return {path, script: await this.text(path)};
+		};
+		[this.customizableSiteScripts, this.siteScripts] = await Promise.all([
+			Promise.all(this.data.customizableSiteScripts.map(mapSite)),
+			Promise.all(this.data.siteScripts.map(mapSite))
+		]);
+		this.siteScripts = this.siteScripts.concat(this.customizableSiteScripts);
+		this.siteJson = this.data.siteJson; // do not load them immediately because not all of them are actually needed
+	},
+
+	initFromIncarnation() {
+		if (!this.incarnation) {
+			return;
 		}
+		this.reqIdSuffix = this.incarnation.reqIdSuffix;
+		this.data = this.incarnation.data;
+		this.cdnScripts = this.incarnation.cdnScripts;
+		this.customizableSiteScripts = this.incarnation.customizableSiteScripts;
+		this.siteScripts = this.incarnation.siteScripts;
+		this.siteJson = this.incarnation.siteJson;
+	},
+
+	async initAndRunAllScripts() {
+		await this.init();
+		await Promise.all(this.cdnScripts.map(this.runModule.bind(this)));
+		this.siteScripts.forEach(this.runScript.bind(this));
+	},
+
+	setPolyfill(polyfill) {
+		[this.polyfill.keys, this.polyfill.values] = Sunniesnow.Utils.transposeArray(Object.entries(polyfill));
+	},
+
+	runCustomizableSiteScripts() {
+		this.customizableSiteScripts.forEach(this.runScript.bind(this));
+	},
+
+	async runModule({path, esm}) {
+		if (esm) {
+			let module = await import(path);
+			module = module.default ?? module;
+			if (globalThis[esm]) {
+				Object.assign(globalThis[esm], module);
+			} else {
+				globalThis[esm] = module;
+			}
+		} else {
+			// use indirect eval to run in global scope
+			eval?.(`${await this.text(path)}\n//# sourceURL=${this.sourceUrl(path)}`);
+		}
+	},
+
+	async text(path) {
 		return await (await fetch(path)).text();
 	},
 
-	runScriptFromString(scriptString, scriptPath) {
-		if (scriptPath) {
-			scriptString += `\n//# sourceURL=${this.sourceUrl(scriptPath)}`;
+	runScript({script, path}) {
+		if (path) {
+			script += `\n//# sourceURL=${this.sourceUrl(path)}`;
 		}
-		new Function(...this.polyfill.keys, scriptString)(...this.polyfill.values);
+		new Function(...this.polyfill.keys, script)(...this.polyfill.values);
 	},
 	
+	async json(path) {
+		return JSON.parse(await this.text(`${Sunniesnow.Utils.base()}/json/${path}.json${this.reqIdSuffix}`));
+	},
+
 	sourceUrl(scriptPath) {
 		return Sunniesnow.Utils.isBrowser() ? scriptPath : scriptPath.replace(/^\//, '');
 	}
 };
 
-Sunniesnow.ScriptsLoader.CDN_SCRIPTS = [
-	`jszip@3.10.1/dist/jszip${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	`pixi.js@8.13.2/dist/pixi${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	`pixi.js@8.13.2/dist/packages/advanced-blend-modes${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	'mime@4.0.7/lite/+esm',
-	'marked@16.0.0/lib/marked.umd.js',
-	`dompurify@3.2.6/dist/purify${Sunniesnow.environment === 'production' ? '.min' : ''}.js`,
-	'audio-decode@2.2.3/+esm',
-	`liquidjs@10.21.1/dist/liquid.browser${Sunniesnow.environment === 'production' ? '.min' : '.umd'}.js`,
-	`vconsole@3.15.1/dist/vconsole.min.js`
-].map(path => `${Sunniesnow.ScriptsLoader.CDN_PREFIX}${path}`);
-
-Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS = [
-	'utils/StoryAssets',
-
-	'audio/Audio',
-	'audio/Music',
-	'audio/Se',
-	'audio/SeTap',
-	'audio/SeFlick',
-	'audio/SeHold',
-	'audio/SeDrag',
-	'audio/SeDragFlick',
-	'audio/SeWithMusic',
-
-	'touch/Touch',
-	'touch/TouchManager',
-
-	'ui/button/Button',
-	'ui/button/ButtonPauseBase',
-	'ui/button/ButtonPause',
-	'ui/button/ButtonResultRetry',
-	'ui/button/ButtonResultFullscreen',
-
-	'interaction/ProgressControl',
-	'interaction/DebugBoard',
-	'interaction/TouchEffectBase',
-	'interaction/TouchEffect',
-	'interaction/TouchEffectsBoard',
-	'interaction/EventInfoTip',
-
-	'interaction/level/Level',
-	'interaction/level/LevelNote',
-	'interaction/level/LevelTap',
-	'interaction/level/LevelFlick',
-	'interaction/level/LevelHold',
-	'interaction/level/LevelDrag',
-	'interaction/level/LevelDragFlick',
-
-	'filter/Filter',
-	'filter/FilterLiquid',
-	'filter/FilterSprite',
-	'filter/FilterEvent',
-	'filter/FilterFromChart',
-
-	'ui/LoadingProgress',
-	'ui/UiComponent',
-	'ui/Background',
-	'ui/TopCenterHud',
-	'ui/TopLeftHud',
-	'ui/TopRightHud',
-	'ui/ProgressBar',
-	'ui/DebugHud',
-
-	'ui/pause/PauseBackground',
-	'ui/pause/ButtonResume',
-	'ui/pause/ButtonRetry',
-	'ui/pause/ButtonFullscreen',
-	'ui/pause/PauseBoard',
-
-	'ui/result/Result',
-	'ui/result/ResultStatsAndCombo',
-	'ui/result/ResultTitle',
-	'ui/result/ResultDifficulty',
-	'ui/result/ResultRank',
-	'ui/result/ResultScore',
-	'ui/result/ResultAccuracy',
-	'ui/result/ResultProfile',
-	'ui/result/ResultAdditionalInfo',
-
-	'ui/event/UiEvent',
-	'ui/event/note/UiNotesBoard',
-	'ui/event/note/UiBgNotesBoard',
-	'ui/event/note/UiNoteBase',
-	'ui/event/note/UiNote',
-	'ui/event/note/UiTap',
-	'ui/event/note/UiFlick',
-	'ui/event/note/UiHold',
-	'ui/event/note/UiDrag',
-	'ui/event/note/UiDragFlick',
-	'ui/event/note/UiBgNote',
-	'ui/event/bg-pattern/UiBgPatternBoard',
-	'ui/event/bg-pattern/UiBgPattern',
-	'ui/event/bg-pattern/UiBigText',
-	'ui/event/bg-pattern/UiGrid',
-	'ui/event/bg-pattern/UiHexagon',
-	'ui/event/bg-pattern/UiCheckerboard',
-	'ui/event/bg-pattern/UiDiamondGrid',
-	'ui/event/bg-pattern/UiPentagon',
-	'ui/event/bg-pattern/UiTurntable',
-	'ui/event/bg-pattern/UiHexagram',
-	'ui/event/story/UiImagesBoard',
-	'ui/event/story/UiImage',
-	'ui/event/effect/UiEffectsBoard',
-
-	'ui/fx/FxBoard',
-	'ui/fx/FxNote',
-	'ui/fx/FxTap',
-	'ui/fx/FxFlick',
-	'ui/fx/FxHold',
-	'ui/fx/FxDrag',
-	'ui/fx/FxDragFlick',
-
-	'chart/Chart',
-	'chart/Event',
-	'chart/FilterableEvent',
-	'chart/Placeholder',
-	'chart/note/NoteBase',
-	'chart/note/Note',
-	'chart/note/Tap',
-	'chart/note/Flick',
-	'chart/note/Hold',
-	'chart/note/Drag',
-	'chart/note/DragFlick',
-	'chart/note/BgNote',
-	'chart/bg-pattern/BgPattern',
-	'chart/bg-pattern/BigText',
-	'chart/bg-pattern/Grid',
-	'chart/bg-pattern/Hexagon',
-	'chart/bg-pattern/Checkerboard',
-	'chart/bg-pattern/DiamondGrid',
-	'chart/bg-pattern/Pentagon',
-	'chart/bg-pattern/Turntable',
-	'chart/bg-pattern/Hexagram',
-	'chart/story/Image',
-	'chart/GlobalSpeed',
-	'chart/effect/EffectUiComponent',
-	'chart/effect/EffectBackground',
-	'chart/effect/EffectTopCenterHud',
-	'chart/effect/EffectTopLeftHud',
-	'chart/effect/EffectTopRightHud',
-	'chart/effect/EffectProgressBar',
-	'chart/effect/EffectTipPoint',
-	'chart/effect/EffectMultiple',
-
-	'ui/nonevent/tip-point/TipPointBase',
-	'ui/nonevent/tip-point/TipPoint',
-	'ui/nonevent/tip-point/TipPointsBoard',
-	'ui/nonevent/double-line/DoubleLineBase',
-	'ui/nonevent/double-line/DoubleLine',
-	'ui/nonevent/double-line/DoubleLinesBoard',
-	'ui/nonevent/judgement-line/JudgementLineBase',
-	'ui/nonevent/judgement-line/JudgementLine',
-
-	'vibration/VibrationManager',
-	'vibration/VibrationWithMusic',
-
-	'scene/Scene',
-	'scene/SceneLoading',
-	'scene/SceneGame',
-	'scene/SceneResult',
-];
-Sunniesnow.ScriptsLoader.SITE_SCRIPTS = [
-	'utils/Utils',
-	'utils/Mixin',
-	'utils/ObjectUrl',
-	'utils/PixiPatches',
-	'utils/Patches',
-	'utils/Fetcher',
-	'utils/Assets',
-
-	'dom/hook/Hook',
-	'dom/hook/HookAudio',
-	'dom/hook/HookJson',
-	'dom/hook/HookOnline',
-	'dom/hook/HookRadioInput',
-	'dom/hook/HookSha256',
-	'dom/hook/HookSpaceList',
-	'dom/hook/HookTexture',
-	'dom/hook/HookZip',
-	'dom/setting/Setting',
-	'dom/setting/SettingText',
-	'dom/setting/SettingNumber',
-	'dom/setting/SettingRange',
-	'dom/setting/SettingSelect',
-	'dom/setting/SettingCheckbox',
-	'dom/setting/SettingRadio',
-	'dom/setting/SettingFile',
-	'dom/setting/SettingCollection',
-	'dom/setting/SettingList',
-	'dom/setting/SettingZipEntry',
-	'dom/I18n',
-	'dom/Settings',
-	'dom/Fullscreen',
-	'dom/Logs',
-	'dom/MiscDom',
-	'dom/PinnedCoordinates',
-	'dom/Popup',
-	'dom/SpinUp',
-
-	'external/Sscharter',
-	'external/DiscordRichPresence',
-	'external/Imgur',
-
-	'Config',
-	'Plugin',
-	'Loader',
-	'Game',
-
-	...Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS,
-
-	'cover/Cover',
-	'cover/CoverGenerator',
-	'cover/CoverBackground',
-	'cover/CoverThemeImage',
-	'cover/CoverTitle',
-	'cover/CoverDifficulty',
-	'cover/CoverProfile',
-
-	'Preprocess',
-	'ScriptsLoader'
-];
-for (const array of [Sunniesnow.ScriptsLoader.SITE_SCRIPTS, Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS]) {
-	for (let i = 0; i < array.length; i++) {
-		array[i] = `${Sunniesnow.ScriptsLoader.SITE_PREFIX}${array[i]}.js`;
-	}
-}
+Sunniesnow.ScriptsLoader.initFromIncarnation();

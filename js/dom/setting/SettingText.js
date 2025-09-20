@@ -17,6 +17,9 @@ Sunniesnow.SettingText = class SettingText extends Sunniesnow.Setting {
 	}
 
 	set(value) {
+		if (Array.isArray(value)) {
+			value = value.join(' '); // to support legacy button list and key list
+		}
 		this.element.value = value;
 	}
 };

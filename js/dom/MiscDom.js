@@ -94,14 +94,6 @@ Sunniesnow.MiscDom = {
 		});
 	},
 
-	async triggerPreprocess() {
-		const script = document.createElement('script');
-		script.textContent = 'Sunniesnow.Preprocess.run();';
-		document.body.appendChild(script);
-		await Sunniesnow.Utils.untilLoaded(document.body);
-		script.remove();
-	},
-
 	// TODO: fix
 	async offsetWizard() {
 		Sunniesnow.Settings.writeRadio('level-file', 'online');

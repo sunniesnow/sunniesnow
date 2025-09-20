@@ -4,7 +4,7 @@ Sunniesnow.Plugin = class Plugin {
 
 	static async load() {
 		if (this.needsReset()) {
-			await this.reset();
+			this.reset();
 			await this.loadPlugins();
 			await this.applyPlugins();
 		}
@@ -62,9 +62,9 @@ Sunniesnow.Plugin = class Plugin {
 		}
 	}
 
-	static async reset() {
+	static reset() {
 		document.getElementById('plugins-readme').innerHTML = '';
-		await Sunniesnow.ScriptsLoader.runSiteScripts(Sunniesnow.ScriptsLoader.CUSTOMIZABLE_SITE_SCRIPTS);
+		Sunniesnow.ScriptsLoader.runCustomizableSiteScripts();
 	}
 
 	static async runMainFunctions() {
@@ -139,7 +139,7 @@ Sunniesnow.Plugin = class Plugin {
 		this.constructor.now = this;
 		const blob = this.blobs['main.js'];
 		if (blob) {
-			Sunniesnow.ScriptsLoader.runScriptFromString(await blob.text(), `plugin-${this.id}/main.js`);
+			Sunniesnow.ScriptsLoader.runScript({script: await blob.text(), path: `plugin-${this.id}/main.js`});
 		} else {
 			Sunniesnow.Logs.warn(`Plugin ${this.id} does not have a main.js`);
 		}

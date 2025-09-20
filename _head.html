@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 
-<link rel="manifest" href="manifest.json{{ affix }}">
+<link rel="manifest" href="json/manifest.json{{ affix }}">
 <link rel="stylesheet" href="css/style.css{{ affix }}">
 
 <script>
@@ -24,6 +24,6 @@
 <script src="js/utils/Utils.js{{ affix }}"></script>
 <script src="js/ScriptsLoader.js{{ affix }}"></script>
 <script type="module">
-	await Sunniesnow.ScriptsLoader.runAllScripts();
-	Sunniesnow.MiscDom.triggerPreprocess();
+	await Sunniesnow.ScriptsLoader.initAndRunAllScripts();
+	await Sunniesnow.Preprocess.run();
 </script>

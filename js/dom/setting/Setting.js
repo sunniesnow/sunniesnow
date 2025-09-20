@@ -98,16 +98,19 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 				return result;
 			}
 			this.currentHook = hook;
-			result = await hook.apply(result);
-			if (this.interrupted) {
-				this.interrupted = false;
+			try {
+				result = await hook.apply(result);
+				if (this.interrupted) {
+					this.interrupted = false;
+					throw new Error('Interrupted');
+				}
+			} catch (e) {
 				this.currentHook = null;
-				const error = new Error('Interrupted');
 				while (this.rejects.length > 0) {
-					this.rejects.shift()(error);
+					this.rejects.shift()(e);
 				}
 				this.resolves.length = 0;
-				throw error;
+				throw e;
 			}
 			this.currentHook = null;
 		}

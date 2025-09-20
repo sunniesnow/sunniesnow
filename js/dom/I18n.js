@@ -7,7 +7,7 @@ Sunniesnow.I18n = {
 	async init() {
 		this.langSelect = Sunniesnow.Settings.s.langSelect;
 		const availableLangs = new Set();
-		for (const [lang, langName] of Object.entries(await (await fetch('json/i18n/languages.json')).json())) {
+		for (const [lang, langName] of Object.entries(await Sunniesnow.ScriptsLoader.json('i18n/languages'))) {
 			const element = document.createElement('option');
 			element.value = lang;
 			element.innerText = langName;
@@ -29,9 +29,9 @@ Sunniesnow.I18n = {
 		if (this.sheets[this.lang]?.[name]) {
 			return this.sheets[this.lang][name];
 		}
-		const result = (this.sheets[this.lang] ??= {})[name] = await (await fetch(`json/i18n/${name}-${this.lang}.json`)).json();
+		const result = (this.sheets[this.lang] ??= {})[name] = await Sunniesnow.ScriptsLoader.json(`i18n/${name}-${this.lang}`);
 		if (this.lang !== this.FALLBACK_LANG) {
-			const fallbackSheet = (this.sheets[this.FALLBACK_LANG] ??= {})[name] ??= await (await fetch(`json/i18n/${name}-${this.FALLBACK_LANG}.json`)).json();
+			const fallbackSheet = (this.sheets[this.FALLBACK_LANG] ??= {})[name] ??= await Sunniesnow.ScriptsLoader.json(`i18n/${name}-${this.FALLBACK_LANG}`);
 			for (const key in fallbackSheet) {
 				result[key] = Object.assign({}, fallbackSheet[key], result[key] ?? {})
 			}
