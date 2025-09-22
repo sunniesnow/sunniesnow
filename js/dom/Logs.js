@@ -3,7 +3,7 @@ Sunniesnow.Logs = {
 		if (Sunniesnow.record?.suppressWarnings) {
 			return;
 		}
-		if (!Sunniesnow.game?.settings.suppressWarnings) {
+		if (!Sunniesnow.game?.settings?.suppressWarnings) {
 			this.add(msg, 'warning');
 		}
 		console.warn(msg);

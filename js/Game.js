@@ -1,5 +1,5 @@
 Sunniesnow.Game = class Game {
-	static run() {
+	static async run(overrideSettings) {
 		if (Sunniesnow.game) {
 			if (!Sunniesnow.Loader.loadingComplete) {
 				Sunniesnow.Logs.warn('Still loading');
@@ -12,16 +12,14 @@ Sunniesnow.Game = class Game {
 			}
 		}
 		Sunniesnow.game = new this();
-		Sunniesnow.Loader.load();
+		Sunniesnow.game.overrideSettings = overrideSettings;
+		await Sunniesnow.Loader.load();
 	}
 
-	// TODO: fix
 	static async offsetWizard() {
-		Sunniesnow.Settings.writeRadio('level-file', 'online');
-		Sunniesnow.Settings.writeValue('level-file-online', 'offset-wizard');
-		await Sunniesnow.Loader.loadChart();
-		this.run();
-		Object.assign(Sunniesnow.game.settings, {
+		await this.run({
+			levelFile: 'online',
+			levelFileOnline: 'offset-wizard',
 			volumeSe: 0,
 			autoplay: false,
 			chartOffset: 0
@@ -148,7 +146,6 @@ Sunniesnow.Game = class Game {
 		if (!this.app) {
 			return;
 		}
-		this.app.stop();
 		this.app.destroy({
 			releaseGlobalResources: true // https://github.com/pixijs/pixijs/discussions/11678
 		});

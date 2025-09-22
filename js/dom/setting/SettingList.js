@@ -168,8 +168,22 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		return this.items.map(item => item.value());
 	}
 
-	async get() {
-		return Promise.all(this.items.map(item => item.get()));
+	ensureToken(tokenOrValueOverride) {
+		const token = super.ensureToken(tokenOrValueOverride);
+		const valueOverride = token?.get(this);
+		if (!valueOverride) {
+			return token;
+		}
+		while (this.items.length < valueOverride.length) {
+			this.addItem();
+		}
+		this.items.forEach((item, i) => token.set(item, valueOverride[i]));
+		return token;
+	}
+
+	async get(tokenOrValueOverride) {
+		const token = this.ensureToken(tokenOrValueOverride);
+		return Promise.all(this.items.map(item => item.get(token)));
 	}
 
 	set(value) {

@@ -14,7 +14,7 @@ Sunniesnow.Hook = class Hook {
 	interrupt() {
 	}
 
-	async apply(value) {
+	async apply(value, token) {
 		return value;
 	}
 };

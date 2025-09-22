@@ -13,7 +13,8 @@ Sunniesnow.HookOnline = class HookOnline extends Sunniesnow.Hook {
 		this.suffix = suffix;
 	}
 
-	interrupt() {
+	// TODO: interrupt by token
+	interrupt(token) {
 		if (this.downloading) {
 			this.interrupted = true;
 		}

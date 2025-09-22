@@ -35,9 +35,7 @@ Sunniesnow.Patches = {
 		const e = Element.prototype;
 		e.requestFullscreen ??= e.webkitRequestFullscreen ?? e.mozRequestFullScreen ?? e.msRequestFullscreen;
 		e.requestFullscreen ??= e.webkitEnterFullscreen ?? e.mozEnterFullScreen ?? e.msEnterFullscreen;
-		e.requestFullscreen ??= function () {
-			return new Promise((resolve, reject) => reject(new TypeError('requestFullscreen() is not supported on this browser')));
-		};
+		e.requestFullscreen ??= () => Promise.reject(new TypeError('requestFullscreen() is not supported on this browser'));
 		const oldAddEventListener = e.addEventListener;
 		e.addEventListener = function (type, listener, options) {
 			oldAddEventListener.call(this, type, listener, options);

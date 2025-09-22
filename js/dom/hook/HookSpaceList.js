@@ -3,7 +3,7 @@ Sunniesnow.HookSpaceList = class HookSpaceList extends Sunniesnow.Hook {
 		this.spaceReplacement = spaceReplacement;
 	}
 
-	async apply(value) {
+	async apply(value, token) {
 		const result = value.split(' ');
 		if (result.length === 1 && result[0] === '') {
 			return [];

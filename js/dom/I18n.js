@@ -15,11 +15,11 @@ Sunniesnow.I18n = {
 			availableLangs.add(lang);
 		}
 		this.langSelect.addEventListener('change', event => this.setLang());
-		this.setLang(localStorage.getItem('lang') ?? navigator.languages.find(lang => this.availableLangs.has(lang)) ?? this.FALLBACK_LANG);
+		await this.setLang(localStorage.getItem('lang') ?? navigator.languages.find(lang => availableLangs.has(lang)) ?? this.FALLBACK_LANG);
 	},
 
-	setLang(lang) {
-		this.lang = lang ?? this.langSelect.get();
+	async setLang(lang) {
+		this.lang = lang ?? await this.langSelect.get();
 		localStorage.setItem('lang', this.lang);
 		this.langSelect.set(this.lang);
 		this.apply();

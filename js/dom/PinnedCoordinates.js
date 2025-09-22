@@ -2,8 +2,8 @@ Sunniesnow.PinnedCoordinates = {
 
 	init() {
 		this.span = document.getElementById('pinned-coordinates');
-		this.pointToItem = new WeakMap();
-		this.itemToPoint = new WeakMap();
+		this.pointToItem = new Sunniesnow.WeakMap();
+		this.itemToPoint = new Sunniesnow.WeakMap();
 		this.input = document.getElementById('pinned-coordinates-input');
 		this.input.addEventListener('keydown', event => {
 			if (event.key === 'Escape') {

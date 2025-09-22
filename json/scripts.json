@@ -23,14 +23,15 @@
 	"siteScripts": [
 		"utils/Utils",
 		"utils/Mixin",
+		"utils/WeakMap",
 		"utils/ObjectUrl",
 		"utils/PixiPatches",
 		"utils/Patches",
-		"utils/Fetcher",
 		"utils/Assets",
 
 		"dom/hook/Hook",
 		"dom/hook/HookAudio",
+		"dom/hook/HookAvoidNull",
 		"dom/hook/HookJson",
 		"dom/hook/HookOnline",
 		"dom/hook/HookRadioInput",

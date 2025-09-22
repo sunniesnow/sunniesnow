@@ -74,19 +74,24 @@ You can see the built files in the `_site` directory.
 > You can change the hostname by modifying `_ssl/*.cnf` files
 > and deleting the previously generated `_ssl/server.*` files.
 
-## Use in Node.js
-
-I do not think anyone would want to do this,
-but [sunniesnow-record](https://github.com/sunniesnow/sunniesnow-record) does this.
-Look at its source codes for reference.
-
-## Other development notes
+## Development notes
 
 The entrypoint script can be found at `_head.html`.
+
+The reason to use `ScriptsLoader` to load scripts dynamically
+instead of traditionally using `require` or `import` to manage modular codes
+is to make plugins easier to handle.
+Some scripts need to be evaluated multiple times due to changing plugins,
+and having a `ScriptsLoader` module to manage this makes it easier.
 
 There are two main logics: the DOM main logic and the game main logic.
 The main function of the DOM main logic is `Sunniesnow.MiscDom.main()`,
 and the main function of the game main logic is `Sunniesnow.Game.run()`.
+
+I do not think anyone would want to do this,
+but it is possible to run Sunniesnow in Node.js environment.
+Look at the source codes of
+[sunniesnow-record](https://github.com/sunniesnow/sunniesnow-record) for reference.
 
 ## License notice
 

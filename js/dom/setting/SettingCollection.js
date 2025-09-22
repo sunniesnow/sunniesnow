@@ -103,11 +103,24 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 		return result;
 	}
 
-	async get() {
+	ensureToken(tokenOrValueOverride) {
+		const token = super.ensureToken(tokenOrValueOverride);
+		const valueOverride = token?.get(this);
+		if (!valueOverride) {
+			return token;
+		}
+		for (const [id, setting] of this.mapSettingIdToSetting) {
+			token.set(setting, valueOverride?.[Sunniesnow.Utils.slugToCamel(id)]);
+		}
+		return token;
+	}
+
+	async get(tokenOrValueOverride) {
+		const token = this.ensureToken(tokenOrValueOverride);
 		const result = {};
 		await Promise.all(Array.from(this.mapSettingIdToSetting).map(async ([id, setting]) => {
 			// the conversion between slug and camel is to keep backward compatibility
-			result[Sunniesnow.Utils.slugToCamel(id)] = await setting.get();
+			result[Sunniesnow.Utils.slugToCamel(id)] = await setting.get(token);
 		}));
 		return result;
 	}

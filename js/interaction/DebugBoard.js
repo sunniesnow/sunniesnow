@@ -19,7 +19,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		this.earlyLateTexts = [];
 		this.eventInfoTipHighlights = new Set();
 		this.addTouchListeners();
-		this.movingPointsOfTouches = new WeakMap();
+		this.movingPointsOfTouches = new Sunniesnow.WeakMap();
 	}
 
 	addTouchListeners() {

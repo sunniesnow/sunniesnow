@@ -9,7 +9,6 @@ Sunniesnow.Settings = {
 		if (!Sunniesnow.game.settings.levelFile) {
 			throw new Error('No level loaded');
 		}
-		this.tryAvoidingNoBackground();
 		Sunniesnow.game.progressAdjustable = Sunniesnow.game.settings.progressAdjustable && Sunniesnow.game.settings.autoplay;
 	},
 
@@ -28,25 +27,19 @@ Sunniesnow.Settings = {
 		this.s.langSelect = new Sunniesnow.SettingSelect(null, document.getElementById('lang-select'));
 		this.s.importSettings = new Sunniesnow.SettingFile(null, document.getElementById('import-settings'));
 		this.s.importChartOffsets = new Sunniesnow.SettingFile(null, document.getElementById('import-chart-offsets'));
-		this.s.levelFile.addEventListener('ziploaded', event => {
+		this.s.levelFile.addEventListener('load', event => {
 			if (this.s.levelFile.value() === 'online') {
 				this.writeSavedChartOffset(this.s.levelFileOnline.value());
 			} else {
 				this.s.chartOffset.set(0);
 			}
 			this.clearLevelReadme();
-			for (const [filename, file] of Object.entries(this.s.levelFile.zip.files)) {
+			for (const [filename, file] of Object.entries(event.value.files)) {
 				if (Sunniesnow.Utils.needsDisplayTextFile(filename)) {
 					file.async('text').then(text => this.fillLevelReadme(filename, text));
 				}
 			}
 		});
-	},
-
-	tryAvoidingNoBackground() {
-		if (this.s.background.value() === 'from-level' && !this.s.backgroundFromLevel.value()) {
-			this.s.background.set('online');
-		}
 	},
 
 	fillLevelReadme(filename, text) {
@@ -73,7 +66,7 @@ Sunniesnow.Settings = {
 	},
 
 	async readSettings() {
-		Sunniesnow.game.settings = await this.mainSettings.get();
+		Sunniesnow.game.settings = await this.mainSettings.get(Sunniesnow.game.overrideSettings);
 	},
 
 	writeSavedSettings() {
@@ -145,34 +138,25 @@ Sunniesnow.Settings = {
 	},
 
 	async importSettings() {
-		const file = this.s.importSettings.get();
-		if (!file) {
-			return;
-		}
-		let importSuccess = false;
+		let settings;
 		try {
-			localStorage.setItem('settings', await file.text());
-			importSuccess = true;
+			settings = await this.s.importSettings.get();
+			this.writeSettings(settings);
+			localStorage.setItem('settings', JSON.stringify(settings));
 		} catch (e) {
-			Sunniesnow.Logs.warn(`Failed to import settings: ${e.message ?? e}`);
-		}
-		if (importSuccess) {
-			this.writeSavedSettings();
+			Sunniesnow.Logs.error(`Failed to import settings: ${e}`, e);
 		}
 	},
 
 	async importChartOffsets() {
-		const file = this.s.importChartOffsets.get();
-		if (!file) {
-			return;
-		}
-		const oldJson = localStorage.getItem('chartOffsets');
-		const chartOffsets = oldJson ? JSON.parse(oldJson) : {};
-		Object.assign(chartOffsets, JSON.parse(await file.text()));
+		const oldChartOffsets = localStorage.getItem('chartOffsets');
+		let chartOffsets;
 		try {
+			chartOffsets = await this.s.importChartOffsets.get();
+			chartOffsets = Object.assign(JSON.parse(oldChartOffsets), chartOffsets);
 			localStorage.setItem('chartOffsets', JSON.stringify(chartOffsets));
 		} catch (e) {
-			Sunniesnow.Logs.warn(`Failed to import chart offsets: ${e.message ?? e}`);
+			Sunniesnow.Logs.error(`Failed to import chart offsets: ${e}`, e);
 		}
 	},
 
