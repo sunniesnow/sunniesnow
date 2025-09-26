@@ -965,10 +965,13 @@ description: Sunniesnow is a web rhythm game
 			<button type="button" id="delete-settings" onclick="Sunniesnow.Settings.deleteSavedSettings();"></button>
 		</div>
 		<div>
+			<span id="export-import-settings-introducer"></span>
 			<button type="button" id="export-settings" onclick="Sunniesnow.Settings.exportSavedSettings();"></button>
+			<button type="button" id="import-settings" onclick="Sunniesnow.Settings.importSettings();"></button>
 		</div>
 		<div>
-			<input type="file" id="import-settings" data-hooks="json" onchange="Sunniesnow.Settings.importSettings();">
+			<textarea id="settings-input" data-hooks="json"></textarea>
+			<button type="button" id="copy-settings" onclick="Sunniesnow.Settings.copySettings();"></button>
 		</div>
 	</fieldset>
 
@@ -978,10 +981,13 @@ description: Sunniesnow is a web rhythm game
 			<button type="button" id="delete-chart-offsets" onclick="Sunniesnow.Settings.deleteSavedChartOffsets();"></button>
 		</div>
 		<div>
+			<span id="export-import-chart-offsets-introducer"></span>
 			<button type="button" id="export-chart-offsets" onclick="Sunniesnow.Settings.exportSavedChartOffsets();"></button>
+			<button type="button" id="import-chart-offsets" onclick="Sunniesnow.Settings.importChartOffsets();"></button>
 		</div>
 		<div>
-			<input type="file" id="import-chart-offsets" data-hooks="json" onchange="Sunniesnow.Settings.importChartOffsets();">
+			<textarea id="chart-offsets-input" data-hooks="json"></textarea>
+			<button type="button" id="copy-chart-offsets" onclick="Sunniesnow.Settings.copyChartOffsets();"></button>
 		</div>
 		<div>
 			<button type="button" id="offset-wizard" onclick="Sunniesnow.Game.offsetWizard();"></button>

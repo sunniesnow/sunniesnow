@@ -1,6 +1,6 @@
 Sunniesnow.Game = class Game {
 	static async run(overrideSettings) {
-		if (Sunniesnow.game) {
+		if (Sunniesnow.game && !Sunniesnow.game.terminating) {
 			if (!Sunniesnow.Loader.loadingComplete) {
 				Sunniesnow.Logs.warn('Still loading');
 				return;
@@ -179,6 +179,9 @@ Sunniesnow.Game = class Game {
 	}
 
 	postLoading() {
+		if (!Sunniesnow.Loader.loadingModulesComplete) {
+			return;
+		}
 		this.initInteraction();
 		this.initAuxiliaryBoard();
 	}

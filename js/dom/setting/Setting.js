@@ -40,6 +40,9 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 		this.uninterruptibleStatus = new Sunniesnow.WeakMap();
 		this.hooks = [];
 		this.postInit();
+		if (!collection) {
+			this.secondRound();
+		}
 	}
 
 	// Convenience method for subclasses.

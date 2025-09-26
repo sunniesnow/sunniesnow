@@ -811,5 +811,14 @@ Sunniesnow.Utils = {
 			return false;
 		}
 		return document.fonts.keys().some(e => e.family == fontFamily);
-	}
+	},
+
+	copyTextInput(element) {
+		if (navigator.clipboard?.writeText) {
+			return navigator.clipboard.writeText(element.value);
+		}
+		element.select();
+		element.setSelectionRange(0, element.value.length);
+		document.execCommand('copy');
+	},
 };

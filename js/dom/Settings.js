@@ -25,8 +25,8 @@ Sunniesnow.Settings = {
 			this.s[Sunniesnow.Utils.slugToCamel(settingId)] = setting;
 		}
 		this.s.langSelect = new Sunniesnow.SettingSelect(null, document.getElementById('lang-select'));
-		this.s.importSettings = new Sunniesnow.SettingFile(null, document.getElementById('import-settings'));
-		this.s.importChartOffsets = new Sunniesnow.SettingFile(null, document.getElementById('import-chart-offsets'));
+		this.s.settingsInput = new Sunniesnow.SettingText(null, document.getElementById('settings-input'));
+		this.s.chartOffsetsInput = new Sunniesnow.SettingText(null, document.getElementById('chart-offsets-input'));
 		this.s.levelFile.addEventListener('load', event => {
 			if (this.s.levelFile.value() === 'online') {
 				this.writeSavedChartOffset(this.s.levelFileOnline.value());
@@ -125,7 +125,7 @@ Sunniesnow.Settings = {
 			Sunniesnow.Logs.warn('No saved settings to export');
 			return;
 		}
-		Sunniesnow.Utils.downloadText(text, 'settings.json', 'application/json');
+		this.s.settingsInput.set(text);
 	},
 
 	exportSavedChartOffsets() {
@@ -134,13 +134,17 @@ Sunniesnow.Settings = {
 			Sunniesnow.Logs.warn('No saved chart offsets to export');
 			return;
 		}
-		Sunniesnow.Utils.downloadText(text, 'chart-offsets.json', 'application/json');
+		this.s.chartOffsetsInput.set(text);
+	},
+
+	copySettings() {
+		Sunniesnow.Utils.copyTextInput(this.s.settingsInput.element);
 	},
 
 	async importSettings() {
 		let settings;
 		try {
-			settings = await this.s.importSettings.get();
+			settings = await this.s.settingsInput.get();
 			this.writeSettings(settings);
 			localStorage.setItem('settings', JSON.stringify(settings));
 		} catch (e) {
@@ -152,12 +156,16 @@ Sunniesnow.Settings = {
 		const oldChartOffsets = localStorage.getItem('chartOffsets');
 		let chartOffsets;
 		try {
-			chartOffsets = await this.s.importChartOffsets.get();
+			chartOffsets = await this.s.chartOffsetsInput.get();
 			chartOffsets = Object.assign(JSON.parse(oldChartOffsets), chartOffsets);
 			localStorage.setItem('chartOffsets', JSON.stringify(chartOffsets));
 		} catch (e) {
 			Sunniesnow.Logs.error(`Failed to import chart offsets: ${e}`, e);
 		}
+	},
+
+	copyChartOffsets() {
+		Sunniesnow.Utils.copyTextInput(this.s.chartOffsetsInput.element);
 	},
 
 	setDeviceDependentDefaults() {
