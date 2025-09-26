@@ -65,7 +65,7 @@ Sunniesnow.Assets = {
 		const isObjectUrl = url.startsWith('blob:') || url.startsWith('data:');
 		let blob;
 		if (!isObjectUrl) {
-			this.progresses.set(url, 0);
+			Sunniesnow.Loader.downloadingProgresses.set(url, 0);
 			const response = await Sunniesnow.Utils.strictFetch(url);
 			const contentLength = Number(response.headers.get('Content-Length'));
 			const reader = response.body.getReader();
@@ -78,7 +78,7 @@ Sunniesnow.Assets = {
 				}
 				chunks.push(value);
 				receivedLength += value.length;
-				this.progresses.set(url, receivedLength / contentLength);
+				Sunniesnow.Loader.downloadingProgresses.set(url, receivedLength / contentLength);
 			}
 			blob = new Blob(chunks, {type: response.headers.get('Content-Type')});
 		}
@@ -100,7 +100,7 @@ Sunniesnow.Assets = {
 		}
 		const result = await PIXI.Assets.load({src, ...options});
 		if (!isObjectUrl) {
-			this.progresses.delete(url);
+			Sunniesnow.Loader.downloadingProgresses.delete(url);
 		}
 		return result;
 	}

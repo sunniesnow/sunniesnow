@@ -4,6 +4,7 @@ Sunniesnow.Loader = {
 		this.loadingModulesComplete = false;
 		this.loadingModulesProgress = 0;
 		this.targetLoadingModulesProgress = 0;
+		this.downloadingProgresses = new Map();
 		this.modulesQueue = [];
 		this.loadMeta();
 		this.loadFilter();

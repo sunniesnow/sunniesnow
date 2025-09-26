@@ -61,13 +61,23 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 		this.progressBar.fill(0x000000);
 	}
 
+	sanitizeUrl(url) {
+		if (url.startsWith(Sunniesnow.Config.SERVER_BASE_URL)) {
+			url = url.slice(Sunniesnow.Config.SERVER_BASE_URL.length + 1);
+		}
+		if (Sunniesnow.authentication && url.includes(Sunniesnow.authentication)) {
+			url = url.replace(Sunniesnow.authentication, '***');
+		}
+		return url;
+	}
+
 	populateAssetProgressBar(name) {
 		const container = new PIXI.Container();
 		container.label = `asset-progress-bar-${name}`;
 		container.x = Sunniesnow.Config.WIDTH / 2;
 		const bar = new PIXI.Graphics();
 		bar.label = 'bar';
-		const text = new PIXI.Text({text: name, style: {
+		const text = new PIXI.Text({text: this.sanitizeUrl(name), style: {
 			fontSize: Sunniesnow.Config.HEIGHT / 30,
 			fill: 'white',
 			align: 'center'
@@ -88,14 +98,14 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 	}
 
 	updateAssetProgressBars() {
-		for (const name of Sunniesnow.Assets.progresses.keys()) {
+		for (const name of Sunniesnow.Loader.downloadingProgresses.keys()) {
 			if (!this.assetProgressBars.has(name)) {
 				this.populateAssetProgressBar(name);
 			}
 		}
 		const keysToRemove = [];
 		for (const name of this.assetProgressBars.keys()) {
-			if (!Sunniesnow.Assets.progresses.has(name)) {
+			if (!Sunniesnow.Loader.downloadingProgresses.has(name)) {
 				keysToRemove.push(name);
 			}
 		}
@@ -108,7 +118,7 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 	updateAssetProgressBar(name, index) {
 		const {container, bar} = this.assetProgressBars.get(name);
 		container.y = Sunniesnow.Config.HEIGHT * 2/3 + index * Sunniesnow.Config.HEIGHT/10;
-		const progress = Sunniesnow.Assets.progresses.get(name);
+		const progress = Sunniesnow.Loader.downloadingProgresses.get(name);
 		const width = Sunniesnow.Config.WIDTH / 2;
 		const height = Sunniesnow.Config.HEIGHT / 20;
 		const thickness = Sunniesnow.Config.HEIGHT / 100;

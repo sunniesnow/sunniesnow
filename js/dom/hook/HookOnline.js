@@ -36,6 +36,7 @@ Sunniesnow.HookOnline = class HookOnline extends Sunniesnow.Hook {
 			this.progressElement.textContent = '0% (0 / ?)';
 		}
 		const url = Sunniesnow.Utils.url(this.basePath, value, this.suffix);
+		Sunniesnow.Loader.downloadingProgresses?.set(url, 0);
 		const response = await Sunniesnow.Utils.strictFetch(url);
 		const contentLength = Number(response.headers.get('Content-Length'));
 		if (this.progressElement) {
@@ -60,7 +61,9 @@ Sunniesnow.HookOnline = class HookOnline extends Sunniesnow.Hook {
 			if (this.progressElement) {
 				this.progressElement.textContent = `${Sunniesnow.Utils.toPercentage(receivedLength / contentLength)} (${receivedLength} / ${contentLength})`;
 			}
+			Sunniesnow.Loader.downloadingProgresses?.set(url, receivedLength / contentLength);
 		}
+		Sunniesnow.Loader.downloadingProgresses?.delete(url);
 		this.downloading = false;
 		return new Blob(chunks, {type: response.headers.get('Content-Type')});
 	}
