@@ -12,6 +12,10 @@ Sunniesnow.Game = class Game {
 			}
 		}
 		Sunniesnow.game = new this();
+		// game.settings will be replaced with await mainSettings.get() in Settings.load().
+		// The reason for this two-stage initialization is that get() is async and slow,
+		// but some settings can be used immediately, among which are the settings that are needed to initialize Pixi app.
+		Sunniesnow.game.settings = Object.assign(Sunniesnow.Settings.mainSettings.value(), overrideSettings);
 		Sunniesnow.game.overrideSettings = overrideSettings;
 		await Sunniesnow.Loader.load();
 	}
@@ -27,9 +31,6 @@ Sunniesnow.Game = class Game {
 	}
 
 	mainTicker({deltaTime}) {
-		if (!this.sceneInitialized) {
-			this.initScene();
-		}
 		this.update(deltaTime);
 	}
 
@@ -66,6 +67,7 @@ Sunniesnow.Game = class Game {
 			// PIXI.initDevtools({app: this.app});
 			globalThis.__PIXI_APP__ = this.app;
 		}
+		this.initScene();
 	}
 
 	initLevel() {
@@ -80,7 +82,6 @@ Sunniesnow.Game = class Game {
 
 	initScene() {
 		this.goto(new Sunniesnow.SceneLoading());
-		this.sceneInitialized = true;
 	}
 
 	updateModules(delta) {

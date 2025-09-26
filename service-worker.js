@@ -63,12 +63,14 @@ self.addEventListener('fetch', event => {
 		}
 		return fetch(oldRequest).then(fetched => {
 			let cacheKey;
-			if (url.host === ONLINE_HOST) {
-				cacheKey = ONLINE_STORAGE_NAME;
-			} else if (isSiteResource(url)) {
-				cacheKey = SITE_STORAGE_NAME;
-			} else if (!Sunniesnow.Utils.isPrivate(url.hostname)) {
-				cacheKey = EXTERNAL_STORAGE_NAME;
+			if (url.protocol === 'https:') {
+				if (url.host === ONLINE_HOST) {
+					cacheKey = ONLINE_STORAGE_NAME;
+				} else if (isSiteResource(url)) {
+					cacheKey = SITE_STORAGE_NAME;
+				} else if (!Sunniesnow.Utils.isPrivate(url.hostname)) {
+					cacheKey = EXTERNAL_STORAGE_NAME;
+				}
 			}
 			if (cacheKey) {
 				const clonedResponse = fetched.clone();

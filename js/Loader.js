@@ -25,10 +25,10 @@ Sunniesnow.Loader = {
 	},
 
 	loadMeta() {
-		this.loadModule('Settings');
 		this.loadModule('Config');
-		this.loadModule('Plugin');
 		this.loadModule('SpinUp');
+		this.loadModule('Settings');
+		this.loadModule('Plugin');
 	},
 
 	loadAudioAndChart() {

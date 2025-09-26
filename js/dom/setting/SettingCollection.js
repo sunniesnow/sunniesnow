@@ -98,7 +98,7 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 	value() {
 		const result = {};
 		for (const [id, setting] of this.mapSettingIdToSetting) {
-			result[id] = setting.value();
+			result[Sunniesnow.Utils.slugToCamel(id)] = setting.value();
 		}
 		return result;
 	}
@@ -127,8 +127,9 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 
 	set(value) {
 		for (const [id, setting] of this.mapSettingIdToSetting) {
-			if (id in value) {
-				setting.set(value[id]);
+			const camelId = Sunniesnow.Utils.slugToCamel(id);
+			if (camelId in value) {
+				setting.set(value[camelId]);
 			}
 		}
 	}
