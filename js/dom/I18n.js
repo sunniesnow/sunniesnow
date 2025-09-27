@@ -42,22 +42,24 @@ Sunniesnow.I18n = {
 	async apply(element) {
 		element ??= document.getElementById('main-wrapper');
 		const sheetName = element.dataset.i18n;
-		const suffix = element.dataset.i18nSuffix ?? '';
-		const sheet = await this.sheet(sheetName);
-		for (const [id, contents] of Object.entries(sheet.directReplacements)) {
-			element.querySelector(`#${id}${suffix}`).innerHTML = contents;
-		}
-		if (this.labelNodes.has(element)) {
-			for (const child of this.labelNodes.get(element)) {
-				child.remove();
+		if (sheetName) {
+			const suffix = element.dataset.i18nSuffix ?? '';
+			const sheet = await this.sheet(sheetName);
+			for (const [id, contents] of Object.entries(sheet.directReplacements)) {
+				element.querySelector(`#${id}${suffix}`).innerHTML = contents;
 			}
-		} else {
-			this.labelNodes.set(element, []);
-		}
-		const labelNodes = this.labelNodes.get(element);
-		labelNodes.length = 0;
-		for (const [id, contents] of Object.entries(sheet.labels)) {
-			this.applyLabel(element.querySelector(`#${id}${suffix}`), contents, labelNodes);
+			if (this.labelNodes.has(element)) {
+				for (const child of this.labelNodes.get(element)) {
+					child.remove();
+				}
+			} else {
+				this.labelNodes.set(element, []);
+			}
+			const labelNodes = this.labelNodes.get(element);
+			labelNodes.length = 0;
+			for (const [id, contents] of Object.entries(sheet.labels)) {
+				this.applyLabel(element.querySelector(`#${id}${suffix}`), contents, labelNodes);
+			}
 		}
 		for (const child of element.querySelectorAll('[data-i18n]')) {
 			if (child.style.display === 'none') { // list item template

@@ -130,8 +130,14 @@
 		"copy-chart-offsets": "Copy",
 		"offset-wizard": "Start",
 		"service-worker-category": "Service worker",
+		"online-caches-introducer": "Caches of online resources:",
+		"list-online-caches": "List",
 		"delete-online-caches": "Delete",
+		"site-caches-introducer": "Caches of site resources:",
+		"list-site-caches": "List",
 		"delete-site-caches": "Delete",
+		"external-caches-introducer": "Caches of external resources:",
+		"list-external-caches": "List",
 		"delete-external-caches": "Delete",
 		"logs-category": "Logs",
 		"logs-clear": "Clear",
@@ -336,9 +342,6 @@
 
 		"delete-settings": "Delete saved settings: ",
 		"delete-chart-offsets": "Delete saved chart offsets: ",
-		"offset-wizard": "Play the Offset Wizard: ",
-		"delete-online-caches": "Delete caches of online resources: ",
-		"delete-site-caches": "Delete caches of site resources: ",
-		"delete-external-caches": "Delete caches of external resources: "
+		"offset-wizard": "Play the Offset Wizard: "
 	}
 }

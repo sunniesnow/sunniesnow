@@ -61,23 +61,13 @@ Sunniesnow.LoadingProgress = class LoadingProgress extends PIXI.Container {
 		this.progressBar.fill(0x000000);
 	}
 
-	sanitizeUrl(url) {
-		if (url.startsWith(Sunniesnow.Config.SERVER_BASE_URL)) {
-			url = url.slice(Sunniesnow.Config.SERVER_BASE_URL.length + 1);
-		}
-		if (Sunniesnow.authentication && url.includes(Sunniesnow.authentication)) {
-			url = url.replace(Sunniesnow.authentication, '***');
-		}
-		return url;
-	}
-
 	populateAssetProgressBar(name) {
 		const container = new PIXI.Container();
 		container.label = `asset-progress-bar-${name}`;
 		container.x = Sunniesnow.Config.WIDTH / 2;
 		const bar = new PIXI.Graphics();
 		bar.label = 'bar';
-		const text = new PIXI.Text({text: this.sanitizeUrl(name), style: {
+		const text = new PIXI.Text({text: Sunniesnow.Utils.sanitizeUrl(name), style: {
 			fontSize: Sunniesnow.Config.HEIGHT / 30,
 			fill: 'white',
 			align: 'center'

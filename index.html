@@ -998,15 +998,36 @@ description: Sunniesnow is a web rhythm game
 		<legend id="service-worker-category"></legend>
 
 		<div>
+			<span id="online-caches-introducer"></span>
+			<button type="button" id="list-online-caches" onclick="Sunniesnow.CacheManager.listOnlineCaches();"></button>
 			<button type="button" id="delete-online-caches" onclick="Sunniesnow.CacheManager.deleteOnlineCaches();"></button>
 		</div>
-		
-		<div>
-			<button type="button" id="delete-site-caches" onclick="Sunniesnow.CacheManager.deleteSiteCaches();"></button>
+		<div class="caches-list-wrapper">
+			<table>
+				<tbody id="online-caches-list"></tbody>
+			</table>
 		</div>
 
 		<div>
+			<span id="site-caches-introducer"></span>
+			<button type="button" id="list-site-caches" onclick="Sunniesnow.CacheManager.listSiteCaches();"></button>
+			<button type="button" id="delete-site-caches" onclick="Sunniesnow.CacheManager.deleteSiteCaches();"></button>
+		</div>
+		<div class="caches-list-wrapper">
+			<table>
+				<tbody id="site-caches-list"></tbody>
+			</table>
+		</div>
+
+		<div>
+			<span id="external-caches-introducer"></span>
+			<button type="button" id="list-external-caches" onclick="Sunniesnow.CacheManager.listExternalCaches();"></button>
 			<button type="button" id="delete-external-caches" onclick="Sunniesnow.CacheManager.deleteExternalCaches();"></button>
+		</div>
+		<div class="caches-list-wrapper">
+			<table>
+				<tbody id="external-caches-list"></tbody>
+			</table>
 		</div>
 	</fieldset>
 

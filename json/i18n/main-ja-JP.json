@@ -130,8 +130,14 @@
 		"copy-chart-offsets": null,
 		"offset-wizard": "スタート",
 		"service-worker-category": "サービスワーカー",
+		"online-caches-introducer": null,
+		"list-online-caches": null,
 		"delete-online-caches": "削除",
+		"site-caches-introducer": null,
+		"list-site-caches": null,
 		"delete-site-caches": "削除",
+		"external-caches-introducer": null,
+		"list-external-caches": null,
 		"delete-external-caches": "削除",
 		"logs-category": "ログ",
 		"logs-clear": "クリア",
@@ -336,9 +342,6 @@
 
 		"delete-settings": "保存した設定を削除する: ",
 		"delete-chart-offsets": "保存した譜面オフセットを削除する: ",
-		"offset-wizard": "オフセットウィザードをスタートする: ",
-		"delete-online-caches": "オンラインのキャッシュを削除する: ",
-		"delete-site-caches": "サイトのキャッシュを削除する: ",
-		"delete-external-caches": "外部のキャッシュを削除する: "
+		"offset-wizard": "オフセットウィザードをスタートする: "
 	}
 }

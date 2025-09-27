@@ -130,8 +130,14 @@
 		"copy-chart-offsets": "复制",
 		"offset-wizard": "开始",
 		"service-worker-category": "Service worker",
+		"online-caches-introducer": "在线资源缓存:",
+		"list-online-caches": "列出",
 		"delete-online-caches": "删除",
+		"site-caches-introducer": "站点资源缓存:",
+		"list-site-caches": "列出",
 		"delete-site-caches": "删除",
+		"external-caches-introducer": "外部资源缓存:",
+		"list-external-caches": "列出",
 		"delete-external-caches": "删除",
 		"logs-category": "日志",
 		"logs-clear": "清空",
@@ -336,9 +342,6 @@
 
 		"delete-settings": "删除保存的设置: ",
 		"delete-chart-offsets": "删除保存的谱面偏移: ",
-		"offset-wizard": "开始偏移向导: ",
-		"delete-online-caches": "删除在线资源的缓存: ",
-		"delete-site-caches": "删除站点资源的缓存: ",
-		"delete-external-caches": "删除外部资源的缓存: "
+		"offset-wizard": "开始偏移向导: "
 	}
 }

@@ -831,5 +831,15 @@ Sunniesnow.Utils = {
 
 	mean(...numbers) {
 		return numbers.reduce((s, e) => s + e, 0) / numbers.length;
+	},
+
+	sanitizeUrl(url) {
+		if (url.startsWith(Sunniesnow.Config.SERVER_BASE_URL)) {
+			url = url.slice(Sunniesnow.Config.SERVER_BASE_URL.length + 1);
+		}
+		if (Sunniesnow.authentication && url.includes(Sunniesnow.authentication)) {
+			url = url.replace(Sunniesnow.authentication, '***');
+		}
+		return url;
 	}
 };
