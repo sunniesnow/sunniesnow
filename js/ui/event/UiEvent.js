@@ -18,6 +18,8 @@ Sunniesnow.UiEvent = class UiEvent extends PIXI.Container {
 		this.event = event;
 		// This is only used in getBeforeTimeStateByRelativeTime(),
 		// so it can be safely ignored if that method is overridden.
+		// It is mostly a legacy from when Sunniesnow did not support SV,
+		// and we should be able to delete it after some minor refactoring.
 		this.activeDuration = 0;
 		// For notes and background notes:
 		// ready -> fadingIn -> active -> holding -> fadingOut -> finished

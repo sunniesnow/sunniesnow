@@ -35,7 +35,7 @@ Sunniesnow.Config = {
 				let late = Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(`judgement-windows-custom-${noteType}-late-${judgement}`)];
 				if (early >= late) {
 					Sunniesnow.Logs.warn(`Illegal custom judgement window: ${noteType} ${judgement} interval is empty`);
-					early = late = (early + late) / 2;
+					early = late = Sunniesnow.Utils.mean(early, late);
 				}
 				if (early > lastEarly) {
 					Sunniesnow.Logs.warn(`Illegal custom judgement window: ${noteType} early ${judgement} is narrower than the inner judgement window`);
@@ -59,11 +59,6 @@ Sunniesnow.Config = {
 
 	loadAccuracies() {
 		this.ACCURACIES = Sunniesnow.game.settings.lyrica5 ? this.ACCURACIES_5 : this.ACCURACIES_4;
-	},
-
-	// calculate the note active time from the note speed specified by gamer
-	fromSpeedToTime(speed) {
-		return 1 / speed;
 	},
 
 	// UI of chart events will be spawned
@@ -278,7 +273,7 @@ Sunniesnow.Config = {
 	JUDGEMENT_WINDOWS_5: {
 		loose: {
 			tap: {
-				perfect: [-0.11, 0.15],
+				perfect: [-0.12, 0.12],
 				good: [-0.3, 0.3],
 				bad: [-0.4, 0.4]
 			},
@@ -288,7 +283,7 @@ Sunniesnow.Config = {
 				bad: [-0.4, 0.4]
 			},
 			flick: {
-				perfect: [-0.3, 0.15],
+				perfect: [-0.3, 0.12],
 				good: [-0.4, 0.3],
 				bad: [-0.4, 0.4],
 			},
@@ -320,12 +315,12 @@ Sunniesnow.Config = {
 				bad: [-0.24, 0.24]
 			},
 			flick: {
-				perfect: [-0.11, 0.11],
+				perfect: [-0.12, 0.12],
 				good: [-0.18, 0.18],
 				bad: [-0.24, 0.24]
 			},
 			hold: {
-				perfect: [-0.11, 0.11],
+				perfect: [-0.12, 0.12],
 				good: [-0.24, 0.24],
 				bad: [-0.24, 0.24]
 			},

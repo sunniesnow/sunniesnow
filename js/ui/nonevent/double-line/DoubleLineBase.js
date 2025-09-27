@@ -9,8 +9,38 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 		this.event2 = event2;
 		this.levelNote1 = event1.levelNote;
 		this.levelNote2 = event2.levelNote;
-		this.activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
+		this.calculateFadingInInstances();
 		this.populate();
+	}
+
+	calculateFadingInInstances() {
+		const {dataPoints: dataPoints1, speed: speed1} = this.event1.timeDependent.circle;
+		const fadingInInstances1 = Sunniesnow.Utils.solveBrokenLine(dataPoints1, -1, speed1);
+		let lastSign1 = -Math.sign(speed1) || Math.sign(dataPoints1[0].value);
+		const {dataPoints: dataPoints2, speed: speed2} = this.event2.timeDependent.circle;
+		const fadingInInstances2 = Sunniesnow.Utils.solveBrokenLine(dataPoints2, -1, speed2);
+		let lastSign2 = -Math.sign(speed2) || Math.sign(dataPoints2[0].value);
+		this.fadingInInstances = [{time: -Infinity, sign: lastSign1>=0 && lastSign2>=0 ? 1 : -1}];
+		for (let index1 = 0, index2 = 0; index1 < fadingInInstances1.length || index2 < fadingInInstances2.length;) {
+			let {time: time1, sign: sign1} = fadingInInstances1[index1] ?? {time: Infinity, sign: 0};
+			let {time: time2, sign: sign2} = fadingInInstances2[index2] ?? {time: Infinity, sign: 0};
+			if (time1 === time2) {
+				this.fadingInInstances.push({time: time1, sign: sign1>=0 && sign2>=0 ? 1 : -1});
+				lastSign1 = sign1;
+				lastSign2 = sign2;
+				index1++;
+				index2++;
+			} else if (time1 < time2) {
+				this.fadingInInstances.push({time: time1, sign: sign1>=0 && lastSign2>=0 ? 1 : -1});
+				lastSign1 = sign1;
+				index1++;
+			} else {
+				this.fadingInInstances.push({time: time2, sign: lastSign1>=0 && sign2>=0 ? 1 : -1});
+				lastSign2 = sign2;
+				index2++;
+			}
+		}
+		this.fadingInInstances.forEach(p => p.relativeTime = p.time - this.event1.time);
 	}
 
 	populate() {
@@ -26,17 +56,16 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 				// do nothing
 				break;
 			case 'fadingIn':
-				this.updateFadingIn((relativeTime + this.activeDuration) / this.constructor.FADING_IN_DURATION + 1, relativeTime);
+				this.updateFadingIn(this.stateProgress, relativeTime);
 				break;
 			case 'active':
-				this.updateActive(relativeTime / this.activeDuration + 1, relativeTime);
+				this.updateActive(this.stateProgress, relativeTime);
 				break;
 			case 'holding':
 				this.updateHolding(relativeTime);
 				break;
 			case 'fadingOut':
-				const releaseRelativeTime = this.getEffectiveReleaseRelativeTime();
-				this.updateFadingOut((relativeTime - releaseRelativeTime) / this.constructor.FADING_OUT_DURATION, relativeTime);
+				this.updateFadingOut(this.stateProgress, relativeTime);
 				break;
 			case 'finished':
 				// do nothing
@@ -45,11 +74,7 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 	}
 
 	getEffectiveReleaseRelativeTimeOfLevelNote(levelNote) {
-		if (levelNote instanceof Sunniesnow.LevelHold) {
-			return levelNote.hitRelativeTime;
-		} else {
-			return levelNote.releaseRelativeTime;
-		}
+		return levelNote.event.duration > 0 ? levelNote.hitRelativeTime : levelNote.releaseRelativeTime;
 	}
 
 	getEffectiveReleaseRelativeTime() {
@@ -62,20 +87,28 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 	getStateByRelativeTime(relativeTime) {
 		const releaseRelativeTime = this.getEffectiveReleaseRelativeTime();
 		if (relativeTime >= releaseRelativeTime + this.constructor.FADING_OUT_DURATION) {
-			return 'finished';
+			return ['finished'];
 		} else if (relativeTime >= releaseRelativeTime) {
-			return 'fadingOut';
-		} else if (releaseRelativeTime !== Infinity) {
-			return 'finished';
+			return ['fadingOut', (relativeTime - releaseRelativeTime) / this.constructor.FADING_OUT_DURATION];
+		} else if (releaseRelativeTime !== Infinity) { // me after 2 years: why is this clause needed???
+			return ['finished'];
 		} else if (relativeTime >= 0) {
-			return 'holding';
-		} else if (relativeTime >= -this.activeDuration) {
-			return 'active';
-		} else if (relativeTime >= -this.activeDuration - this.constructor.FADING_IN_DURATION) {
-			return 'fadingIn';
-		} else {
-			return 'ready';
+			return ['holding'];
 		}
+		const fadingInInstanceIndex = Sunniesnow.Utils.bisectRight(
+			this.fadingInInstances,
+			({relativeTime: t}) => t - relativeTime
+		);
+		const {relativeTime: t1, sign} = this.fadingInInstances[fadingInInstanceIndex] ?? {relativeTime: -Infinity};
+		if (sign > 0) {
+			return ['active', Sunniesnow.Utils.mean(
+				this.event1.timeDependentAtRelative('circle', relativeTime),
+				this.event2.timeDependentAtRelative('circle', relativeTime)
+			)];
+		}
+		const {relativeTime: t2} = this.fadingInInstances[fadingInInstanceIndex + 1] ?? {relativeTime: Infinity};
+		const progress = 1 - Math.min(relativeTime - t1, t2 - relativeTime) / this.constructor.FADING_IN_DURATION;
+		return progress >= 0 ? ['fadingIn', progress] : ['ready'];
 	}
 
 	updateCoordinates(relativeTime) {
@@ -90,7 +123,7 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 	}
 
 	updateState(relativeTime) {
-		this.state = this.getStateByRelativeTime(relativeTime);
+		[this.state, this.stateProgress] = this.getStateByRelativeTime(relativeTime);
 		this.visible = this.state !== 'ready' && this.state !== 'finished';
 	}
 

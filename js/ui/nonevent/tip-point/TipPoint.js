@@ -14,7 +14,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		this.tipPointGeometry = this.createTipPointGeometry();
 		this.trailShader = this.createTrailShader();
 		if (Sunniesnow.game.settings.scroll) {
-			this.ACTIVE_DURATION = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
+			this.ACTIVE_DURATION = 1 / Sunniesnow.game.settings.speed; // tip points in scroll mode do not need SV
 			this.REMNANT_DURATION = this.calculateRemnantDuration();
 		}
 	}
@@ -277,7 +277,7 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 		}
 		angleP ??= angleN + Math.PI;
 		angleN ??= angleP + Math.PI;
-		let angle = (angleP + angleN) / 2;
+		let angle = Sunniesnow.Utils.mean(angleP, angleN);
 		if (Sunniesnow.Utils.angleDistance(angleP, angleN) < Math.PI/2 - 1e-4) {
 			angle += Math.PI / 2;
 		}

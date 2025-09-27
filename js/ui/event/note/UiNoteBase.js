@@ -2,7 +2,6 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 
 	constructor(event) {
 		super(event);
-		//this.activeDuration = Sunniesnow.Config.fromSpeedToTime(Sunniesnow.game.settings.speed);
 		this.calculateFadingInInstances();
 	}
 
@@ -16,11 +15,7 @@ Sunniesnow.UiNoteBase = class UiNote extends Sunniesnow.UiEvent {
 
 	calculateFadingInInstances() {
 		const {dataPoints, speed} = this.event.timeDependent.circle;
-		this.fadingInInstances = Sunniesnow.Utils.solveBrokenLine(dataPoints, -1);
-		const {time: t0, value: v0} = dataPoints[0];
-		if (v0 > -1 && speed > 0) {
-			this.fadingInInstances.unshift({time: t0 + (-1 - v0) / speed, sign: 1})
-		}
+		this.fadingInInstances = Sunniesnow.Utils.solveBrokenLine(dataPoints, -1, speed);
 		this.fadingInInstances.forEach(p => p.relativeTime = p.time - this.event.time);
 	}
 

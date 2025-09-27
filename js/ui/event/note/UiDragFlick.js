@@ -19,7 +19,7 @@ Sunniesnow.UiDragFlick = class UiDragFlick extends Sunniesnow.UiNote {
 		graphics.poly([
 			tipDistance, 0,
 			...Sunniesnow.Utils.polarToCartesian(innerDistance, halfAngle),
-			(innerDistance + tipDistance) / 2, 0,
+			Sunniesnow.Utils.mean(innerDistance, tipDistance), 0,
 			...Sunniesnow.Utils.polarToCartesian(innerDistance, -halfAngle)
 		]);
 		graphics.fill(0xfafa7a);

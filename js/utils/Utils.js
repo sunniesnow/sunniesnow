@@ -742,7 +742,8 @@ Sunniesnow.Utils = {
 	// where `time` is the time of the point and it is when the line crosses the target value,
 	// and `sign` is one of -1, 0, 1,
 	// depending on whether the line is above or below the target value immediately after the point.
-	solveBrokenLine(dataPoints, targetValue = 0) {
+	// If speed is specified, it is used to extrapolate before the first data point.
+	solveBrokenLine(dataPoints, targetValue = 0, speed = null) {
 		const result = [];
 		for (let i = 0; i < dataPoints.length - 1; i++) {
 			const {time: t1, value: v1} = dataPoints[i];
@@ -760,6 +761,12 @@ Sunniesnow.Utils = {
 			} else if (v1 === targetValue && v2 === targetValue && result[result.length - 1]?.sign !== 0) {
 				result.push({time: t1, sign: 0});
 			}
+		}
+		if ((dataPoints[0]?.value - targetValue) * speed > 0) {
+			result.unshift({
+				time: dataPoints[0].time + (targetValue - dataPoints[0].value) / speed,
+				sign: Math.sign(speed)
+			});
 		}
 		return result;
 	},
@@ -821,4 +828,8 @@ Sunniesnow.Utils = {
 		element.setSelectionRange(0, element.value.length);
 		document.execCommand('copy');
 	},
+
+	mean(...numbers) {
+		return numbers.reduce((s, e) => s + e, 0) / numbers.length;
+	}
 };
