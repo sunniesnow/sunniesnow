@@ -203,6 +203,9 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		if (!value) {
 			return;
 		}
+		if (!Array.isArray(value)) {
+			value = [value];
+		}
 		this.clearItems();
 		while (this.items.length < value.length) {
 			this.addItem();

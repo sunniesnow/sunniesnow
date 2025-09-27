@@ -23,4 +23,11 @@ Sunniesnow.SettingNumber = class SettingNumber extends Sunniesnow.Setting {
 		multiplier = multiplier ? Number(multiplier) : 1;
 		this.element.value = Sunniesnow.Utils.clamp(value / multiplier, min, max);
 	}
+
+	load(value) {
+		if (isNaN(value)) {
+			return;
+		}
+		super.load(Number(value));
+	}
 };

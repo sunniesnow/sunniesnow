@@ -17,4 +17,11 @@ Sunniesnow.SettingRange = class SettingRange extends Sunniesnow.Setting {
 	set(value) {
 		this.element.value = value;
 	}
+
+	load(value) {
+		if (isNaN(value)) {
+			return;
+		}
+		super.load(Number(value));
+	}
 };

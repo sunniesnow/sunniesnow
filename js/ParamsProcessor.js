@@ -38,7 +38,11 @@ Sunniesnow.ParamsProcessor = {
 				delete params[key];
 			}
 		}
-		Sunniesnow.Settings.writeSettings(params);
+		const settings = {};
+		for (const key in params) {
+			settings[Sunniesnow.Utils.slugToCamel(key)] = params[key];
+		}
+		Sunniesnow.Settings.writeSettings(settings);
 		for (const key in processedParams) {
 			this.EXTRA_URL_PARAMS[key].call(this, processedParams[key]);
 		}

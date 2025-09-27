@@ -147,6 +147,13 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 		if (!value) {
 			return;
 		}
+		if (typeof value === 'string') {
+			try {
+				value = Sunniesnow.Utils.urlSearchParamsObject(value);
+			} catch (e) {
+				Sunniesnow.Logs.warn(`Invalid value for ${this.id}`);
+			}
+		}
 		for (const id in value) {
 			const settingId = Sunniesnow.Utils.camelToSlug(id);
 			const setting = this.mapSettingIdToSetting.get(settingId);
