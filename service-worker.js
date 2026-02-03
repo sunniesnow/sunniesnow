@@ -52,6 +52,9 @@ function isSiteResource(url) {
 
 self.addEventListener('fetch', event => {
 	const oldRequest = event.request;
+	if (oldRequest.mode === 'navigate') { // creating new request fails when mode is 'navigate'
+		Object.defineProperty(oldRequest, 'mode', {value: 'cors'});
+	}
 	const url = new URL(oldRequest.url);
 	// These are for busting caches for VS Code simple browser, not for service worker.
 	url.searchParams.delete('vscodeBrowserReqId');

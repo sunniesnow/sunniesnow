@@ -46,13 +46,18 @@ Sunniesnow.Game = class Game {
 			preference: this.settings.renderer,
 			autoStart: Sunniesnow.Utils.isBrowser()
 		};
-		if (this.settings.renderer === 'webgl') {
-			appOptions.preferWebGLVersion = this.settings.glVersion;
-			appOptions.antialias = this.settings.glAntialias;
-			appOptions.powerPreference = this.settings.glPowerPreference;
-		} else if (this.settings.renderer === 'webgpu') {
-			appOptions.antialias = this.settings.gpuAntialias;
-			appOptions.powerPreference = this.settings.gpuPowerPreference;
+		switch (this.settings.renderer) {
+			case 'canvas':
+				break;
+			case 'webgl':
+				appOptions.preferWebGLVersion = this.settings.glVersion;
+				appOptions.antialias = this.settings.glAntialias;
+				appOptions.powerPreference = this.settings.glPowerPreference;
+				break;
+			case 'webgpu':
+				appOptions.antialias = this.settings.gpuAntialias;
+				appOptions.powerPreference = this.settings.gpuPowerPreference;
+				break;
 		}
 		await this.app.init(appOptions);
 		/*if (this.settings.renderer === 'canvas') {
