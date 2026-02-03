@@ -16,6 +16,6 @@ Sunniesnow.HookRadioInput = class HookRadioInput extends Sunniesnow.Hook {
 	}
 
 	async apply(value, token) {
-		return await this.mapValueToSetting.get(value)?.get(token);
+		return await this.mapValueToSetting.get(value)?.getWithoutCache(token);
 	}
 };

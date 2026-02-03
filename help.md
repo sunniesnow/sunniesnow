@@ -1709,12 +1709,10 @@ This setting is **only** useful when the corresponding [`plugin`](#plugin) item 
 #### Renderer
 
 - **Setting id**: `renderer`.
-- **Possible values**: ~~`"canvas"`~~, `"webgl"`, `"webgpu"`.
+- **Possible values**: `"canvas"`, `"webgl"`, `"webgpu"`.
 
-~~When the setting is `"canvas"`,
-Sunniesnow uses the canvas API to draw everything.~~
-Setting this to `"canvas"` is not supported
-because [PIXI.js removed it](https://github.com/pixijs/pixijs/discussions/10682).
+When the setting is `"canvas"`,
+Sunniesnow uses the canvas API to draw everything.
 When the setting is `"webgl"`,
 Sunniesnow uses the [WebGL](https://webgl.org){:target="_blank"} API
 to draw everything.
