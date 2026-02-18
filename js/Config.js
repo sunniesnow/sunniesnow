@@ -74,7 +74,7 @@ Sunniesnow.Config = {
 	// The unit is chart coordinates length unit.
 	// It is guaranteed that x chart coordinates within [-w/2, w/2] is inside the screen.
 	// Similarly for height.
-	MIN_WIDTH: 275,
+	MIN_WIDTH: 250,
 	MIN_HEIGHT: 150,
 
 	// Get coordinates on canvas by providing the coordinates in charts.
