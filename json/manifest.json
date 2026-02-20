@@ -12,9 +12,9 @@
 			"sizes": "256x256"
 		}
 	],
-	"start_url": "{{ site.url }}{{ page.dir }}",
+	"start_url": "{{ site.url }}{{ page.url | dirname | dirname }}",
 	"display": "fullscreen",
 	"theme_color": "{{ site.theme_color }}",
 	"orientation": "landscape-primary",
-	"scope": "{{ page.dir }}"
+	"scope": "{{ page.url | dirname | dirname }}"
 }
