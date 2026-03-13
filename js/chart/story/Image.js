@@ -8,7 +8,8 @@ Sunniesnow.Image = class Image extends Sunniesnow.FilterableEvent {
 			x: 0,
 			y: 0,
 			above: 'bgPattern',
-			coordinateSystem: 'chart'
+			coordinateSystem: 'chart',
+			mirrorable: null,
 		}
 	}
 

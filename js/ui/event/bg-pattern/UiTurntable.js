@@ -10,7 +10,7 @@ Sunniesnow.UiTurntable = class UiTurntable extends Sunniesnow.UiBgPattern {
 		graphics.circle(0, 0, unit * 2);
 		graphics.fill({color: 0x000000, alpha: 0.2});
 		graphics.stroke({width: thickness, color: 0xffffef});
-		graphics.circle(0, 0, unit);
+		graphics.circle(0, 0, unit * 1.12); // inner circle has radius 28
 		graphics.stroke({width: thickness, color: 0xffffef});
 		graphics.circle(0, 0, thickness / 2);
 		graphics.stroke({width: thickness, color: 0xffffef});

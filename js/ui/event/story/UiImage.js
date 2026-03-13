@@ -35,23 +35,30 @@ Sunniesnow.UiImage = class UiImage extends Sunniesnow.UiEvent {
 		const width = this.event.timeDependentAtRelative('width', relativeTime);
 		const height = this.event.timeDependentAtRelative('height', relativeTime);
 		const rotation = this.event.timeDependentAtRelative('rotation', relativeTime);
+		const mirrorable = this.event.mirrorable ?? this.event.coordinateSystem === 'chart';
 		switch (this.event.coordinateSystem) {
 			case 'canvas':
 				this.x = x * Sunniesnow.Config.WIDTH;
-				this.y = y * Sunnies
+				this.y = y * Sunniesnow.Config.HEIGHT;
 				this.scale.x = width * Sunniesnow.Config.WIDTH / this.texture.width;
 				this.scale.y = height == null ? this.scale.x : height * Sunniesnow.Config.HEIGHT / this.texture.height;
 				this.rotation = rotation;
+				if (Sunniesnow.game.settings.horizontalFlip && mirrorable) {
+					this.scale.x *= -1;
+				}
+				if (Sunniesnow.game.settings.verticalFlip && mirrorable) {
+					this.scale.y *= -1;
+				}
 				break;
 			case 'chart':
 				[this.x, this.y] = Sunniesnow.Config.chartMapping(x, y);
 				this.rotation = Sunniesnow.Config.chartMappingRotation(rotation);
 				this.scale.x = width * Sunniesnow.Config.SCALE / this.texture.width;
 				this.scale.y = height == null ? this.scale.x : height * Sunniesnow.Config.SCALE / this.texture.height;
-				if (Sunniesnow.game.settings.horizontalFlip) {
+				if (Sunniesnow.game.settings.horizontalFlip && mirrorable) {
 					this.scale.x *= -1;
 				}
-				if (Sunniesnow.game.settings.verticalFlip) {
+				if (Sunniesnow.game.settings.verticalFlip && mirrorable) {
 					this.scale.y *= -1;
 				}
 				break;

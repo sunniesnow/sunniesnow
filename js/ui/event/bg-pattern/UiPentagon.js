@@ -7,7 +7,8 @@ Sunniesnow.UiPentagon = class UiPentagon extends Sunniesnow.UiBgPattern {
 		const graphics = new PIXI.GraphicsContext();
 		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
 		const thickness = unit / 20;
-		graphics.regularPoly(0, 0, unit * 2, 5);
+		const radius = 4 * unit / (1 + Math.cos(Math.PI / 5));
+		graphics.regularPoly(0, -2 * unit + radius, radius, 5);
 		graphics.fill({color: 0x000000, alpha: 0.2});
 		graphics.stroke({width: thickness, color: 0xffffef});
 		graphics.circle(0, 0, thickness / 2);
