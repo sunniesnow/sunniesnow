@@ -7,6 +7,7 @@ Sunniesnow.Loader = {
 		this.downloadingProgresses = new Map();
 		this.modulesQueue = [];
 		this.loadMeta();
+		this.loadUtils();
 		this.loadFilter();
 		this.loadAudioAndChart();
 		this.loadTouch();
@@ -30,6 +31,10 @@ Sunniesnow.Loader = {
 		this.loadModule('SpinUp');
 		this.loadModule('Settings');
 		this.loadModule('Plugin');
+	},
+
+	loadUtils() {
+		this.loadModule('StoryAssets');
 	},
 
 	loadAudioAndChart() {

@@ -1,5 +1,14 @@
 Sunniesnow.StoryAssets = {
 	assets: {},
+	dirty: false,
+
+	async load() {
+		if (this.dirty) {
+			this.assets = {};
+			this.dirty = false;
+		}
+	},
+
 	async loadTexture(filename) {
 		if (Object.hasOwn(this.assets, filename)) {
 			return !!this.assets[filename];

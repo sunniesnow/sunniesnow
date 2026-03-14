@@ -54,7 +54,7 @@ Sunniesnow.Sscharter = {
 
 	onUpdate({onlyCharts}) {
 		Sunniesnow.Logs.info('Chart update is received from sscharter');
-		Sunniesnow.Settings.s.levelFileOnline.dirty = true;
+		Sunniesnow.Settings.s.levelFile.markDirty();
 		if (Sunniesnow.game.settings.sscharterLiveRestart) {
 			Sunniesnow.game.window.focus();
 			if (onlyCharts) {
@@ -67,6 +67,7 @@ Sunniesnow.Sscharter = {
 
 	async onChartUpdate({name, chart}) {
 		Sunniesnow.Logs.info(`Chart ${name}.json is updated from sscharter`);
+		Sunniesnow.Settings.s.levelFile.markDirty();
 		if (Sunniesnow.game.savedSettings.chartSelect !== name + '.json') {
 			return;
 		}

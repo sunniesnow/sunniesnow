@@ -40,6 +40,9 @@ Sunniesnow.Settings = {
 				}
 			}
 		});
+		this.s.levelFile.addEventListener('change', event => {
+			Sunniesnow.StoryAssets.dirty = true;
+		});
 	},
 
 	fillLevelReadme(filename, text) {

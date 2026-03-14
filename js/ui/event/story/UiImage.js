@@ -25,7 +25,7 @@ Sunniesnow.UiImage = class UiImage extends Sunniesnow.UiEvent {
 		this.addChild(this.sprite);
 	}
 
-	updateHolding(relativeTime) {
+	updateHolding(progress, relativeTime) {
 		if (!this.sprite) {
 			return;
 		}

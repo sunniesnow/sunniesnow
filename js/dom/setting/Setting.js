@@ -27,7 +27,10 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 		this.setId(element.id);
 		this.collection?.mapElementIdToSetting.set(element.id, this);
 		if (this.element.dataset.loadButton) {
-			this.collection?.getElementById(this.element.dataset.loadButton).addEventListener('click', event => this.getWithoutCache());
+			this.collection?.getElementById(this.element.dataset.loadButton).addEventListener('click', event => {
+				this.markDirty();
+				this.get()
+			});
 		}
 		this.promiseCallbacks = new Sunniesnow.WeakMap(); // map from token to an array of {resolve, reject} objects
 		// Map from token or null to some return value of get().
