@@ -18,6 +18,16 @@ Sunniesnow.Settings = {
 		this.writeSavedSettings();
 	},
 
+	async initWithJsdom() {
+		let html = await fetch('index.html').then(r => r.text());
+		if (html.startsWith('---')) { // uncompiled Jekyll template
+			html = `<!DOCTYPE html><html><body>${html.split('---')[2]}</body></html>`;
+		}
+		const document = new JSDOM(html).window.document;
+		this.mainSettings = new Sunniesnow.SettingCollection(null, document.getElementById('main-settings'));
+		this.s = {mainSettings: this.mainSettings};
+	},
+
 	initSettings() {
 		this.mainSettings = new Sunniesnow.SettingCollection(null, document.getElementById('main-settings'));
 		this.s = {mainSettings: this.mainSettings};

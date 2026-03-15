@@ -2,9 +2,6 @@ Sunniesnow.SettingZipEntry = class SettingZipEntry extends Sunniesnow.SettingSel
 
 	static Hook = class HookZipEntry extends Sunniesnow.Hook {
 		async apply(value, token) {
-			if (this.setting.element.disabled) {
-				return null;
-			}
 			const zip = await this.setting.zipSetting.get(token);
 			if (!zip) {
 				return null;
@@ -41,6 +38,7 @@ Sunniesnow.SettingZipEntry = class SettingZipEntry extends Sunniesnow.SettingSel
 		if (!token) {
 			this.clearOptions();
 		}
+		this.previousValue.delete(token);
 	}
 
 	onZipLoaded(zip, token) {

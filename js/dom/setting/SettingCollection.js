@@ -69,21 +69,24 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 
 	applyPrerequisites() {
 		this.element.querySelectorAll('[data-prerequisite]').forEach(element => {
+			const setting = this.mapElementIdToSetting.get(element.id);
 			const prerequisiteElement = this.getElementById(element.dataset.prerequisite);
-			let listener;
+			const prerequisiteSetting = this.mapElementIdToSetting.get(prerequisiteElement.id);
+			let prerequisite;
 			switch (prerequisiteElement.type) {
 				case 'checkbox':
-					listener = () => this.setEnabled(element, prerequisiteElement.checked);
-					prerequisiteElement.addEventListener('change', listener);
-					listener();
+					prerequisite = token => token?.get(prerequisiteSetting) ?? prerequisiteSetting.value();
 					break;
 				case 'radio':
-					const radios = this.getElementsByName(prerequisiteElement.name);
-					listener = () => this.setEnabled(element, prerequisiteElement.checked);
-					radios.forEach(radio => radio.addEventListener('change', listener));
-					listener();
+					prerequisite = token => (token?.get(prerequisiteSetting) ?? prerequisiteSetting.value()) === prerequisiteElement.value;
 					break;
 			}
+			const listener = () => this.setEnabled(element, prerequisite());
+			prerequisiteSetting.addEventListener('change', listener);
+			if (setting) {
+				setting.prerequisites.push(prerequisite);
+			}
+			listener();
 		});
 	}
 

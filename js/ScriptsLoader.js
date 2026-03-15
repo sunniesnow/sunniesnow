@@ -51,6 +51,11 @@ Sunniesnow.ScriptsLoader = {
 		this.siteScripts.forEach(this.runScript.bind(this));
 	},
 
+	async initAndRunSiteScripts() {
+		await this.init();
+		this.siteScripts.forEach(this.runScript.bind(this));
+	},
+
 	setPolyfill(polyfill) {
 		[this.polyfill.keys, this.polyfill.values] = Sunniesnow.Utils.transposeArray(Object.entries(polyfill));
 	},

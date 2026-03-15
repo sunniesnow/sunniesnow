@@ -23,7 +23,7 @@ Sunniesnow.SettingRadio = class SettingRadio extends Sunniesnow.Setting {
 			if (element.value === value) {
 				if (!element.checked) {
 					element.checked = true;
-					element.dispatchEvent(new Event('change'));
+					this.dispatch('change');
 				}
 				return;
 			}

@@ -32,6 +32,7 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 				this.get()
 			});
 		}
+		this.prerequisites = []; // see SettingCollection.applyPrerequisites()
 		this.promiseCallbacks = new Sunniesnow.WeakMap(); // map from token to an array of {resolve, reject} objects
 		// Map from token or null to some return value of get().
 		// If the cache exists for a non-null token, the cache is never considered dirty.
@@ -122,6 +123,9 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 	// Try not to override this method and getWithoutCache() in subclasses.
 	async get(tokenOrValueOverride) {
 		const token = this.ensureToken(tokenOrValueOverride);
+		if (!this.prerequisites.every(prerequisite => prerequisite(token))) {
+			return null;
+		}
 		const cache = this.cache.get(token);
 		if (cache != null && (token || !this.dirty)) {
 			return cache;

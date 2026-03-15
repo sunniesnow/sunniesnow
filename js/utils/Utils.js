@@ -348,7 +348,10 @@ Sunniesnow.Utils = {
 	},
 
 	async untilLoaded(elementId) {
-		const element = elementId instanceof HTMLElement ? elementId : document.getElementById(elementId);
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
+		const element = typeof elementId === 'string' ? document.getElementById(elementId) : elementId;
 		const img = document.createElement('img');
 		img.src = '';
 		element.appendChild(img);

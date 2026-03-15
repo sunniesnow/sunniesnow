@@ -29,6 +29,7 @@ Sunniesnow.Loader = {
 	loadMeta() {
 		this.loadModule('Config');
 		this.loadModule('SpinUp');
+		this.loadModule('Audio'); // before Settings because HookAudio needs Audio.context
 		this.loadModule('Settings');
 		this.loadModule('Plugin');
 	},
@@ -38,7 +39,6 @@ Sunniesnow.Loader = {
 	},
 
 	loadAudioAndChart() {
-		this.loadModule('Audio');
 		this.loadModule('Music');
 		this.loadModule('Chart');
 		this.loadModule('SeTap');

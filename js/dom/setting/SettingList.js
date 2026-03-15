@@ -25,6 +25,9 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 	}
 
 	populateButtons() {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
 		const buttonsContainer = this.collection.getElementById(this.element.dataset.listButtons);
 		this.addButton = this.newButton('add', () => this.addItem());
 		this.clearButton = this.newButton('clear', () => this.clearItems());
@@ -101,6 +104,9 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 
 	refresh() {
 		this.lastElement = this.items[this.items.length - 1]?.element || this.template;
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
 		this.clearButton.disabled = this.items.length === 0;
 		for (let i = 0; i < this.items.length; i++) {
 			const item = this.items[i];

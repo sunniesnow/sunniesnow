@@ -2,6 +2,11 @@
 // This hook cannot be applied to radio settings.
 Sunniesnow.HookOnline = class HookOnline extends Sunniesnow.Hook {
 	initialize(basePath = '', suffix = '') {
+		this.basePath = basePath;
+		this.suffix = suffix;
+		if (!Sunniesnow.Utils.isBrowser()) {
+			return;
+		}
 		let element = this.setting.element;
 		while (element.nextSibling.tagName === 'LABEL' && element.nextSibling.for === this.setting.element) {
 			element = element.nextSibling;
@@ -9,8 +14,6 @@ Sunniesnow.HookOnline = class HookOnline extends Sunniesnow.Hook {
 		this.progressElement = document.createElement('span');
 		this.progressElement.classList.add('downloading-progress');
 		element.after(this.progressElement);
-		this.basePath = basePath;
-		this.suffix = suffix;
 	}
 
 	// TODO: interrupt by token
@@ -28,9 +31,6 @@ Sunniesnow.HookOnline = class HookOnline extends Sunniesnow.Hook {
 	}
 
 	async apply(value) {
-		if (this.setting.element.disabled) {
-			return null;
-		}
 		this.downloading = true;
 		if (this.progressElement) {
 			this.progressElement.textContent = '0% (0 / ?)';

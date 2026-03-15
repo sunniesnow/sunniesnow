@@ -15,7 +15,7 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		const height = Sunniesnow.Config.HEIGHT;
 		tempSprite.scale.set(Math.max(width / texture.width, height / texture.height));
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
-			const filter1 = new PIXI.BlurFilter({strength: Sunniesnow.game.settings.backgroundBlur, quality: 10});
+			const filter1 = new PIXI.BlurFilter({strength: Sunniesnow.game.settings.backgroundBlur, quality: 10, legacy: true});
 			const filter2 = new PIXI.ColorMatrixFilter();
 			filter2.matrix[18] = 0;
 			filter2.matrix[19] = 1;
