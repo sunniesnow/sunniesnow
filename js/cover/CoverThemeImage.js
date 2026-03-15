@@ -10,7 +10,7 @@ Sunniesnow.CoverThemeImage = class CoverThemeImage extends PIXI.Container {
 	}
 
 	calculateDimensions() {
-		const texture = Sunniesnow.Background.originalTexture;
+		const texture = Sunniesnow.game.settings.background;
 		this.radius = Math.min(Sunniesnow.Config.WIDTH / 4, Sunniesnow.Config.HEIGHT / 2) * 0.8;
 		const x = Sunniesnow.Utils.isBrowser() ? document.getElementById('cover-theme-image-x').value || null : Sunniesnow.record.coverThemeImageX;
 		this.imageAnchorX = x != null ? parseFloat(x) / texture.width : 0.5;
@@ -28,7 +28,7 @@ Sunniesnow.CoverThemeImage = class CoverThemeImage extends PIXI.Container {
 	}
 
 	populateImage() {
-		this.image = new PIXI.Sprite(Sunniesnow.Background.originalTexture);
+		this.image = new PIXI.Sprite(Sunniesnow.game.settings.background);
 		this.image.anchor.set(this.imageAnchorX, this.imageAnchorY);
 		this.image.scale.set(this.imageScale);
 		this.image.mask = this.imageMask;
