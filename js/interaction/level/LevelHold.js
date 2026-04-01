@@ -4,7 +4,7 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 		super(event);
 		this.candidateTouches = [];
 	}
-	
+
 	dryHit(time) {
 		super.dryHit(time);
 		this.highestJudgement = this.getJudgementByRelativeTime(this.hitRelativeTime);

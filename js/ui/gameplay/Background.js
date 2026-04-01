@@ -15,14 +15,13 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		const height = Sunniesnow.Config.HEIGHT;
 		tempSprite.scale.set(Math.max(width / texture.width, height / texture.height));
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
-			const filter1 = new PIXI.BlurFilter({strength: Sunniesnow.game.settings.backgroundBlur, quality: 10, legacy: true});
+			const filter1 = new PIXI.BlurFilter({strength: Sunniesnow.game.settings.backgroundBlur, quality: 4});
 			const filter2 = new PIXI.ColorMatrixFilter();
+			filter2.brightness(Sunniesnow.game.settings.backgroundBrightness);
 			filter2.matrix[18] = 0;
 			filter2.matrix[19] = 1;
 			tempSprite.filters = [filter1, filter2];
 		}
-		const b = Sunniesnow.game.settings.backgroundBrightness;
-		tempSprite.tint = [b, b, b];
 		const wrapper = new PIXI.Container();
 		wrapper.addChild(tempSprite);
 		const result = Sunniesnow.game.app.renderer.generateTexture(
@@ -32,7 +31,7 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		wrapper.destroy({children: true});
 		return result;
 	}
-	
+
 	populate() {
 		super.populate();
 		this.label = 'background';

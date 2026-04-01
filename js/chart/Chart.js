@@ -50,7 +50,7 @@ Sunniesnow.Chart = class Chart {
 			this[field] = this.data[field] ?? Sunniesnow.Chart.OPTIONAL_META_FIELDS[field];
 		}
 	}
-	
+
 	async readSscharterInfo() {
 		if (!this.sscharter || !Sunniesnow.game.settings.sscharter) {
 			return;

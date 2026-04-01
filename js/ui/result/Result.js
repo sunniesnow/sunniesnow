@@ -1,5 +1,5 @@
 Sunniesnow.Result = class Result extends PIXI.Container {
-	
+
 	static async load() {
 		this.mainColor = 0xfbfbff;
 		this.mainContourColor = 0xaaaaaa;

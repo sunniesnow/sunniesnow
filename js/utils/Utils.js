@@ -64,7 +64,7 @@ Sunniesnow.Utils = {
 	cartesianToPolar(x, y) {
 		return [Math.hypot(x, y), Math.atan2(y, x)];
 	},
-	
+
 	between(x, a, b) {
 		return a <= x && x <= b || b <= x && x <= a;
 	},
@@ -568,11 +568,11 @@ Sunniesnow.Utils = {
 		outArray[18] = 1;
 		outArray[19] = 0;
 	},
-	
+
 	dirname(path) {
 		return path.replace(/\/[^/]*$/, '');
 	},
-	
+
 	isPrivate(hostname) {
 		return [
 			/^localhost$/i,

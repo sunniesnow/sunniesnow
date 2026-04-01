@@ -3,7 +3,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	static COLOR = '#ff00ff';
 
 	static DISTRIBUTION_RASTER_COUNT = 600;
-	
+
 	// should normalize
 	// unit of distance: sigma
 	static SAMPLE_BLUR(distance) {

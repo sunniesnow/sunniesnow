@@ -1,5 +1,5 @@
 Sunniesnow.UiBgPattern = class UiBgPattern extends Sunniesnow.UiEvent {
-	
+
 	static fadingInDuration(event) {
 		return 1/6;
 	}

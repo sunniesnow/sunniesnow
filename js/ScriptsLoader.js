@@ -89,7 +89,7 @@ Sunniesnow.ScriptsLoader = {
 		}
 		new Function(...this.polyfill.keys, script)(...this.polyfill.values);
 	},
-	
+
 	async json(path) {
 		return JSON.parse(await this.text(`${Sunniesnow.Utils.base()}/json/${path}.json${this.reqIdSuffix}`));
 	},

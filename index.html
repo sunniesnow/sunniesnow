@@ -130,7 +130,7 @@ description: Sunniesnow is a web rhythm game
 
 	<fieldset>
 		<legend id="note-hit-size-category"></legend>
-		
+
 		<div>
 			<input type="number" id="note-hit-size" value="3.2" min="0" step="0.1">
 		</div>
@@ -187,10 +187,10 @@ description: Sunniesnow is a web rhythm game
 
 <details>
 	<summary id="visual-settings"></summary>
-	
+
 	<fieldset>
 		<legend id="speed-category"></legend>
-	
+
 		<div>
 			<input type="number" id="speed" value="2" min="0" step="0.1">
 		</div>
@@ -231,7 +231,7 @@ description: Sunniesnow is a web rhythm game
 		<legend id="background-settings-category"></legend>
 
 		<div>
-			<input type="range" id="background-blur" value="100" min="0" max="200" step="1" data-output="background-blur-value">
+			<input type="range" id="background-blur" value="20" min="0" max="100" step="1" data-output="background-blur-value">
 			<output id="background-blur-value" for="background-blur"></output>
 		</div>
 
@@ -240,19 +240,19 @@ description: Sunniesnow is a web rhythm game
 			<output id="background-brightness-value" for="background-brightness"></output>
 		</div>
 	</fieldset>
-	
+
 	<fieldset>
 		<legend id="fx-category"></legend>
 
 		<div>
 			<input type="radio" id="fx-default-radio" name="fx" value="default" checked data-hooks="radio-input|zip">
 		</div>
-	
+
 		<div>
 			<input type="radio" id="fx-online-radio" name="fx" value="online" data-input="fx-online">
 			<input type="text" id="fx-online" placeholder="empty" data-prerequisite="fx-online-radio" data-hooks="online(fx,.ssp)">
 		</div>
-	
+
 		<div>
 			<input type="radio" id="fx-upload-radio" name="fx" value="upload" data-input="fx-upload">
 			<input type="file" id="fx-upload" accept=".ssp" data-prerequisite="fx-upload-radio">
@@ -400,7 +400,7 @@ description: Sunniesnow is a web rhythm game
 			<input type="number" id="fading-duration" value="0.2" step="0.1" min="0">
 		</div>
 	</fieldset>
-	
+
 	<fieldset>
 		<legend id="misc-visual-category"></legend>
 

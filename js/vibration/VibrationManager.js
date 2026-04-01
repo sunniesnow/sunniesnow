@@ -12,7 +12,7 @@ Sunniesnow.VibrationManager = {
 	},
 
 	clear() {
-		navigator.vibrate(0);
+		navigator.vibrate?.(0);
 		this.keyTimes.length = 0;
 		this.holdingStart.clear();
 		this.holdingEnd.clear();
@@ -78,7 +78,7 @@ Sunniesnow.VibrationManager = {
 	reschedule() {
 		const currentIndex = Sunniesnow.Utils.bisectRight(this.keyTimes, this.currentTime);
 		this.keyTimes.splice(0, currentIndex+1, this.currentTime, ...(currentIndex%2===0 ? [] : [this.currentTime]));
-		navigator.vibrate(Sunniesnow.Utils.arrayDifference(this.keyTimes));
+		navigator.vibrate?.(Sunniesnow.Utils.arrayDifference(this.keyTimes));
 	},
 
 	acquireHold(object, time) {

@@ -1,10 +1,10 @@
 Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
-	
+
 	constructor(pauseBoard, priority = 150) {
 		super(() => this.theOnTrigger(), priority);
 		this.pauseBoard = pauseBoard;
 	}
-	
+
 	onTouchStart(touch) {
 		switch (touch.type) {
 			case 'mouse':

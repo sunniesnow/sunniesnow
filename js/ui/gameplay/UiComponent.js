@@ -6,7 +6,7 @@ Sunniesnow.UiComponent = class UiComponent extends PIXI.Container {
 
 	static async load() {
 	}
-	
+
 	constructor() {
 		super();
 		this.allEffects = Sunniesnow.game.chart.eventsSortedByAppearTime.filter(event => event instanceof Sunniesnow[this.constructor.EFFECT_EVENT_CLASS]);

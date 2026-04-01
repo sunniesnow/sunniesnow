@@ -42,7 +42,7 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		}
 		this.presentFx.push(fx);
 	}
-	
+
 	addLevelEventListeners() {
 		this.listenerForFx = event => {
 			const levelNote = event.levelNote;
