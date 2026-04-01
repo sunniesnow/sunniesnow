@@ -10,7 +10,7 @@ Sunniesnow.CoverThemeImage = class CoverThemeImage extends PIXI.Container {
 	}
 
 	calculateDimensions() {
-		const texture = Sunniesnow.game.settings.background;
+		const texture = Sunniesnow.game.settings.background ?? PIXI.Texture.WHITE;
 		this.radius = Math.min(Sunniesnow.Config.WIDTH / 4, Sunniesnow.Config.HEIGHT / 2) * 0.8;
 		const x = Sunniesnow.Utils.isBrowser() ? document.getElementById('cover-theme-image-x').value || null : Sunniesnow.record.coverThemeImageX;
 		this.imageAnchorX = x != null ? parseFloat(x) / texture.width : 0.5;
