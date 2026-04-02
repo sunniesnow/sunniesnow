@@ -206,3 +206,4 @@ Sunniesnow.Mixin.prepend('UiFlick', UiNoteMixin);
 Sunniesnow.Mixin.prepend('UiHold', UiNoteMixin);
 Sunniesnow.Mixin.prepend('UiBgNote', UiNoteMixin);
 Sunniesnow.Mixin.prepend('UiDragFlick', UiNoteMixin);
+Sunniesnow.Mixin.prepend('UiHeadOnlyHold', UiNoteMixin);

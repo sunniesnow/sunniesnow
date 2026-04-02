@@ -46,6 +46,7 @@ Sunniesnow.Loader = {
 		this.loadModule('SeFlick');
 		this.loadModule('SeDrag');
 		this.loadModule('SeDragFlick');
+		this.loadModule('SeHeadOnlyHold');
 	},
 
 	loadTouch() {
@@ -97,6 +98,7 @@ Sunniesnow.Loader = {
 		this.loadModule('UiFlick');
 		this.loadModule('UiDrag');
 		this.loadModule('UiDragFlick');
+		this.loadModule('UiHeadOnlyHold');
 		this.loadModule('UiBgNote');
 		this.loadModule('UiBigText');
 		this.loadModule('UiGrid');
@@ -115,6 +117,7 @@ Sunniesnow.Loader = {
 		this.loadModule('FxFlick');
 		this.loadModule('FxDrag');
 		this.loadModule('FxDragFlick');
+		this.loadModule('FxHeadOnlyHold');
 	},
 
 	loadUiNonevents() {

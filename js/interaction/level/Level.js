@@ -16,13 +16,17 @@ Sunniesnow.Level = class Level extends EventTarget {
 			this.judgementWindows.tap.bad[1],
 			this.judgementWindows.drag.bad[1],
 			this.judgementWindows.flick.bad[1],
-			this.judgementWindows.hold.bad[1]
+			this.judgementWindows.hold.bad[1],
+			this.judgementWindows.dragFlick.bad[1],
+			this.judgementWindows.headOnlyHold.bad[1],
 		);
 		[this.earliestEarlyBad, this.latestEarlyBad] = Sunniesnow.Utils.minmax(
 			this.judgementWindows.tap.bad[0],
 			this.judgementWindows.drag.bad[0],
 			this.judgementWindows.flick.bad[0],
-			this.judgementWindows.hold.bad[0]
+			this.judgementWindows.hold.bad[0],
+			this.judgementWindows.dragFlick.bad[0],
+			this.judgementWindows.headOnlyHold.bad[0],
 		);
 	}
 

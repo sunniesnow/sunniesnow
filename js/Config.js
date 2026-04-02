@@ -26,7 +26,7 @@ Sunniesnow.Config = {
 			return;
 		}
 		this.JUDGEMENT_WINDOWS = {};
-		for (const noteType of ['tap', 'drag', 'flick', 'hold', 'dragFlick']) {
+		for (const noteType of ['tap', 'drag', 'flick', 'hold', 'dragFlick', 'headOnlyHold']) {
 			this.JUDGEMENT_WINDOWS[noteType] = {};
 			let lastEarly = Infinity;
 			let lastLate = -Infinity;
@@ -170,7 +170,12 @@ Sunniesnow.Config = {
 				perfect: [-0.3, 0.12],
 				good: [-0.4, 0.3],
 				bad: [-0.4, 0.4],
-			}
+			},
+			headOnlyHold: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
 		},
 		medium: {
 			tap: {
@@ -202,7 +207,12 @@ Sunniesnow.Config = {
 				perfect: [-0.12, 0.12],
 				good: [-0.24, 0.24],
 				bad: [-0.24, 0.24]
-			}
+			},
+			headOnlyHold: {
+				perfect: [-0.12, 0.12],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
 		},
 		strict: {
 			tap: {
@@ -234,7 +244,12 @@ Sunniesnow.Config = {
 				perfect: [-0.1, 0.1],
 				good: [-0.15, 0.15],
 				bad: [-0.15, 0.15]
-			}
+			},
+			headOnlyHold: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
 		},
 		rigorous: {
 			tap: {
@@ -266,7 +281,12 @@ Sunniesnow.Config = {
 				perfect: [-0.08, 0.08],
 				good: [-0.12, 0.12],
 				bad: [-0.12, 0.12]
-			}
+			},
+			headOnlyHold: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
 		}
 	},
 
@@ -301,7 +321,12 @@ Sunniesnow.Config = {
 				perfect: [-0.4, 0.4],
 				good: [-0.4, 0.4],
 				bad: [-0.4, 0.4]
-			}
+			},
+			headOnlyHold: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
 		},
 		medium: {
 			tap: {
@@ -333,7 +358,12 @@ Sunniesnow.Config = {
 				perfect: [-0.24, 0.24],
 				good: [-0.24, 0.24],
 				bad: [-0.24, 0.24]
-			}
+			},
+			headOnlyHold: {
+				perfect: [-0.12, 0.12],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
 		},
 		strict: {
 			tap: {
@@ -365,7 +395,12 @@ Sunniesnow.Config = {
 				perfect: [-0.15, 0.15],
 				good: [-0.15, 0.15],
 				bad: [-0.15, 0.15]
-			}
+			},
+			headOnlyHold: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
 		},
 		rigorous: {
 			tap: {
@@ -397,7 +432,12 @@ Sunniesnow.Config = {
 				perfect: [-0.12, 0.12],
 				good: [-0.12, 0.12],
 				bad: [-0.12, 0.12]
-			}
+			},
+			headOnlyHold: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
 		}
 	},
 

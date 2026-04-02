@@ -106,6 +106,7 @@ and other data are in **milliseconds**
 | hold (*start*) | -400 | -400 | -400 | +400 | +400 | +400 |
 | hold (*end*) | -&infin; | 0.4 | 0.7 | | | |
 | drag-flick | -400 | -400 | -300 | +120 | +300 | +400 |
+| head-only hold | -400 | -400 | -400 | +400 | +400 | +400 |
 
 Data for the medium tier:
 
@@ -117,6 +118,7 @@ Data for the medium tier:
 | hold (*start*) | -240 | -240 | -120 | +120 | +240 | +240 |
 | hold (*end*) | -&infin; | 0.7 | 0.7 | | | |
 | drag-flick | -240 | -240 | -120 | +120 | +240 | +240 |
+| head-only hold | -240 | -240 | -120 | +120 | +240 | +240 |
 
 Data for the strict tier:
 
@@ -128,6 +130,7 @@ Data for the strict tier:
 | hold (*start*) | -150 | -100 | -50 | +50 | +100 | +150 |
 | hold (*end*) | -&infin; | 0.8 | 0.8 | | | |
 | drag-flick | -150 | -150 | -100 | +100 | +150 | +150 |
+| head-only hold | -150 | -100 | -50 | +50 | +100 | +150 |
 
 Data for the rigorous tier:
 
@@ -139,6 +142,7 @@ Data for the rigorous tier:
 | hold (*start*) | -100 | -60 | -30 | +30 | +60 | +100 |
 | hold (*end*) | -&infin; | 0.8 | 0.8 | | | |
 | drag-flick | -120 | -120 | -80 | +80 | +120 | +120 |
+| head-only hold | -100 | -60 | -30 | +30 | +60 | +100 |
 
 The interval for drag notes are **different** when [`lyrica-5`](#lyrica-5) is `true`:
 the perfect interval is the same as the bad interval.
@@ -176,8 +180,14 @@ and they will be used to determine the judgement time windows:
 - `judgement-windows-custom-drag-flick-early-good`,
 - `judgement-windows-custom-drag-flick-early-perfect`,
 - `judgement-windows-custom-drag-flick-late-perfect`,
-- `judgement-windows-custom-drag-flick-late-good`, and
-- `judgement-windows-custom-drag-flick-late-bad`.
+- `judgement-windows-custom-drag-flick-late-good`,
+- `judgement-windows-custom-drag-flick-late-bad`,
+- `judgement-windows-custom-head-only-hold-early-bad`,
+- `judgement-windows-custom-head-only-hold-early-good`,
+- `judgement-windows-custom-head-only-hold-early-perfect`,
+- `judgement-windows-custom-head-only-hold-late-perfect`,
+- `judgement-windows-custom-head-only-hold-late-good`,
+- `judgement-windows-custom-head-only-hold-late-bad`.
 
 All the values are in seconds although they are entered in milliseconds,
 so you need to enter milliseconds in judgement settings UI,
@@ -577,6 +587,14 @@ Enable simultaneity hints for flick notes.
 
 Enable simultaneity hints for drag-flick notes.
 
+##### Head-only hold
+{:#double-line-head-only-hold}
+
+- **Setting id**: `double-line-head-only-hold`.
+- **Possible values**: `true`, `false`.
+
+Enable simultaneity hints for head-only hold notes.
+
 ##### Override chart settings
 {:#force-double-line}
 
@@ -635,6 +653,15 @@ When it is `true`, the FX of perfect judgement will not be displayed.
 
 This setting is used to hide the FX of the start of hold notes.
 When it is `true`, the FX of the start of hold notes will not be displayed.
+
+##### Hide FX of start of head-only hold notes
+{:#hide-fx-head-only-hold-start}
+
+- **Setting id**: `hide-fx-head-only-hold-start`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to hide the FX of the start of head-only hold notes.
+When it is `true`, the FX of the start of head-only hold notes will not be displayed.
 
 ##### Always update FX even when pausing
 {:#always-update-fx}
@@ -1024,6 +1051,27 @@ This setting is used to set the duration of the vibration of hitting a drag-flic
 A value of zero is equivalent to disabling the vibration for drag-flick notes.
 Different from other time-related settings, the internal value of this setting is in milliseconds,
 while other time-related settings are in seconds.
+
+##### Head-only hold vibration time
+
+- **Setting id**: `head-only-hold-vibration-time`.
+- **Possible values**: Any number greater than or equal to 0.
+
+This setting is used to set the duration of the vibration of hitting a head-only hold note.
+A value of zero is equivalent to disabling the vibration for head-only hold notes.
+Different from other time-related settings, the internal value of this setting is in milliseconds,
+while other time-related settings are in seconds.
+
+#### Vibrate during head-only hold notes
+
+- **Setting id**: `vibrate-during-head-only-hold`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether the device should keep vibrating during the duration of head-only hold notes
+just like how it does for regular hold notes.
+When it is `true`, the device will keep vibrating during the duration of head-only hold notes
+just like how it does for regular hold notes.
+When it is `false`, the device will only vibrate at the start of head-only hold notes, and will not vibrate during the duration of head-only hold notes.
 
 ### Game settings
 

@@ -21,6 +21,7 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 		Sunniesnow.SeHold.stop();
 		Sunniesnow.SeDrag.stop();
 		Sunniesnow.SeDragFlick.stop();
+		Sunniesnow.SeHeadOnlyHold.stop();
 		this.unhitEvents = this.allEvents.slice();
 		this.holdingEvents = [];
 	}

@@ -122,6 +122,15 @@ description: Sunniesnow is a web rhythm game
 							<td><input type="number" id="judgement-windows-custom-drag-flick-late-good" value="300" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-drag-flick-late-bad" value="400" step="10"></td>
 						</tr>
+						<tr>
+							<th id="judgement-windows-custom-head-only-hold"></th>
+							<td><input type="number" id="judgement-windows-custom-head-only-hold-early-bad" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-head-only-hold-early-good" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-head-only-hold-early-perfect" value="-400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-head-only-hold-late-perfect" value="400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-head-only-hold-late-good" value="400" step="10"></td>
+							<td><input type="number" id="judgement-windows-custom-head-only-hold-late-bad" value="400" step="10"></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -330,6 +339,7 @@ description: Sunniesnow is a web rhythm game
 			<input type="checkbox" id="double-line-drag">
 			<input type="checkbox" id="double-line-flick">
 			<input type="checkbox" id="double-line-drag-flick">
+			<input type="checkbox" id="double-line-head-only-hold">
 		</div>
 
 		<div>
@@ -358,6 +368,10 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			<input type="checkbox" id="hide-fx-hold-start">
+		</div>
+
+		<div>
+			<input type="checkbox" id="hide-fx-head-only-hold-start">
 		</div>
 
 		<div>
@@ -569,6 +583,14 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			<input type="number" id="drag-flick-vibration-time" min="0" step="10" value="0">
+		</div>
+
+		<div>
+			<input type="number" id="head-only-hold-vibration-time" min="0" step="10" value="0">
+		</div>
+
+		<div>
+			<input type="checkbox" id="vibrate-during-head-only-hold">
 		</div>
 	</fieldset>
 </details>

@@ -47,6 +47,7 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 		this.listenerForFx = event => {
 			const levelNote = event.levelNote;
 			let condition = levelNote instanceof Sunniesnow.LevelHold && !Sunniesnow.game.settings.hideFxHoldStart
+			condition ||= levelNote instanceof Sunniesnow.LevelHeadOnlyHold && !Sunniesnow.game.settings.hideFxHeadOnlyHoldStart;
 			condition &&= event.type === 'hit';
 			condition ||= event.type === 'release' || event.type === 'miss';
 			if (condition) {
