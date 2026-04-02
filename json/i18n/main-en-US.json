@@ -69,6 +69,7 @@
 		"se-with-music-category": "Play SE with music",
 		"delay-category": "Delay",
 		"latency-hint-category": "Latency hint",
+		"audio-time-category": "Source of audio time",
 
 		"haptic-settings": "Haptic settings",
 		"vibration-category": "Vibration",
@@ -256,6 +257,10 @@
 		"latency-hint-playback-radio": " Playback",
 		"latency-hint-value-radio": "",
 		"latency-hint-value": ["Value: ", "ms"],
+		"audio-time-current-time-radio": " <code>AudioContext.currentTime</code>",
+		"audio-time-get-output-timestamp-radio": " <code>AudioContext.getOutputTimestamp()</code>",
+		"audio-time-output-latency-radio": " <code>AudioContext.outputLatency</code>",
+		"audio-time-worklet-processor-radio": " <code>AudioWorkletGlobalScope.currentFrame</code>",
 
 		"vibration-with-music": " Vibration with music",
 		"vibration-delay": [" Delay: ", "ms"],

@@ -8,6 +8,25 @@ Sunniesnow.Audio = class Audio {
 				latencyHint = Sunniesnow.game.settings.latencyHint;
 			}
 			this.context = new AudioContext({latencyHint});
+			if (Sunniesnow.game.settings.audioTime == 'worklet-processor') {
+				if (crossOriginIsolated) {
+					await this.context.audioWorklet.addModule(Sunniesnow.Utils.pathJoin(
+						Sunniesnow.Utils.dirname(selfPath),
+						'FrameReporter.js'
+					));
+					this.sharedBuffer ??= new SharedArrayBuffer(16);
+					this.sharedArray ??= new BigInt64Array(this.sharedBuffer);
+					this.frameReporter = new AudioWorkletNode(this.context, 'frame-reporter', {processorOptions: {sharedBuffer: this.sharedBuffer}});
+					this.frameReporter.connect(this.context.destination);
+					this.timeReporter = new Worker(Sunniesnow.Utils.pathJoin(
+						Sunniesnow.Utils.dirname(selfPath),
+						'TimeReporter.js'
+					));
+					this.timeReporter.postMessage({sharedBuffer: this.sharedBuffer});
+				} else {
+					Sunniesnow.Logs.warn('Cannot use worklet processor for audio time because the webpage is not cross-origin isolated');
+				}
+			}
 		} else {
 			// The offline audio context is dummy and will not be used in the main loop
 			this.context = new OfflineAudioContext(2, 44100, 44100);
@@ -29,7 +48,7 @@ Sunniesnow.Audio = class Audio {
 		);
 	}
 
-	static stopAll() {
+	static terminate() {
 		// put this guard here because sometimes this method gets called before load()
 		if (!this.playingAudios) {
 			return;
@@ -37,11 +56,38 @@ Sunniesnow.Audio = class Audio {
 		for (const audio of this.playingAudios) {
 			audio.stop();
 		}
+		if (Sunniesnow.Utils.isBrowser()) {
+			this.frameReporter?.disconnect();
+			this.frameReporter = null;
+			this.timeReporter?.terminate();
+			this.timeReporter = null;
+			this.context.close();
+		}
 	}
 
-	static getCurrentTime() {
-		// this.currentTime is set manually in the main loop
-		return (Sunniesnow.Utils.isBrowser() ? this.context : this).currentTime;
+	// timestamp is guaranteed to be close to performance.now()
+	static getCurrentTime(timeStamp = performance.now()) {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			// this.currentTime is set manually in the main loop
+			return this.currentTime;
+		}
+		switch (Sunniesnow.game.settings.audioTime) {
+			case 'current-time':
+				return this.context.currentTime;
+			case 'get-output-timestamp':
+				const {contextTime, performanceTime} = this.context.getOutputTimestamp();
+				return contextTime + (timeStamp - performanceTime) / 1000;
+			case 'performance-now':
+				return timeStamp / 1000 - this.context.outputLatency;
+			case 'worklet-processor':
+				if (!this.sharedArray) {
+					return this.context.currentTime;
+				}
+				const lastAudioTime = Number(Atomics.load(this.sharedArray, 0)) / this.context.sampleRate;
+				const lastWorkerTimeStamp = Number(Atomics.load(this.sharedArray, 1)) / 1000 - performance.timeOrigin;
+				return lastAudioTime + (timeStamp - lastWorkerTimeStamp) / 1000;
+		}
+		return this.context.currentTime; // should not reach here
 	}
 
 	static removePlayingAudio(audio) {
@@ -145,12 +191,11 @@ Sunniesnow.Audio = class Audio {
 		this.constructor.removePlayingAudio(this);
 	}
 
-	currentTime() {
-		return this.constructor.getCurrentTime() - this.startTime;
+	currentTime(timeStamp = performance.now()) {
+		return this.constructor.getCurrentTime(timeStamp) - this.startTime;
 	}
 
 	static systematicDelay() {
-		// Seems that it is better not to consider the systematic delay.
-		return 0; // this.context.baseLatency + this.context.outputLatency;
+		return this.context.baseLatency;
 	}
 };

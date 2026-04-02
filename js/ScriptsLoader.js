@@ -87,7 +87,7 @@ Sunniesnow.ScriptsLoader = {
 		if (path) {
 			script += `\n//# sourceURL=${this.sourceUrl(path)}`;
 		}
-		new Function(...this.polyfill.keys, script)(...this.polyfill.values);
+		new Function('selfPath', ...this.polyfill.keys, script)(path, ...this.polyfill.values);
 	},
 
 	async json(path) {

@@ -869,6 +869,62 @@ for the meaning of each options.
 
 This is **only** useful when [`latency-hint`](#latency-hint) is set to `"value"`.
 
+#### Source of audio time
+
+- **Setting id**: `audio-time`.
+- **Possible values**: `"current-time"`, `"get-output-timestamp"`, `"output-latency"`, `"worklet-processor"`.
+
+This setting is used to set how the game determines the current time of audio playback,
+which is used to determine how the notes are displayed and judged.
+The different values of this setting can largely be categorized into two types:
+the ones that can calculate the time corresponding to a specific timestamp,
+and the ones that can only get the time at the moment when the audio time is requested for.
+The difference is significant in that there is a latency
+between the user input event and when the game actually processes the event.
+Theoretically, to aim for lower latency and better responsiveness of the game,
+the timestamp of user input events should be converted to the corresponding audio time using the first type of methods,
+and it should yield better results than the other type.
+However, in practice for most mobile browsers, we observe that
+the timestamp of the events becomes less and less accurate if the canvas has been around for a long time,
+especially when the game pauses for a long time and then resumes.
+Therefore, when a discrepancy greater than 10 ms is observed between the timestamp of input events
+and the time when the game processes the events,
+the latter will be used instead, and the difference between the two categories
+of the values of this setting will be eliminated.
+If a discrepancy greater than 50 ms is observed, a warning will be shown.
+
+When this setting is set to `"current-time"`, the game uses
+`AudioContext.currentTime` to determine the current time of audio playback.
+This is a method of the second type.
+
+When this setting is set to `"get-output-timestamp"`, the game uses
+`AudioContext.getOutputTimestamp()` to get a pair of the current audio time and the corresponding performance time,
+and then uses the requested timestamp to convert to the audio time.
+This is a method of the first type.
+
+When this setting is set to `"output-latency"`, the game uses
+`AudioContext.outputLatency` to get the output latency of the audio context,
+and then subtracts it from the requested timestamp to get the corresponding audio time.
+This is a method of the second type.
+
+When this setting is set to `"worklet-processor"`, the game creates an `AudioWorkletProcessor` to update the current sample frame in a shared array buffer,
+and then a worker thread is used to detect changes in the shared array buffer and record the timestamp of when the changes occur.
+The main thread then reads the sample frame and the timestamp to convert the requested timestamp to the corresponding audio time.
+This is a method of the first type.
+This is only usable when the webpage is cross-origin isolated;
+otherwise, the game will emit a warning and fall back to using the same method as `"current-time"`.
+If your browser supports service workers,
+then the webpage will be cross-origin isolated after you refresh the page after the first load.
+
+If your browser strictly stick to the API specifications,
+the methods of the first type should yield equally good results,
+and the methods of the second type should yield equally less good results.
+However, in practice, browsers implement reduction in precision of timestamps in various ways,
+and the results can be different in different browsers and under different circumstances.
+Typically, you would find that the result of `"worklet-processor"` is the best,
+and the result of `"current-time"` is the worst,
+but it can differ by specific browsers and settings.
+
 ### Haptic settings
 
 #### Vibration

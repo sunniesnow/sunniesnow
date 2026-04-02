@@ -69,6 +69,7 @@
 		"se-with-music-category": "随音乐播放 SE",
 		"delay-category": "延迟",
 		"latency-hint-category": "延迟指示",
+		"audio-time-category": "音频时间来源",
 
 		"haptic-settings": "触觉设置",
 		"vibration-category": "振动",
@@ -256,6 +257,10 @@
 		"latency-hint-playback-radio": " 回放",
 		"latency-hint-value-radio": "",
 		"latency-hint-value": ["值: ", "ms"],
+		"audio-time-current-time-radio": " <code>AudioContext.currentTime</code>",
+		"audio-time-get-output-timestamp-radio": " <code>AudioContext.getOutputTimestamp()</code>",
+		"audio-time-output-latency-radio": " <code>AudioContext.outputLatency</code>",
+		"audio-time-worklet-processor-radio": " <code>AudioWorkletGlobalScope.currentFrame</code>",
 
 		"vibration-with-music": " 振动跟随音乐",
 		"vibration-delay": [" 延迟: ", "ms"],

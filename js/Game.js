@@ -148,7 +148,7 @@ Sunniesnow.Game = class Game {
 			Sunniesnow.Sscharter.disconnect();
 			Sunniesnow.DiscordRichPresence.terminate();
 		}
-		Sunniesnow.Audio.stopAll();
+		Sunniesnow.Audio.terminate();
 		if (!this.app) {
 			return;
 		}

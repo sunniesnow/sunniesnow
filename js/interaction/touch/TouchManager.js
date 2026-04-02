@@ -13,6 +13,7 @@ Sunniesnow.TouchManager = {
 		}
 		this.touches = {};
 		this.touchEffectsBoard?.clear();
+		this.warnedAboutWrongEventTime = false;
 	},
 
 	clearListeners() {
@@ -87,11 +88,21 @@ Sunniesnow.TouchManager = {
 		return x < 0 || y < 0 || x >= Sunniesnow.Config.WIDTH || y >= Sunniesnow.Config.HEIGHT;
 	},
 
+	normalizeTimeStamp({timeStamp}) {
+		const now = performance.now();
+		const diff = Math.abs(timeStamp - now);
+		if (diff > 50 && !this.warnedAboutWrongEventTime) {
+			Sunniesnow.Logs.warn(`Event timestamp ${timeStamp} is very different from actual current time ${now} (by ${diff} ms). Further warnings of this type will be suppressed.`)
+			this.warnedAboutWrongEventTime = true;
+		}
+		return Sunniesnow.Music.convertTimeStamp(diff > 10 ? now : timeStamp);
+	},
+
 	keyDown(event) {
 		if (this.shouldIgnoreKey(event)) {
 			return;
 		}
-		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		const time = this.normalizeTimeStamp(event);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		const touch = Sunniesnow.Touch.key(event.key, time, this.mousePageX, this.mousePageY, ctrlKey, event.shiftKey, event.altKey);
 		return this.onStart(touch);
@@ -106,7 +117,7 @@ Sunniesnow.TouchManager = {
 		if (!touch) {
 			return;
 		}
-		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		const time = this.normalizeTimeStamp(event);
 		delete this.touches[id];
 		touch.move(time, this.mouseX, this.mouseY);
 		this.onEnd(touch);
@@ -127,7 +138,7 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreMouse(event)) {
 			return;
 		}
-		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		const time = this.normalizeTimeStamp(event);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		const touch = Sunniesnow.Touch.mouseButton(event.button, time, this.mousePageX, this.mousePageY, ctrlKey, event.shiftKey, event.altKey);
 		return this.onStart(touch);
@@ -135,7 +146,7 @@ Sunniesnow.TouchManager = {
 
 	mouseMove(event) {
 		this.setMouse(event);
-		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		const time = this.normalizeTimeStamp(event);
 		for (const id in this.touches) {
 			const touch = this.touches[id];
 			if (!touch) {
@@ -157,7 +168,7 @@ Sunniesnow.TouchManager = {
 		if (!touch) {
 			return;
 		}
-		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		const time = this.normalizeTimeStamp(event);
 		delete this.touches[id];
 		touch.move(time, this.mousePageX, this.mousePageY);
 		this.onEnd(touch);
@@ -177,7 +188,7 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreTouch(event)) {
 			return;
 		}
-		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		const time = this.normalizeTimeStamp(event);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		let result = false;
 		for (const domTouch of event.changedTouches) {
@@ -191,7 +202,7 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreTouch(event)) {
 			return;
 		}
-		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		const time = this.normalizeTimeStamp(event);
 		let result = false;
 		for (const domTouch of event.changedTouches) {
 			const id = this.touchId(domTouch.identifier);
@@ -209,7 +220,7 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreTouch(event)) {
 			return;
 		}
-		const time = Sunniesnow.Music.convertTimeStamp(event.timeStamp);
+		const time = this.normalizeTimeStamp(event);
 		let result = false;
 		for (const domTouch of event.changedTouches) {
 			const id = this.touchId(domTouch.identifier);

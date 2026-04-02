@@ -844,5 +844,17 @@ Sunniesnow.Utils = {
 			url = url.replace(Sunniesnow.authentication, '***');
 		}
 		return url;
+	},
+
+	pathJoin(...parts) {
+		return parts.map((part, i) => {
+			if (i > 0) {
+				part = part.replace(/^\/+/, '');
+			}
+			if (i < parts.length - 1) {
+				part = part.replace(/\/+$/, '');
+			}
+			return part;
+		}).join('/');
 	}
 };

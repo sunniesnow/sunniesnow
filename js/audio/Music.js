@@ -96,20 +96,11 @@ Sunniesnow.Music = {
 	},
 
 	delay() {
-		return Sunniesnow.game.settings.delay + Sunniesnow.Audio.systematicDelay();
+		return Sunniesnow.game.settings.delay - Sunniesnow.Audio.systematicDelay();
 	},
 
+	// timeStamp is guaranteed to be close to performance.now()
 	convertTimeStamp(timeStamp) {
-		/* The only places where this method is called are in TouchManager,
-		when it wants to get the time of the touch events.
-		The current implementation leads to a curious bug on most browsers:
-		the time are wrong by an offset after a long pause.
-		The modified implementation does not do exactly what it should do,
-		but it fixes the bug. */
-		// return (timeStamp - this.lastResumeTimeStamp) / 1000 + this.lastResumeTime;
-		if (!this.pausing) {
-			this.updateCurrentTime();
-		}
-		return this.currentTime;
+		return this.audio.currentTime(timeStamp) + this.delay();
 	}
 };

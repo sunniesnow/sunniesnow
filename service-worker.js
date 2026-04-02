@@ -12,6 +12,8 @@ const EXTRA_SITE_RESOURCES = [ // paths not included in ScriptsLoader.{cdnScript
 	`${BASE}/popup`,
 	`${BASE}/popup/index.html`,
 	`${BASE}/popup/style.css`,
+	`${BASE}/js/audio/FrameReporter.js`,
+	`${BASE}/js/audio/TimeReporter.js`,
 	'/favicon.ico',
 	'/favicon.svg',
 ];
@@ -53,7 +55,7 @@ function isSiteResource(url) {
 self.addEventListener('fetch', event => {
 	const oldRequest = event.request;
 	if (oldRequest.mode === 'navigate') { // creating new request fails when mode is 'navigate'
-		Object.defineProperty(oldRequest, 'mode', {value: 'cors'});
+		Object.defineProperty(oldRequest, 'mode', {value: 'same-origin'});
 	}
 	const url = new URL(oldRequest.url);
 	// These are for busting caches for VS Code simple browser, not for service worker.
@@ -65,6 +67,15 @@ self.addEventListener('fetch', event => {
 			return response;
 		}
 		return fetch(oldRequest).then(fetched => {
+			const headers = new Headers(fetched.headers);
+			// https://blog.tomayac.com/2025/03/08/setting-coop-coep-headers-on-static-hosting-like-github-pages/
+			headers.set("Cross-Origin-Embedder-Policy", "require-corp");
+			headers.set("Cross-Origin-Opener-Policy", "same-origin");
+			const clonedResponse = new Response(fetched.body, {
+				status: fetched.status,
+				statusText: fetched.statusText,
+				headers
+			});
 			let cacheKey;
 			if (url.protocol === 'https:') {
 				if (url.host === ONLINE_HOST) {
@@ -76,10 +87,9 @@ self.addEventListener('fetch', event => {
 				}
 			}
 			if (cacheKey) {
-				const clonedResponse = fetched.clone();
 				caches.open(cacheKey).then(cache => cache.put(request, clonedResponse));
 			}
-			return fetched;
+			return clonedResponse;
 		});
 	}))
 });

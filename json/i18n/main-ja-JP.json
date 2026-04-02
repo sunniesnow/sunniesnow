@@ -69,6 +69,7 @@
 		"se-with-music-category": "ミュージックと SE を再生",
 		"delay-category": "遅延",
 		"latency-hint-category": "レイテンシーヒント",
+		"audio-time-category": null,
 
 		"haptic-settings": null,
 		"vibration-category": null,
@@ -256,6 +257,10 @@
 		"latency-hint-playback-radio": " Playback",
 		"latency-hint-value-radio": "",
 		"latency-hint-value": ["値: ", "ms"],
+		"audio-time-current-time-radio": " <code>AudioContext.currentTime</code>",
+		"audio-time-get-output-timestamp-radio": " <code>AudioContext.getOutputTimestamp()</code>",
+		"audio-time-output-latency-radio": " <code>AudioContext.outputLatency</code>",
+		"audio-time-worklet-processor-radio": " <code>AudioWorkletGlobalScope.currentFrame</code>",
 
 		"vibration-with-music": null,
 		"vibration-delay": null,

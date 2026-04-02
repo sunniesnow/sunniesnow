@@ -506,6 +506,26 @@ description: Sunniesnow is a web rhythm game
 			<input type="number" id="latency-hint-value" value="10" step="10" min="0" data-multiplier="0.001" data-prerequisite="latency-hint-value-radio">
 		</div>
 	</fieldset>
+
+	<fieldset>
+		<legend id="audio-time-category"></legend>
+
+		<div>
+			<input type="radio" name="audio-time" value="current-time" id="audio-time-current-time-radio" checked>
+		</div>
+
+		<div>
+			<input type="radio" name="audio-time" value="get-output-timestamp" id="audio-time-get-output-timestamp-radio">
+		</div>
+
+		<div>
+			<input type="radio" name="audio-time" value="output-latency" id="audio-time-output-latency-radio">
+		</div>
+
+		<div>
+			<input type="radio" name="audio-time" value="worklet-processor" id="audio-time-worklet-processor-radio">
+		</div>
+	</fieldset>
 </details>
 
 <details>
