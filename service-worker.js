@@ -71,7 +71,7 @@ self.addEventListener('fetch', event => {
 			// https://blog.tomayac.com/2025/03/08/setting-coop-coep-headers-on-static-hosting-like-github-pages/
 			headers.set("Cross-Origin-Embedder-Policy", "require-corp");
 			headers.set("Cross-Origin-Opener-Policy", "same-origin");
-			const clonedResponse = new Response(fetched.body, {
+			const modifiedResponse = new Response(fetched.body, {
 				status: fetched.status,
 				statusText: fetched.statusText,
 				headers
@@ -87,9 +87,10 @@ self.addEventListener('fetch', event => {
 				}
 			}
 			if (cacheKey) {
+				const clonedResponse = modifiedResponse.clone();
 				caches.open(cacheKey).then(cache => cache.put(request, clonedResponse));
 			}
-			return clonedResponse;
+			return modifiedResponse;
 		});
 	}))
 });

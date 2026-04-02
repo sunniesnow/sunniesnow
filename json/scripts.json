@@ -59,6 +59,7 @@
 		"dom/MiscDom",
 		"dom/PinnedCoordinates",
 		"dom/Popup",
+		"dom/ScreenshotManager",
 		"dom/SpinUp",
 
 		"external/Sscharter",
