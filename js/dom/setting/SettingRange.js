@@ -4,8 +4,8 @@ Sunniesnow.SettingRange = class SettingRange extends Sunniesnow.Setting {
 		if (!this.element.dataset.output) {
 			return;
 		}
-		const output = this.collection.getElementById(this.element.dataset.output);
-		const listener = () => output.innerText = this.element.value;
+		this.output = this.collection.getElementById(this.element.dataset.output);
+		const listener = () => this.output.innerText = this.element.value;
 		this.element.addEventListener('input', listener);
 		listener();
 	}
@@ -16,6 +16,7 @@ Sunniesnow.SettingRange = class SettingRange extends Sunniesnow.Setting {
 
 	set(value) {
 		this.element.value = value;
+		this.output.innerText = value;
 	}
 
 	load(value) {
