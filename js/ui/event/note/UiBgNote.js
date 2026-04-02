@@ -190,7 +190,7 @@ const UiNoteMixin = new Sunniesnow.Mixin({
 			return;
 		}
 		const targetCircleScale = this.constructor.radius / this.constructor.circleRadius;
-		if (progress <= 1) {
+		if (progress < 1) {
 			this.circleGraphics.visible = true;
 			this.circleGraphics.scale.set(1 - (1-targetCircleScale) * progress);
 			this.circleGraphics.alpha = (1/3 + 2/3 * progress);

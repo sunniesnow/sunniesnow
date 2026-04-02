@@ -10,10 +10,10 @@ Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 		this.textStyle = this.createTextStyle();
 	}
 
-	static createHaloGeometry() {
+	static createHaloGeometry(color = 0xd3e373) {
 		const graphics = new PIXI.GraphicsContext();
 		graphics.circle(0, 0, this.haloRadius);
-		graphics.fill(0xd3e373);
+		graphics.fill(color);
 		return graphics;
 	}
 
