@@ -1,7 +1,12 @@
 Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 	static PROPERTIES = {
 		required: ['x', 'y'],
-		optional: {tipPoint: null, size: 1}
+		optional: {
+			tipPoint: null,
+			size: 1,
+			fake: false,
+			doubleLine: 'user', // user (respect user settings) | always | never
+		}
 	}
 
 	static TIME_DEPENDENT = {
@@ -61,16 +66,19 @@ Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 		return result;
 	}
 
+	userWantsDoubleLine() {
+		return false;
+	}
+
+	doubleLineable() {
+		return Sunniesnow.game.settings.forceDoubleLine || this.doubleLine == 'user' ? this.userWantsDoubleLine() : this.doubleLine == 'always';
+	}
+
 	getConnectedNote() {
 		let match = null;
 		for (let i = 0; i < this.simultaneousEvents.length; i++) {
 			const event = this.simultaneousEvents[i];
-			let condition = event instanceof Sunniesnow.Tap && Sunniesnow.game.settings.doubleLineTap;
-			condition ||= event instanceof Sunniesnow.Drag && Sunniesnow.game.settings.doubleLineDrag;
-			condition ||= event instanceof Sunniesnow.Hold && Sunniesnow.game.settings.doubleLineHold;
-			condition ||= event instanceof Sunniesnow.Flick && Sunniesnow.game.settings.doubleLineFlick;
-			condition ||= event instanceof Sunniesnow.DragFlick && Sunniesnow.game.settings.doubleLineDragFlick;
-			if (!condition) {
+			if (!event.doubleLineable()) {
 				continue;
 			}
 			if (match === this) {

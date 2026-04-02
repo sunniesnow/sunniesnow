@@ -2,8 +2,8 @@ Sunniesnow.Tap = class Tap extends Sunniesnow.Note {
 	static ABSTRACT = false
 
 	static PROPERTIES = {
-		required: ['x', 'y'],
-		optional: {tipPoint: null, text: '', size: 1}
+		required: [...Sunniesnow.Note.PROPERTIES.required],
+		optional: {...Sunniesnow.Note.PROPERTIES.optional, text: ''}
 	}
 
 	static TIME_DEPENDENT = {
@@ -19,5 +19,9 @@ Sunniesnow.Tap = class Tap extends Sunniesnow.Note {
 
 	vibrationTime() {
 		return Sunniesnow.game.settings.tapVibrationTime;
+	}
+
+	userWantsDoubleLine() {
+		return Sunniesnow.game.settings.doubleLineTap;
 	}
 };

@@ -2,8 +2,8 @@ Sunniesnow.Drag = class Drag extends Sunniesnow.Note {
 	static ABSTRACT = false
 
 	static PROPERTIES = {
-		required: ['x', 'y'],
-		optional: {tipPoint: null, size: 1}
+		required: [...Sunniesnow.Note.PROPERTIES.required],
+		optional: {...Sunniesnow.Note.PROPERTIES.optional}
 	}
 
 	static UI_CLASS = 'UiDrag'
@@ -14,5 +14,9 @@ Sunniesnow.Drag = class Drag extends Sunniesnow.Note {
 
 	vibrationTime() {
 		return Sunniesnow.game.settings.dragVibrationTime;
+	}
+
+	userWantsDoubleLine() {
+		return Sunniesnow.game.settings.doubleLineDrag;
 	}
 };

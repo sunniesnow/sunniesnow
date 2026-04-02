@@ -46,7 +46,6 @@ Sunniesnow.UiBgNotesBoard = class UiBgNotesBoard extends PIXI.Container {
 		}
 		Sunniesnow.Utils.eachWithRedoingIf(this.uiEvents, (uiEvent, i) => {
 			uiEvent.update(time - uiEvent.event.time);
-			uiEvent.alpha = uiEvent.fadingAlpha;
 			if (uiEvent.state === 'finished') {
 				uiEvent.destroy({children: true});
 				this.uiEvents.splice(i, 1);

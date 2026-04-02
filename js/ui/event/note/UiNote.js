@@ -51,7 +51,11 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 		if (this.circle) {
 			this.circle.alpha *= this.fadingAlpha;
 		}
-		if (Sunniesnow.game.settings.debug) {
+		if (this.event.fake) {
+			this.alpha *= Sunniesnow.game.settings.opacityFake;
+			this.circle.alpha *= Sunniesnow.game.settings.opacityFake;
+		}
+		if (Sunniesnow.game.settings.debug && !this.event.fake) {
 			const judgementWindows = Sunniesnow.Config.JUDGEMENT_WINDOWS;
 			const earlyBad = judgementWindows[this.levelNote.type].bad[0];
 			if (!this.touchAreaCreated && relativeTime >= earlyBad) {
@@ -62,6 +66,9 @@ Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {
 	}
 
 	getAfterTimeStateByRelativeTime(relativeTime) {
+		if (this.event.fake) {
+			return super.getAfterTimeStateByRelativeTime(relativeTime);
+		}
 		const releaseRelativeTime = this.levelNote.releaseRelativeTime;
 		if (releaseRelativeTime != null) {
 			if (relativeTime >= releaseRelativeTime + this.fadingOutDuration()) {

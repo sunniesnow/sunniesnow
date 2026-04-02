@@ -71,6 +71,7 @@ Sunniesnow.DoubleLineBase = class DoubleLineBase extends PIXI.Container {
 				// do nothing
 				break;
 		}
+		this.alpha = this.fadingAlpha;
 	}
 
 	getEffectiveReleaseRelativeTimeOfLevelNote(levelNote) {

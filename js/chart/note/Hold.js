@@ -2,8 +2,8 @@ Sunniesnow.Hold = class Hold extends Sunniesnow.Note {
 	static ABSTRACT = false
 
 	static PROPERTIES = {
-		required: ['x', 'y', 'duration'],
-		optional: {tipPoint: null, text: '', size: 1}
+		required: [...Sunniesnow.Note.PROPERTIES.required, 'duration'],
+		optional: {...Sunniesnow.Note.PROPERTIES.optional, text: ''}
 	}
 
 	static TIME_DEPENDENT = {
@@ -19,5 +19,9 @@ Sunniesnow.Hold = class Hold extends Sunniesnow.Note {
 
 	vibrationTime() {
 		return Sunniesnow.game.settings.holdVibrationTime;
+	}
+
+	userWantsDoubleLine() {
+		return Sunniesnow.game.settings.doubleLineHold;
 	}
 };

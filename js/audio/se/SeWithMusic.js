@@ -4,7 +4,7 @@ Sunniesnow.SeWithMusic = class SeWithMusic {
 	}
 
 	initAllEvents() {
-		this.allEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.Note);
+		this.allEvents = Sunniesnow.game.chart.events.filter(event => event instanceof Sunniesnow.Note && !event.fake);
 		if (Sunniesnow.game.progressAdjustable) {
 			// e.time instead of e.time - Sunniesnow.Config.UI_PREPARATION_TIME
 			// because we want update() to handle hitSe() correctly.

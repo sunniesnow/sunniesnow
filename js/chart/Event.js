@@ -234,4 +234,8 @@ Sunniesnow.Event = class Event {
 	timeDependentAtRelative(property, relativeTime) {
 		return this.timeDependentAt(property, this.time + relativeTime);
 	}
+
+	doubleLineable() {
+		return false;
+	}
 };

@@ -2,8 +2,8 @@ Sunniesnow.DragFlick = class DragFlick extends Sunniesnow.Note {
 	static ABSTRACT = false
 
 	static PROPERTIES = {
-		required: ['x', 'y', 'angle'],
-		optional: {tipPoint: null, size: 1}
+		required: [...Sunniesnow.Note.PROPERTIES.required, 'angle'],
+		optional: {...Sunniesnow.Note.PROPERTIES.optional}
 	}
 
 	static UI_CLASS = 'UiDragFlick'
@@ -18,5 +18,9 @@ Sunniesnow.DragFlick = class DragFlick extends Sunniesnow.Note {
 
 	vibrationTime() {
 		return Sunniesnow.game.settings.dragFlickVibrationTime;
+	}
+
+	userWantsDoubleLine() {
+		return Sunniesnow.game.settings.doubleLineDragFlick;
 	}
 };

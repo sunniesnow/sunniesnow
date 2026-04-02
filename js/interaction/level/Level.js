@@ -29,7 +29,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 	initializeNoteStores() {
 		this.unhitNotes = [];
 		for (const event of Sunniesnow.game.chart.events) {
-			if (event instanceof Sunniesnow.Note) {
+			if (event instanceof Sunniesnow.Note && !event.fake) {
 				this.unhitNotes.push(event.newLevelNote());
 			}
 		}

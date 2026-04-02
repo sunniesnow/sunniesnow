@@ -10,22 +10,7 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 
 	initAllEvents() {
 		this.allEvents = Sunniesnow.game.chart.events.filter(event => {
-			if (!(event instanceof Sunniesnow.Note)) {
-				return false;
-			}
-			if (!Sunniesnow.game.settings.doubleLineTap && event instanceof Sunniesnow.Tap) {
-				return false;
-			}
-			if (!Sunniesnow.game.settings.doubleLineHold && event instanceof Sunniesnow.Hold) {
-				return false;
-			}
-			if (!Sunniesnow.game.settings.doubleLineDrag && event instanceof Sunniesnow.Drag) {
-				return false;
-			}
-			if (!Sunniesnow.game.settings.doubleLineFlick && event instanceof Sunniesnow.Flick) {
-				return false;
-			}
-			if (!Sunniesnow.game.settings.doubleLineDragFlick && event instanceof Sunniesnow.DragFlick) {
+			if (!event.doubleLineable()) {
 				return false;
 			}
 			return !!event.getConnectedNote();
@@ -71,7 +56,6 @@ Sunniesnow.DoubleLinesBoard = class DoubleLinesBoard extends PIXI.Container {
 		this.addNewDoubleLines(time);
 		Sunniesnow.Utils.eachWithRedoingIf(this.children, child => {
 			child.update(time - child.event1.time);
-			child.alpha = child.fadingAlpha;
 			if (child.state === 'finished') {
 				child.destroy({children: true});
 				return true;

@@ -2,8 +2,8 @@ Sunniesnow.Flick = class Flick extends Sunniesnow.Note {
 	static ABSTRACT = false
 
 	static PROPERTIES = {
-		required: ['x', 'y', 'angle'],
-		optional: {text: '', tipPoint: null, size: 1}
+		required: [...Sunniesnow.Note.PROPERTIES.required, 'angle'],
+		optional: {...Sunniesnow.Note.PROPERTIES.optional, text: ''}
 	}
 
 	static TIME_DEPENDENT = {
@@ -23,5 +23,9 @@ Sunniesnow.Flick = class Flick extends Sunniesnow.Note {
 
 	vibrationTime() {
 		return Sunniesnow.game.settings.flickVibrationTime;
+	}
+
+	userWantsDoubleLine() {
+		return Sunniesnow.game.settings.doubleLineFlick;
 	}
 };

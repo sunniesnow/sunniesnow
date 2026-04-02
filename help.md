@@ -577,6 +577,34 @@ Enable simultaneity hints for flick notes.
 
 Enable simultaneity hints for drag-flick notes.
 
+##### Override chart settings
+{:#force-double-line}
+
+- **Setting id**: `force-double-line`.
+- **Possible values**: `true`, `false`.
+
+In a chart, a note can be specified to be able to have simultaneity hints or not.
+By default, it is determined by the settings [`double-line-tap`](#double-line-tap), [`double-line-hold`](#double-line-hold), [`double-line-drag`](#double-line-drag), [`double-line-flick`](#double-line-flick), and [`double-line-drag-flick`](#double-line-drag-flick).
+However, the chart can also force the note to be able to have simultaneity hints or not regardless of these settings.
+
+When this setting is `true`, the user settings will override the chart settings.
+When this setting is `false`, the chart settings will take precedence,
+and only fall back to the user settings when the chart does not specify whether the note can have simultaneity hints.
+
+#### Opacity
+
+##### Fake notes
+{:#opacity-fake}
+
+- **Setting id**: `opacity-fake`.
+- **Possible values**: Any number between 0 and 1
+
+This setting is used to set the opacity of fake notes.
+The fake notes are the notes that are not supposed to be hit,
+but are used for ornamental purposes.
+When this setting is zero, the fake notes will be completely transparent.
+When this setting is one, the fake notes will be completely opaque.
+
 #### FX options
 
 ##### Hide FX in front of notes
@@ -740,6 +768,7 @@ When it is `false`, the circles will not move with the notes.
 This setting is used to disable the ornamental effects of the game.
 Ornamental effects include:
 
+- fake notes,
 - changes in speed specified by the chart,
 - changes in opacity, size, position, rotation, etc. of notes, background patterns, etc,
 - special changes to HUDs specified by the chart,
