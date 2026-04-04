@@ -105,12 +105,36 @@ Sunniesnow.Chart = class Chart {
 			throw new Error('There are no events in the chart in the specified range');
 		}
 		this.events.sort((a, b) => a.time - b.time);
+		this.applyTipPointSpeed();
 		this.stripEvents();
 		this.applyGlobalSpeed();
 		this.setSimultaneousEvents();
 		this.eventsSortedByAppearTime = this.events.toSorted((a, b) => a.appearTime() - b.appearTime());
 		this.eventsSortedByEndTime = this.events.toSorted((a, b) => a.endTime() - b.endTime());
-		this.eventsSortedByEndTime.filter(event => event instanceof Sunniesnow.Note).forEach((note, i) => note.comboIndex = i + 1);
+		this.eventsSortedByEndTime.filter(event => event instanceof Sunniesnow.Note && !event.fake).forEach((note, i) => note.comboIndex = i + 1);
+		this.organizeTipPoints();
+	}
+
+	// Apply tipPointSpeed and tipPointDistance settings, assuming this.events are sorted by time.
+	applyTipPointSpeed() {
+		const tipPoints = new Map();
+		for (const event of this.events) {
+			if (event.tipPoint == null || event instanceof Sunniesnow.EffectTipPoint) {
+				continue;
+			}
+			if (!tipPoints.has(event.tipPoint)) {
+				tipPoints.set(event.tipPoint, event instanceof Sunniesnow.Placeholder ? event : null);
+				continue;
+			}
+			const placeholder = tipPoints.get(event.tipPoint);
+			if (!placeholder) {
+				continue;
+			}
+			placeholder.time = event.time - (event.time - placeholder.time) * Sunniesnow.game.settings.tipPointDistance / Sunniesnow.game.settings.tipPointSpeed;
+			placeholder.x = event.x - (event.x - placeholder.x) * Sunniesnow.game.settings.tipPointDistance;
+			placeholder.y = event.y - (event.y - placeholder.y) * Sunniesnow.game.settings.tipPointDistance;
+			tipPoints.set(event.tipPoint, null);
+		}
 	}
 
 	// Event.from() already strips events after this.end,
@@ -121,7 +145,7 @@ Sunniesnow.Chart = class Chart {
 		const preparationStart = this.start - Sunniesnow.game.settings.beginningPreparationTime;
 		for (let i = this.events.length - 1; i >= 0; i--) {
 			const event = this.events[i];
-			if (event.time >= preparationStart && event.tipPoint) {
+			if (event.time >= preparationStart && event.tipPoint && !(event instanceof Sunniesnow.EffectTipPoint)) {
 				tipPoints.set(event.tipPoint, false);
 			}
 			if (event instanceof Sunniesnow.Note && event.time < this.start || event.disappearTime() < preparationStart) {
@@ -183,6 +207,34 @@ Sunniesnow.Chart = class Chart {
 				event2.simultaneousEvents = event1.simultaneousEvents;
 			}
 		}
+	}
+
+	organizeTipPoints() {
+		// [{id, events, appearTime, disappearTime, effects}, ...], sorted by events[0].time
+		this.tipPoints = new Map();
+		for (const event of this.events) {
+			if (event.tipPoint == null) {
+				continue;
+			}
+			if (!this.tipPoints.has(event.tipPoint)) {
+				this.tipPoints.set(event.tipPoint, {effects: [], events: []});
+			}
+			this.tipPoints.get(event.tipPoint)[event instanceof Sunniesnow.EffectTipPoint ? 'effects' : 'events'].push(event);
+		}
+		// First convert to array then map instead of the other way around
+		// because Safari and Firefox do not support Iterator.
+		this.tipPoints = Array.from(this.tipPoints.entries()).map(
+			([id, {events, effects}]) => ({
+				id, events, effects,
+				appearTime: events[0].time - Sunniesnow.TipPoint.ACTIVE_DURATION - Sunniesnow.Config.UI_PREPARATION_TIME,
+				disappearTime: events[events.length - 1].time + Sunniesnow.TipPoint.ZOOMING_OUT_DURATION
+			})
+		);
+		Sunniesnow.Utils.eachWithRedoingIf(
+			this.tipPoints,
+			({events}, i) => events.length === 0 && this.tipPoints.splice(i, 1)
+		);
+		this.tipPoints.sort((a, b) => a.appearTime - b.appearTime);
 	}
 
 	async checkAndLoadFilters() {

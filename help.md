@@ -343,6 +343,10 @@ This is the behavior of Lyrica, which is manifest in the special chart of Frog R
 ### Visual settings
 
 #### Speed
+{:#speed-category}
+
+##### Shrinking speed of circles
+{:#speed}
 
 - **Setting id**: `speed`.
 - **Possible values**: Any non-negative number.
@@ -373,6 +377,31 @@ When [`scroll`](#scroll) is `true`, this setting is the time
 (which is the height of the canvas set by
 [`height`](#height) multiplied by the value of 
 [`scroll-distance`](#scroll-distance)).
+
+##### Speed of incoming tip points
+{:#tip-point-speed}
+
+- **Setting id**: `tip-point-speed`.
+- **Possible values**: Any positive number.
+
+If a tip point chain starts with a placeholder event,
+this setting changes the time of the placeholder event
+to make the tip point fly in at a different speed.
+When this setting is `1`, the time of the placeholder event is not changed.
+Increasing this setting makes the tip point fly in faster
+(i.e., the placeholder event is later in time).
+
+##### Distance of incoming tip points
+{:#tip-point-distance}
+
+- **Setting id**: `tip-point-distance`.
+- **Possible values**: Any number.
+
+If a tip point chain starts with a placeholder event,
+this setting changes the position and time of the placeholder event
+to make the tip point fly in from a different distance
+without changing the speed of it.
+When this setting is `1`, the position and time of the placeholder event are not changed.
 
 #### Note size
 
