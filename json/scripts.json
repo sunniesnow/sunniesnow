@@ -1,12 +1,12 @@
 {
 	"npmLock": {
 		"jszip": "3.10.1",
-		"pixijs": "8.17.1",
+		"pixijs": "8.18.1",
 		"mime": "4.1.0",
-		"marked": "16.4.0",
-		"dompurify": "3.2.7",
-		"audio_decode": "2.2.3",
-		"liquidjs": "10.22.0",
+		"marked": "18.0.2",
+		"dompurify": "3.4.0",
+		"audio_decode": "3.9.3",
+		"liquidjs": "10.25.5",
 		"vconsole": "3.15.1"
 	},
 	"npmScripts": [
