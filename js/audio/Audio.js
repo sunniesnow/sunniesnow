@@ -196,6 +196,6 @@ Sunniesnow.Audio = class Audio {
 	}
 
 	static systematicDelay() {
-		return this.context.baseLatency;
+		return Sunniesnow.Utils.isBrowser() ? this.context.baseLatency : 0;
 	}
 };
