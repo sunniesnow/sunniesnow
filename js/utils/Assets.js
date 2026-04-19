@@ -56,11 +56,20 @@ Sunniesnow.Assets = {
 	},
 
 	async loadPixiAssets(url, options = {}) {
-		const downloadToFs = options.downloadToFs ?? false;
+		const downloadToFs = (options.downloadToFs ?? false) && !Sunniesnow.Utils.isBrowser();
 		delete options.downloadToFs;
 		const isObjectUrl = url.startsWith('blob:') || url.startsWith('data:');
-		let blob;
-		if (!isObjectUrl) {
+		let blob, src, fs;
+		let condition = !isObjectUrl;
+		let redownloadToFs = false;
+		if (downloadToFs) {
+			const path = require('path');
+			fs = require('fs');
+			src = path.join(Sunniesnow.record.tempDir, path.basename(url));
+			redownloadToFs = !fs.existsSync(src) || Sunniesnow.record.clean;
+			condition &&= redownloadToFs;
+		}
+		if (condition) {
 			Sunniesnow.Loader.downloadingProgresses.set(url, 0);
 			const response = await Sunniesnow.Utils.strictFetch(url);
 			const contentLength = Number(response.headers.get('Content-Length'));
@@ -78,24 +87,15 @@ Sunniesnow.Assets = {
 			}
 			blob = new Blob(chunks, {type: response.headers.get('Content-Type')});
 		}
-		let src;
-		if (Sunniesnow.Utils.isBrowser() || !downloadToFs) {
-			if (isObjectUrl) {
-				src = url;
-			} else {
-				src = Sunniesnow.ObjectUrl.create(blob);
-			}
-		} else {
+		if (redownloadToFs) {
 			const arrayBuffer = isObjectUrl ? await fetch(url).then(res => res.arrayBuffer()) : await blob.arrayBuffer();
-			const path = require('path');
-			const fs = require('fs');
-			src = path.join(Sunniesnow.record.tempDir, path.basename(url));
-			if (!fs.existsSync(src) || Sunniesnow.record.clean) {
-				fs.writeFileSync(src, Buffer.from(arrayBuffer));
-			}
+			fs.writeFileSync(src, Buffer.from(arrayBuffer));
+		}
+		if (!downloadToFs) {
+			src = isObjectUrl ? url : Sunniesnow.ObjectUrl.create(blob);
 		}
 		const result = await PIXI.Assets.load({src, ...options});
-		if (!isObjectUrl) {
+		if (condition) {
 			Sunniesnow.Loader.downloadingProgresses.delete(url);
 		}
 		return result;
