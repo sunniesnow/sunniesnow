@@ -17,7 +17,7 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 			}
 		}
 		this.fontSize = Sunniesnow.Config.RADIUS * 10 * Sunniesnow.Config.SCALE;
-		this.maxWidth = Sunniesnow.Config.MIN_WIDTH * Sunniesnow.Config.SCALE;
+		this.maxWidth = Sunniesnow.game.settings.playfieldWidth * Sunniesnow.Config.SCALE;
 		this.style = new PIXI.TextStyle({
 			fontFamily: 'HanWangShinSuMedium,YujiBoku,Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.fontSize,

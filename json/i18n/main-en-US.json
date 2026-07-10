@@ -76,6 +76,7 @@
 		"vibration-category": "Vibration",
 
 		"game-settings": "Game settings",
+		"playfield-category": "Playfield",
 		"scroll-category": "Scroll mode",
 		"autoplay-category": "Autoplay",
 		"chart-offset-category": "Chart offset",
@@ -281,6 +282,8 @@
 		"vibrate-during-head-only-hold": " Vibrate during head-only hold",
 		"drag-flick-vibration-time": ["Drag-flick vibration time: ", "ms"],
 
+		"playfield-width": "Width: ",
+		"playfield-height": "Height: ",
 		"scroll": " Enable scroll mode",
 		"autoplay": " Autoplay",
 		"progress-adjustable": " Progress adjustable",

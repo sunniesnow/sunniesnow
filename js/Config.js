@@ -10,8 +10,8 @@ Sunniesnow.Config = {
 		this.WIDTH = Sunniesnow.game.settings.width;
 		this.HEIGHT = Sunniesnow.game.settings.height;
 		this.SCALE = Math.min(
-			this.WIDTH / this.MIN_WIDTH,
-			this.HEIGHT / this.MIN_HEIGHT
+			this.WIDTH / Sunniesnow.game.settings.playfieldWidth,
+			this.HEIGHT / Sunniesnow.game.settings.playfieldHeight
 		);
 		// unit: pixels
 		this.NOTE_RADIUS = this.RADIUS * this.SCALE * Sunniesnow.game.settings.noteSize;
@@ -69,13 +69,6 @@ Sunniesnow.Config = {
 	// Note radius in chart coordinate length units.
 	// This is used for calculating judgement space window.
 	RADIUS: 12.5,
-
-	// The minimum width of the visible part of a chart.
-	// The unit is chart coordinates length unit.
-	// It is guaranteed that x chart coordinates within [-w/2, w/2] is inside the screen.
-	// Similarly for height.
-	MIN_WIDTH: 250,
-	MIN_HEIGHT: 150,
 
 	// Get coordinates on canvas by providing the coordinates in charts.
 	chartMapping(chartX, chartY) {

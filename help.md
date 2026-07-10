@@ -1104,6 +1104,30 @@ When it is `false`, the device will only vibrate at the start of head-only hold 
 
 ### Game settings
 
+#### Playfield
+
+##### Width
+{:#playfield-width}
+
+- **Setting id**: `playfield-width`.
+- **Possible values**: positive numbers.
+
+{% katexmm %}
+The width of the playfield in the chart coordinating system.
+It is guaranteed that a point whose $x$ coordinate is smaller than half this value is within the horizontal span of the canvas.
+{% endkatexmm %}
+
+##### Height
+{:#playfield-height}
+
+- **Setting id**: `playfield-height`.
+- **Possible values**: positive numbers.
+
+{% katexmm %}
+The height of the playfield in the chart coordinating system.
+It is guaranteed that a point whose $y$ coordinate is smaller than half this value is within the vertical span of the canvas.
+{% endkatexmm %}
+
 #### Scroll mode
 
 ##### Enable scroll mode

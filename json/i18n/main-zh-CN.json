@@ -76,6 +76,7 @@
 		"vibration-category": "振动",
 
 		"game-settings": "游戏设置",
+		"playfield-category": "游玩区域",
 		"scroll-category": "下落式",
 		"autoplay-category": "自动游玩",
 		"chart-offset-category": "谱面偏移",
@@ -281,6 +282,8 @@
 		"vibrate-during-head-only-hold": " head-only hold 音符期间振动",
 		"drag-flick-vibration-time": ["drag-flick 音符振动时间: ", "ms"],
 
+		"playfield-width": "宽度: ",
+		"playfield-height": "高度: ",
 		"scroll": " 启用下落式模式",
 		"autoplay": " 自动游玩",
 		"progress-adjustable": " 进度可调",

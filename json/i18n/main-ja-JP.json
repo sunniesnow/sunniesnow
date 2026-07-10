@@ -76,6 +76,7 @@
 		"vibration-category": null,
 
 		"game-settings": "ゲーム設定",
+		"playfield-category": null,
 		"scroll-category": "スクロールモード",
 		"autoplay-category": "オートプレイ",
 		"chart-offset-category": "譜面オフセット",
@@ -281,6 +282,8 @@
 		"vibrate-during-head-only-hold": null,
 		"drag-flick-vibration-time": null,
 
+		"playfield-width": null,
+		"playfield-height": null,
 		"scroll": " スクロールモードを有効にする",
 		"autoplay": " オートプレイ",
 		"progress-adjustable": " プログレスを調整できる",
