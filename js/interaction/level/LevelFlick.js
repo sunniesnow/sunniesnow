@@ -21,12 +21,17 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 			return;
 		}
 		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
-		const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
-		if (this.minFlickDistance() > 0 && !Sunniesnow.Utils.between(angle, ...this.angleRange())) { // wrong direction
-			this.judgement = 'bad';
-			return;
+		if (this.minFlickDistance() > 0) {
+			for (const angle of this.event.angles) {
+				if (Sunniesnow.Utils.between(Sunniesnow.Utils.angleDifference(phi, angle), ...this.angleRange())) {
+					this.judgement = this.getJudgementByRelativeTime(this.hitRelativeTime);
+					return;
+				}
+			}
+			this.judgement = 'bad'; // wrong direction
+		} else {
+			this.judgement = this.getJudgementByRelativeTime(this.hitRelativeTime);
 		}
-		this.judgement = this.getJudgementByRelativeTime(this.hitRelativeTime);
 	}
 
 	// the distance of touch spot moving to be regarded as a flick
@@ -59,11 +64,20 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 			this.release(this.time + this.lateBad());
 			return;
 		}
+		if (this.minFlickDistance() === 0) {
+			this.release(this.touch.end().time);
+			return;
+		}
 		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
 		let condition = rho >= this.minFlickDistance();
 		if (condition) {
-			const angle = Sunniesnow.Utils.angleDifference(phi, this.event.angle);
-			condition = this.minFlickDistance() === 0 || Sunniesnow.Utils.between(angle, ...this.angleRange());
+			condition = false;
+			for (const angle of this.event.angles) {
+				if (Sunniesnow.Utils.between(Sunniesnow.Utils.angleDifference(phi, angle), ...this.angleRange())) {
+					condition = true;
+					break;
+				}
+			}
 		}
 		condition ||= rho >= this.maxFlickDistance();
 		if (condition) {

@@ -10,7 +10,7 @@ Sunniesnow.FxFlick = class FxFlick extends Sunniesnow.FxTap {
 		for (let i = 0; i < count; i++) {
 			const spark = new PIXI.Graphics(this.constructor.sparkLine);
 			spark.rotation = Math.random() * Math.PI - Math.PI / 2;
-			spark.rotation += -this.levelNote.event.angle;
+			spark.rotation += -this.levelNote.event.angles[Math.floor(Math.random() * this.levelNote.event.angles.length)];
 			spark.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
 			this.addChild(spark);
 			this.sparks.push(spark);

@@ -18,7 +18,25 @@ Sunniesnow.Flick = class Flick extends Sunniesnow.Note {
 	static TYPE_NAME = 'flick'
 
 	checkProperties() {
-		return super.checkProperties() && this.assertType("angle", "number");
+		if (!super.checkProperties()) {
+			return false;
+		}
+		if (Array.isArray(this.angle)) {
+			this.angles = this.angle;
+		} else {
+			this.angles = [this.angle];
+		}
+		if (this.angles.length === 0) {
+			Sunniesnow.Logs.warn(`Property \`angle\` in ${this.constructor.TYPE_NAME} event must be a number or an nonempty array of numbers`);
+			return false;
+		}
+		for (const angle of this.angles) {
+			if (typeof angle !== "number") {
+				Sunniesnow.Logs.warn(`Property \`angle\` in ${this.constructor.TYPE_NAME} event must be a number or an array of numbers`);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	vibrationTime() {

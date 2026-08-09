@@ -32,9 +32,15 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.label = `flick-${this.event.id}`;
 		this.noteBody = new PIXI.Graphics(this.constructor.geometry);
 		this.noteBody.label = 'note-body';
-		this.arrow = new PIXI.Graphics(this.constructor.arrowGeometry);
-		this.arrow.label = 'arrow';
-		this.arrow.rotation = Sunniesnow.Config.chartMappingAngle(this.event.angle);
+		this.arrows = this.event.angles.map(angle => {
+			const result = new PIXI.Graphics(this.constructor.arrowGeometry);
+			result.label = 'arrow';
+			result.rotation = Sunniesnow.Config.chartMappingAngle(angle);
+			return result;
+		});
+		this.arrow = new PIXI.Container();
+		this.arrow.label = 'arrow-container';
+		this.arrow.addChild(...this.arrows);
 		this.text = this.createText();
 		this.note = new PIXI.Container();
 		this.note.label = 'note';
@@ -91,10 +97,12 @@ Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 		this.arrow.scale.set(1.05);
 		if (progress <= 1) {
 			this.arrow.alpha = (1 - progress)**3;
-			this.arrow.position.set(...Sunniesnow.Utils.polarToCartesian(
-				distance * (1 - (1-progress)**2),
-				this.arrow.rotation
-			));
+			this.arrows.forEach(arrow => {
+				arrow.position.set(...Sunniesnow.Utils.polarToCartesian(
+					distance * (1 - (1-progress)**2),
+					arrow.rotation
+				));
+			});
 		} else {
 			this.arrow.visible = false;
 		}
