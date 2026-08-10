@@ -6,7 +6,7 @@ Sunniesnow.UiHexagon = class UiHexagon extends Sunniesnow.UiBgPattern {
 
 	static createGeometry() {
 		const graphics = new PIXI.GraphicsContext();
-		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
+		const unit = Sunniesnow.Config.NOTE_RADIUS * 2;
 		const thickness = unit / 20;
 		graphics.regularPoly(0, 0, unit*4/Math.sqrt(3), 6, Math.PI / 2);
 		graphics.fill({color: 0x000000, alpha: 0.2});

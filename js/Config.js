@@ -14,7 +14,7 @@ Sunniesnow.Config = {
 			this.HEIGHT / Sunniesnow.game.settings.playfieldHeight
 		);
 		// unit: pixels
-		this.NOTE_RADIUS = this.RADIUS * this.SCALE * Sunniesnow.game.settings.noteSize;
+		this.NOTE_RADIUS = this.RADIUS * this.SCALE;
 		this.SCROLL_END_Y = Sunniesnow.game.settings.scrollJudgementLine * this.HEIGHT;
 		this.SCROLL_START_Y = this.SCROLL_END_Y - Sunniesnow.game.settings.scrollDistance * this.HEIGHT;
 		this.SCROLL_SPEED = Sunniesnow.game.settings.speed * Sunniesnow.game.settings.scrollDistance * this.HEIGHT;

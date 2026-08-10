@@ -61,14 +61,22 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		return false;
 	}
 
+	// The hit size set by user settings.
+	settingsHitSize() {
+		return 1;
+	}
+
+	hitSize() {
+		return Sunniesnow.Config.RADIUS * this.settingsHitSize() * this.event.size;
+	}
+
 	// x, y are in chart coordinates
 	isTappableAt(touch, x, y) {
 		if (touch.wholeScreen) {
 			return true;
 		}
-		const r = Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.noteHitSize * this.event.size;
 		const distance = Sunniesnow.game.settings.scroll ? Math.abs(this.event.x - x) : Math.hypot(this.event.x - x, this.event.y - y);
-		return distance < r;
+		return distance < this.hitSize();
 	}
 
 	// Hit without processing (see processHit()) or event dispatching

@@ -1,7 +1,7 @@
 Sunniesnow.UiHold = class UiHold extends Sunniesnow.UiNote {
 
 	static async load() {
-		this.radius = Sunniesnow.Config.NOTE_RADIUS;
+		this.radius = Sunniesnow.Config.NOTE_RADIUS * Sunniesnow.game.settings.noteSizeHold;
 		this.haloRadius = this.radius * 1.5;
 		this.geometry = this.createNoteBodyGeometry(0xd18cef, 0xffffff);
 		this.haloGeometry = this.createHaloGeometry();

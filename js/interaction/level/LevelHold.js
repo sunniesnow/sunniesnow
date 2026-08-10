@@ -5,6 +5,10 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 		this.candidateTouches = [];
 	}
 
+	settingsHitSize() {
+		return Sunniesnow.game.settings.noteHitSizeHold;
+	}
+
 	dryHit(time) {
 		super.dryHit(time);
 		this.highestJudgement = this.getJudgementByRelativeTime(this.hitRelativeTime);

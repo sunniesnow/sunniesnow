@@ -25,6 +25,10 @@ Sunniesnow.LevelDragFlick = class LevelDragFlick extends Sunniesnow.LevelNote {
 		return true;
 	}
 
+	settingsHitSize() {
+		return Sunniesnow.game.settings.noteHitSizeDragFlick;
+	}
+
 	determineJudgement() {
 		if (this.designatedTouch) {
 			this.determineJudgementWithDesignatedTouch();

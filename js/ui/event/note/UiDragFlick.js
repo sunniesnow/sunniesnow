@@ -1,9 +1,9 @@
 Sunniesnow.UiDragFlick = class UiDragFlick extends Sunniesnow.UiNote {
 	static async load() {
-		this.radius = Sunniesnow.Config.NOTE_RADIUS * 2/3;
-		this.geometry = this.createDragBodyGeometry(0xfe6e4e);
+		this.radius = Sunniesnow.Config.NOTE_RADIUS * Sunniesnow.game.settings.noteSizeDragFlick;
+		this.geometry = this.createDragBodyGeometry(0xfe6e4e, 0xfc9383);
 		this.arrowGeometry = this.createArrowGeometry();
-		this.circleRadius = this.radius * 6;
+		this.circleRadius = this.radius * 4;
 		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
 	}
 

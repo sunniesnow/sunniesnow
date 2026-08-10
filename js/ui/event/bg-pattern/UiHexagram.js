@@ -6,7 +6,7 @@ Sunniesnow.UiHexagram = class UiHexagram extends Sunniesnow.UiBgPattern {
 
 	static createGeometry() {
 		const graphics = new PIXI.GraphicsContext();
-		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
+		const unit = Sunniesnow.Config.NOTE_RADIUS * 2;
 		const thickness = unit / 20;
 		const polygon = [];
 		for (let i = 0; i < 12; i++) {

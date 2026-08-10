@@ -198,17 +198,81 @@ The early bad judgement for hold end is always negative infinity.
 
 #### Note hit size
 
-- **Setting id**: `note-hit-size`.
+##### Tap
+{:#note-hit-size-tap}
+
+- **Setting id**: `note-hit-size-tap`.
 - **Possible values**: Any non-negative number.
 
-This setting is used to set the hit size of the notes.
+This setting is used to set the hit size of tap notes.
 
-The hit region of a note is the **same** for all types of notes:
-a **square** concentric with the note.
-This setting is used to specify the **ratio** of the side length of the square
-to the radius of the note (when the value of [`note-size`](#note-size) is one).
+This setting is used to specify the **ratio** of the radius of the judgement region
+to the radius of the note (when the value of [`note-size-tap`](#note-size-tap) is `1`).
 
-This setting does **not** affect the visual size of notes, which is set by [`note-size`](#note-size).
+This setting does **not** affect the visual size of tap notes, which is set by [`note-size-tap`](#note-size-tap).
+
+##### Drag
+{:#note-hit-size-drag}
+
+- **Setting id**: `note-hit-size-drag`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the hit size of drag notes.
+
+This setting is used to specify the **ratio** of the radius of the judgement region
+to the radius of the note (when the value of [`note-size-drag`](#note-size-drag) is `1`).
+
+This setting does **not** affect the visual size of drag notes, which is set by [`note-size-drag`](#note-size-drag).
+
+##### Flick
+{:#note-hit-size-flick}
+
+- **Setting id**: `note-hit-size-flick`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the hit size of flick notes.
+
+This setting is used to specify the **ratio** of the radius of the judgement region
+to the radius of the note (when the value of [`note-size-flick`](#note-size-flick) is `1`).
+
+This setting does **not** affect the visual size of flick notes, which is set by [`note-size-flick`](#note-size-flick).
+
+##### Hold
+{:#note-hit-size-hold}
+
+- **Setting id**: `note-hit-size-hold`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the hit size of hold notes.
+
+This setting is used to specify the **ratio** of the radius of the judgement region
+to the radius of the note (when the value of [`note-size-hold`](#note-size-hold) is `1`).
+
+This setting does **not** affect the visual size of hold notes, which is set by [`note-size-hold`](#note-size-hold).
+
+##### Drag-flick
+{:#note-hit-size-drag-flick}
+
+- **Setting id**: `note-hit-size-drag-flick`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the hit size of drag-flick notes.
+
+This setting is used to specify the **ratio** of the radius of the judgement region
+to the radius of the note (when the value of [`note-size-drag-flick`](#note-size-drag-flick) is `1`).
+This setting does **not** affect the visual size of drag-flick notes, which is set by [`note-size-drag-flick`](#note-size-drag-flick).
+
+##### Head-only hold
+{:#note-hit-size-head-only-hold}
+
+- **Setting id**: `note-hit-size-head-only-hold`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the hit size of head-only hold notes.
+
+This setting is used to specify the **ratio** of the radius of the judgement region
+to the radius of the note (when the value of [`note-size-head-only-hold`](#note-size-head-only-hold) is `1`).
+This setting does **not** affect the visual size of head-only hold notes, which is set by [`note-size-head-only-hold`](#note-size-head-only-hold).
 
 #### Offset
 
@@ -283,7 +347,7 @@ before the end of the bad judgement window
 (see [`judgement-windows`](#judgement-windows));
 otherwise, the flick note will be judged as a **miss**.
 This distance is defined as the value of this setting **times** the radius of the note
-(when the value of [`note-size`](#note-size) is one).
+(when the value of [`note-size-flick`](#note-size-flick) is `1`).
 
 When the touch point moves by more than this distance
 **while** being in the angle range specified by [`flick-angle-range`](#flick-angle-range),
@@ -299,7 +363,7 @@ The judgement of a released flick note is explained in [`flick-angle-range`](#fl
 A flick note is forced to release when the touch point that hit it
 moves by a certain distance.
 This distance is defined as the value of this setting **times** the radius of the note
-(when the value of [`note-size`](#note-size) is one).
+(when the value of [`note-size-flick`](#note-size-flick) is `1`).
 The judgement of a released flick note is explained in [`flick-angle-range`](#flick-angle-range).
 
 In Lyrica, this value is effectively infinity,
@@ -405,11 +469,59 @@ When this setting is `1`, the position and time of the placeholder event are not
 
 #### Note size
 
-- **Setting id**: `note-size`.
+##### Tap
+{:#note-size-tap}
+
+- **Setting id**: `note-size-tap`.
 - **Possible values**: Any non-negative number.
 
-This setting is used to set the visual size of the notes.
-This setting does **not** affect the hit size of the notes, which is set by [`note-hit-size`](#note-hit-size).
+This setting is used to set the visual size of tap notes.
+This setting does **not** affect the hit size of tap notes, which is set by [`note-hit-size-tap`](#note-hit-size-tap).
+
+##### Drag
+{:#note-size-drag}
+
+- **Setting id**: `note-size-drag`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the visual size of drag notes.
+This setting does **not** affect the hit size of drag notes, which is set by [`note-hit-size-drag`](#note-hit-size-drag).
+
+##### Flick
+{:#note-size-flick}
+
+- **Setting id**: `note-size-flick`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the visual size of flick notes.
+This setting does **not** affect the hit size of flick notes, which is set by [`note-hit-size-flick`](#note-hit-size-flick).
+
+##### Hold
+{:#note-size-hold}
+
+- **Setting id**: `note-size-hold`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the visual size of hold notes.
+This setting does **not** affect the hit size of hold notes, which is set by [`note-hit-size-hold`](#note-hit-size-hold).
+
+##### Drag-flick
+{:#note-size-drag-flick}
+
+- **Setting id**: `note-size-drag-flick`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the visual size of drag-flick notes.
+This setting does **not** affect the hit size of drag-flick notes, which is set by [`note-hit-size-drag-flick`](#note-hit-size-drag-flick).
+
+##### Head-only hold
+{:#note-size-head-only-hold}
+
+- **Setting id**: `note-size-head-only-hold`.
+- **Possible values**: Any non-negative number.
+
+This setting is used to set the visual size of head-only hold notes.
+This setting does **not** affect the hit size of head-only hold notes, which is set by [`note-hit-size-head-only-hold`](#note-hit-size-head-only-hold).
 
 #### Background
 

@@ -5,7 +5,7 @@ Sunniesnow.UiDiamondGrid = class UiDiamondGrid extends Sunniesnow.UiBgPattern {
 
 	static createGeometry() {
 		const graphics = new PIXI.GraphicsContext();
-		const unit = Sunniesnow.Config.RADIUS * 2 * Sunniesnow.Config.SCALE;
+		const unit = Sunniesnow.Config.NOTE_RADIUS * 2;
 		const margin = unit / 10;
 		const ends = [3, 2, 1, -1];
 		const halfSpan = ends.length - 1;

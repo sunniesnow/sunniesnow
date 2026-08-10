@@ -1,7 +1,7 @@
 Sunniesnow.UiBgNote = class UiBgNote extends Sunniesnow.UiNoteBase {
 
 	static async load() {
-		this.radius = Sunniesnow.Config.NOTE_RADIUS;
+		this.radius = Sunniesnow.Config.NOTE_RADIUS * Sunniesnow.game.settings.noteSizeBgNote;
 		this.geometry = this.createGeometry();
 		this.textStyle = this.createTextStyle();
 	}
@@ -104,18 +104,21 @@ const UiNoteMixin = new Sunniesnow.Mixin({
 		return graphics;
 	},
 
-	createDragBodyGeometry(lineColor) {
+	createDragBodyGeometry(lineColor, outerColor) {
 		const graphics = new PIXI.GraphicsContext();
 		graphics.circle(0, 0, this.radius);
-		const smallerRadius = this.radius * 2/3;
-		graphics.circle(0, 0, smallerRadius);
-		const unit1 = smallerRadius / Math.sqrt(2);
-		const unit2 = this.radius / Math.sqrt(2);
+		graphics.stroke({width: this.radius / 20, color: outerColor, alignment: 1});
+		const radius2 = this.radius * 3/4;
+		const radius1 = this.radius * 1/2;
+		graphics.circle(0, 0, radius2);
+		graphics.circle(0, 0, radius1);
+		const unit1 = radius1 / Math.sqrt(2);
+		const unit2 = radius2 / Math.sqrt(2);
 		graphics.moveTo(-unit1, unit1);
 		graphics.lineTo(-unit2, unit2);
 		graphics.moveTo(unit1, -unit1);
 		graphics.lineTo(unit2, -unit2);
-		graphics.stroke({width: this.radius / 8, color: lineColor, alignment: 1});
+		graphics.stroke({width: this.radius / 9, color: lineColor});
 		return graphics;
 	},
 

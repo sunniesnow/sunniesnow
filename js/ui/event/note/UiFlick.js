@@ -1,6 +1,6 @@
 Sunniesnow.UiFlick = class UiFlick extends Sunniesnow.UiNote {
 	static async load() {
-		this.radius = Sunniesnow.Config.NOTE_RADIUS;
+		this.radius = Sunniesnow.Config.NOTE_RADIUS * Sunniesnow.game.settings.noteSizeFlick;
 		this.geometry = this.createNoteBodyGeometry(0xfe6e4e, 0xffffff);
 		this.arrowGeometry = this.createArrowGeometry();
 		this.circleRadius = this.radius * 4;

@@ -11,6 +11,10 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		return true;
 	}
 
+	settingsHitSize() {
+		return Sunniesnow.game.settings.noteHitSizeFlick;
+	}
+
 	determineJudgement() {
 		if (!this.touch || this.touch.wholeScreen) {
 			super.determineJudgement();

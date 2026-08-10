@@ -2,7 +2,7 @@ Sunniesnow.UiTap = class UiTap extends Sunniesnow.UiNote {
 
 	static async load() {
 		this.loadFontIfNeeded();
-		this.radius = Sunniesnow.Config.NOTE_RADIUS;
+		this.radius = Sunniesnow.Config.NOTE_RADIUS * Sunniesnow.game.settings.noteSizeTap;
 		this.circleRadius = this.radius * 4;
 		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
 		this.doubleCircleGeometry = this.createCircleGeometry(0xf9f9e9);

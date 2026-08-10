@@ -16,6 +16,10 @@ Sunniesnow.LevelDrag = class LevelDrag extends Sunniesnow.LevelNote {
 		return Sunniesnow.game.settings.lyrica5 ? -1 : super.judgementPriority();
 	}
 
+	settingsHitSize() {
+		return Sunniesnow.game.settings.noteHitSizeDrag;
+	}
+
 	hit(touch, time) {
 		super.hit(touch, time);
 		if (!touch) {

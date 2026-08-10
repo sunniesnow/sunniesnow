@@ -65,7 +65,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 	}
 
 	static createTouchAreaGeometry() {
-		const radius = Sunniesnow.Config.NOTE_RADIUS * Sunniesnow.game.settings.noteHitSize;
+		const radius = Sunniesnow.Config.SCALE;
 		const graphics = new PIXI.GraphicsContext();
 		if (Sunniesnow.game.settings.scroll) {
 			graphics.rect(-radius, 0, radius*2, Sunniesnow.Config.HEIGHT);
@@ -355,9 +355,10 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		const graphics = new PIXI.Graphics(this.constructor.touchAreaGeometry);
 		graphics.label = `touch-area-${uiNote.event.id}`;
 		graphics.position.set(...Sunniesnow.Config.chartMapping(uiNote.event.x, uiNote.event.y));
-		graphics.scale.set(uiNote.event.size);
+		graphics.scale.set(uiNote.event.levelNote.hitSize());
 		if (Sunniesnow.game.settings.scroll) {
 			graphics.y = 0;
+			graphics.scale.y = 1;
 		}
 		graphics.uiNote = uiNote;
 		this.addChild(graphics);

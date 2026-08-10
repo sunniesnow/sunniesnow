@@ -1,6 +1,6 @@
 Sunniesnow.FxDragFlick = class FxDragFlick extends Sunniesnow.FxFlick {
 	static async load() {
-		this.radius = Sunniesnow.Config.NOTE_RADIUS * 2/3;
+		this.radius = Sunniesnow.UiDragFlick.radius;
 		this.sparkLine = this.createSparkLine();
 		this.explosionContourArc = this.createExplosionContourArc();
 		this.missHalo = this.createMissHalo();

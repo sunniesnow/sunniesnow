@@ -1,6 +1,6 @@
 Sunniesnow.FxTap = class FxTap extends Sunniesnow.FxNote {
 	static async load() {
-		this.radius = Sunniesnow.Config.NOTE_RADIUS;
+		this.radius = Sunniesnow.UiTap.radius;
 		this.sparkLine = this.createSparkLine();
 		this.explosionContourArc = this.createExplosionContourArc();
 		this.missHalo = this.createMissHalo();
