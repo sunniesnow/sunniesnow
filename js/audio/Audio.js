@@ -27,6 +27,11 @@ Sunniesnow.Audio = class Audio {
 					Sunniesnow.Logs.warn('Cannot use worklet processor for audio time because the webpage is not cross-origin isolated');
 				}
 			}
+			// on Chromium, there needs to be a non-silent playing audio to keep the audio context alive;
+			// otherwise, playing an audio after a long silence makes currentTime freeze for a while.
+			const keepAlive = this.context.createConstantSource();
+			keepAlive.connect(this.context.createMediaStreamDestination());
+			keepAlive.start();
 		} else {
 			// The offline audio context is dummy and will not be used in the main loop
 			this.context = new OfflineAudioContext(2, 44100, 44100);
