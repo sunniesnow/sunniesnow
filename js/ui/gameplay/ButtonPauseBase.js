@@ -64,7 +64,7 @@ Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
 
 	update(delta) {
 		if (this.doubleTapElapsed >= 0) {
-			this.doubleTapElapsed += delta / PIXI.settings.TARGET_FPMS / 1000;
+			this.doubleTapElapsed += delta / PIXI.Ticker.targetFPMS / 1000;
 		}
 	}
 
