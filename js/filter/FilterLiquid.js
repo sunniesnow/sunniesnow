@@ -10,8 +10,12 @@ Sunniesnow.FilterLiquid = class FilterLiquid extends liquidjs.Liquid {
 {%- endif %}
 
 uniform highp vec4 uInputSize;
-uniform vec4 uInputPixel;
-uniform vec4 uInputClamp;
+{% if needsInputPixel -%}
+	uniform vec4 uInputPixel;
+{%- endif %}
+{% if needsInputClamp -%}
+	uniform vec4 uInputClamp;
+{%- endif %}
 uniform vec4 uOutputFrame;
 uniform vec4 uOutputTexture;
 uniform sampler2D uTexture;
@@ -68,8 +72,12 @@ void main(void) {
 	static gpuPreamble = `
 struct GlobalFilterUniforms {
 	uInputSize: vec4<f32>,
-	uInputPixel: vec4<f32>,
-	uInputClamp: vec4<f32>,
+	{% if needsInputPixel -%}
+		uInputPixel: vec4<f32>,
+	{%- endif %}
+	{% if needsInputClamp -%}
+		uInputClamp: vec4<f32>,
+	{%- endif %}
 	uOutputFrame: vec4<f32>,
 	uGlobalFrame: vec4<f32>,
 	uOutputTexture: vec4<f32>,
@@ -174,17 +182,23 @@ struct VSOutput {
 		const glPreambleTemplates = this.parse(this.constructor.glPreamble)
 		const gpuPreambleTemplates = this.parse(this.constructor.gpuPreamble);
 		this.registerTag('preamble', {
+			parse(tagToken, remainTokens) {
+				this.needsInputPixel = remainTokens.contains('uInputPixel');
+				this.needsInputClamp = remainTokens.contains('uInputClamp');
+			},
 			* render(ctx, emitter) {
 				const r = this.liquid.renderer;
+				ctx.push({needsInputPixel: this.needsInputPixel, needsInputClamp: this.needsInputClamp});
 				switch (ctx.environments.environment) {
 					case 'gl-vertex':
 					case 'gl-fragment':
 						yield r.renderTemplates(glPreambleTemplates, ctx, emitter);
 						break;
 					case 'gpu':
-						yield r.renderTemplates(ctx.environments.environment === 'gpu' ? gpuPreambleTemplates : glPreambleTemplates, ctx, emitter);
+						yield r.renderTemplates(gpuPreambleTemplates, ctx, emitter);
 						break;
 				}
+				ctx.pop();
 			}
 		});
 	}
