@@ -9,51 +9,77 @@ Sunniesnow.FilterLiquid = class FilterLiquid extends liquidjs.Liquid {
 	out vec4 finalColor;
 {%- endif %}
 
-uniform highp vec4 uInputSize;
-{% if needsInputPixel -%}
+{% assign includeFilterVertexPosition = string contains 'filterVertexPosition' and not excluded contains 'filterVertexPosition' -%}
+{% assign includeFilterTextureCoord = string contains 'filterTextureCoord' and not excluded contains 'filterTextureCoord' -%}
+
+{% capture user_uniforms -%}
+{%- for resource_item in resources -%}
+	{%- assign key = resource_item[0] -%}
+	{%- assign resource = resource_item[1] -%}
+	{%- if resource.type == 'uniforms' %}
+		{%- for uniform_item in resource.uniforms %}
+			{% if string contains uniform_item[0] and not excluded contains uniform_item[0] -%}
+				uniform {{ uniform_item[1] | gl_type }} {{ uniform_item[0] }};
+			{%- endif %}
+		{% endfor -%}
+	{%- elsif resource.type == 'texture' %}
+		{%- capture coordFunction %}{{ key }}Coord{% endcapture %}
+		{%- assign includeCoordFunction = string contains coordFunction and not excluded contains coordFunction %}
+		{% if string contains key and not excluded contains key -%}
+			uniform sampler2D {{ key }};
+		{%- endif %}
+		{% if string contains resource.matrixName or includeCoordFunction and not excluded contains resource.matrixName -%}
+			uniform mat3 {{ resource.matrixName }};
+		{%- endif %}
+		{%- if includeCoordFunction %}
+			{%- assign includeFilterTextureCoord = true %}
+			vec2 {{ coordFunction }}(void) {
+				return ({{ resource.matrixName}} * vec3(filterTextureCoord(), 1.0)).xy;
+			}
+		{%- endif %}
+	{%- endif %}
+{%- endfor %}
+{% endcapture %}
+
+{% if string contains 'uInputSize' or includeFilterVertexPosition and not excluded contains 'filterVertexPosition' -%}
+	uniform highp vec4 uInputSize;
+{%- endif %}
+{% if string contains 'uInputPixel' and not excluded contains 'uInputPixel' -%}
 	uniform vec4 uInputPixel;
 {%- endif %}
-{% if needsInputClamp -%}
+{% if string contains 'uInputClamp' and not excluded contains 'uInputClamp' -%}
 	uniform vec4 uInputClamp;
 {%- endif %}
-uniform vec4 uOutputFrame;
-uniform vec4 uOutputTexture;
-uniform sampler2D uTexture;
-{% if options.blendRequired -%}
+{% if string contains 'uOutputFrame' or includeFilterVertexPosition or includeFilterTextureCoord and not excluded contains 'uOutputFrame' -%}
+	uniform vec4 uOutputFrame;
+{%- endif %}
+{% if string contains 'uOutputTexture' or includeFilterVertexPosition and not excluded contains 'uOutputTexture' -%}
+	uniform vec4 uOutputTexture;
+{%- endif %}
+{% if string contains 'uTexture' and not excluded contains 'uTexture' -%}
+	uniform sampler2D uTexture;
+{%- endif %}
+{% if options.blendRequired and string contains 'uBackTexture' and not excluded contains 'uBackTexture' -%}
 	uniform sampler2D uBackTexture;
 {%- endif %}
 
-{% if environment == 'gl-vertex' -%}
+{% if includeFilterVertexPosition -%}
 	vec4 filterVertexPosition(void) {
 		vec2 position = aPosition * uOutputFrame.zw + uOutputFrame.xy;
 		position.x = position.x * (2.0 / uOutputTexture.x) - 1.0;
 		position.y = position.y * (2.0*uOutputTexture.z / uOutputTexture.y) - uOutputTexture.z;
 		return vec4(position, 0.0, 1.0);
 	}
+{%- endif %}
 
+{% if includeFilterTextureCoord -%}
 	vec2 filterTextureCoord(void) {
 		return aPosition * (uOutputFrame.zw * uInputSize.zw);
 	}
 {%- endif %}
-`
-	static glUniforms = `
-{%- for resource_item in resources -%}
-	{%- assign key = resource_item[0] -%}
-	{%- assign resource = resource_item[1] -%}
-	{%- if resource.type == 'uniforms' %}
-		{%- for uniform_item in resource.uniforms %}
-			uniform {{ uniform_item[1] | gl_type }} {{ uniform_item[0] }};
-		{% endfor -%}
-	{%- elsif resource.type == 'texture' %}
-		uniform sampler2D {{ key }};
-		uniform mat3 {{ resource.matrixName }};
-		{%- if environment == 'gl-vertex' %}
-			vec2 {{ key }}Coord(void) {
-				return ({{ resource.matrixName}} * vec3(filterTextureCoord(), 1.0)).xy;
-			}
-		{% endif -%}
-	{%- endif -%}
-{%- endfor -%}
+
+// User-defined uniforms
+{{ user_uniforms }}
 `
 
 	static glTrivialVertex = `
@@ -64,20 +90,16 @@ void main(void) {
 `
 
 	static glTrivialFragment = `
-@fragment fn mainFragment(@location(0) uv: vec2<f32>, @builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
-	return textureSample(uTexture, uSampler, uv);
+void main(void) {
+	finalColor = texture(uTexture, vTextureCoord);
 }
 `
 
 	static gpuPreamble = `
 struct GlobalFilterUniforms {
 	uInputSize: vec4<f32>,
-	{% if needsInputPixel -%}
-		uInputPixel: vec4<f32>,
-	{%- endif %}
-	{% if needsInputClamp -%}
-		uInputClamp: vec4<f32>,
-	{%- endif %}
+	uInputPixel: vec4<f32>,
+	uInputClamp: vec4<f32>,
 	uOutputFrame: vec4<f32>,
 	uGlobalFrame: vec4<f32>,
 	uOutputTexture: vec4<f32>,
@@ -108,19 +130,22 @@ fn globalTextureCoord(aPosition: vec2<f32>) -> vec2<f32> {
 fn getSize() -> vec2<f32> {
 	return gfu.uGlobalFrame.zw;
 }
-`
 
-	static gpuUniforms = `
+// User-defined uniforms
 {%- assign group = group | default: 1 -%}
 {%- assign binding = 0 -%}
 {%- for resource_item in resources -%}
 	{%- assign key = resource_item[0] -%}
 	{%- assign resource = resource_item[1] -%}
 	{%- if resource.type == 'uniforms' -%}
-		{%- assign struct_name = key | capitalize %}
+		{%- if resource.structName %}
+			{%- assign struct_name = resource.structName %}
+		{%- else %}
+			{%- assign struct_name = key | capitalize_one %}
+		{%- endif %}
 		struct {{ struct_name }} {
-			{%- for uniform_item in resource_item[1].uniforms %}
-				{{ uniform_item[0] }}: {{ uniform_item[1] }},
+			{%- for uniform_item in resource.uniforms %}
+				{{ uniform_item[0] }}: {{ uniform_item[1] | gpu_type }},
 			{% endfor -%}
 		};
 		@group({{ group }}) @binding({{ binding }}) var<uniform> {{ key }}: {{ struct_name }};
@@ -130,7 +155,11 @@ fn getSize() -> vec2<f32> {
 		{% assign binding = binding | plus: 1 -%}
 		@group({{ group }}) @binding({{ binding }}) var {{ resource.samplerName }}: sampler;
 		{% assign binding = binding | plus: 1 -%}
-		{%- assign struct_name = resource.uniformsName | capitalize -%}
+		{%- if resource.uniformsStructName %}
+			{%- assign struct_name = resource.uniformStructName %}
+		{%- else %}
+			{%- assign struct_name = resource.uniformsName | capitalize_one -%}
+		{%- endif %}
 		struct {{ struct_name }} {
 			{{ resource.matrixName }}: mat3x3<f32>,
 		};
@@ -167,15 +196,18 @@ struct VSOutput {
 	}
 
 	registerFilters() {
-		for (const fun of ['glType']) {
+		for (const fun of ['glType', 'gpuType', 'capitalizeOne']) {
 			this.registerFilter(Sunniesnow.Utils.camelToUnderscore(fun), Sunniesnow.Utils[fun].bind(Sunniesnow.Utils));
 		}
 	}
 
 	registerTags() {
 		this.registerPreambleTag();
-		this.registerUniformsTag();
 		this.registerTrivialTag();
+	}
+
+	preamblePlaceholder(moreInfo) {
+		return `@SUNNIESNOW VERY UNLIKELY PREAMBLE TEXT ${moreInfo}@`;
 	}
 
 	registerPreambleTag() {
@@ -183,39 +215,16 @@ struct VSOutput {
 		const gpuPreambleTemplates = this.parse(this.constructor.gpuPreamble);
 		this.registerTag('preamble', {
 			parse(tagToken, remainTokens) {
-				this.needsInputPixel = remainTokens.contains('uInputPixel');
-				this.needsInputClamp = remainTokens.contains('uInputClamp');
+				this.excluded = tagToken.args.trim();
 			},
 			* render(ctx, emitter) {
 				const r = this.liquid.renderer;
-				ctx.push({needsInputPixel: this.needsInputPixel, needsInputClamp: this.needsInputClamp});
 				switch (ctx.environments.environment) {
 					case 'gl-vertex':
 					case 'gl-fragment':
-						yield r.renderTemplates(glPreambleTemplates, ctx, emitter);
-						break;
+						return this.liquid.preamblePlaceholder(this.excluded);
 					case 'gpu':
 						yield r.renderTemplates(gpuPreambleTemplates, ctx, emitter);
-						break;
-				}
-				ctx.pop();
-			}
-		});
-	}
-
-	registerUniformsTag() {
-		const glUniformsTemplates = this.parse(this.constructor.glUniforms);
-		const gpuUniformsTemplates = this.parse(this.constructor.gpuUniforms);
-		this.registerTag('uniforms', {
-			* render(ctx, emitter) {
-				const r = this.liquid.renderer;
-				switch (ctx.environments.environment) {
-					case 'gl-vertex':
-					case 'gl-fragment':
-						yield r.renderTemplates(glUniformsTemplates, ctx, emitter);
-						break;
-					case 'gpu':
-						yield r.renderTemplates(gpuUniformsTemplates, ctx, emitter);
 						break;
 				}
 			}
@@ -258,21 +267,21 @@ struct VSOutput {
 	}
 
 	glVertex(string, {label, resources, filterOptions}) {
-		return this.parseAndRenderSync(string, {
+		return this.populateGlPreamble(this.parseAndRenderSync(string, {
 			environment: 'gl-vertex',
 			label, resources, options: filterOptions,
 			settings: Sunniesnow.game.settings,
 			config: Sunniesnow.Config
-		});
+		}), {environment: 'gl-vertex', resources, filterOptions});
 	}
 
 	glFragment(string, {label, resources, filterOptions}) {
-		return this.parseAndRenderSync(string, {
+		return this.populateGlPreamble(this.parseAndRenderSync(string, {
 			environment: 'gl-fragment',
 			label, resources, options: filterOptions,
 			settings: Sunniesnow.game.settings,
 			config: Sunniesnow.Config
-		});
+		}), {environment: 'gl-fragment', resources, filterOptions});
 	}
 
 	gpu(string, {label, resources, filterOptions}) {
@@ -282,5 +291,15 @@ struct VSOutput {
 			settings: Sunniesnow.game.settings,
 			config: Sunniesnow.Config
 		});
+	}
+
+	populateGlPreamble(string, {environment, resources, filterOptions}) {
+		const [preamble, excluded] = string.match(new RegExp(this.preamblePlaceholder('(.*?)'))) ?? [];
+		if (!preamble) {
+			return string;
+		}
+		return string.replace(preamble, this.parseAndRenderSync(this.constructor.glPreamble, {
+			string, environment, resources, excluded: excluded.split(','), options: filterOptions
+		}));
 	}
 };

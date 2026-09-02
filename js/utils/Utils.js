@@ -805,11 +805,22 @@ Sunniesnow.Utils = {
 		if (basicTypes[type]) {
 			return basicTypes[type];
 		}
-		const [_, base, typeParam] = type.match(/^(.+)<(.+)>$/) || [];
+		let [_, precision, rest] = type.match(/^(lowp |mediump |highp )?(.*)$/);
+		precision ??= ''
+		if (basicTypes[rest]) {
+			return precision + basicTypes[rest];
+		}
+		let base, typeParam;
+		[_, base, typeParam] = rest.match(/^(.+)<(.+)>$/) ?? [];
 		if (!base || !typeParam) {
 			return null;
 		}
-		return typeParam === 'f32' ? base : `${basicTypes[typeParam][0]}${base}`;
+		return precision + (typeParam === 'f32' ? base : `${basicTypes[typeParam][0]}${base}`);
+	},
+
+	gpuType(type) {
+		const [_, precision, rest] = type.match(/^(lowp |mediump |highp )?(.*)$/);
+		return rest;
 	},
 
 	isFontAvailable(fontFamily) {
@@ -856,5 +867,9 @@ Sunniesnow.Utils = {
 			}
 			return part;
 		}).join('/');
-	}
+	},
+
+	capitalizeOne(text) {
+		return text[0].toUpperCase() + text.substring(1);
+	},
 };
