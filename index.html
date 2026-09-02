@@ -1227,7 +1227,14 @@ description: Sunniesnow is a web rhythm game
 <hr>
 
 <div id="footer">
-	<span id="footer-last-update"></span>{{ "now" | date: "%FT%T%z" }}<br>
+	<span id="footer-last-update"></span><a href="https://github.com/sunniesnow/sunniesnow/commit/{% commit_hash %}" target="_blank">{% commit_date %}</a><br>
+	{% assign github_run_id = 'GITHUB_RUN_ID' | env -%}
+	<span id="footer-last-build"></span>
+	{%- if github_run_id -%}
+		<a href="{{ site.git_repo }}/actions/runs/{{ github_run_id }}" target="_blank">{{ "now" | date: "%FT%T%:z" }}</a><br>
+	{%- else -%}
+		{{ "now" | date: "%FT%T%:z" }}<br>
+	{% endif -%}
 	<span id="footer-source-codes"></span><a href="https://github.com/sunniesnow/sunniesnow" target="_blank">GitHub</a><br>
 	<span id="footer-license"></span><a href="https://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank" rel="license">AGPL-3.0</a><br>
 	<span id="footer-author"></span>{{ site.author }} &lt;<a href="mailto:{{ site.author }} <{{ site.email }}>">{{ site.email }}</a>&gt;<br>

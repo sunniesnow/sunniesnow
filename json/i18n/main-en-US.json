@@ -169,6 +169,7 @@
 		"level-readme-settings": "Level README",
 
 		"footer-last-update": "Last update: ",
+		"footer-last-build": "Last build: ",
 		"footer-source-codes": "Source codes: ",
 		"footer-license": "License: ",
 		"footer-author": "Author: ",

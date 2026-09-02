@@ -169,6 +169,7 @@
 		"level-readme-settings": "关卡 README",
 
 		"footer-last-update": "最后更新: ",
+		"footer-last-build": "最后构建: ",
 		"footer-source-codes": "源代码: ",
 		"footer-license": "许可: ",
 		"footer-author": "作者: ",

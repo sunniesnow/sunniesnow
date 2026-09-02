@@ -1,30 +1,37 @@
-{% capture affix %}{% if jekyll.environment == 'development' %}?fuckCache={{ "now" | date: "%s%L" }}{% endif %}{% endcapture %}
-{% comment %}
+{% capture fuck_cache -%}
+	{%- if jekyll.environment == 'development' %}
+		{{- "now" | date: "%s%L" }}
+	{%- else %}
+		{%- commit_hash | slice: 0, 7 %}
+	{%- endif %}
+{%- endcapture %}
+{%- comment %}
 	You think this is too hacky?
 	Tell me about it, but I copied it from VS Code:
 	https://github.com/microsoft/vscode/blob/7e805145f76dea04d774cb14b7bc85366c02e79d/extensions/simple-browser/preview-src/index.ts#L96-L98
-{% endcomment %}
+{% endcomment -%}
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 
-<link rel="manifest" href="json/manifest.json{{ affix }}">
-<link rel="stylesheet" href="css/style.css{{ affix }}">
+<link rel="manifest" href="json/manifest.json?fuck-cache={{ fuck_cache }}">
+<link rel="stylesheet" href="css/style.css?fuck-cache={{ fuck_cache }}">
 
 <script>
 	// Put all parameters that need to be passed by the static site generator here.
 	// Any other JS files should be agnostic to the static site generator.
 	Sunniesnow = {
-		vscodeBrowserReqId: location.search.match(/^\?.*vscodeBrowserReqId=(\d+)/)?.[1],
+		fuckCache: '{{ fuck_cache }}',
 		environment: '{{ jekyll.environment }}',
-		{% if site.sunniesnow_authentication %}
-			authentication: '{{ site.sunniesnow_authentication }}',
-		{% endif %}
+		{% assign auth = 'SUNNIESNOW_AUTHENTICATION' | env -%}
+		{% if auth -%}
+			authentication: '{{ auth }}',
+		{%- endif %}
 	};
 </script>
-<script src="js/utils/Utils.js{{ affix }}"></script>
-<script src="js/ScriptsLoader.js{{ affix }}"></script>
+<script src="js/utils/Utils.js?fuck-cache={{ fuck_cache }}"></script>
+<script src="js/ScriptsLoader.js?fuck-cache={{ fuck_cache }}"></script>
 <script type="module">
 	await Sunniesnow.ScriptsLoader.initAndRunAllScripts();
 	await Sunniesnow.MiscDom.main();

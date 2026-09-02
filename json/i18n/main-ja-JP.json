@@ -169,6 +169,7 @@
 		"level-readme-settings": "レベル README",
 
 		"footer-last-update": "最新アップデート: ",
+		"footer-last-build": null,
 		"footer-source-codes": "ソースコード: ",
 		"footer-license": "許可: ",
 		"footer-author": "作者: ",

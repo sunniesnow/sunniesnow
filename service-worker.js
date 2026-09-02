@@ -1,3 +1,14 @@
+---
+---
+
+{%- capture fuck_cache -%}
+	{%- if jekyll.environment == 'development' %}
+		{{- "now" | date: "%s%L" }}
+	{%- else %}
+		{%- commit_hash | slice: 0, 7 %}
+	{%- endif %}
+{%- endcapture -%}
+
 self.Sunniesnow = {};
 importScripts('js/utils/Utils.js', 'js/ScriptsLoader.js');
 
@@ -18,7 +29,7 @@ const EXTRA_SITE_RESOURCES = [ // paths not included in ScriptsLoader.{cdnScript
 	'/favicon.svg',
 ];
 
-const SITE_STORAGE_NAME = 'site-v1';
+const SITE_STORAGE_NAME = 'site-{{ fuck_cache }}';
 const ONLINE_STORAGE_NAME = 'online-v1';
 const EXTERNAL_STORAGE_NAME = 'external-v1';
 const STORAGE_NAMES = [SITE_STORAGE_NAME, ONLINE_STORAGE_NAME, EXTERNAL_STORAGE_NAME]
@@ -60,7 +71,7 @@ self.addEventListener('fetch', event => {
 	const url = new URL(oldRequest.url);
 	// These are for busting caches for VS Code simple browser, not for service worker.
 	url.searchParams.delete('vscodeBrowserReqId');
-	url.searchParams.delete('fuckCache');
+	url.searchParams.delete('fuck-cache');
 	const request = new Request(url.href, oldRequest);
 	event.respondWith(caches.match(request).then(response => {
 		if (response) {

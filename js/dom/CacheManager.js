@@ -1,5 +1,5 @@
 Sunniesnow.CacheManager = {
-	SITE_STORAGE_NAME: 'site-v1',
+	SITE_STORAGE_NAME: `site-${Sunniesnow.fuckCache}`,
 	ONLINE_STORAGE_NAME: 'online-v1',
 	EXTERNAL_STORAGE_NAME: 'external-v1',
 

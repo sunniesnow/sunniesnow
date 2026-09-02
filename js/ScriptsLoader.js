@@ -5,12 +5,6 @@ Sunniesnow.ScriptsLoader = {
 	polyfill: {keys: [], values: []},
 
 	async init() {
-		// https://github.com/microsoft/vscode/issues/205105
-		// https://github.com/microsoft/vscode/blob/7e805145f76dea04d774cb14b7bc85366c02e79d/extensions/simple-browser/preview-src/index.ts#L96-L98
-		// VS Code use this search parameter to bust the cache for the main webpage,
-		// but the caches for the resources that it request are not busted.
-		// Here is the workaround.
-		this.reqIdSuffix = Sunniesnow.vscodeBrowserReqId ? `?vscodeBrowserReqId=${Sunniesnow.vscodeBrowserReqId}` : '';
 		this.data = await this.json('scripts');
 		this.cdnScripts = this.data.npmScripts.map(({path, pathMin, esm}) => {
 			if (Sunniesnow.environment === 'production' && pathMin) {
@@ -18,11 +12,11 @@ Sunniesnow.ScriptsLoader = {
 			}
 			path = `${this.CDN_PREFIX}/${
 				path.replaceAll(/\$(\w+)/g, (match, varName) => this.data.npmLock[varName])
-			}${this.reqIdSuffix}`;
+			}?fuck-cache=${Sunniesnow.fuckCache}`;
 			return {path, esm};
 		});
 		const mapSite = async path => {
-			path = `${Sunniesnow.Utils.base()}/js/${path}.js${this.reqIdSuffix}`;
+			path = `${Sunniesnow.Utils.base()}/js/${path}.js?fuck-cache=${Sunniesnow.fuckCache}`;
 			return {path, script: await this.text(path)};
 		};
 		[this.customizableSiteScripts, this.siteScripts] = await Promise.all([
@@ -37,7 +31,6 @@ Sunniesnow.ScriptsLoader = {
 		if (!this.incarnation) {
 			return;
 		}
-		this.reqIdSuffix = this.incarnation.reqIdSuffix;
 		this.data = this.incarnation.data;
 		this.cdnScripts = this.incarnation.cdnScripts;
 		this.customizableSiteScripts = this.incarnation.customizableSiteScripts;
@@ -91,7 +84,7 @@ Sunniesnow.ScriptsLoader = {
 	},
 
 	async json(path) {
-		return JSON.parse(await this.text(`${Sunniesnow.Utils.base()}/json/${path}.json${this.reqIdSuffix}`));
+		return JSON.parse(await this.text(`${Sunniesnow.Utils.base()}/json/${path}.json?fuck-cache=${Sunniesnow.fuckCache}`));
 	},
 
 	sourceUrl(scriptPath) {
