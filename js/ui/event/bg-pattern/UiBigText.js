@@ -52,8 +52,9 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 		);
 		// https://github.com/pixijs/pixijs/discussions/11666
 		// TODO: It may seem that the prepare system is intended to boost performance in this case,
-		// but it is actually useless because the expensive operation is still done synchronously for the whole texture
-		Sunniesnow.game.app.renderer.prepare?.upload(result);
+		// but it is actually useless because the expensive operation is still done synchronously for the whole texture.
+		// Currently this performance problem is solved by allowing user to reduce quality of big texts (quality-big-text).
+		//Sunniesnow.game.app.renderer.prepare?.upload(result);
 		this.texts.set(text, result);
 		result.anchor.set(0.5, 0.5);
 		result.scale.set(1 / Sunniesnow.game.settings.qualityBigText);
