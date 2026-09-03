@@ -184,7 +184,10 @@ Sunniesnow.Settings = {
 	setDeviceDependentDefaults() {
 		this.setResolution();
 		this.setRenderer();
-		this.setFullscreenMethod();
+		this.setFullscreen();
+		this.setAutoplay();
+		this.setPause();
+		this.setQuality();
 	},
 
 	setResolution() {
@@ -202,9 +205,37 @@ Sunniesnow.Settings = {
 		}
 	},
 
-	setFullscreenMethod() {
+	setFullscreen() {
 		if (Sunniesnow.Utils.isMobileSafari()) {
 			this.s.floatAsFullscreen.set(true);
 		}
+		if (!Sunniesnow.Utils.isMobile()) {
+			this.s.fullscreenOnStart.set(false);
+		}
 	},
+
+	setAutoplay() {
+		if (Sunniesnow.Utils.isMobile()) {
+			return;
+		}
+		this.s.autoplay.set(true);
+		this.s.progressAdjustable.set(true);
+		this.s.seWithMusic.set(true);
+	},
+
+	setPause() {
+		if (Sunniesnow.Utils.isMobile()) {
+			return;
+		}
+		this.s.resumePreparationTime.set(0);
+		this.s.hidePauseUi.set(true);
+	},
+
+	// mobile devices generally have poorer GPU but higher resolution
+	// too make full quality big texts too expensive
+	setQuality() {
+		if (Sunniesnow.Utils.isMobile()) {
+			this.s.qualityBigText.set(0.8);
+		}
+	}
 };

@@ -317,6 +317,11 @@ Sunniesnow.Utils = {
 		return Sunniesnow.Utils.isBrowser() && /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
 	},
 
+	// https://stackoverflow.com/a/79294498
+	isMobile() {
+		return Sunniesnow.Utils.isBrowser() && !window.matchMedia('(hover: hover)').matches;
+	},
+
 	until(condition, interval = 100) {
 		let time = 0;
 		const poll = (resolve, reject) => {
