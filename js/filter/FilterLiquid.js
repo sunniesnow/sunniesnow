@@ -83,14 +83,14 @@ Sunniesnow.FilterLiquid = class FilterLiquid extends liquidjs.Liquid {
 `
 
 	static glTrivialVertex = `
-void main(void) {
+void {{ functionName }}(void) {
 	gl_Position = filterVertexPosition();
 	vTextureCoord = filterTextureCoord();
 }
 `
 
 	static glTrivialFragment = `
-void main(void) {
+void {{ functionName }}(void) {
 	finalColor = texture(uTexture, vTextureCoord);
 }
 `
@@ -178,13 +178,13 @@ struct VSOutput {
 	@location(0) uv: vec2<f32>
 };
 
-@vertex fn mainVertex(@location(0) aPosition: vec2<f32>,) -> VSOutput {
+@vertex fn {{ functionName }}(@location(0) aPosition: vec2<f32>,) -> VSOutput {
 	return VSOutput(filterVertexPosition(aPosition), filterTextureCoord(aPosition));
 }
 `
 
 	static gpuTrivialFragment = `
-@fragment fn mainFragment(@location(0) uv: vec2<f32>, @builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
+@fragment fn {{ functionName }}(@location(0) uv: vec2<f32>, @builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
 	return textureSample(uTexture, uSampler, uv);
 }
 `
@@ -237,31 +237,43 @@ struct VSOutput {
 		const gpuTrivialVertexTemplates = this.parse(this.constructor.gpuTrivialVertex);
 		const gpuTrivialFragmentTemplates = this.parse(this.constructor.gpuTrivialFragment);
 		this.registerTag('trivial_vertex', {
+			parse(tagToken, remainTokens) {
+				this.functionName = tagToken.args.trim();
+			},
 			* render(ctx, emitter) {
 				const r = this.liquid.renderer;
 				switch (ctx.environments.environment) {
 					case 'gl-vertex':
 					case 'gl-fragment':
+						ctx.push({functionName: this.functionName || 'main'});
 						yield r.renderTemplates(glTrivialVertexTemplates, ctx, emitter);
 						break;
 					case 'gpu':
+						ctx.push({functionName: this.functionName || 'mainVertex'});
 						yield r.renderTemplates(gpuTrivialVertexTemplates, ctx, emitter);
 						break;
 				}
+				ctx.pop();
 			}
 		});
 		this.registerTag('trivial_fragment', {
+			parse(tagToken, remainTokens) {
+				this.functionName = tagToken.args.trim();
+			},
 			* render(ctx, emitter) {
 				const r = this.liquid.renderer;
 				switch (ctx.environments.environment) {
 					case 'gl-vertex':
 					case 'gl-fragment':
+						ctx.push({functionName: this.functionName || 'main'});
 						yield r.renderTemplates(glTrivialFragmentTemplates, ctx, emitter);
 						break;
 					case 'gpu':
+						ctx.push({functionName: this.functionName || 'mainFragment'});
 						yield r.renderTemplates(gpuTrivialFragmentTemplates, ctx, emitter);
 						break;
 				}
+				ctx.pop();
 			}
 		});
 	}

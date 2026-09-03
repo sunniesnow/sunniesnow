@@ -12,11 +12,17 @@ Sunniesnow.ScriptsLoader = {
 			}
 			path = `${this.CDN_PREFIX}/${
 				path.replaceAll(/\$(\w+)/g, (match, varName) => this.data.npmLock[varName])
-			}?fuck-cache=${Sunniesnow.fuckCache}`;
+			}`;
+			if (Sunniesnow.fuckCache) {
+				path += `?fuck-cache=${Sunniesnow.fuckCache}`;
+			}
 			return {path, esm};
 		});
 		const mapSite = async path => {
-			path = `${Sunniesnow.Utils.base()}/js/${path}.js?fuck-cache=${Sunniesnow.fuckCache}`;
+			path = `${Sunniesnow.Utils.base()}/js/${path}.js`;
+			if (Sunniesnow.fuckCache) {
+				path += `?fuck-cache=${Sunniesnow.fuckCache}`;
+			}
 			return {path, script: await this.text(path)};
 		};
 		[this.customizableSiteScripts, this.siteScripts] = await Promise.all([
@@ -84,7 +90,11 @@ Sunniesnow.ScriptsLoader = {
 	},
 
 	async json(path) {
-		return JSON.parse(await this.text(`${Sunniesnow.Utils.base()}/json/${path}.json?fuck-cache=${Sunniesnow.fuckCache}`));
+		path = `${Sunniesnow.Utils.base()}/json/${path}.json`;
+		if (Sunniesnow.fuckCache) {
+			path += `?fuck-cache=${Sunniesnow.fuckCache}`;
+		}
+		return JSON.parse(await this.text(path));
 	},
 
 	sourceUrl(scriptPath) {
