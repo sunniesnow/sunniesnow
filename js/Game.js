@@ -141,7 +141,7 @@ Sunniesnow.Game = class Game {
 		this.scene?.terminate();
 		if (Sunniesnow.Utils.isBrowser()) {
 			Sunniesnow.PinnedCoordinates.clear();
-			Sunniesnow.Fullscreen.set(false);
+			Sunniesnow.FullscreenManager.set(false);
 			Sunniesnow.TouchManager.terminate();
 			Sunniesnow.SpinUp.terminate();
 			Sunniesnow.Popup.close();

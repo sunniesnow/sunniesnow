@@ -48,11 +48,10 @@ Sunniesnow.TouchManager = {
 	onStart(touch) {
 		document.activeElement.blur();
 		Sunniesnow.game.window.focus(); // In VSCode Simple Browser, this acquires focus lock
+		// sometimes browser misses touchend events
 		const existingTouch = this.touches[touch.id];
 		if (existingTouch) {
-			existingTouch.history.push(touch.start());
-			this.onMove(existingTouch);
-			return;
+			this.onEnd(existingTouch);
 		}
 		this.touches[touch.id] = touch;
 		return this.callListeners(this.startListeners, touch);

@@ -1,7 +1,7 @@
 Sunniesnow.ButtonPauseBase = class ButtonPauseBase extends Sunniesnow.Button {
 
 	constructor(pauseBoard, priority = 150) {
-		super(() => this.theOnTrigger(), priority);
+		super(() => this.theOnTrigger(), {priority});
 		this.pauseBoard = pauseBoard;
 	}
 

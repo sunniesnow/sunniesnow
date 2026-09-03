@@ -2,7 +2,6 @@ Sunniesnow.MiscDom = {
 
 	async main() {
 		Sunniesnow.Patches.apply();
-		Sunniesnow.MiscDom.addScrollbarToAndroidWebView();
 		Sunniesnow.MiscDom.adjustCustomJudgementWindowsTable();
 		Sunniesnow.Settings.init();
 		await Sunniesnow.I18n.init();
@@ -11,14 +10,6 @@ Sunniesnow.MiscDom = {
 		Sunniesnow.MiscDom.removeSiteLoadingNotice();
 		Sunniesnow.ParamsProcessor.processUrlParams();
 		await Sunniesnow.CacheManager.registerServiceWorker();
-	},
-
-	// https://github.com/pixijs/pixijs/issues/10020
-	addScrollbarToAndroidWebView() {
-		if (!Sunniesnow.Utils.isAndroidWebView()) {
-			return;
-		}
-		document.getElementById('main-wrapper').classList.add('force-scrollbar');
 	},
 
 	adjustCustomJudgementWindowsTable() {

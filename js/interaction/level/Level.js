@@ -60,7 +60,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 		this.inaccuracies = [];
 		this.lastJudgement = null;
 		this.lastJudgedNote = null;
-		this.apFcIndicator = 'ap'; // possible values: 'ap', 'fc', ''
+		this.apFcIndicator = 'ap'; // possible values: 'ap', 'fc', 'fcs', ''
 	}
 
 	addTouchListeners() {

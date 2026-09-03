@@ -17,7 +17,6 @@ Sunniesnow.ParamsProcessor = {
 
 	async run() {
 		Sunniesnow.Patches.apply();
-		Sunniesnow.MiscDom.addScrollbarToAndroidWebView();
 		Sunniesnow.MiscDom.adjustCustomJudgementWindowsTable();
 		Sunniesnow.Settings.init();
 		await Sunniesnow.I18n.init();

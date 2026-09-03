@@ -24,7 +24,7 @@ Sunniesnow.SpinUp = {
 		Sunniesnow.game.document.getElementById('main-canvas').replaceWith(Sunniesnow.game.canvas);
 		this.addCanvasListeners();
 		if (Sunniesnow.game.settings.fullscreenOnStart) {
-			Sunniesnow.Fullscreen.set(true);
+			Sunniesnow.FullscreenManager.set(true);
 		}
 	},
 
@@ -42,7 +42,7 @@ Sunniesnow.SpinUp = {
 			}
 		};
 		Sunniesnow.game.canvas.addEventListener('contextmenu', this.canvasContextMenuListener);
-		Sunniesnow.Fullscreen.addListenerToCanvas();
+		Sunniesnow.FullscreenManager.addListenerToCanvas();
 	},
 
 	removeCanvasListeners() {
@@ -50,13 +50,13 @@ Sunniesnow.SpinUp = {
 			return;
 		}
 		Sunniesnow.game.canvas.removeEventListener('contextmenu', this.canvasContextMenuListener);
-		Sunniesnow.Fullscreen.removeListenerFromCanvas();
+		Sunniesnow.FullscreenManager.removeListenerFromCanvas();
 	},
 
 	addWindowListeners() {
 		this.blurListener = event => {
 			Sunniesnow.TouchManager.clear();
-			if (Sunniesnow.Fullscreen.entering || Sunniesnow.Fullscreen.quitting) {
+			if (Sunniesnow.FullscreenManager.entering || Sunniesnow.FullscreenManager.quitting) {
 				return;
 			}
 			if (!Sunniesnow.game.level?.finished && Sunniesnow.game.sceneInitialized) {

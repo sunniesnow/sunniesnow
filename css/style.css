@@ -45,22 +45,6 @@
 	transform: translate(-50%, -50%);
 }
 
-.force-scrollbar {
-	height: 100vh;
-	overflow: auto;
-}
-
-.force-scrollbar::-webkit-scrollbar {
-	-webkit-appearance: none;
-	width: 20px;
-	height: 20px;
-	background-color: #fff;
-}
-
-.force-scrollbar::-webkit-scrollbar-thumb {
-	background-color: #888;
-}
-
 #judgement-windows-custom-wrapper {
 	/* set padding-bottom in js */
 	position: relative;

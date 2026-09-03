@@ -25,7 +25,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	}
 
 	constructor() {
-		super(() => this.trigger(), 50);
+		super(() => this.trigger(), {priority: 50});
 		this.hitRect = new PIXI.Rectangle(0, 0, Sunniesnow.Config.WIDTH, Sunniesnow.Config.HEIGHT);
 	}
 

@@ -52,7 +52,7 @@
 		"dom/setting/SettingZipEntry",
 		"dom/I18n",
 		"dom/Settings",
-		"dom/Fullscreen",
+		"dom/FullscreenManager",
 		"dom/Logs",
 		"dom/CacheManager",
 		"dom/VConsole",

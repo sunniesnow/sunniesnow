@@ -22,7 +22,13 @@ Sunniesnow.SceneResult = class SceneResult extends Sunniesnow.Scene {
 		this.addChild(this.pauseButton = new Sunniesnow.ButtonPause());
 		this.addChild(this.result = new Sunniesnow.Result());
 		this.addChild(this.retryButton = new Sunniesnow.ButtonResultRetry(() => this.gotoGame()));
-		this.addChild(this.fullscreenButton = new Sunniesnow.ButtonResultFullscreen(() => Sunniesnow.Fullscreen.toggle()));
+		this.addChild(this.fullscreenButton = new Sunniesnow.ButtonResultFullscreen(
+			() => Sunniesnow.FullscreenManager.toggle(),
+			// on Android WebView, exiting fullscreen with `touch-action: none;` in touchstart listener
+			// makes the webpage unscrollable.
+			// https://github.com/pixijs/pixijs/issues/11564
+			{useTouchEnd: true}
+		));
 		this.addChild(this.additionalInfo = new Sunniesnow.ResultAdditionalInfo());
 	}
 

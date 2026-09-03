@@ -1,4 +1,6 @@
-Sunniesnow.Fullscreen = {
+// this was originally called Sunniesnow.Fullscreen,
+// but `Fullscreen.js` often trigger adblocker filters.
+Sunniesnow.FullscreenManager = {
 
 	should: false,
 	is: false,
