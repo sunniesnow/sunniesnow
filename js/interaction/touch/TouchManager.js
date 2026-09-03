@@ -101,6 +101,9 @@ Sunniesnow.TouchManager = {
 		if (this.shouldIgnoreKey(event)) {
 			return;
 		}
+		if (this.touches[this.keyId(event.key)]) { // keyboard long press repeat
+			return;
+		}
 		const time = this.normalizeTimeStamp(event);
 		const ctrlKey = navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey;
 		const touch = Sunniesnow.Touch.key(event.key, time, this.mousePageX, this.mousePageY, ctrlKey, event.shiftKey, event.altKey);

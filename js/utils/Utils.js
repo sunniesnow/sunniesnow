@@ -202,6 +202,12 @@ Sunniesnow.Utils = {
 		return new Blob([bytes], {type});
 	},
 
+	slugify(string) {
+		string = string.toString().normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+		string = string.replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
+		return string.replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+	},
+
 	slugToCamel(string) {
 		return string.replace(/-([a-z\d])/g, (_, c) => c.toUpperCase());
 	},

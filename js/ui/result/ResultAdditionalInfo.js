@@ -220,7 +220,6 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 
 	getTextContents() {
 		return `judgement-windows: ${Sunniesnow.game.settings.judgementWindows}
-note-hit-size: ${Sunniesnow.game.settings.noteHitSize}
 offset: ${Sunniesnow.game.settings.offset}
 lyrica-5: ${Sunniesnow.game.settings.lyrica5}
 no-early-drag: ${Sunniesnow.game.settings.noEarlyDrag}
@@ -249,17 +248,28 @@ ${Sunniesnow.Utils.currentTimeIso()}`;
 Mean μ = ${Math.round(this.sampleMean * 1000)}ms
 SD σ = ${Math.round(this.sampleSd * 1000)}ms
 
+Temporal windows:
 `;
+		const noteTypes = {
+			tap: 'tap', drag: 'drag', flick: 'flick', hold: 'hold',
+			dragFlick: 'drag-flick', headOnlyHold: 'head-only hold',
+		};
 		const judgementWindows = Sunniesnow.Config.JUDGEMENT_WINDOWS;
-		for (const noteType of ['tap', 'drag', 'flick', 'hold']) {
+		for (const [key, noteType] of Object.entries(noteTypes)) {
 			result += `${noteType}: `;
 			let intervals = [];
 			for (const judgement of ['perfect', 'good', 'bad']) {
-				intervals = judgementWindows[noteType][judgement].toSpliced(1, 0, ...intervals);
+				intervals = judgementWindows[key][judgement].toSpliced(1, 0, ...intervals);
 			}
 			result += intervals.join(', ') + '\n';
 		}
-		result += `hold (end): -\u221e, ${judgementWindows.holdEnd.good}, ${judgementWindows.holdEnd.perfect}`
+		result += `hold (end): -\u221e, ${judgementWindows.holdEnd.good}, ${judgementWindows.holdEnd.perfect}
+
+Spatial windows:
+`;
+		for (const [key, noteType] of Object.entries(noteTypes)) {
+			result += `${noteType}: ${Sunniesnow.game.settings[`noteHitSize${Sunniesnow.Utils.capitalizeOne(key)}`]}\n`;
+		}
 		return result;
 	}
 
