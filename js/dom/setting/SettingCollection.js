@@ -67,6 +67,10 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 		}
 	}
 
+	dirtyPropagator() {
+		return this.mapSettingIdToSetting.values();
+	}
+
 	applyPrerequisites() {
 		this.element.querySelectorAll('[data-prerequisite]').forEach(element => {
 			const setting = this.mapElementIdToSetting.get(element.id);

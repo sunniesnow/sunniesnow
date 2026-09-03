@@ -6,6 +6,10 @@ Sunniesnow.SettingList = class SettingList extends Sunniesnow.Setting {
 		this.refresh();
 	}
 
+	dirtyPropagator() {
+		return this.items;
+	}
+
 	readTemplate() {
 		this.template = this.collection.getElementById(this.element.dataset.listTemplate);
 		this.template.style.display = 'none';

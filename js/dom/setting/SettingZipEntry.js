@@ -34,11 +34,14 @@ Sunniesnow.SettingZipEntry = class SettingZipEntry extends Sunniesnow.SettingSel
 		this.zipSetting.addEventListener('change', event => this.markDirty());
 	}
 
+	dirtyPropagator() {
+		return [this.zipSetting];
+	}
+
 	onZipStartLoading(token) {
 		if (!token) {
 			this.clearOptions();
 		}
-		this.previousValue.delete(token);
 	}
 
 	onZipLoaded(zip, token) {

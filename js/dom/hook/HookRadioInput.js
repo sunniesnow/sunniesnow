@@ -13,9 +13,10 @@ Sunniesnow.HookRadioInput = class HookRadioInput extends Sunniesnow.Hook {
 			setting.addEventListener('load', event => this.setting.get(event.token));
 			setting.addEventListener('change', event => element.checked && this.setting.markDirty());
 		}
+		this.setting.dirtyPropagator = () => Sunniesnow.Utils.compactify([this.mapValueToSetting.get(this.setting.value())]);
 	}
 
 	async apply(value, token) {
-		return await this.mapValueToSetting.get(value)?.getWithoutCache(token);
+		return await this.mapValueToSetting.get(value)?.get(token);
 	}
 };

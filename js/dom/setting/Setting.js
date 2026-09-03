@@ -28,8 +28,8 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 		this.collection?.mapElementIdToSetting.set(element.id, this);
 		if (this.element.dataset.loadButton) {
 			this.collection?.getElementById(this.element.dataset.loadButton).addEventListener('click', event => {
-				this.markDirty();
-				this.get()
+				this.markDirtyWithBackPropagation();
+				this.get();
 			});
 		}
 		this.prerequisites = []; // see SettingCollection.applyPrerequisites()
@@ -64,6 +64,14 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 		this.dirty = true;
 		this.interrupt();
 		this.dispatch('change');
+	}
+
+	markDirtyWithBackPropagation() {
+		if (this.dirtyPropagator) {
+			this.dirtyPropagator().forEach(setting => setting.markDirtyWithBackPropagation());
+		} else {
+			this.markDirty();
+		}
 	}
 
 	dirtyOn(eventName, element = this.element) {
@@ -216,5 +224,6 @@ Sunniesnow.Setting = class Setting extends EventTarget {
 			return;
 		}
 		this.set(value);
+		this.markDirty();
 	}
 };
