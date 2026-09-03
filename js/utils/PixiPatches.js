@@ -1,17 +1,13 @@
 Sunniesnow.PixiPatches = {
 	apply() {
-		if (!Sunniesnow.Utils.isBrowser()) {
-			this.patchNodeLoaderParsers();
-		}
+		this.addPrepareSystem();
 		this.patchWorldVisible();
 		this.patchAddTo();
 	},
 
-	// https://github.com/pixijs-userland/node/pull/13
-	patchNodeLoaderParsers() {
-		PIXI.loadNodeTexture.name = 'loadNodeTexture';
-		PIXI.loadNodeFont.name = 'loadNodeFont';
-		PIXI.loadNodeBase64.name = 'loadNodeBase64';
+	// Then I can use Sunniesnow.game.app.renderer.prepare.upload
+	addPrepareSystem() {
+		PIXI.extensions.add(PIXI.PrepareSystem);
 	},
 
 	// Then I can use child?.addTo(parent) instead of child && parent.addChild(child).

@@ -898,6 +898,41 @@ When it is `true`, the FX will not be displayed.
 This setting is used to hide the background pattern.
 When it is `true`, the background pattern will not be displayed.
 
+#### Fading
+
+##### Fading start
+
+- **Setting id**: `fading-start`.
+- **Possible values**: number.
+
+This controls when the fadeout effect of notes starts.
+A value of `0` means the start of circle shrinking,
+and a value of `1` means the note time.
+Setting it to `1` effectively disables fadeout effects.
+
+##### Fading duration
+
+- **Setting id**: `fading-duration`.
+- **Possible values**: nonnegative number.
+
+This controls the time length between the start of fadeout and when the note becomes fully invisible.
+The opacity is linearly interpolated between these two times.
+A value of `1` means the duration is as long as the circle shrinking duration.
+
+#### Graphics quality
+
+##### Big text
+{:#quality-big-text}
+
+- **Setting id**: `quality-big-text`.
+- **Possible values**: positive number.
+
+This controls the graphics quality of big texts.
+A quality lower than `1` means that the big texts rendered at a smaller font size
+than the actual visual appearance and are upscaled.
+The value is the ratio between the texture size and the upscaled size.
+Depending on the skin, this setting may not actually be respected.
+
 #### Miscellaneous
 
 ##### Touch effects

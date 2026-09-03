@@ -16,8 +16,8 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 				Sunniesnow.Logs.warn(`Failed to load font for big texts: ${e.message ?? e}`, e);
 			}
 		}
-		this.fontSize = Sunniesnow.Config.NOTE_RADIUS * 10;
-		this.maxWidth = Sunniesnow.game.settings.playfieldWidth * Sunniesnow.Config.SCALE;
+		this.fontSize = Sunniesnow.Config.NOTE_RADIUS * 10 * Sunniesnow.game.settings.qualityBigText;
+		this.maxWidth = Sunniesnow.game.settings.playfieldWidth * Sunniesnow.Config.SCALE * Sunniesnow.game.settings.qualityBigText;
 		this.style = new PIXI.TextStyle({
 			fontFamily: 'HanWangShinSuMedium,YujiBoku,Noto Sans Math,Noto Sans CJK TC',
 			fontSize: this.fontSize,
@@ -31,49 +31,61 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 
 	populate() {
 		super.populate();
+		this.textWrapper = new PIXI.Container();
+		this.textWrapper.label = 'text-wrapper';
+		this.addChild(this.textWrapper);
 		this.label = `big-text-${this.event.id}`;
-		this.text = new PIXI.Text({text: this.event.text, style: this.constructor.style.clone()});
-		this.text.anchor.set(0.5, 0.5);
-		this.text.label = 'text';
-		this.addChild(this.text);
+		this.texts = new Map();
+	}
+
+	prepareText(text) {
+		if (this.texts.has(text)) {
+			return this.texts.get(text);
+		}
+		const result = new PIXI.Text({text, style: this.constructor.style.clone()});
+		if (!this.constructor.widthCache.has(text)) {
+			this.constructor.widthCache.set(text, PIXI.CanvasTextMetrics.measureText(text, this.constructor.style).width);
+		}
+		result.style.fontSize = this.constructor.fontSize * Math.min(
+			1,
+			this.constructor.maxWidth / this.constructor.widthCache.get(text)
+		);
+		// https://github.com/pixijs/pixijs/discussions/11666
+		// TODO: It may seem that the prepare system is intended to boost performance in this case,
+		// but it is actually useless because the expensive operation is still done synchronously for the whole texture
+		Sunniesnow.game.app.renderer.prepare?.upload(result);
+		this.texts.set(text, result);
+		result.anchor.set(0.5, 0.5);
+		result.scale.set(1 / Sunniesnow.game.settings.qualityBigText);
+		result.label = 'text';
+		return result;
 	}
 
 	update(relativeTime) {
-		this.text.text = this.event.timeDependentAtRelative('text', relativeTime);
-		this.adjustTextSize();
+		this.event.timeDependentBetweenRelative(
+			'text', relativeTime, relativeTime + Sunniesnow.Config.UI_PREPARATION_TIME
+		).forEach((text, i) => {
+			text = this.prepareText(text);
+			if (this.text === text || i > 0) {
+				return;
+			}
+			this.text?.removeFromParent();
+			this.textWrapper.addChild(text);
+			this.text = text;
+		});
 		super.update(relativeTime);
-	}
-
-	adjustTextSize() {
-		if (!this.constructor.widthCache.has(this.text.text)) {
-			this.constructor.widthCache.set(
-				this.text.text,
-				PIXI.CanvasTextMetrics.measureText(this.text.text, this.constructor.style).width
-			);
-		}
-		const newFontSize = this.constructor.fontSize * Math.min(
-			1,
-			this.constructor.maxWidth / this.constructor.widthCache.get(this.text.text)
-		);
-		// https://github.com/pixijs/pixijs/issues/11664
-		if (this.text.style.fontSize !== newFontSize) {
-			this.text.style.fontSize = newFontSize;
-			// Normally when the text is not time-dependent, this will boost performance
-			// by preparing the texture before it actually appears on screen.
-			//Sunniesnow.game.app.prepare.upload(this.text.texture);
-		}
 	}
 
 	updateFadingIn(progress, relativeTime) {
 		super.updateFadingIn(progress, relativeTime);
-		this.text.alpha = progress * this.constructor.textBaseAlpha;
-		this.text.scale.set(progress);
+		this.textWrapper.alpha = progress * this.constructor.textBaseAlpha;
+		this.textWrapper.scale.set(progress);
 	}
 
 	updateHolding(progress, relativeTime) {
 		super.updateHolding(progress, relativeTime);
-		this.text.alpha = this.constructor.textBaseAlpha;
-		this.text.scale.set(1);
+		this.textWrapper.alpha = this.constructor.textBaseAlpha;
+		this.textWrapper.scale.set(1);
 	}
 
 	updateFadingOut(progress, relativeTime) {
@@ -81,10 +93,10 @@ Sunniesnow.UiBigText = class UiBigText extends Sunniesnow.UiBgPattern {
 		if (this.aborted) {
 			return;
 		}
-		this.text.alpha = (1 - progress) * this.constructor.textBaseAlpha;
+		this.textWrapper.alpha = (1 - progress) * this.constructor.textBaseAlpha;
 	}
 
-	updateScale(relativeTime) {
-		this.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
+	shouldFlipWithChart() {
+		return false;
 	}
 };

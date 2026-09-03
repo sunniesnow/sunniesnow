@@ -107,6 +107,7 @@ Sunniesnow.Chart = class Chart {
 		this.events.sort((a, b) => a.time - b.time);
 		this.applyTipPointSpeed();
 		this.stripEvents();
+		this.checkNoNotes();
 		this.applyGlobalSpeed();
 		this.setSimultaneousEvents();
 		this.eventsSortedByAppearTime = this.events.toSorted((a, b) => a.appearTime() - b.appearTime());
@@ -160,6 +161,17 @@ Sunniesnow.Chart = class Chart {
 			}
 		}
 		Sunniesnow.Utils.compactify(this.events);
+	}
+
+	// if there are no notes in the chart, constructor of Level will throw outside of the loading phase,
+	// resulting in error at a confusing time
+	checkNoNotes() {
+		for (const event of this.events) {
+			if (event instanceof Sunniesnow.Note && !event.fake) {
+				return;
+			}
+		}
+		throw new Error('There are no notes in the chart in the specified range');
 	}
 
 	// This converts all the globalSpeed events to data points in timeDependent.circle of all the notes,

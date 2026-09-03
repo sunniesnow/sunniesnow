@@ -62,6 +62,7 @@
 		"scroll-visual-category": "Scroll mode",
 		"hide-category": "Hide",
 		"fading-category": "Fading",
+		"quality-category": "Graphics quality",
 		"misc-visual-category": "Miscellaneous",
 
 		"audio-settings": "Audio settings",
@@ -259,6 +260,7 @@
 		"hide-bg-pattern": " Background pattern",
 		"fading-start": "Fading start: ",
 		"fading-duration": "Fading duration: ",
+		"quality-big-text": "Big text: ",
 		"touch-effects": " Touch effects",
 		"reverse-note-order": " Reverse the display order of notes",
 		"circle-moves-with-note": " Circles move with notes",

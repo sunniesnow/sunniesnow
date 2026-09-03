@@ -62,6 +62,7 @@
 		"scroll-visual-category": "下落式",
 		"hide-category": "隐藏",
 		"fading-category": "下隐",
+		"quality-category": "画质",
 		"misc-visual-category": "杂项",
 
 		"audio-settings": "音频设置",
@@ -259,6 +260,7 @@
 		"hide-bg-pattern": " 背景图案",
 		"fading-start": "下隐开始: ",
 		"fading-duration": "淡出时长: ",
+		"quality-big-text": "大字: ",
 		"touch-effects": " 触摸效果",
 		"reverse-note-order": " 音符显示顺序反转",
 		"circle-moves-with-note": " 缩圈随音符移动",

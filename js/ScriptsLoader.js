@@ -13,9 +13,6 @@ Sunniesnow.ScriptsLoader = {
 			path = `${this.CDN_PREFIX}/${
 				path.replaceAll(/\$(\w+)/g, (match, varName) => this.data.npmLock[varName])
 			}`;
-			if (Sunniesnow.fuckCache) {
-				path += `?fuck-cache=${Sunniesnow.fuckCache}`;
-			}
 			return {path, esm};
 		});
 		const mapSite = async path => {
@@ -97,8 +94,11 @@ Sunniesnow.ScriptsLoader = {
 		return JSON.parse(await this.text(path));
 	},
 
-	sourceUrl(scriptPath) {
-		return Sunniesnow.Utils.isBrowser() ? scriptPath : scriptPath.replace(/^\//, '');
+	sourceUrl(path) {
+		if (!Sunniesnow.Utils.isBrowser()) {
+			path = path.replace(/^\//, '')
+		}
+		return path.replace(/\?[^\?]*$/, '');
 	}
 };
 

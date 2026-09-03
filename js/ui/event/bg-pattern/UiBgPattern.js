@@ -33,12 +33,16 @@ Sunniesnow.UiBgPattern = class UiBgPattern extends Sunniesnow.UiEvent {
 		super.update(relativeTime);
 	}
 
+	shouldFlipWithChart() {
+		return true;
+	}
+
 	updateScale(relativeTime) {
 		this.scale.set(this.event.timeDependentAtRelative('size', relativeTime));
-		if (Sunniesnow.game.settings.horizontalFlip) {
+		if (Sunniesnow.game.settings.horizontalFlip && this.shouldFlipWithChart()) {
 			this.scale.x *= -1;
 		}
-		if (Sunniesnow.game.settings.verticalFlip) {
+		if (Sunniesnow.game.settings.verticalFlip && this.shouldFlipWithChart()) {
 			this.scale.y *= -1;
 		}
 		this.scale.x *= this.event.timeDependentAtRelative('scaleX', relativeTime);

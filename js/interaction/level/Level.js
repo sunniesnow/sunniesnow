@@ -38,6 +38,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 			}
 		}
 		if (this.unhitNotes.length === 0) {
+			// should never reach here because of Chart.checkNoNotes
 			throw new Error('No notes in the chart');
 		}
 		this.unhitNotes.sort((a, b) => a.time - b.time || b.judgementPriority() - a.judgementPriority());

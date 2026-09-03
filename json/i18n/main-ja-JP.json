@@ -62,6 +62,7 @@
 		"scroll-visual-category": "スクロールモード",
 		"hide-category": "隠す",
 		"fading-category": "フェード",
+		"quality-category": null,
 		"misc-visual-category": "その他",
 
 		"audio-settings": "オーディオ設定",
@@ -259,6 +260,7 @@
 		"hide-bg-pattern": " 背景ボタン",
 		"fading-start": "フェイドスタート: ",
 		"fading-duration": "フェイド時間: ",
+		"quality-big-text": null,
 		"touch-effects": " タッチエフェクト",
 		"reverse-note-order": " ノートの表示順を逆にする",
 		"circle-moves-with-note": " リングがノートに移動する",

@@ -231,8 +231,34 @@ Sunniesnow.Event = class Event {
 		return v1 + (v2 - v1) * progress;
 	}
 
+	// array of all possible values during time1 <= time < time2, only applicable for uninterpolable properties
+	timeDependentBetween(property, time1, time2) {
+		const {interpolable, dataPoints, omitted} = this.timeDependent[property];
+		if (interpolable) {
+			throw new Error('Cannot call `timeDependentValuesBetween` for uninterpolable properties');
+		}
+		const result = [];
+		if (omitted) {
+			return result;
+		}
+		const index = Sunniesnow.Utils.bisectRight(dataPoints, ({time}) => time - time1);
+		// index is never -1 because there is a -Infinity
+		for (let i = index; i < dataPoints.length; i++) {
+			const {time, value} = dataPoints[i];
+			if (time >= time2) {
+				break;
+			}
+			result.push(value);
+		}
+		return result;
+	}
+
 	timeDependentAtRelative(property, relativeTime) {
 		return this.timeDependentAt(property, this.time + relativeTime);
+	}
+
+	timeDependentBetweenRelative(property, relativeTime1, relativeTime2) {
+		return this.timeDependentBetween(property, this.time + relativeTime1, this.time + relativeTime2);
 	}
 
 	doubleLineable() {
