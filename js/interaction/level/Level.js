@@ -252,6 +252,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 			note.updateHolding(touch.end().time);
 		}
 		this.swipeDrags(touch);
+		this.swipingFillCandidateForHolds(touch);
 		return true;
 	}
 
@@ -259,8 +260,10 @@ Sunniesnow.Level = class Level extends EventTarget {
 		if (Sunniesnow.Music.pausing || this.finished) {
 			return false;
 		}
-		this.fillCandidateForHolds(touch, this.unhitNotes);
-		this.fillCandidateForHolds(touch, this.holdingNotes);
+		this.tappingFillCandidateForHolds(touch);
+		if (this.screensTapping(touch)) {
+			return true;
+		}
 		const time = touch.start().time;
 		for (let i = 0; i < this.unhitNotes.length;) {
 			let note = this.unhitNotes[i];
@@ -284,17 +287,47 @@ Sunniesnow.Level = class Level extends EventTarget {
 		return false;
 	}
 
-	fillCandidateForHolds(touch, notes) {
-		for (let i = 0; i < notes.length; i++) {
-			const note = notes[i];
+	tappingFillCandidateForHolds(touch) {
+		const {x, y, time} = touch.start();
+		for (const note of this.unhitNotes) {
 			if (note.type !== 'hold') {
 				continue;
 			}
-			const {x, y, time} = touch.start();
+			if (note.time > this.unhitNotes[0].time) {
+				break;
+			}
 			if (note.isTappableAt(touch, x, y) && Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows.hold.bad)) {
 				note.candidateTouches.push(touch);
 			}
 		}
+		for (const note of this.holdingNotes) {
+			if (note.type !== 'hold') {
+				continue;
+			}
+			let condition = note.isTappableAt(touch, x, y) && Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows.hold.bad);
+			condition ||= note.isTappableAt(touch, x, y, Sunniesnow.game.settings.holdSwitchTapSize);
+			condition && note.candidateTouches.push(touch);
+		}
+	}
+
+	swipingFillCandidateForHolds(touch) {
+		const {x, y} = touch.end();
+		for (const note of this.holdingNotes) {
+			if (note.type !== 'hold') {
+				continue;
+			}
+			note.isTappableAt(touch, x, y, Sunniesnow.game.settings.holdSwitchSwipeSize) && note.candidateTouches.push(touch);
+		}
+	}
+
+	screensTapping(touch) {
+		if (touch.wholeScreen) {
+			return false;
+		}
+		const {x, y} = touch.start();
+		return this.holdingNotes.some(
+			note => note.type === 'hold' && note.isTappableAt(touch, x, y, Sunniesnow.game.settings.holdScreeningSize)
+		);
 	}
 
 	distanceAndAngle(x, y, event) {

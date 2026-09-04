@@ -235,7 +235,7 @@ Sunniesnow.Settings = {
 	// too make full quality big texts too expensive
 	setQuality() {
 		if (Sunniesnow.Utils.isMobile()) {
-			this.s.qualityBigText.set(0.8);
+			this.s.qualityBigText.set(0.6);
 		}
 	}
 };

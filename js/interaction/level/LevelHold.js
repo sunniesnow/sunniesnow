@@ -32,11 +32,12 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 
 	updateHolding(time) {
 		super.updateHolding(time);
-		if (!this.touch || !Sunniesnow.game.settings.lockingHold) {
+		if (!this.touch) {
+			this.prereleaseTime != null && this.release(time);
 			return;
 		}
 		const {x, y, time: t} = this.touch.end();
-		if (!this.isTappableAt(this.touch, x, y)) {
+		if (!this.isTappableAt(this.touch, x, y, Sunniesnow.game.settings.holdKeepSize)) {
 			this.release(t);
 		}
 	}
@@ -47,11 +48,16 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 
 	release(time) {
 		if (time >= this.endTime) {
-			return super.release(time);
+			return super.release(this.endTime);
 		}
-		if (!this.holding || !this.touch) {
+		if (!this.holding || this.acceptCandidateTouch()) {
 			return;
 		}
+		this.prereleaseTime ??= time;
+		time - this.prereleaseTime >= Sunniesnow.game.settings.holdReleaseLeniency && super.release(time);
+	}
+
+	acceptCandidateTouch() {
 		for (let i = 0; i < this.candidateTouches.length;) {
 			const touch = this.candidateTouches[i];
 			if (touch.finished) {
@@ -60,12 +66,12 @@ Sunniesnow.LevelHold = class LevelHold extends Sunniesnow.LevelNote {
 			}
 			if (!touch.note) {
 				touch.note = this;
-				this.touch = touch;
-				return;
+				this.prereleaseTime = null;
+				return this.touch = touch;
 			}
 			i++;
 		}
-		super.release(time);
+		return this.touch = null;
 	}
 
 };

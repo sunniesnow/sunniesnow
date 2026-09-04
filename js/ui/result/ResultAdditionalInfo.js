@@ -219,23 +219,30 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	}
 
 	getTextContents() {
-		return `judgement-windows: ${Sunniesnow.game.settings.judgementWindows}
-offset: ${Sunniesnow.game.settings.offset}
-lyrica-5: ${Sunniesnow.game.settings.lyrica5}
-no-early-drag: ${Sunniesnow.game.settings.noEarlyDrag}
-locking-hold: ${Sunniesnow.game.settings.lockingHold}
-min-flick-distance: ${Sunniesnow.game.settings.minFlickDistance}
-max-flick-distance: ${Sunniesnow.game.settings.maxFlickDistance}
-flick-angle-range: ${Sunniesnow.game.settings.flickAngleRange}
-overlapping-flick-fix: ${Sunniesnow.game.settings.overlappingFlickFix}
-scroll: ${Sunniesnow.game.settings.scroll}
-autoplay: ${Sunniesnow.game.settings.autoplay}
-chart-offset: ${Sunniesnow.game.settings.chartOffset}
-game-speed: ${Sunniesnow.game.settings.gameSpeed}
-horizontal-flip: ${Sunniesnow.game.settings.horizontalFlip}
-vertical-flip: ${Sunniesnow.game.settings.verticalFlip}
-start: ${Sunniesnow.game.settings.start}
-end: ${Sunniesnow.game.settings.end}
+		const judgementInfo = [
+			'judgement-windows',
+			'offset',
+			'min-flick-distance',
+			'max-flick-distance',
+			'flick-angle-range',
+			'overlapping-flick-fix',
+			'hold-keep-size',
+			'hold-switch-tap-size',
+			'hold-switch-swipe-size',
+			'hold-screening-size',
+			'hold-release-leniency',
+			'lyrica-5',
+			'no-early-drag',
+			'scroll',
+			'autoplay',
+			'chart-offset',
+			'game-speed',
+			'horizontal-flip',
+			'vertical-flip',
+			'start',
+			'end',
+		].map(id => `${id}: ${Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(id)]}`).join('\n');
+		return `${judgementInfo}
 
 Artist: ${Sunniesnow.game.chart.artist}
 Charter: ${Sunniesnow.game.chart.charter}

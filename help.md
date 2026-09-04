@@ -288,51 +288,6 @@ This setting is intended to fix the latency in the video.
 This does **not** affect the audio-video sync.
 To fix the audio-video sync, use [`delay`](#delay).
 
-#### Mechanics
-
-##### Lyrica 5 mechanics
-{:#lyrica-5}
-
-- **Setting id**: `lyrica-5`.
-- **Possible values**: `true`, `false`.
-
-There was a major update in Lyrica 5.0.0 that changed the mechanics of the game.
-This setting is used to set whether the mechanics of the game should mock that of Lyrica 5.0.0.
-
-When this setting is set to `true`, the following mechanics are changed:
-
-- The score and the accuracy is calculated differently.
-- The bad judgement is called *Ok* now, but it depends on the skin.
-- The perfect interval of drag notes are changed to be the same as the bad interval of them.
-- Hitting (instead of swiping over) a drag note will only impose judgement on the drag note itself
-  instead of hitting other notes behind the drag note.
-  This means [`no-early-drag`](#no-early-drag) will not have an effect.
-- Bad judgement does not break the combo.
-- The look of the AP/FC indicator is changed.
-
-##### Drag notes cannot be hit early
-{:#no-early-drag}
-
-- **Setting id**: `no-early-drag`.
-- **Possible values**: `true`, `false`.
-
-This setting is used to set whether drag notes can be hit early.
-When this setting is set to `false`,
-tapping on a drag note within its judgement window will hit the note immediately.
-When this setting is set to `true`,
-the judgement will be delayed until the exact time of the drag note
-(and reduces difficulty if [`lyrica-5`](#lyrica-5) is `false`).
-
-##### Hold notes lock the position of touch
-{:#locking-hold}
-
-- **Setting id**: `locking-hold`.
-- **Possible values**: `true`, `false`.
-
-When this setting is set to `true`,
-moving a touch point away from a hold note is regarded as releasing it
-(increasing difficulty).
-
 #### Flick windows
 
 ##### Minimum distance
@@ -403,6 +358,96 @@ the higher the judgement priority of the note.
 When this setting is `false`, the judgement priority of flick notes that are simultaneous and completely overlapping
 will be purely determined by the order of their appearances in the chart file.
 This is the behavior of Lyrica, which is manifest in the special chart of Frog Rappa.
+
+#### Hold windows
+
+##### Area for keeping
+{:#hold-keep-size}
+
+- **Setting id**: `hold-keep-size`.
+- **Possible values**: nonnegative number.
+
+The finger hitting a hold note releases the hold after its distance from the note
+exceeds what this setting specifies.
+The length is in the same unit as [`note-hit-size-*`](#note-hit-size).
+
+##### Area for switching finger by tapping
+{:#hold-switch-tap-size}
+
+- **Setting id**: `hold-switch-tap-size`.
+- **Possible values**: nonnegative number.
+
+The finger hitting a hold note may be switched to another finger
+if the latter started at a distance from the note
+smaller than what this setting specifies.
+The length is in the same unit as [`note-hit-size-*`](#note-hit-size).
+
+##### Area for switching finger by swiping
+{:#hold-switch-swipe-size}
+
+- **Setting id**: `hold-switch-swipe-size`.
+- **Possible values**: nonnegative number.
+
+The finger hitting a hold note may be switched to another finger
+if the latter ever has its distance from the note
+smaller than what this setting specifies.
+The length is in the same unit as [`note-hit-size-*`](#note-hit-size).
+
+##### Area for screening tapping
+{:#hold-screening-size}
+
+- **Setting id**: `hold-screening-size`.
+- **Possible values**: nonnegative number.
+
+While a hold note is being held, tapping is screened from triggering notes judgement
+at a distance from the hold note smaller than what this setting specifies.
+The length is in the same unit as [`note-hit-size-*`](#note-hit-size).
+
+##### Release leniency
+{:#hold-release-leniency}
+
+- **Setting id**: `hold-release-leniency`.
+- **Possible values**: nonnegative number.
+
+A hold note is released after its finger has been released for
+the set number of seconds.
+During the leniency time, the hold note can switch to another finger
+and cancel the scheduled release.
+
+#### Mechanics
+
+##### Lyrica 5 mechanics
+{:#lyrica-5}
+
+- **Setting id**: `lyrica-5`.
+- **Possible values**: `true`, `false`.
+
+There was a major update in Lyrica 5.0.0 that changed the mechanics of the game.
+This setting is used to set whether the mechanics of the game should mock that of Lyrica 5.0.0.
+
+When this setting is set to `true`, the following mechanics are changed:
+
+- The score and the accuracy is calculated differently.
+- The bad judgement is called *Ok* now, but it depends on the skin.
+- The perfect interval of drag notes are changed to be the same as the bad interval of them.
+- Hitting (instead of swiping over) a drag note will only impose judgement on the drag note itself
+  instead of hitting other notes behind the drag note.
+  This means [`no-early-drag`](#no-early-drag) will not have an effect.
+- Bad judgement does not break the combo.
+- The look of the AP/FC indicator is changed.
+
+##### Drag notes cannot be hit early
+{:#no-early-drag}
+
+- **Setting id**: `no-early-drag`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether drag notes can be hit early.
+When this setting is set to `false`,
+tapping on a drag note within its judgement window will hit the note immediately.
+When this setting is set to `true`,
+the judgement will be delayed until the exact time of the drag note
+(and reduces difficulty if [`lyrica-5`](#lyrica-5) is `false`).
 
 ### Visual settings
 
