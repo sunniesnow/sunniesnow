@@ -65,7 +65,7 @@ Sunniesnow.Assets = {
 		if (downloadToFs) {
 			const path = require('path');
 			fs = require('fs');
-			src = path.join(Sunniesnow.record.tempDir, path.basename(url));
+			src = path.join(Sunniesnow.record.assetsDir, path.basename(url));
 			redownloadToFs = !fs.existsSync(src) || Sunniesnow.record.clean;
 			condition &&= redownloadToFs;
 		}
