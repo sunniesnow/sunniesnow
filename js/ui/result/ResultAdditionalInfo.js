@@ -202,7 +202,11 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 	}
 
 	createRightText() {
-		this.rightText = new PIXI.Text({text: this.getRightTextContents(), style: {...this.constructor.textStyle, align: 'right'}});
+		const style = {...this.constructor.textStyle};
+		const text = this.getRightTextContents();
+		style.fontSize = style.lineHeight = (Sunniesnow.Config.HEIGHT - this.constructor.samplesDiagramHeight) / Sunniesnow.Utils.countLines(text);
+		style.align = 'right';
+		this.rightText = new PIXI.Text({text, style});
 		this.rightText.label = 'right-text';
 		this.rightText.anchor.set(1, 0);
 		this.rightText.x = Sunniesnow.Config.WIDTH;
@@ -277,6 +281,10 @@ Spatial windows:
 		for (const [key, noteType] of Object.entries(noteTypes)) {
 			result += `${noteType}: ${Sunniesnow.game.settings[`noteHitSize${Sunniesnow.Utils.capitalizeOne(key)}`]}\n`;
 		}
+		result += `
+Sunniesnow: ${Sunniesnow.fuckCache}
+Chart: ${Sunniesnow.game.chart.hash}
+Notes: ${Sunniesnow.game.level.hash}`
 		return result;
 	}
 

@@ -13,6 +13,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		this.type = event.constructor.TYPE_NAME;
 		this.time = event.time + Sunniesnow.game.settings.offset;
 		this.endTime = this.time + (event.duration || 0);
+		[this.size, this.x, this.y] = [this.event.size, this.event.x, this.event.y];
 		this.clear();
 	}
 
@@ -68,7 +69,13 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 
 	hitSize(base) {
 		base ??= this.settingsHitSize();
-		return Sunniesnow.Config.RADIUS * base * this.event.size;
+		return Sunniesnow.Config.RADIUS * base * this.size;
+	}
+
+	toObject() {
+		const result = {};
+		['type', 'time', 'endTime', 'size', 'x', 'y'].forEach((property) => result[property] = this[property]);
+		return result;
 	}
 
 	// x, y are in chart coordinates
@@ -77,7 +84,7 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		if (touch.wholeScreen && baseSize > 0) {
 			return true;
 		}
-		const distance = Sunniesnow.game.settings.scroll ? Math.abs(this.event.x - x) : Math.hypot(this.event.x - x, this.event.y - y);
+		const distance = Sunniesnow.game.settings.scroll ? Math.abs(this.x - x) : Math.hypot(this.x - x, this.y - y);
 		return distance < this.hitSize(baseSize);
 	}
 

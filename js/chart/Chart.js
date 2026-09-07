@@ -30,6 +30,7 @@ Sunniesnow.Chart = class Chart {
 			throw new Error('There is no chart');
 		}
 		this.data = data;
+		this.hash = Sunniesnow.Utils.objectHash(data, 'base64');
 		this.readMeta();
 		this.readFilters();
 		this.init();

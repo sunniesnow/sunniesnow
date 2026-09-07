@@ -11,7 +11,7 @@ Sunniesnow.FxNote = class FxNote extends PIXI.Container {
 		this.judgement = levelNote.judgement || levelNote.highestJudgement;
 		this.earlyLate = levelNote.earlyLate;
 		this.populate();
-		this.position.set(...Sunniesnow.Config.chartMapping(levelNote.event.x, levelNote.event.y));
+		this.position.set(...Sunniesnow.Config.chartMapping(levelNote.x, levelNote.y));
 		if (Sunniesnow.game.settings.scroll) {
 			this.y = Sunniesnow.Config.SCROLL_END_Y;
 		}

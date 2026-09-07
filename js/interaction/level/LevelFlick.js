@@ -15,6 +15,12 @@ Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
 		return Sunniesnow.game.settings.noteHitSizeFlick;
 	}
 
+	toObject() {
+		const result = super.toObject();
+		result.angles = this.event.angles;
+		return result;
+	}
+
 	determineJudgement() {
 		if (!this.touch || this.touch.wholeScreen) {
 			super.determineJudgement();

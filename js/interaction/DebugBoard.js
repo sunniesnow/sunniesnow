@@ -333,7 +333,7 @@ Sunniesnow.DebugBoard = class DebugBoard extends PIXI.Container {
 		}});
 		earlyLateText.label = `early-late-text-${levelNote.event.id}`;
 		earlyLateText.anchor.set(0.5, 0.5);
-		[earlyLateText.x, earlyLateText.y] = Sunniesnow.Config.chartMapping(levelNote.event.x, levelNote.event.y);
+		[earlyLateText.x, earlyLateText.y] = Sunniesnow.Config.chartMapping(levelNote.x, levelNote.y);
 		this.addChild(earlyLateText);
 		this.earlyLateTexts.push(earlyLateText);
 	}

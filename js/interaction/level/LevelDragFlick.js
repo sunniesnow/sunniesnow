@@ -29,6 +29,12 @@ Sunniesnow.LevelDragFlick = class LevelDragFlick extends Sunniesnow.LevelNote {
 		return Sunniesnow.game.settings.noteHitSizeDragFlick;
 	}
 
+	toObject() {
+		const result = super.toObject();
+		result.angles = this.event.angles.map(a => a % (2*Math.PI)).sort();
+		return result;
+	}
+
 	determineJudgement() {
 		if (this.designatedTouch) {
 			this.determineJudgementWithDesignatedTouch();

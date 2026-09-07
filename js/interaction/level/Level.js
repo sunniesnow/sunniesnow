@@ -42,6 +42,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 			throw new Error('No notes in the chart');
 		}
 		this.unhitNotes.sort((a, b) => a.time - b.time || b.judgementPriority() - a.judgementPriority());
+		this.hash = Sunniesnow.Utils.objectHash(this.unhitNotes.map(n => n.toObject()), 'base64');
 		if (Sunniesnow.game.progressAdjustable) {
 			this.allNotes = this.unhitNotes.slice();
 			this.timeline = Sunniesnow.Utils.eventsTimeline(this.allNotes, e => e.time, e => e.endTime);
@@ -439,5 +440,15 @@ Sunniesnow.Level = class Level extends EventTarget {
 				note.swipe(touch);
 			}
 		}
+	}
+
+	notesHash(notes, format = 'hex') {
+		const objects = notes.map(n => n.toObject());
+		const startTime = objects[0].time;
+		objects.forEach(object => {
+			object.time -= startTime;
+			object.endTime -= startTime;
+		});
+		return Sunniesnow.Utils.objectHash(objects, format);
 	}
 };

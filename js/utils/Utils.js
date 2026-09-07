@@ -594,7 +594,7 @@ Sunniesnow.Utils = {
 	},
 
 	// Why the fuck does the Crypto API require secure context???
-	sha256(arrayBuffer) {
+	sha256(arrayBuffer, format = 'hex') {
 		if (typeof arrayBuffer === 'string') {
 			arrayBuffer = new TextEncoder().encode(arrayBuffer);
 		}
@@ -619,16 +619,12 @@ Sunniesnow.Utils = {
 		const σ1 = x => (ROTR(x, 17) ^ ROTR(x, 19) ^ (x >>> 10)) >>> 0;
 		const Ch = (x, y, z) => ((x & y) ^ (~x & z)) >>> 0;
 		const Maj = (x, y, z) => ((x & y) ^ (x & z) ^ (y & z)) >>> 0;
-		const add = (...args) => {
-			let s = 0 >>> 0;
-			for (let a of args) s = (s + (a >>> 0)) >>> 0;
-			return s;
-		};
+		const add = (...args) => args.reduce((s, a) => (s + (a >>> 0)) >>> 0, 0 >>> 0);
 
 		// initial hash values
-		let H = new Uint32Array([
-			0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,
-			0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19
+		const H = new Uint32Array([
+			0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+			0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
 		]);
 
 		const bytes = new Uint8Array(arrayBuffer);
@@ -642,7 +638,9 @@ Sunniesnow.Utils = {
 
 		// total length after padding must be congruent to 56 (mod 64) before appending 8-byte length
 		let paddedLen = withOne.length;
-		while ((paddedLen % 64) !== 56) paddedLen++;
+		while (paddedLen % 64 !== 56) {
+			paddedLen++;
+		}
 		const padded = new Uint8Array(paddedLen + 8);
 		padded.set(withOne);
 		// append 64-bit big-endian length
@@ -695,15 +693,28 @@ Sunniesnow.Utils = {
 			H[7] = add(H[7], h);
 		}
 
-		// produce hex string
-		let hex = "";
-		for (let i = 0; i < H.length; i++) {
-			hex += ("00000000" + H[i].toString(16)).slice(-8);
+		switch (format) {
+			case 'hex':
+				let hex = "";
+				for (let i = 0; i < H.length; i++) {
+					hex += ("00000000" + H[i].toString(16)).slice(-8);
+				}
+				return hex;
+			case 'base64':
+				const buffer = new ArrayBuffer(H.length * 4);
+				const view = new DataView(buffer);
+				H.forEach((val, index) => view.setUint32(index * 4, val, false)); // force bigendian
+				let binary = '';
+				for (const charCode of new Uint8Array(buffer)) {
+					binary += String.fromCharCode(charCode);
+				}
+				return btoa(binary);
+			default:
+				throw new Error(`Unknown sha256 format: ${format}`)
 		}
-		return hex;
 	},
 
-	async sha256Async(data) {
+	async sha256Async(data, format = 'hex') {
 		if (!crypto?.subtle) {
 			return this.sha256(data);
 		}
@@ -714,7 +725,18 @@ Sunniesnow.Utils = {
 		}
 		const hashBuffer = await crypto.subtle.digest('SHA-256', data);
 		const array = Array.from(new Uint8Array(hashBuffer))
-		return array.map(b => b.toString(16).padStart(2, '0')).join('');
+		switch (format) {
+			case 'hex':
+				return array.map(b => b.toString(16).padStart(2, '0')).join('');
+			case 'base64':
+				let binary = '';
+				for (const charCode of array) {
+					binary += String.fromCharCode(charCode);
+				}
+				return btoa(binary);
+			default:
+				throw new Error(`Unknown sha256 format: ${format}`)
+		}
 	},
 
 	arrayDifference(array) {
@@ -882,5 +904,22 @@ Sunniesnow.Utils = {
 
 	capitalizeOne(text) {
 		return text[0].toUpperCase() + text.substring(1);
+	},
+
+	sortObjectKeys(object) {
+		if (typeof object !== 'object') {
+			return object;
+		}
+		if (Array.isArray(object)) {
+			return object.map(Sunniesnow.Utils.sortObjectKeys);
+		}
+		return Object.keys(object).sort().reduce((r, key) => {
+			r[key] = Sunniesnow.Utils.sortObjectKeys(object[key]);
+			return r;
+		}, {});
+	},
+
+	objectHash(object, format = 'hex') {
+		return Sunniesnow.Utils.sha256(JSON.stringify(Sunniesnow.Utils.sortObjectKeys(object), null, null), format);
 	},
 };
