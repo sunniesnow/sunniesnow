@@ -906,7 +906,12 @@ Sunniesnow.Utils = {
 		return text[0].toUpperCase() + text.substring(1);
 	},
 
+	// Normalize object and numbers for reproducible hash,
+	// resilient to key orders and floating point errors.
 	sortObjectKeys(object) {
+		if (typeof object === 'number') {
+			return Number(object.toFixed(Sunniesnow.Config.ROUNDING_PLACES));
+		}
 		if (typeof object !== 'object') {
 			return object;
 		}
@@ -921,5 +926,9 @@ Sunniesnow.Utils = {
 
 	objectHash(object, format = 'hex') {
 		return Sunniesnow.Utils.sha256(JSON.stringify(Sunniesnow.Utils.sortObjectKeys(object), null, null), format);
+	},
+
+	mod(a, b) {
+		return (a % b + b) % b;
 	},
 };

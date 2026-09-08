@@ -70,6 +70,13 @@ Sunniesnow.Config = {
 	// This is used for calculating judgement space window.
 	RADIUS: 12.5,
 
+	// 1e-12 is much larger than Number.EPSILON
+	// and much smaller than meaningful difference in numbers
+	// (an audio sample for 44.1 kHz is 2.3e-5 seconds).
+	// This is used for rounding when calculating chart hashes to
+	// avoid floating point errors affecting the hash.
+	ROUNDING_PLACES: 12,
+
 	// Get coordinates on canvas by providing the coordinates in charts.
 	chartMapping(chartX, chartY) {
 		if (Sunniesnow.game.settings.horizontalFlip) {

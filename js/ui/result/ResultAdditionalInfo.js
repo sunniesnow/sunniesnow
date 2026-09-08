@@ -282,7 +282,7 @@ Spatial windows:
 			result += `${noteType}: ${Sunniesnow.game.settings[`noteHitSize${Sunniesnow.Utils.capitalizeOne(key)}`]}\n`;
 		}
 		result += `
-Sunniesnow: ${Sunniesnow.fuckCache}
+Game: ${Sunniesnow.commitHash}
 Chart: ${Sunniesnow.game.chart.hash}
 Notes: ${Sunniesnow.game.level.hash}`
 		return result;

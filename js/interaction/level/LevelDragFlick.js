@@ -31,7 +31,7 @@ Sunniesnow.LevelDragFlick = class LevelDragFlick extends Sunniesnow.LevelNote {
 
 	toObject() {
 		const result = super.toObject();
-		result.angles = this.event.angles.map(a => a % (2*Math.PI)).sort();
+		result.angles = this.event.angles.map(a => Sunniesnow.Utils.mod(a, 2*Math.PI)).sort();
 		return result;
 	}
 
