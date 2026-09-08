@@ -1,5 +1,5 @@
 Sunniesnow.Game = class Game {
-	static async run(overrideSettings) {
+	static async run(overrideSettings, loadingProgressCallback) {
 		if (Sunniesnow.game && !Sunniesnow.game.terminating) {
 			if (!Sunniesnow.Loader.loadingComplete) {
 				Sunniesnow.Logs.warn('Still loading');
@@ -17,7 +17,7 @@ Sunniesnow.Game = class Game {
 		// but some settings can be used immediately, among which are the settings that are needed to initialize Pixi app.
 		Sunniesnow.game.settings = Object.assign(Sunniesnow.Settings.mainSettings.value(), overrideSettings);
 		Sunniesnow.game.overrideSettings = overrideSettings;
-		await Sunniesnow.Loader.load();
+		await Sunniesnow.Loader.load(loadingProgressCallback);
 	}
 
 	static async offsetWizard() {

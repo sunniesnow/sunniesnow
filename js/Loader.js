@@ -156,12 +156,13 @@ Sunniesnow.Loader = {
 		this.targetLoadingModulesProgress++;
 	},
 
-	async load() {
+	async load(progressCallback) {
 		let element;
 		if (Sunniesnow.Utils.isBrowser()) {
 			element = document.getElementById('loading-progress');
 			element.style.display = '';
 		}
+		this.progressCallback = progressCallback ?? (() => {});
 		this.loadingComplete = false;
 		await this.loadModules();
 		this.loadingComplete = true;
@@ -179,11 +180,7 @@ Sunniesnow.Loader = {
 		if (Sunniesnow.Utils.isBrowser()) {
 			const element = document.getElementById('loading-progress');
 			element.textContent = this.loadingText;
-		} else {
-			if (this.lastLoadingText !== this.loadingText) {
-				Sunniesnow.record.print(this.loadingText + '\n');
-				this.lastLoadingText = this.loadingText;
-			}
 		}
+		this.progressCallback();
 	},
 };
