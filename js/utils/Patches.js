@@ -86,19 +86,31 @@ Sunniesnow.Patches = {
 	},
 
 	patchToSorted() {
-		Array.prototype.toSorted ??= function (compareFunction) {
-			const result = this.slice();
-			result.sort(compareFunction);
-			return result;
-		};
+		if (Array.prototype.toSorted) {
+			return;
+		}
+		// use defineProperty instead of assignment to make it non-enumerable,
+		// otherwise it shows up in for...in loops.
+		Object.defineProperty(Array.prototype, 'toSorted', {
+			value: function (compareFunction) {
+				const result = this.slice();
+				result.sort(compareFunction);
+				return result;
+			}
+		});
 	},
 
 	patchToSpliced() {
-		Array.prototype.toSpliced ??= function () {
-			const result = this.slice();
-			result.splice(...arguments);
-			return result;
-		};
+		if (Array.prototype.toSpliced) {
+			return;
+		}
+		Object.defineProperty(Array.prototype, 'toSpliced', {
+			value: function () {
+				const result = this.slice();
+				result.splice(...arguments);
+				return result;
+			}
+		});
 	},
 
 	patchFontFaceSetIterator() {
