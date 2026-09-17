@@ -348,6 +348,8 @@
 		"avatar-upload": "上传: ",
 		"avatar-gravatar-radio": "",
 		"avatar-gravatar": "Gravatar: ",
+		"avatar-weavatar-radio": "",
+		"avatar-weavatar": "WeAvatar: ",
 
 		"sscharter": " 启用 sscharter 集成",
 		"sscharter-live-restart": " 关卡更新时即刻重新开始",

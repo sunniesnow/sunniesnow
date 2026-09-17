@@ -1804,7 +1804,7 @@ The nickname will be displayed in the results scene.
 #### Avatar
 
 - **Setting id**: `avatar`.
-- **Possible values**: One of `none`, `online`, `upload`, `gravatar`.
+- **Possible values**: One of `"none"`, `"online"`, `"upload"`, `"gravatar"`, `"weavatar"`.
 
 This setting is used to set the avatar of the player.
 The avatar will be displayed in the results scene.
@@ -1839,6 +1839,16 @@ This setting is only **useful** when [`avatar`](#avatar) is set to `upload`.
 
 You can fill in the email address of your [Gravatar](https://gravatar.com/)
 account to use its avatar here.
+
+##### WeAvatar
+{:#avatar-weavatar}
+
+- **Setting id**: `avatar-weavatar`.
+- **Possible values**: Any string.
+
+You can fill in the email address or phone number of your [WeAvatar](https://weavatar.com/)
+account to use its avatar here.
+Note that a QQ mail address that has not registered on WeAvatar gives the QQ avatar.
 
 ### Integration settings
 

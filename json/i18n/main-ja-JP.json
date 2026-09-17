@@ -348,6 +348,8 @@
 		"avatar-upload": "アップロード: ",
 		"avatar-gravatar-radio": "",
 		"avatar-gravatar": "Gravatar: ",
+		"avatar-weavatar-radio": "",
+		"avatar-weavatar": "WeAvatar: ",
 
 		"sscharter": " sscharter 連結を有効にする",
 		"sscharter-live-restart": " レベルアップデート時にリスタートする",

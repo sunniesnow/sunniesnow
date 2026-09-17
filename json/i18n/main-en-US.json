@@ -348,6 +348,8 @@
 		"avatar-upload": "Upload: ",
 		"avatar-gravatar-radio": "",
 		"avatar-gravatar": "Gravatar: ",
+		"avatar-weavatar-radio": "",
+		"avatar-weavatar": "WeAvatar: ",
 
 		"sscharter": " Enable sscharter integration",
 		"sscharter-live-restart": " Live restart",
