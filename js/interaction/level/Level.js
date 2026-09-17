@@ -261,6 +261,18 @@ Sunniesnow.Level = class Level extends EventTarget {
 		if (Sunniesnow.Music.pausing || this.finished) {
 			return false;
 		}
+		if (Sunniesnow.game.settings.touchScreeningDistance > 0 && touch.type === 'touch') {
+			const {x, y} = touch.start();
+			for (const otherTouch of Sunniesnow.TouchManager.touches.values()) {
+				if (otherTouch === touch || otherTouch.type !== 'touch') {
+					continue;
+				}
+				const {x: otherX, y: otherY} = otherTouch.end();
+				if (Sunniesnow.Utils.distance(x, y, otherX, otherY) < Sunniesnow.game.settings.touchScreeningDistance) {
+					return false;
+				}
+			}
+		}
 		this.tappingFillCandidateForHolds(touch);
 		if (this.screensTapping(touch)) {
 			return true;

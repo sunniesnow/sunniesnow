@@ -288,7 +288,7 @@ This setting is intended to fix the latency in the video.
 This does **not** affect the audio-video sync.
 To fix the audio-video sync, use [`delay`](#delay).
 
-#### Flick windows
+#### Flick mechanics
 
 ##### Minimum distance
 {:#min-flick-distance}
@@ -359,7 +359,7 @@ When this setting is `false`, the judgement priority of flick notes that are sim
 will be purely determined by the order of their appearances in the chart file.
 This is the behavior of Lyrica, which is manifest in the special chart of Frog Rappa.
 
-#### Hold windows
+#### Hold mechanics
 
 ##### Area for keeping
 {:#hold-keep-size}
@@ -414,7 +414,22 @@ the set number of seconds.
 During the leniency time, the hold note can switch to another finger
 and cancel the scheduled release.
 
-#### Mechanics
+#### Drag mechanics
+
+##### Drag notes cannot be hit early
+{:#no-early-drag}
+
+- **Setting id**: `no-early-drag`.
+- **Possible values**: `true`, `false`.
+
+This setting is used to set whether drag notes can be hit early.
+When this setting is set to `false`,
+tapping on a drag note within its judgement window will hit the note immediately.
+When this setting is set to `true`,
+the judgement will be delayed until the exact time of the drag note
+(and reduces difficulty if [`lyrica-5`](#lyrica-5) is `false`).
+
+#### Miscellaneous
 
 ##### Lyrica 5 mechanics
 {:#lyrica-5}
@@ -436,18 +451,15 @@ When this setting is set to `true`, the following mechanics are changed:
 - Bad judgement does not break the combo.
 - The look of the AP/FC indicator is changed.
 
-##### Drag notes cannot be hit early
-{:#no-early-drag}
+#### Touch screening distance
 
-- **Setting id**: `no-early-drag`.
-- **Possible values**: `true`, `false`.
+- **Setting id**: `touch-screening-distance`.
+- **Possible values**: Any non-negative number.
 
-This setting is used to set whether drag notes can be hit early.
-When this setting is set to `false`,
-tapping on a drag note within its judgement window will hit the note immediately.
-When this setting is set to `true`,
-the judgement will be delayed until the exact time of the drag note
-(and reduces difficulty if [`lyrica-5`](#lyrica-5) is `false`).
+When a touch start is within the distance specified by this setting from an existing touch,
+the new touch cannot trigger a hit judgement (but can still swipe drag notes and drag-flick notes).
+The distance is specified in the length unit of the chart coordinating system.
+This setting is to simulate a judgement bug on Lyrica.
 
 ### Visual settings
 

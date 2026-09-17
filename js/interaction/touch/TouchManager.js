@@ -1,17 +1,15 @@
 Sunniesnow.TouchManager = {
 
 	// format: {id: Touch, ...}
-	touches: {},
+	touches: new Map(),
 
 	startListeners: [],
 	moveListeners: [],
 	endListeners: [],
 
 	clear() {
-		for (const id in this.touches) {
-			this.onEnd(this.touches[id]);
-		}
-		this.touches = {};
+		this.touches.forEach(touch => this.onEnd(touch));
+		this.touches.clear();
 		this.touchEffectsBoard?.clear();
 		this.warnedAboutWrongEventTime = false;
 	},
@@ -23,14 +21,13 @@ Sunniesnow.TouchManager = {
 	},
 
 	update(delta) {
-		for (const id in this.touches) {
-			const touch = this.touches[id];
+		this.touches.forEach(touch => {
 			if (touch.needsUpdating) {
 				touch.trivialMove();
 				this.onMove(touch);
 			}
 			touch.needsUpdating = true;
-		}
+		});
 	},
 
 	keyId(key) {
@@ -49,11 +46,11 @@ Sunniesnow.TouchManager = {
 		document.activeElement.blur();
 		Sunniesnow.game.window.focus(); // In VSCode Simple Browser, this acquires focus lock
 		// sometimes browser misses touchend events
-		const existingTouch = this.touches[touch.id];
+		const existingTouch = this.touches.get(touch.id);
 		if (existingTouch) {
 			this.onEnd(existingTouch);
 		}
-		this.touches[touch.id] = touch;
+		this.touches.set(touch.id, touch);
 		return this.callListeners(this.startListeners, touch);
 	},
 
@@ -112,12 +109,12 @@ Sunniesnow.TouchManager = {
 			return;
 		}
 		const id = this.keyId(event.key);
-		const touch = this.touches[id];
+		const touch = this.touches.get(id);
 		if (!touch) {
 			return;
 		}
 		const time = this.normalizeTimeStamp(event);
-		delete this.touches[id];
+		this.touches.delete(id);
 		touch.move(time, this.mouseX, this.mouseY);
 		this.onEnd(touch);
 	},
@@ -149,16 +146,12 @@ Sunniesnow.TouchManager = {
 	mouseMove(event) {
 		this.setMouse(event);
 		const time = this.normalizeTimeStamp(event);
-		for (const id in this.touches) {
-			const touch = this.touches[id];
-			if (!touch) {
-				continue;
-			}
+		this.touches.forEach(touch => {
 			if (touch.type === 'mouse' || touch.type === 'key') {
 				touch.move(time, this.mousePageX, this.mousePageY);
 				this.onMove(touch);
 			}
-		}
+		});
 	},
 
 	mouseUp(event) {
@@ -166,12 +159,12 @@ Sunniesnow.TouchManager = {
 			return;
 		}
 		const id = this.mouseButtonId(event.button);
-		const touch = this.touches[id];
+		const touch = this.touches.get(id);
 		if (!touch) {
 			return;
 		}
 		const time = this.normalizeTimeStamp(event);
-		delete this.touches[id];
+		this.touches.delete(id);
 		touch.move(time, this.mousePageX, this.mousePageY);
 		this.onEnd(touch);
 	},
@@ -208,7 +201,7 @@ Sunniesnow.TouchManager = {
 		let result = false;
 		for (const domTouch of event.changedTouches) {
 			const id = this.touchId(domTouch.identifier);
-			const touch = this.touches[id]
+			const touch = this.touches.get(id);
 			if (!touch) {
 				continue;
 			}
@@ -226,11 +219,11 @@ Sunniesnow.TouchManager = {
 		let result = false;
 		for (const domTouch of event.changedTouches) {
 			const id = this.touchId(domTouch.identifier);
-			const touch = this.touches[id];
+			const touch = this.touches.get(id);
 			if (!touch) {
 				continue;
 			}
-			delete this.touches[id];
+			this.touches.delete(id);
 			touch.move(time, domTouch.pageX, domTouch.pageY);
 			result = this.onEnd(touch) || result;
 		}
