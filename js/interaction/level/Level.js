@@ -67,7 +67,15 @@ Sunniesnow.Level = class Level extends EventTarget {
 
 	addTouchListeners() {
 		Sunniesnow.TouchManager.addStartListener(
-			this.touchStartListener = this.touchStart.bind(this),
+			this.touchStartListener = touch => {
+				// Must call touchMove immediately after touchStart for swiping drags.
+				// Consider the following sequence of notes with lyrica-5 judgement: tap1, drag1, tap2.
+				// If there are two touchstart events very close in time, then tap2 will not be judged
+				// if touchMove is not immediately called for each touchstart event.
+				const result = this.touchStart(touch);
+				this.touchMove(touch);
+				return result;
+			},
 			Sunniesnow.game.settings.notesPriorityOverPause ? 200 : 0
 		);
 		Sunniesnow.TouchManager.addMoveListener(this.touchMoveListener = this.touchMove.bind(this));
@@ -261,43 +269,79 @@ Sunniesnow.Level = class Level extends EventTarget {
 		if (Sunniesnow.Music.pausing || this.finished) {
 			return false;
 		}
-		if (Sunniesnow.game.settings.touchScreeningDistance > 0 && touch.type === 'touch') {
-			const {x, y} = touch.start();
-			for (const otherTouch of Sunniesnow.TouchManager.touches.values()) {
-				if (otherTouch === touch || otherTouch.type !== 'touch') {
-					continue;
-				}
-				const {x: otherX, y: otherY} = otherTouch.end();
-				if (Sunniesnow.Utils.distance(x, y, otherX, otherY) < Sunniesnow.game.settings.touchScreeningDistance) {
-					return false;
-				}
-			}
-		}
-		this.tappingFillCandidateForHolds(touch);
-		if (this.screensTapping(touch)) {
+		if (this.touchScreensTapping(touch)) {
 			return true;
 		}
+		this.tappingFillCandidateForHolds(touch);
+		if (this.holdScreensTapping(touch)) {
+			return true;
+		}
+		const notes = this.getHitNotes(touch);
 		const time = touch.start().time;
-		for (let i = 0; i < this.unhitNotes.length;) {
-			let note = this.unhitNotes[i];
-			if (time < note.time + this.earliestEarlyBad) {
-				return false;
-			}
-			if (Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows[note.type].bad)) {
-				note = this.tryHitNote(note, touch, time);
-				if (note?.onlyOnePerTouch()) {
-					return true;
-				} else if (note) {
-					// Do nothing!
-					// No i++ because the note is already removed from this.unhitNotes.
-				} else {
-					i++;
-				}
-			} else {
-				i++;
+		for (const note of notes) {
+			note.hit(touch, time);
+			if (note.onlyOnePerTouch()) {
+				return true;
 			}
 		}
 		return false;
+	}
+
+	// array of all hittable notes sorted by judgement priority
+	getHitNotes(touch) {
+		const {x, y, time} = touch.start();
+		// Only notes in hittableNotes can be hit.
+		// Build this array first, and then sort by judgement priority.
+		const hittableNotes = [];
+		for (const note of this.unhitNotes) {
+			if (time < note.time + this.earliestEarlyBad) {
+				break;
+			}
+			if (note.isHittableBy(touch)) {
+				hittableNotes.push(note);
+			}
+		}
+		const reducedTimes = new Map();
+		let lastReducedTime = -Infinity;
+		for (const note of hittableNotes) {
+			if (note.time - lastReducedTime > Sunniesnow.game.settings.samePriorityTimeWindow) {
+				lastReducedTime = note.time;
+			}
+			reducedTimes.set(note, lastReducedTime);
+		}
+		const reducedAngleDifferences = new Map();
+		if (Sunniesnow.game.settings.overlappingFlickFix) {
+			// This algorithm makes sure that if two flick-like notes originally have adjacent priorities,
+			// then the one with the smaller angle difference to the touch point has higher priority.
+			let lastIndex = 0;
+			for (const note of hittableNotes) {
+				if (note.isFlickLike()) {
+					const [distance, angle] = this.distanceAndAngle(x, y, note.event);
+					reducedAngleDifferences.set(note, [lastIndex, Sunniesnow.Utils.angleDistance(note.event.angles[0], angle)]);
+				} else {
+					lastIndex++;
+					reducedAngleDifferences.set(note, [lastIndex, -Infinity]);
+				}
+			}
+		}
+		Sunniesnow.Utils.sortBy(hittableNotes, note => {
+			const [distance, angle] = this.distanceAndAngle(x, y, note.event);
+			const keys = [
+				// Use reduced time to take care of same-priority-time-window.
+				reducedTimes.get(note),
+				// drag and drag-flick notes have lower priority in lyrica-5.
+				-note.judgementPriority(),
+				// Closer notes have higher priority.
+				// Caveat: this is sensitive to floating-point errors.
+				distance,
+			];
+			// Take care of overlapping-flick-fix.
+			if (note.isFlickLike() && Sunniesnow.game.settings.overlappingFlickFix) {
+				keys.push(...reducedAngleDifferences.get(note));
+			}
+			return keys;
+		});
+		return hittableNotes;
 	}
 
 	tappingFillCandidateForHolds(touch) {
@@ -306,7 +350,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 			if (note.type !== 'hold') {
 				continue;
 			}
-			if (note.time > this.unhitNotes[0].time) {
+			if (note.time - this.unhitNotes[0].time > Sunniesnow.game.settings.samePriorityTimeWindow) {
 				break;
 			}
 			if (note.isTappableAt(touch, x, y) && Sunniesnow.Utils.between(time - note.time, ...this.judgementWindows.hold.bad)) {
@@ -333,7 +377,24 @@ Sunniesnow.Level = class Level extends EventTarget {
 		}
 	}
 
-	screensTapping(touch) {
+	touchScreensTapping(touch) {
+		if (Sunniesnow.game.settings.touchScreeningDistance <= 0 || touch.type !== 'touch') {
+			return false;
+		}
+		const {x, y} = touch.start();
+		for (const otherTouch of Sunniesnow.TouchManager.touches.values()) {
+			if (otherTouch === touch || otherTouch.type !== 'touch') {
+				continue;
+			}
+			const {x: otherX, y: otherY} = otherTouch.end();
+			if (Sunniesnow.Utils.distance(x, y, otherX, otherY) < Sunniesnow.game.settings.touchScreeningDistance) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	holdScreensTapping(touch) {
 		if (touch.wholeScreen) {
 			return false;
 		}
@@ -349,43 +410,6 @@ Sunniesnow.Level = class Level extends EventTarget {
 		} else {
 			return Sunniesnow.Utils.cartesianToPolar(x - event.x, y - event.y);
 		}
-	}
-
-	// What if a touch can potentially hit different simultaneous notes at this position?
-	// Pick the one that is the nearest!
-	// However, we should avoid hitting drags as possible.
-	// The function hits the most appropriate note and returns the actually hit note.
-	tryHitNote(note, touch, time) {
-		const {x, y} = touch.start();
-		const simultaneousNotes = note.event.simultaneousEvents.map(e => e.levelNote);
-		let [distance, angle] = this.distanceAndAngle(x, y, note.event);
-		let tappable = note.isTappableAt(touch, x, y);
-		for (const newNote of simultaneousNotes) {
-			let condition = newNote === note || !newNote || newNote.hitRelativeTime !== null;
-			condition ||= newNote.judgementPriority() < note.judgementPriority();
-			condition ||= !newNote.isTappableAt(touch, x, y);
-			if (condition) {
-				continue;
-			}
-			const [newDistance, newAngle] = this.distanceAndAngle(x, y, newNote.event);
-			condition = !tappable;
-			condition ||= (!note.onlyOnePerTouch() || newDistance < distance) && newNote.onlyOnePerTouch();
-			condition ||= !note.onlyOnePerTouch() && !newNote.onlyOnePerTouch() && newDistance < distance;
-			if (note.isFlickLike() && newNote.isFlickLike() && newDistance === distance && Sunniesnow.game.settings.overlappingFlickFix) {
-				condition ||= Sunniesnow.Utils.angleDistance(newNote.event.angles[0], newAngle) < Sunniesnow.Utils.angleDistance(note.event.angles[0], angle);
-			}
-			if (condition) {
-				note = newNote;
-				distance = newDistance;
-				angle = newAngle;
-				tappable = true;
-			}
-		}
-		if (!tappable) {
-			return null;
-		}
-		note.hit(touch, time);
-		return note;
 	}
 
 	onNewJudgement(note) {

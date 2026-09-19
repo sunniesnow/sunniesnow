@@ -238,6 +238,7 @@ Sunniesnow.ResultAdditionalInfo = class ResultAdditionalInfo extends Sunniesnow.
 			'no-early-drag',
 			'lyrica-5',
 			'touch-screening-distance',
+			'same-priority-time-window',
 			'scroll',
 			'autoplay',
 			'chart-offset',

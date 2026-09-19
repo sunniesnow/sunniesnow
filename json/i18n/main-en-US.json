@@ -211,6 +211,7 @@
 		"no-early-drag": " Drag notes cannot be hit early",
 		"lyrica-5": " Lyrica 5 mechanics",
 		"touch-screening-distance": "Touch screening distance: ",
+		"same-priority-time-window": ["Same priority time window: ", "ms"],
 
 		"speed": "Shrinking speed of circles: ",
 		"tip-point-speed": "Speed of incoming tip points: ",

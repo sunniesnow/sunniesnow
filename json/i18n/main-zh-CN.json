@@ -211,6 +211,7 @@
 		"no-early-drag": " drag 音符不能提前击中",
 		"lyrica-5": " 阳春白雪 5 机制",
 		"touch-screening-distance": "触摸屏蔽距离: ",
+		"same-priority-time-window": ["同优先级时间窗: ", "ms"],
 
 		"speed": "缩圈速度: ",
 		"tip-point-speed": "游标飞入速度: ",

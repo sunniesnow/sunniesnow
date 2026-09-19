@@ -931,4 +931,20 @@ Sunniesnow.Utils = {
 	mod(a, b) {
 		return (a % b + b) % b;
 	},
+
+	// Sorts an array of objects by lexicographical order of the keys arrays returned by keysFun.
+	sortBy(array, keysFun) {
+		return array.sort((a, b) => {
+			const keysA = keysFun(a);
+			const keysB = keysFun(b);
+			for (let i = 0; i < Math.min(keysA.length, keysB.length); i++) {
+				if (keysA[i] < keysB[i]) {
+					return -1;
+				} else if (keysA[i] > keysB[i]) {
+					return 1;
+				}
+			}
+			return keysA.length - keysB.length;
+		});
+	},
 };

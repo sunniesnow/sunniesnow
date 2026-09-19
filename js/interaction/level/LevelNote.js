@@ -88,6 +88,11 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		return distance < this.hitSize(baseSize);
 	}
 
+	isHittableBy(touch) {
+		const {x, y, time} = touch.start();
+		return this.isTappableAt(touch, x, y) && Sunniesnow.Utils.between(time - this.time, ...this.judgementWindows().bad);
+	}
+
 	// Hit without processing (see processHit()) or event dispatching
 	dryHit(time) {
 		this.hitRelativeTime = time - this.time;

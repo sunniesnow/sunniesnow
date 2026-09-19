@@ -461,6 +461,18 @@ the new touch cannot trigger a hit judgement (but can still swipe drag notes and
 The distance is specified in the length unit of the chart coordinating system.
 This setting is to simulate a judgement bug on Lyrica.
 
+#### Same priority time window
+
+- **Setting id**: `same-priority-time-window`.
+- **Possible values**: Any non-negative number.
+
+When the time difference between two notes is smaller than the value of this setting,
+they will be considered to have the same priority in judgement.
+Otherwise, the earlier note has a higher priority than the later note.
+
+The setting specifies the value in milliseconds in the UI,
+but the internal value is in seconds.
+
 ### Visual settings
 
 #### Speed

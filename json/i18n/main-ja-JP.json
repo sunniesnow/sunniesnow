@@ -211,6 +211,7 @@
 		"no-early-drag": " Drag ノートを早く押せない",
 		"lyrica-5": " 陽春白雪 5 メカニクス",
 		"touch-screening-distance": null,
+		"same-priority-time-window": null,
 
 		"speed": null,
 		"tip-point-speed": null,
