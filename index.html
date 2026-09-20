@@ -57,22 +57,22 @@ description: Sunniesnow is a web rhythm game
 
 		<div>
 			<input type="radio" id="judgement-windows-custom-radio" name="judgement-windows" value="custom">
-			<div id="judgement-windows-custom-wrapper" data-prerequisite="judgement-windows-custom-radio">
-				<table id="judgement-windows-custom-table">
+			<div class="table-wrapper" data-prerequisite="judgement-windows-custom-radio">
+				<table>
 					<thead>
 						<tr>
-							<th></th>
-							<th id="judgement-windows-custom-early-bad"></th>
-							<th id="judgement-windows-custom-early-good"></th>
-							<th id="judgement-windows-custom-early-perfect"></th>
-							<th id="judgement-windows-custom-late-perfect"></th>
-							<th id="judgement-windows-custom-late-good"></th>
-							<th id="judgement-windows-custom-late-bad"></th>
+							<td></td>
+							<th id="judgement-windows-custom-early-bad" scope="col"></th>
+							<th id="judgement-windows-custom-early-good" scope="col"></th>
+							<th id="judgement-windows-custom-early-perfect" scope="col"></th>
+							<th id="judgement-windows-custom-late-perfect" scope="col"></th>
+							<th id="judgement-windows-custom-late-good" scope="col"></th>
+							<th id="judgement-windows-custom-late-bad" scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<th id="judgement-windows-custom-tap"></th>
+							<th id="judgement-windows-custom-tap" scope="row"></th>
 							<td><input type="number" id="judgement-windows-custom-tap-early-bad" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-tap-early-good" value="-300" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-tap-early-perfect" value="-120" step="10"></td>
@@ -81,7 +81,7 @@ description: Sunniesnow is a web rhythm game
 							<td><input type="number" id="judgement-windows-custom-tap-late-bad" value="400" step="10"></td>
 						</tr>
 						<tr>
-							<th id="judgement-windows-custom-drag"></th>
+							<th id="judgement-windows-custom-drag" scope="row"></th>
 							<td><input type="number" id="judgement-windows-custom-drag-early-bad" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-drag-early-good" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-drag-early-perfect" value="-400" step="10"></td>
@@ -90,7 +90,7 @@ description: Sunniesnow is a web rhythm game
 							<td><input type="number" id="judgement-windows-custom-drag-late-bad" value="400" step="10"></td>
 						</tr>
 						<tr>
-							<th id="judgement-windows-custom-flick"></th>
+							<th id="judgement-windows-custom-flick" scope="row"></th>
 							<td><input type="number" id="judgement-windows-custom-flick-early-bad" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-flick-early-good" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-flick-early-perfect" value="-300" step="10"></td>
@@ -99,7 +99,7 @@ description: Sunniesnow is a web rhythm game
 							<td><input type="number" id="judgement-windows-custom-flick-late-bad" value="400" step="10"></td>
 						</tr>
 						<tr>
-							<th id="judgement-windows-custom-hold"></th>
+							<th id="judgement-windows-custom-hold" scope="row"></th>
 							<td><input type="number" id="judgement-windows-custom-hold-early-bad" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-hold-early-good" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-hold-early-perfect" value="-400" step="10"></td>
@@ -108,13 +108,13 @@ description: Sunniesnow is a web rhythm game
 							<td><input type="number" id="judgement-windows-custom-hold-late-bad" value="400" step="10"></td>
 						</tr>
 						<tr>
-							<th id="judgement-windows-custom-hold-end"></th>
+							<th id="judgement-windows-custom-hold-end" scope="row"></th>
 							<td></td>
 							<td><input type="number" id="judgement-windows-custom-hold-end-early-good" value="0.4" step="0.1" max="1"></td>
 							<td><input type="number" id="judgement-windows-custom-hold-end-early-perfect" value="0.7" step="0.1" max="1"></td>
 						</tr>
 						<tr>
-							<th id="judgement-windows-custom-drag-flick"></th>
+							<th id="judgement-windows-custom-drag-flick" scope="row"></th>
 							<td><input type="number" id="judgement-windows-custom-drag-flick-early-bad" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-drag-flick-early-good" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-drag-flick-early-perfect" value="-300" step="10"></td>
@@ -123,7 +123,7 @@ description: Sunniesnow is a web rhythm game
 							<td><input type="number" id="judgement-windows-custom-drag-flick-late-bad" value="400" step="10"></td>
 						</tr>
 						<tr>
-							<th id="judgement-windows-custom-head-only-hold"></th>
+							<th id="judgement-windows-custom-head-only-hold" scope="row"></th>
 							<td><input type="number" id="judgement-windows-custom-head-only-hold-early-bad" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-head-only-hold-early-good" value="-400" step="10"></td>
 							<td><input type="number" id="judgement-windows-custom-head-only-hold-early-perfect" value="-400" step="10"></td>
@@ -140,28 +140,48 @@ description: Sunniesnow is a web rhythm game
 	<fieldset>
 		<legend id="note-hit-size-category"></legend>
 
-		<div>
-			<input type="number" id="note-hit-size-tap" value="3.2" min="0" step="0.1">
-		</div>
-
-		<div>
-			<input type="number" id="note-hit-size-drag" value="3.2" min="0" step="0.1">
-		</div>
-
-		<div>
-			<input type="number" id="note-hit-size-flick" value="3.2" min="0" step="0.1">
-		</div>
-
-		<div>
-			<input type="number" id="note-hit-size-hold" value="3.2" min="0" step="0.1">
-		</div>
-
-		<div>
-			<input type="number" id="note-hit-size-drag-flick" value="3.2" min="0" step="0.1">
-		</div>
-
-		<div>
-			<input type="number" id="note-hit-size-head-only-hold" value="3.2" min="0" step="0.1">
+		<div class="table-wrapper">
+			<table>
+				<thead>
+					<tr>
+						<td></td>
+						<th id="note-hit-size-prior" scope="col"></th>
+						<th id="note-hit-size-normal" scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th id="note-hit-size-tap-th" scope="row"></th>
+						<td><input type="number" id="note-hit-size-tap-prior" value="0" min="0" step="0.1"></td>
+						<td><input type="number" id="note-hit-size-tap" value="3.2" min="0" step="0.1"></td>
+					</tr>
+					<tr>
+						<th id="note-hit-size-drag-th" scope="row"></th>
+						<td><input type="number" id="note-hit-size-drag-prior" value="0" min="0" step="0.1"></td>
+						<td><input type="number" id="note-hit-size-drag" value="3.2" min="0" step="0.1"></td>
+					</tr>
+					<tr>
+						<th id="note-hit-size-flick-th" scope="row"></th>
+						<td><input type="number" id="note-hit-size-flick-prior" value="0" min="0" step="0.1"></td>
+						<td><input type="number" id="note-hit-size-flick" value="3.2" min="0" step="0.1"></td>
+					</tr>
+					<tr>
+						<th id="note-hit-size-hold-th" scope="row"></th>
+						<td><input type="number" id="note-hit-size-hold-prior" value="0" min="0" step="0.1"></td>
+						<td><input type="number" id="note-hit-size-hold" value="3.2" min="0" step="0.1"></td>
+					</tr>
+					<tr>
+						<th id="note-hit-size-drag-flick-th" scope="row"></th>
+						<td><input type="number" id="note-hit-size-drag-flick-prior" value="0" min="0" step="0.1"></td>
+						<td><input type="number" id="note-hit-size-drag-flick" value="3.2" min="0" step="0.1"></td>
+					</tr>
+					<tr>
+						<th id="note-hit-size-head-only-hold-th" scope="row"></th>
+						<td><input type="number" id="note-hit-size-head-only-hold-prior" value="0" min="0" step="0.1"></td>
+						<td><input type="number" id="note-hit-size-head-only-hold" value="3.2" min="0" step="0.1"></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</fieldset>
 

@@ -45,8 +45,8 @@
 	transform: translate(-50%, -50%);
 }
 
-#judgement-windows-custom-wrapper {
-	/* set padding-bottom in js */
+.table-wrapper {
+	/* set padding-bottom in js; see MiscDom.adjustTables */
 	position: relative;
 	overflow-x: auto;
 	table {

@@ -64,7 +64,11 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 
 	// The hit size set by user settings.
 	settingsHitSize() {
-		return 1;
+		return Sunniesnow.Config.NOTE_HIT_SIZES[this.type].normal;
+	}
+
+	settingsPriorHitSize() {
+		return Sunniesnow.Config.NOTE_HIT_SIZES[this.type].prior;
 	}
 
 	hitSize(base) {
@@ -88,9 +92,9 @@ Sunniesnow.LevelNote = class LevelNote extends EventTarget {
 		return distance < this.hitSize(baseSize);
 	}
 
-	isHittableBy(touch) {
+	isHittableBy(touch, baseSize) {
 		const {x, y, time} = touch.start();
-		return this.isTappableAt(touch, x, y) && Sunniesnow.Utils.between(time - this.time, ...this.judgementWindows().bad);
+		return this.isTappableAt(touch, x, y, baseSize) && Sunniesnow.Utils.between(time - this.time, ...this.judgementWindows().bad);
 	}
 
 	// Hit without processing (see processHit()) or event dispatching

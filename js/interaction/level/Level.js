@@ -327,6 +327,7 @@ Sunniesnow.Level = class Level extends EventTarget {
 		Sunniesnow.Utils.sortBy(hittableNotes, note => {
 			const [distance, angle] = this.distanceAndAngle(x, y, note.event);
 			const keys = [
+				!note.isHittableBy(touch, note.settingsPriorHitSize()),
 				// Use reduced time to take care of same-priority-time-window.
 				reducedTimes.get(note),
 				// drag and drag-flick notes have lower priority in lyrica-5.

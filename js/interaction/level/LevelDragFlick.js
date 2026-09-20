@@ -25,10 +25,6 @@ Sunniesnow.LevelDragFlick = class LevelDragFlick extends Sunniesnow.LevelNote {
 		return true;
 	}
 
-	settingsHitSize() {
-		return Sunniesnow.game.settings.noteHitSizeDragFlick;
-	}
-
 	toObject() {
 		const result = super.toObject();
 		result.angles = this.event.angles.map(a => Sunniesnow.Utils.mod(a, 2*Math.PI)).sort();

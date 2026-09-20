@@ -3,6 +3,7 @@ Sunniesnow.Config = {
 	async load() {
 		this.loadLengthDimensions();
 		this.loadJudgementWindows();
+		this.loadNoteHitSizes();
 		this.loadAccuracies();
 	},
 
@@ -55,6 +56,19 @@ Sunniesnow.Config = {
 			good = perfect;
 		}
 		this.JUDGEMENT_WINDOWS['holdEnd'] = {perfect, good, bad: -Infinity};
+	},
+
+	loadNoteHitSizes() {
+		this.NOTE_HIT_SIZES = {};
+		for (const noteType of ['tap', 'drag', 'flick', 'hold', 'dragFlick', 'headOnlyHold']) {
+			const prior = Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(`note-hit-size-${noteType}-prior`)];
+			let normal = Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(`note-hit-size-${noteType}`)];
+			if (prior > normal) {
+				Sunniesnow.Logs.warn(`Illegal note hit size: ${noteType} prior hit size is larger than normal hit size`);
+				normal = prior;
+			}
+			this.NOTE_HIT_SIZES[noteType] = {prior, normal};
+		}
 	},
 
 	loadAccuracies() {

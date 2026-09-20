@@ -2,7 +2,7 @@ Sunniesnow.MiscDom = {
 
 	async main() {
 		Sunniesnow.Patches.apply();
-		Sunniesnow.MiscDom.adjustCustomJudgementWindowsTable();
+		Sunniesnow.MiscDom.adjustTables();
 		Sunniesnow.Settings.init();
 		await Sunniesnow.I18n.init();
 		Sunniesnow.I18n.apply();
@@ -12,19 +12,18 @@ Sunniesnow.MiscDom = {
 		await Sunniesnow.CacheManager.registerServiceWorker();
 	},
 
-	adjustCustomJudgementWindowsTable() {
-		const wrapper = document.getElementById('judgement-windows-custom-wrapper');
-		const table = document.getElementById('judgement-windows-custom-table');
-		const observer = new ResizeObserver(entries => {
-			for (const entry of entries) {
-				const height = entry.contentBoxSize?.[0]?.blockSize;
-				if (!height) {
-					continue;
+	adjustTables() {
+		for (const wrapper of document.getElementsByClassName('table-wrapper')) {
+			new ResizeObserver(entries => {
+				for (const entry of entries) {
+					const height = entry.contentBoxSize?.[0]?.blockSize;
+					if (!height) {
+						continue;
+					}
+					wrapper.style.paddingBottom = `${height}px`;
 				}
-				wrapper.style.paddingBottom = `${height}px`;
-			}
-		});
-		observer.observe(table);
+			}).observe(wrapper.getElementsByTagName('table')[0]);
+		}
 	},
 
 	removeSiteLoadingNotice() {

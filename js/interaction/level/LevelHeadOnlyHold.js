@@ -1,8 +1,4 @@
 Sunniesnow.LevelHeadOnlyHold = class LevelHeadOnlyHold extends Sunniesnow.LevelNote {
-	settingsHitSize() {
-		return Sunniesnow.game.settings.noteHitSizeHeadOnlyHold;
-	}
-
 	dryHit(time) {
 		super.dryHit(time);
 		this.highestJudgement = this.getJudgementByRelativeTime(this.hitRelativeTime);

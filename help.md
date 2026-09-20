@@ -150,44 +150,23 @@ the perfect interval is the same as the bad interval.
 When this setting is `"custom"`, the following settings will be available to enter,
 and they will be used to determine the judgement time windows:
 
-- `judgement-windows-custom-tap-early-bad`,
-- `judgement-windows-custom-tap-early-good`,
-- `judgement-windows-custom-tap-early-perfect`,
-- `judgement-windows-custom-tap-late-perfect`,
-- `judgement-windows-custom-tap-late-good`,
-- `judgement-windows-custom-tap-late-bad`,
-- `judgement-windows-custom-drag-early-bad`,
-- `judgement-windows-custom-drag-early-good`,
-- `judgement-windows-custom-drag-early-perfect`,
-- `judgement-windows-custom-drag-late-perfect`,
-- `judgement-windows-custom-drag-late-good`,
-- `judgement-windows-custom-drag-late-bad`,
-- `judgement-windows-custom-flick-early-bad`,
-- `judgement-windows-custom-flick-early-good`,
-- `judgement-windows-custom-flick-early-perfect`,
-- `judgement-windows-custom-flick-late-perfect`,
-- `judgement-windows-custom-flick-late-good`,
-- `judgement-windows-custom-flick-late-bad`,
-- `judgement-windows-custom-hold-early-bad`,
-- `judgement-windows-custom-hold-early-good`,
-- `judgement-windows-custom-hold-early-perfect`,
-- `judgement-windows-custom-hold-late-perfect`,
-- `judgement-windows-custom-hold-late-good`,
-- `judgement-windows-custom-hold-late-bad`,
-- `judgement-windows-custom-hold-end-early-good`,
-- `judgement-windows-custom-hold-end-early-perfect`,
-- `judgement-windows-custom-drag-flick-early-bad`,
-- `judgement-windows-custom-drag-flick-early-good`,
-- `judgement-windows-custom-drag-flick-early-perfect`,
-- `judgement-windows-custom-drag-flick-late-perfect`,
-- `judgement-windows-custom-drag-flick-late-good`,
-- `judgement-windows-custom-drag-flick-late-bad`,
-- `judgement-windows-custom-head-only-hold-early-bad`,
-- `judgement-windows-custom-head-only-hold-early-good`,
-- `judgement-windows-custom-head-only-hold-early-perfect`,
-- `judgement-windows-custom-head-only-hold-late-perfect`,
-- `judgement-windows-custom-head-only-hold-late-good`,
-- `judgement-windows-custom-head-only-hold-late-bad`.
+<ul>
+{% assign notes = 'tap drag flick hold hold-end drag-flick head-only-hold' | split: ' ' -%}
+{% for note in notes %}
+  {%- if note != 'hold-end' %}
+    {%- assign judgements = 'early-bad early-good early-perfect late-perfect late-good late-bad' | split: ' ' %}
+  {%- else %}
+    {%- assign judgements = 'early-good early-perfect' | split: ' ' %}
+  {%- endif %}
+  {%- assign last = forloop.last %}
+  {%- for judgement in judgements %}
+    {%- capture id %}judgement-windows-custom-{{ note }}-{{ judgement }}{% endcapture -%}
+    <li id="{{ id }}"><code>{{ id }}</code>
+      {%- if last and forloop.last %}.{% else %},{% endif -%}
+    </li>
+  {%- endfor -%}
+{% endfor -%}
+</ul>
 
 All the values are in seconds although they are entered in milliseconds,
 so you need to enter milliseconds in judgement settings UI,
@@ -198,81 +177,30 @@ The early bad judgement for hold end is always negative infinity.
 
 #### Note hit size
 
-##### Tap
-{:#note-hit-size-tap}
+The following settings are available to enter:
 
-- **Setting id**: `note-hit-size-tap`.
-- **Possible values**: Any non-negative number.
+<ul>
+{% assign notes = 'tap drag flick hold drag-flick head-only-hold' | split: ' ' -%}
+{% for note in notes %}
+  {%- assign last = forloop.last %}
+  {%- capture id %}note-hit-size-{{ note }}{% endcapture -%}
+  <li id="{{ id }}-prior"><code>{{ id }}-prior</code>,</li>
+  <li id="{{ id }}"><code>{{ id }}</code>
+    {%- if last and forloop.last %}.{% else %},{% endif -%}
+  </li>
+{% endfor -%}
+</ul>
 
-This setting is used to set the hit size of tap notes.
+Each setting sets the hit size of a type of notes.
+The value is the **ratio** of the radius of the judgement region
+to the radius of the note (when the value of [`note-size-*`](#note-size) is `1`).
+It does **note** affect the visual size of the notes, which is set by [`note-size-*`](#note-size).
 
-This setting is used to specify the **ratio** of the radius of the judgement region
-to the radius of the note (when the value of [`note-size-tap`](#note-size-tap) is `1`).
+The value of the prior hit sizes cannot be larger than the value of the normal hit sizes.
 
-This setting does **not** affect the visual size of tap notes, which is set by [`note-size-tap`](#note-size-tap).
-
-##### Drag
-{:#note-hit-size-drag}
-
-- **Setting id**: `note-hit-size-drag`.
-- **Possible values**: Any non-negative number.
-
-This setting is used to set the hit size of drag notes.
-
-This setting is used to specify the **ratio** of the radius of the judgement region
-to the radius of the note (when the value of [`note-size-drag`](#note-size-drag) is `1`).
-
-This setting does **not** affect the visual size of drag notes, which is set by [`note-size-drag`](#note-size-drag).
-
-##### Flick
-{:#note-hit-size-flick}
-
-- **Setting id**: `note-hit-size-flick`.
-- **Possible values**: Any non-negative number.
-
-This setting is used to set the hit size of flick notes.
-
-This setting is used to specify the **ratio** of the radius of the judgement region
-to the radius of the note (when the value of [`note-size-flick`](#note-size-flick) is `1`).
-
-This setting does **not** affect the visual size of flick notes, which is set by [`note-size-flick`](#note-size-flick).
-
-##### Hold
-{:#note-hit-size-hold}
-
-- **Setting id**: `note-hit-size-hold`.
-- **Possible values**: Any non-negative number.
-
-This setting is used to set the hit size of hold notes.
-
-This setting is used to specify the **ratio** of the radius of the judgement region
-to the radius of the note (when the value of [`note-size-hold`](#note-size-hold) is `1`).
-
-This setting does **not** affect the visual size of hold notes, which is set by [`note-size-hold`](#note-size-hold).
-
-##### Drag-flick
-{:#note-hit-size-drag-flick}
-
-- **Setting id**: `note-hit-size-drag-flick`.
-- **Possible values**: Any non-negative number.
-
-This setting is used to set the hit size of drag-flick notes.
-
-This setting is used to specify the **ratio** of the radius of the judgement region
-to the radius of the note (when the value of [`note-size-drag-flick`](#note-size-drag-flick) is `1`).
-This setting does **not** affect the visual size of drag-flick notes, which is set by [`note-size-drag-flick`](#note-size-drag-flick).
-
-##### Head-only hold
-{:#note-hit-size-head-only-hold}
-
-- **Setting id**: `note-hit-size-head-only-hold`.
-- **Possible values**: Any non-negative number.
-
-This setting is used to set the hit size of head-only hold notes.
-
-This setting is used to specify the **ratio** of the radius of the judgement region
-to the radius of the note (when the value of [`note-size-head-only-hold`](#note-size-head-only-hold) is `1`).
-This setting does **not** affect the visual size of head-only hold notes, which is set by [`note-size-head-only-hold`](#note-size-head-only-hold).
+When the player taps on the screen,
+notes within the prior judgement region will be judged first.
+Other notes within the normal judgement region will be judged only if there is no note within the prior judgement region.
 
 #### Offset
 
