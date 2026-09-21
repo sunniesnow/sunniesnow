@@ -71,7 +71,7 @@ Sunniesnow.Note = class Note extends Sunniesnow.NoteBase {
 	}
 
 	doubleLineable() {
-		return Sunniesnow.game.settings.forceDoubleLine || this.doubleLine == 'user' ? this.userWantsDoubleLine() : this.doubleLine == 'always';
+		return Sunniesnow.game.settings.forceDoubleLine || this.doubleLine === 'user' ? this.userWantsDoubleLine() : this.doubleLine === 'always';
 	}
 
 	getConnectedNote() {

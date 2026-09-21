@@ -178,19 +178,19 @@ Sunniesnow.TipPoint = class TipPoint extends Sunniesnow.TipPointBase {
 	}
 
 	updateTipPoint(time) {
-		if (this.checkpoints.length == 1) {
+		if (this.checkpoints.length === 1) {
 			this.tipPoint.position.set(this.checkpoints[0].x, this.checkpoints[0].y);
 			this.tipPoint.rotation = this.zeroAngle();
 			return;
 		}
 		const i = this.checkpoints.findIndex(checkpoint => checkpoint.time >= time);
-		if (i == 0) {
+		if (i === 0) {
 			this.tipPoint.position.set(this.checkpoints[0].x, this.checkpoints[0].y);
 			this.tipPoint.rotation = this.atan2(
 				this.checkpoints[1].x - this.checkpoints[0].x,
 				this.checkpoints[1].y - this.checkpoints[0].y
 			);
-		} else if (i == -1) {
+		} else if (i === -1) {
 			this.tipPoint.position.set(
 				this.checkpoints[this.checkpoints.length - 1].x,
 				this.checkpoints[this.checkpoints.length - 1].y

@@ -50,7 +50,7 @@ Sunniesnow.Utils = {
 	},
 
 	stringify(obj) {
-		result = '';
+		let result = '';
 		for (let key in obj) {
 			result += `${key}: ${obj[key]}\n`;
 		}
@@ -537,7 +537,7 @@ Sunniesnow.Utils = {
 			}
 		});
 		instants.sort((a, b) => a.time - b.time);
-		result = [{time: -Infinity, events: []}];
+		const result = [{time: -Infinity, events: []}];
 		for (const {time, event, appear} of instants) {
 			let {time: lastTime, events} = result[result.length - 1];
 			if (time !== lastTime) {
@@ -864,7 +864,7 @@ Sunniesnow.Utils = {
 			Sunniesnow.Logs.warn('FontFaceSet API not available');
 			return false;
 		}
-		return document.fonts.keys().some(e => e.family == fontFamily);
+		return document.fonts.keys().some(e => e.family === fontFamily);
 	},
 
 	copyTextInput(element) {

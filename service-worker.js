@@ -72,6 +72,7 @@ self.addEventListener('fetch', event => {
 	// These are for busting caches for VS Code simple browser, not for service worker.
 	url.searchParams.delete('vscodeBrowserReqId');
 	url.searchParams.delete('fuck-cache');
+	url.searchParams.delete('authentication');
 	const request = new Request(url.href, oldRequest);
 	event.respondWith(caches.match(request).then(response => {
 		if (response) {

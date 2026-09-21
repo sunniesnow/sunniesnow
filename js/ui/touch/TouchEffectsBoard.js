@@ -22,7 +22,7 @@ Sunniesnow.TouchEffectsBoard = class TouchEffectsBoard extends PIXI.Container {
 	update(delta) {
 		this.presentTouchEffects.forEach((touchEffect) => {
 			touchEffect.update(delta);
-			if (touchEffect.state == 'finished') {
+			if (touchEffect.state === 'finished') {
 				touchEffect.destroy({children: true});
 				this.presentTouchEffects.splice(this.presentTouchEffects.indexOf(touchEffect), 1);
 			}

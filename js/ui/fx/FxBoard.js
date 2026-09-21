@@ -21,7 +21,7 @@ Sunniesnow.FxBoard = class FxBoard extends PIXI.Container {
 	update(delta) {
 		Sunniesnow.Utils.eachWithRedoingIf(this.presentFx, (fx, i) => {
 			fx.update(delta);
-			if (fx.state == 'finished') {
+			if (fx.state === 'finished') {
 				fx.destroy({children: true});
 				this.presentFx.splice(i, 1);
 				return true;

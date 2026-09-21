@@ -71,3 +71,20 @@
 	max-height: 400px;
 	overflow-y: auto;
 }
+
+details {
+	columns: 400px 2;
+}
+
+summary {
+	cursor: pointer;
+	font-weight: bold;
+}
+
+th {
+	font-weight: normal;
+}
+
+input[type='number'] {
+	max-width: 80px;
+}
