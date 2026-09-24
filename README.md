@@ -39,26 +39,37 @@ and [/game-unstable](https://sunniesnow.github.io/game-unstable) for the master 
 New features and insignificant bug fixes are only added to the master branch.
 Only significant bug fixes will be backported to the stable branch.
 
-## Serve the game locally
+## Build and serve the game locally
 
-> [!NOTE]
-> If you play the game in this way, you still need internet access.
-> However, a feature to use a vendor in place of a CDN for external scripts
-> may be added in the future to allow full offline usage.
-
-[Install Ruby](https://www.ruby-lang.org/en/documentation/installation), and then run
+[Install Node.js](https://nodejs.org) (version 20 or later), and then run
 
 ```shell
-git clone --recursive https://github.com/sunniesnow/sunniesnow.github.io.git
-cd sunniesnow.github.io
-bundle install # and resolve all errors if there are any
-JEKYLL_ENVIRONMENT=production bundle exec jekyll serve --host 0.0.0.0 --port 4000
+git clone https://github.com/sunniesnow/sunniesnow.git
+cd sunniesnow
+npm install
+npm run build
+npm run serve
 ```
 
-Now, visit http://localhost:4000/game/ to see the game.
+Now, visit http://localhost:4000/ to see the game.
 
-You can also build the static files by running `bundle exec jekyll build`.
-You can see the built files in the `_site` directory.
+`npm run build` writes two things:
+
+- `dist/web`, the standalone static website that is pushed to GitHub Pages, and
+- `dist/lib`, the library that is packed in the npm package.
+
+`npm run build -- --dev` (or `SUNNIESNOW_ENVIRONMENT=development`) builds a development
+version of the web page: it is not minified and it busts caches with a timestamp instead
+of the commit hash. `npm run verify` checks the build output, including the requirement
+that the web bundle is parseable by Chromium 37.
+
+The build accepts a few environment variables:
+
+- `SUNNIESNOW_SITE_URL` overrides the site's URL (used for the canonical URLs and the
+  metadata of the pages), which defaults to the `url` of `src/web/site.json`,
+- `SUNNIESNOW_AUTHENTICATION` is passed to the game as `Sunniesnow.authentication`
+  (used when the game is hosted with an authentication token),
+- `GITHUB_RUN_ID` is only used to link to the workflow run in the page's footer.
 
 > [!NOTE]
 > Because Imgur blocks requests with `Origin` being localhost,
@@ -66,32 +77,105 @@ You can see the built files in the `_site` directory.
 > you may want to use a different hostname instead of `localhost`
 > to access the locally served site.
 
-> [!NOTE]
-> You can enable HTTPS support by setting `JEKYLL_SSL=1` and trusting the generated certificate at `_ssl/ca.crt` in the browser.
-> The generated server certificate can be used to enable HTTPS
-> with the hostname `jekyll.local`,
-> which you can use some custom DNS resolver to resolve to `127.0.0.1`.
-> You can change the hostname by modifying `_ssl/*.cnf` files
-> and deleting the previously generated `_ssl/server.*` files.
-
 ## Development notes
 
-The entrypoint script can be found at `_head.html`.
+### Layout
 
-The reason to use `ScriptsLoader` to load scripts dynamically
-instead of traditionally using `require` or `import` to manage modular codes
-is to make plugins easier to handle.
-Some scripts need to be evaluated multiple times due to changing plugins,
-and having a `ScriptsLoader` module to manage this makes it easier.
+- `src/js` is the game itself. It is a set of ES modules that attach their classes and
+  objects to the `Sunniesnow` object, which used to be a global variable and is now the
+  default export of the package. `src/js/index.js` imports all of them in the order they
+  used to be loaded, and `src/js/Sunniesnow.js` is the object they attach to.
+- `src/lib/index.js` and `src/lib/node.js` are the library entry points of the npm package
+  (`sunniesnow` and `sunniesnow/node`). They differ in the PixiJS library they use:
+  `pixi.js` and `@pixi/node` respectively.
+- `src/web` is the static site. `index.html` and `popup/index.html` are LiquidJS templates
+  that apply `_layout.html` with the `{% layout %}` tag, which is why none of the templates
+  needs Jekyll front matter; the values that used to be in Jekyll's `_config.yml` are in
+  `src/web/site.json`. `help.md` is Markdown, and `service-worker.js` caches the site.
+- `src/data` is data that ends up in the bundle: the translations of `src/data/i18n`,
+  which are imported as modules instead of being fetched from the site's `json` directory.
+- `scripts` is the build: `build.mjs` (the entry point), `build-web.mjs`, `build-lib.mjs`,
+  `bundle.mjs` (esbuild and Babel), `optional-chunks.mjs` (the chunks of the site),
+  `liquid.mjs` (the Liquid engine), `markdown.mjs` (marked and its extensions),
+  `table-of-contents.mjs` (the `[TOC]` marker), `site.mjs`, `serve.mjs` and `verify.mjs`.
 
-There are two main logics: the DOM main logic and the game main logic.
-The main function of the DOM main logic is `Sunniesnow.MiscDom.main()`,
-and the main function of the game main logic is `Sunniesnow.Game.run()`.
+### The web page
 
-I do not think anyone would want to do this,
-but it is possible to run Sunniesnow in Node.js environment.
-Look at the source codes of
-[sunniesnow-record](https://github.com/sunniesnow/sunniesnow-record) for reference.
+`src/web/main.js` is the entry point of the JavaScript that runs in the page.
+It replaces the inline scripts that the static site generator used to put in the page's
+head: it loads the polyfills, wires up the `data-action` attributes of the page and runs
+`Sunniesnow.MiscDom.main()`, the main logic of the page. The main logic of the game itself
+is `Sunniesnow.Game.run()`.
+
+Everything the page needs to render is bundled into the single file `dist/web/main.js`.
+The browser support of that file is Chromium 37: it is transpiled to ES5 and polyfilled,
+including the dependencies. Note that Chromium 37 cannot run the game itself, because
+PixiJS 8 requires WebGL 2.
+
+The exceptions to the single file are the two scripts that the browser loads by itself,
+`dist/web/audio/FrameReporter.js` (an audio worklet) and `dist/web/audio/TimeReporter.js`
+(a worker), `dist/web/service-worker.js`, and the optional chunks below.
+
+### The optional chunks
+
+The code that the game only needs sometimes is not part of `main.js`, so that it never
+delays the first rendering of the page. It is built into the chunks under
+`dist/web/optional`, which the page loads when they are first needed:
+
+- `audio-decoders.js` is loaded when a level's music is decoded. It contains all the
+  decoders that `@audio/decode` loads with a dynamic `import()`, which the build rewrites
+  to the chunk loader (`scripts/bundle.mjs`); they are in a single chunk because they
+  depend on each other, and were about 5 MiB of the 9 MiB that `main.js` used to be.
+- `vconsole.js` is loaded when vConsole is turned on in the page's settings.
+
+Chromium 37 cannot parse `import()` and cannot load ES modules, so the chunks are classic
+scripts that register what they provide on the channel that `src/js/optional-chunks.js`
+sets up; `src/js/optional-chunks-import.js` is used instead by the library builds, which
+can use a real dynamic import because their consumer's bundler resolves it.
+
+The page never waits for the chunks to download. Right after it registers the service
+worker, it asks the worker to cache them (`Sunniesnow.CacheManager`), and the worker
+downloads them in the background from the list in `dist/web/optional/manifest.json`.
+The downloads therefore do not block the first rendering of the page, but an audio
+decoder still works offline once the service worker has cached it.
+
+### The Markdown page
+
+`help.md` is rendered by LiquidJS first (which expands the settings lists of the page),
+and then by marked, which uses these extensions:
+
+- [marked-gfm-heading-id](https://github.com/markedjs/marked-gfm-heading-id) gives the
+  headings their GFM IDs,
+- [marked-custom-heading-id](https://github.com/markedjs/marked-custom-heading-id) gives a
+  heading the ID of the extended syntax, e.g. `##### Online {#level-file-online}`: the
+  settings of the page are linked to by their setting IDs, both from the other settings
+  and from outside the site,
+- [marked-katex-extension](https://github.com/UziTech/marked-katex-extension) renders the
+  `$...$` math with KaTeX (with `nonStandard`, so that math followed by punctuation, like
+  `($\mu$)`, is rendered too),
+- [marked-smartypants](https://github.com/markedjs/marked-smartypants) converts the quotes
+  of the prose, as Kramdown's smart quotes used to,
+- `scripts/table-of-contents.mjs` expands the `[TOC]` marker. The marked ecosystem has a
+  table of contents extension, but it derives its links from the heading *text*, so it
+  cannot link to the explicit heading IDs above; this extension reads the headings of the
+  rendered page instead, and it does not list the headings that come before the marker
+  (the title of the page and the title of the table of contents itself).
+
+The page's Markdown therefore uses marked's conventions rather than Kramdown's: heading
+IDs are the extended syntax above, the table of contents is `[TOC]`, `target="_blank"`
+links are HTML, and the math is delimited by `$` instead of jekyll-katex's tags.
+`npm run verify` checks that every anchor link of the page resolves to an element of the
+page, which is what the table of contents and the cross-references of the settings need.
+
+The KaTeX stylesheet and fonts are copied from the `katex` package into `dist/web/katex`,
+so the page does not depend on a CDN.
+
+### Node.js
+
+It is possible to run Sunniesnow in Node.js by importing `sunniesnow/node`, which uses
+`@pixi/node` as the PixiJS library. The library build keeps its dependencies external,
+so the consumer resolves them from its own `node_modules`; `@pixi/node` is an optional
+peer dependency, which means that it has to be installed explicitly.
 
 ## License notice
 
@@ -112,12 +196,24 @@ The open-source projects used by Sunniesnow:
 - [marked](https://marked.js.org) (MIT),
 - [DOMPurify](https://github.com/cure53/DOMPurify) (Apache-2.0 or MPL-2.0),
 - [LiquidJS](https://liquidjs.com) (MIT),
+- [KaTeX](https://katex.org) (MIT),
+- the marked extensions
+  ([marked-gfm-heading-id](https://github.com/markedjs/marked-gfm-heading-id),
+  [marked-custom-heading-id](https://github.com/markedjs/marked-custom-heading-id),
+  [marked-katex-extension](https://github.com/UziTech/marked-katex-extension),
+  [marked-smartypants](https://github.com/markedjs/marked-smartypants),
+  [smartypants](https://github.com/othree/smartypants.js) and
+  [node-html-parser](https://github.com/taoqf/node-fast-html-parser)) (MIT),
+- [core-js](https://github.com/zloirock/core-js) (MIT),
+- [vConsole](https://github.com/Tencent/vConsole) (MIT),
 - [wangfonts](http://code.google.com/p/wangfonts) (GPL-2.0),
 - [Yuji](https://github.com/Kinutafontfactory/Yuji) (OFL-1.1),
 - [LXGW WenKai](https://github.com/lxgw/LxgwWenKai) (OFL-1.1),
-- [Noto fonts](https://fonts.google.com/noto/use) (OFL-1.1),
-- [vConsole](https://github.com/Tencent/vConsole) (MIT).
+- [Noto fonts](https://fonts.google.com/noto/use) (OFL-1.1).
 
 Sunniesnow's source codes do not contain any files from the above projects.
-Sunniesnow uses them by letting the client download needed files
-from public CDN sources.
+The dependencies are installed with npm: some of them are bundled into `dist/web/main.js`
+and into `dist/lib`, and the license notices of the bundled files are kept at the end of
+the built files. The favicons are downloaded from the
+[logo repository](https://github.com/sunniesnow/logo)'s releases while building the site,
+and the fonts are downloaded by the game itself from public CDN sources at runtime.

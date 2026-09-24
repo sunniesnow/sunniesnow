@@ -1,0 +1,16 @@
+{
+	"title": "Sunniesnow",
+	"author": "UlyssesZhan",
+	"email": "ulysseszhan@gmail.com",
+	"description": "The web rhythm game",
+	"lang": "en-US",
+	"locale": "en_US",
+	"url": "https://sunniesnow.github.io/sunniesnow",
+	"git_repo": "https://github.com/sunniesnow/sunniesnow",
+	"theme_color": "#ffa520",
+	"logo": "favicon.svg",
+	"social_links": {
+		"github": "https://github.com/sunniesnow",
+		"discord": "https://discord.gg/6ZHRU9teju"
+	}
+}

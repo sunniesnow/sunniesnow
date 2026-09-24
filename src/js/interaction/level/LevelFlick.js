@@ -1,0 +1,96 @@
+import Sunniesnow from '../../Sunniesnow.js';
+
+Sunniesnow.LevelFlick = class LevelFlick extends Sunniesnow.LevelNote {
+
+	constructor(event) {
+		super(event);
+		this.slow = false;
+	}
+
+	static AUTO_FINISHES_HOLDING = false
+
+	isFlickLike() {
+		return true;
+	}
+
+	toObject() {
+		const result = super.toObject();
+		result.angles = this.event.angles;
+		return result;
+	}
+
+	determineJudgement() {
+		if (!this.touch || this.touch.wholeScreen) {
+			super.determineJudgement();
+			return;
+		}
+		if (this.slow) {
+			this.judgement = 'miss';
+			return;
+		}
+		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
+		if (this.minFlickDistance() > 0) {
+			for (const angle of this.event.angles) {
+				if (Sunniesnow.Utils.between(Sunniesnow.Utils.angleDifference(phi, angle), ...this.angleRange())) {
+					this.judgement = this.getJudgementByRelativeTime(this.hitRelativeTime);
+					return;
+				}
+			}
+			this.judgement = 'bad'; // wrong direction
+		} else {
+			this.judgement = this.getJudgementByRelativeTime(this.hitRelativeTime);
+		}
+	}
+
+	// the distance of touch spot moving to be regarded as a flick
+	minFlickDistance() {
+		return Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.minFlickDistance;
+	}
+	maxFlickDistance() {
+		return Sunniesnow.Config.RADIUS * Sunniesnow.game.settings.maxFlickDistance;
+	}
+
+	// the angle range
+	angleRange() {
+		return [-Sunniesnow.game.settings.flickAngleRange, Sunniesnow.game.settings.flickAngleRange];
+	}
+
+	hit(touch, time) {
+		super.hit(touch, time);
+		if (touch?.wholeScreen) {
+			this.release(time);
+		}
+	}
+
+	updateHolding(time) {
+		super.updateHolding(time);
+		if (!this.touch) {
+			return;
+		}
+		if (time - this.time > this.lateBad()) {
+			this.slow = true;
+			this.release(this.time + this.lateBad());
+			return;
+		}
+		if (this.minFlickDistance() === 0) {
+			this.release(this.touch.end().time);
+			return;
+		}
+		const [rho, phi] = Sunniesnow.Utils.cartesianToPolar(...this.touch.totalMovement());
+		let condition = rho >= this.minFlickDistance();
+		if (condition) {
+			condition = false;
+			for (const angle of this.event.angles) {
+				if (Sunniesnow.Utils.between(Sunniesnow.Utils.angleDifference(phi, angle), ...this.angleRange())) {
+					condition = true;
+					break;
+				}
+			}
+		}
+		condition ||= rho >= this.maxFlickDistance();
+		if (condition) {
+			this.release(this.touch.end().time);
+		}
+	}
+
+};

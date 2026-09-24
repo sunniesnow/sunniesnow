@@ -1,0 +1,17 @@
+{% layout '_layout.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="style.css">
+<script>
+	// `menubar` only exists in NW.js; do not use optional chaining here
+	// because the inline scripts of the pages are not transpiled.
+	if (typeof menubar !== 'undefined' && menubar.visible) {
+		alert('This page should be opened as a popup.');
+		close();
+	}
+</script>
+{% endblock %}
+
+{% block content %}
+<canvas id="main-canvas" width="1920" height="1080"></canvas>
+{% endblock %}

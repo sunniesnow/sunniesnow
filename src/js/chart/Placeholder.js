@@ -1,0 +1,15 @@
+import Sunniesnow from '../Sunniesnow.js';
+
+Sunniesnow.Placeholder = class Placeholder extends Sunniesnow.Event {
+	static ABSTRACT = false
+
+	static PROPERTIES = {
+		required: ['x', 'y'],
+		optional: {tipPoint: null}
+	}
+	static TYPE_NAME = 'placeholder'
+
+	checkProperties() {
+		return super.checkProperties() && this.assertType("x", "number") && this.assertType("y", "number");
+	}
+};

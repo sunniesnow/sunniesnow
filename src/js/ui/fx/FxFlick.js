@@ -1,0 +1,33 @@
+import Sunniesnow from '../../Sunniesnow.js';
+import PIXI from '../../pixi.js';
+
+Sunniesnow.FxFlick = class FxFlick extends Sunniesnow.FxTap {
+
+	populate() {
+		super.populate();
+		this.label = `fx-flick-${this.levelNote.event.id}`;
+	}
+
+	populateSparks(count, minColor, maxColor) {
+		this.sparks = [];
+		for (let i = 0; i < count; i++) {
+			const spark = new PIXI.Graphics(this.constructor.sparkLine);
+			spark.rotation = Math.random() * Math.PI - Math.PI / 2;
+			spark.rotation += -this.levelNote.event.angles[Math.floor(Math.random() * this.levelNote.event.angles.length)];
+			spark.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
+			this.addChild(spark);
+			this.sparks.push(spark);
+		}
+	}
+
+	populateContours(count, minColor, maxColor) {
+		this.contours = [];
+		for (let i = 0; i < count; i++) {
+			const contour = new PIXI.Graphics(this.constructor.explosionContourArc);
+			contour.rotation = Math.random() * Math.PI * 2;
+			contour.tint = Sunniesnow.Utils.randColor(minColor, maxColor);
+			this.addChild(contour);
+			this.contours.push(contour);
+		}
+	}
+};
