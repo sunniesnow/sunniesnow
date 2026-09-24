@@ -53,6 +53,8 @@ Sunniesnow.Plugin = class Plugin {
 	}
 
 	static async applyPlugins() {
+		Sunniesnow.Logs.warn('Not applying plugins because plugins features are currently under construction');
+		return;
 		for (const id in this.plugins) {
 			try {
 				await this.plugins[id].apply();
@@ -64,10 +66,12 @@ Sunniesnow.Plugin = class Plugin {
 
 	static reset() {
 		document.getElementById('plugins-readme').innerHTML = '';
-		Sunniesnow.ScriptsLoader.runCustomizableSiteScripts();
+		// TODO
+		// Sunniesnow.ScriptsLoader.runCustomizableSiteScripts();
 	}
 
 	static async runMainFunctions() {
+		return;
 		for (const id in this.plugins) {
 			try {
 				await this.plugins[id].main?.();
@@ -139,7 +143,8 @@ Sunniesnow.Plugin = class Plugin {
 		this.constructor.now = this;
 		const blob = this.blobs['main.js'];
 		if (blob) {
-			Sunniesnow.ScriptsLoader.runScript({script: await blob.text(), path: `plugin-${this.id}/main.js`});
+			// TODO
+			// Sunniesnow.ScriptsLoader.runScript({script: await blob.text(), path: `plugin-${this.id}/main.js`});
 		} else {
 			Sunniesnow.Logs.warn(`Plugin ${this.id} does not have a main.js`);
 		}
