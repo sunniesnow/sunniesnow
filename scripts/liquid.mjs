@@ -1,6 +1,3 @@
-// The Liquid engine that renders the static site's templates.
-// It replaces Jekyll for the site: the Jekyll-specific tags and filters that the
-// templates use are registered here, so that the templates do not need front matter.
 import path from 'node:path';
 import {Liquid} from 'liquidjs';
 
