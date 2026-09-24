@@ -1,4 +1,4 @@
-import buildInfo from '../js/build-info.js';
+import buildInfo from '../data/build-info.json';
 
 const BASE = location.pathname.replace(/\/[^/]*$/, '');
 const ONLINE_HOST = atob('c3Vubmllc25vdy1jb21tdW5pdHkuNzU3MzY4MDgueHl6');

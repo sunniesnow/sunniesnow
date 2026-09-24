@@ -1,4 +1,4 @@
-import Sunniesnow from './Sunniesnow.js';
+import Sunniesnow from '../Sunniesnow.js';
 
 Sunniesnow.ParamsProcessor = {
 

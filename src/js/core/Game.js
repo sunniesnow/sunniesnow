@@ -1,5 +1,5 @@
-import Sunniesnow from './Sunniesnow.js';
-import PIXI from './pixi.js';
+import Sunniesnow from '../Sunniesnow.js';
+import PIXI from '../pixi.js';
 
 Sunniesnow.Game = class Game {
 	static async run(overrideSettings, loadingProgressCallback) {

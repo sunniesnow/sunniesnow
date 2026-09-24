@@ -2,7 +2,7 @@
 import * as babel from '@babel/core';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {jsSourceDirectory, rootDirectory} from './site.mjs';
+import {jsSourceDirectory, rootDirectory, sourceDirectory} from './site.mjs';
 
 // The browsers that the web build supports. Chromium 37 only understands ES5,
 // so everything (including the dependencies) is transpiled and polyfilled.
@@ -17,7 +17,7 @@ const alreadyEs5 = [
 	path.join(rootDirectory, 'node_modules', 'whatwg-fetch'),
 ];
 
-export function createBabelPlugin({targets = webBabelTargets, patchSource} = {}) {
+export function createBabelPlugin({targets = webBabelTargets, patchSource, sourcemap = false} = {}) {
 	return {
 		name: 'babel',
 		setup(build) {
@@ -36,6 +36,11 @@ export function createBabelPlugin({targets = webBabelTargets, patchSource} = {})
 					babelrc: false,
 					configFile: false,
 					compact: false,
+					// esbuild composes the inline source maps of its inputs into the
+					// source map of the output, so the source maps of the build point at
+					// the original sources instead of at the output of Babel.
+					sourceMaps: sourcemap ? 'inline' : false,
+					sourceFileName: arguments_.path,
 					presets: [['@babel/preset-env', {targets, modules: false}]],
 				});
 				return {contents: result.code, loader: 'js'};
@@ -44,24 +49,24 @@ export function createBabelPlugin({targets = webBabelTargets, patchSource} = {})
 	};
 }
 
-// Replaces the contents of src/js/build-info.js with the information collected
+// Replaces the contents of src/data/build-info.json with the information collected
 // while building the static site.
 export function createBuildInfoPlugin(buildInfo) {
-	const file = path.join(jsSourceDirectory, 'build-info.js');
-	const contents = `export default ${JSON.stringify({
+	const file = path.join(sourceDirectory, 'data', 'build-info.json');
+	const contents = `${JSON.stringify({
 		commitHash: buildInfo.commitHash,
 		fuckCache: buildInfo.fuckCache,
 		environment: buildInfo.environment,
 		authentication: buildInfo.authentication,
-	}, null, '\t')};\n`;
+	}, null, '\t')}\n`;
 	return {
 		name: 'build-info',
 		setup(build) {
-			build.onLoad({filter: /build-info\.js$/}, arguments_ => {
+			build.onLoad({filter: /build-info\.json$/}, arguments_ => {
 				if (arguments_.path !== file) {
 					return null;
 				}
-				return {contents, loader: 'js'};
+				return {contents, loader: 'json'};
 			});
 		},
 	};
@@ -76,7 +81,7 @@ export function createBuildInfoPlugin(buildInfo) {
 //   - the calls to loadOptionalChunk(), which the game itself makes.
 // The two patches of this module also check that none of them is left behind.
 export function createOptionalChunksPatch({specifiers, ownSpecifiers}) {
-	const loaderModule = path.join(jsSourceDirectory, 'optional-chunks.js');
+	const loaderModule = path.join(jsSourceDirectory, 'optional-chunks-site.js');
 	const identifier = '__sunniesnowLoadOptionalChunk__';
 	const decoderImport = /(?:^|[^\w$.])import\(\s*(['"])(@audio\/decode-[a-z0-9-]+)\1\s*\)/g;
 	const loaderCall = /loadOptionalChunk\(\s*(['"])([^'"]+)\1\s*\)/g;
@@ -109,56 +114,59 @@ export function createOptionalChunksPatch({specifiers, ownSpecifiers}) {
 	};
 }
 
-// Checks that every optional module the game itself loads is also loadable by the
-// library builds, which list their optional modules explicitly (see
-// src/js/optional-chunks-import.js), because a bundler cannot resolve a dynamic
-// import with a variable specifier.
+// Checks that every optional module the game itself loads is listed in
+// src/js/optional-chunks.js, which lists its optional modules explicitly, because a
+// bundler cannot resolve a dynamic import with a variable specifier.
 export async function checkLibraryOptionalModules(ownSpecifiers) {
-	const {optionalLoaders} = await import('../src/js/optional-chunks-import.js');
+	const {optionalLoaders} = await import('../src/js/optional-chunks.js');
 	const missing = [...ownSpecifiers].filter(specifier => !(specifier in optionalLoaders));
 	if (missing.length > 0) {
-		throw new Error(`These optional modules are missing from src/js/optional-chunks-import.js: ${missing.join(', ')}`);
+		throw new Error(`These optional modules are missing from src/js/optional-chunks.js: ${missing.join(', ')}`);
 	}
 }
 
-// The optional chunks are loaded by classic scripts (see src/js/optional-chunks.js),
-// which is the implementation of the loader that the static site uses. The library
-// builds use ./optional-chunks-import.js instead, which uses a real dynamic import.
-function optionalLoaderAliases() {
-	return new Map([
-		[path.join(jsSourceDirectory, 'optional-chunks.js'), path.join(jsSourceDirectory, 'optional-chunks-import.js')],
-	]);
-}
-
-// Makes a library build load its optional modules the way a library should.
-export function createLibraryAliasesPlugin() {
-	const aliases = optionalLoaderAliases();
+// The site's loader of the optional chunks is a classic script loader, which only the
+// static site uses (see src/js/optional-chunks-site.js). The library builds use the
+// module that the game imports, which loads the chunks with a dynamic import.
+export function createOptionalChunksAliasPlugin() {
+	const module = path.join(jsSourceDirectory, 'optional-chunks.js');
+	const siteModule = path.join(jsSourceDirectory, 'optional-chunks-site.js');
 	return {
-		name: 'library-aliases',
+		name: 'optional-chunks-alias',
 		setup(build) {
-			build.onResolve({filter: /^\.\.?\/.*\.js$/}, arguments_ => {
+			build.onResolve({filter: /^\.\.?\/.*optional-chunks\.js$/}, arguments_ => {
 				const resolved = path.resolve(path.dirname(arguments_.importer), arguments_.path);
-				return aliases.has(resolved) ? {path: aliases.get(resolved)} : null;
+				return resolved === module ? {path: siteModule} : null;
 			});
 		},
 	};
 }
 
-// Makes a build use the implementations that only work on Node.js
-// (@pixi/node instead of pixi.js, and require() instead of the stub),
-// which is what the `sunniesnow/node` entry point is about.
-export function createNodeEntryAliasesPlugin() {
-	const aliases = new Map([
-		...optionalLoaderAliases(),
-		[path.join(jsSourceDirectory, 'pixi.js'), path.join(jsSourceDirectory, 'pixi-node.js')],
-		[path.join(jsSourceDirectory, 'node-require.js'), path.join(jsSourceDirectory, 'node-require-node.js')],
-	]);
+// The published library keeps the file structure of src/js, one file per module, so
+// that it can be read and debugged like the sources (see scripts/build-lib.mjs). The
+// relative imports of a module are therefore left alone — except the ones that the
+// aliases of a build point elsewhere, which is how the node build of the library gets
+// @pixi/node instead of pixi.js.
+export function createLibTreePlugin(aliases) {
 	return {
-		name: 'node-entry-aliases',
+		name: 'lib-tree',
 		setup(build) {
-			build.onResolve({filter: /^\.\.?\/.*\.js$/}, arguments_ => {
+			build.onResolve({filter: /^\.\.?\//}, arguments_ => {
+				// JSON imports are inlined by esbuild, so that the library does not
+				// depend on how the consumer imports JSON.
+				if (arguments_.path.endsWith('.json')) {
+					return null;
+				}
 				const resolved = path.resolve(path.dirname(arguments_.importer), arguments_.path);
-				return aliases.has(resolved) ? {path: aliases.get(resolved)} : null;
+				const alias = aliases.get(resolved);
+				if (!alias) {
+					return {path: arguments_.path, external: true};
+				}
+				let relative = path.relative(path.dirname(arguments_.importer), alias).split(path.sep).join('/');
+				if (!relative.startsWith('.')) {
+					relative = `./${relative}`;
+				}
+				return {path: relative, external: true};
 			});
 		},
 	};

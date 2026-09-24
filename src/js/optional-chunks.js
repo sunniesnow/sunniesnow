@@ -1,66 +1,26 @@
-import Sunniesnow from './Sunniesnow.js';
-import {optionalChunkName} from './optional-chunk-names.js';
-
 /**
- * Loading the optional chunks of the built static site.
+ * Loading the modules that the game only needs sometimes, for the library builds.
  *
- * Most of the code that the game only needs sometimes (the audio decoders and
- * vConsole) is not part of `dist/web/main.js`, but of the chunks under `optional/`.
- * They are loaded when they are first needed, so that they never delay the first
- * rendering of the page; the service worker caches them in the background (see
- * src/web/service-worker.js), so loading them is usually instant.
+ * A library is bundled by its consumer, so it can use a real dynamic import and let the
+ * consumer's bundler decide what to do with it (bundle it, split it into a chunk, or
+ * leave it external). The specifiers are written out explicitly, because a dynamic
+ * import with a variable specifier cannot be resolved by a bundler.
  *
- * The library builds replace this module with ./optional-chunks-import.js, which
- * uses a real dynamic import instead, because a library is bundled by its consumer.
- *
- * Chromium 37 cannot parse `import()` and the web build has to be a single classic
- * script, so a chunk cannot be an ES module and cannot hand over what it provides by
- * exporting it. It registers itself on the global channel below instead, and the
- * chunks rely on the polyfills and on the regenerator runtime of main.js.
+ * The static site does not use this module: its build replaces it with
+ * ./optional-chunks-site.js, which loads the chunks of the site as classic scripts.
  */
-const modules = new Map();
-const promises = new Map();
+export const optionalLoaders = {
+	vconsole: () => import('vconsole'),
+};
 
 export function loadOptionalChunk(specifier) {
-	if (modules.has(specifier)) {
-		return Promise.resolve(modules.get(specifier));
+	const loader = optionalLoaders[specifier];
+	if (!loader) {
+		throw new TypeError(`There is no optional module named ${specifier}`);
 	}
-	if (!promises.has(specifier)) {
-		promises.set(specifier, loadOptionalChunkFile(specifier));
-	}
-	return promises.get(specifier);
+	return loader();
 }
 
-export function registerOptionalChunk(specifier, module) {
-	modules.set(specifier, module);
+export function registerOptionalChunk() {
+	throw new TypeError('Optional chunks are only used by the build of the static site');
 }
-
-function loadOptionalChunkFile(specifier) {
-	return new Promise((resolve, reject) => {
-		const url = optionalChunkUrl(specifier);
-		const element = document.createElement('script');
-		element.src = url;
-		element.addEventListener('load', () => {
-			const module = modules.get(specifier);
-			if (module) {
-				resolve(module);
-			} else {
-				reject(new TypeError(`The optional chunk ${url} does not provide ${specifier}`));
-			}
-		});
-		element.addEventListener('error', () => {
-			reject(new TypeError(`Failed to load the optional chunk ${url}`));
-		});
-		document.head.appendChild(element);
-	});
-}
-
-function optionalChunkUrl(specifier) {
-	const path = `${Sunniesnow.Utils.base()}/optional/${optionalChunkName(specifier)}.js`;
-	return Sunniesnow.fuckCache ? `${path}?fuck-cache=${Sunniesnow.fuckCache}` : path;
-}
-
-globalThis.SunniesnowOptional = {
-	load: loadOptionalChunk,
-	register: registerOptionalChunk,
-};

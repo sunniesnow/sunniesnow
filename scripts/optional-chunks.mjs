@@ -46,7 +46,7 @@ function chunkSourceFor(specifiers) {
 	return lines.join('\n');
 }
 
-export async function buildOptionalChunks({specifiers, development}) {
+export async function buildOptionalChunks({specifiers, minify = false, sourcemap = false}) {
 	const chunks = new Map();
 	const missing = [];
 	for (const specifier of [...specifiers].sort()) {
@@ -76,10 +76,10 @@ export async function buildOptionalChunks({specifiers, development}) {
 			format: 'iife',
 			platform: 'browser',
 			target: 'es5',
-			plugins: [createBabelPlugin({targets: webBabelTargets})],
-			minify: !development,
+			plugins: [createBabelPlugin({targets: webBabelTargets, sourcemap})],
+			minify,
 			legalComments: 'eof',
-			sourcemap: false,
+			sourcemap: sourcemap ? 'linked' : false,
 			logLevel: 'warning',
 		});
 		names.push(`${name}.js`);
