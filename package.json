@@ -34,8 +34,7 @@
 		"build": "node scripts/build.mjs",
 		"build:web": "node scripts/build.mjs --web",
 		"build:lib": "node scripts/build.mjs --lib",
-		"serve": "node scripts/serve.mjs",
-		"verify": "node scripts/verify.mjs"
+		"serve": "node scripts/serve.mjs"
 	},
 	"dependencies": {
 		"audio-decode": "^3.12.0",

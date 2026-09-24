@@ -1,14 +1,8 @@
-// The service worker of the game's static site.
-// All of the site's resources are listed here explicitly because the site is a
-// static site: there is no longer a runtime loader that knows the file list.
 import buildInfo from '../js/build-info.js';
 
 const BASE = location.pathname.replace(/\/[^/]*$/, '');
 const ONLINE_HOST = atob('c3Vubmllc25vdy1jb21tdW5pdHkuNzU3MzY4MDgueHl6');
 
-// Resources that are cached when the service worker is installed.
-// `npm run build` produces all of them except the favicons, which are downloaded
-// from the logo release and may therefore be missing.
 const SITE_RESOURCES = [
 	`${BASE}/`,
 	`${BASE}/index.html`,
@@ -82,7 +76,7 @@ async function doCacheOptionalChunks() {
 function cacheSiteResources() {
 	return caches.open(SITE_STORAGE_NAME).then(cache => {
 		// Add the resources one by one so that a missing resource
-		// (the favicons, for example) does not fail the whole installation.
+		// does not fail the whole installation.
 		return Promise.all(SITE_RESOURCES.map(resource => {
 			return fetch(resource).then(response => {
 				if (!response.ok) {
