@@ -1,4 +1,4 @@
-import Sunniesnow from './Sunniesnow.js';
+import Sunniesnow from '../Sunniesnow.js';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import mime from 'mime/lite';

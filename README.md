@@ -58,10 +58,19 @@ Now, visit http://localhost:4000/ to see the game.
 - `dist/web`, the standalone static website that is pushed to GitHub Pages, and
 - `dist/lib`, the library that is packed in the npm package.
 
-`npm run build -- --dev` (or `SUNNIESNOW_ENVIRONMENT=development`) builds a development
-version of the web page: it is not minified and it busts caches with a timestamp instead
-of the commit hash. `npm run verify` checks the build output, including the requirement
-that the web bundle is parseable by Chromium 37.
+The build can be told what to produce:
+
+- `--web` and `--lib` build only one of the two (both are built by default),
+- `--minify` and `--no-minify` choose whether the output is minified, whatever the
+  environment says; the web page is minified in production and not in development, and
+  the library is not minified unless `--minify` is given, because minifying it is the job
+  of the bundler of whoever consumes it,
+- `--sourcemap` and `--no-sourcemap` choose whether source maps are written next to the
+  built JavaScript; in development they are, and they map to the sources, not to the
+  output of Babel, because esbuild composes the source maps of Babel,
+- `--dev` (or `SUNNIESNOW_ENVIRONMENT=development`) builds a development version: it is
+  not minified, it has source maps, and it busts caches with a timestamp instead of the
+  commit hash.
 
 The build accepts a few environment variables:
 
@@ -85,27 +94,35 @@ The build accepts a few environment variables:
   objects to the `Sunniesnow` object, which used to be a global variable and is now the
   default export of the package. `src/js/index.js` imports all of them in the order they
   used to be loaded, and `src/js/Sunniesnow.js` is the object they attach to.
-- `src/lib/index.js` and `src/lib/node.js` are the library entry points of the npm package
-  (`sunniesnow` and `sunniesnow/node`). They differ in the PixiJS library they use:
-  `pixi.js` and `@pixi/node` respectively.
+- `src/js/core` holds the modules that drive the game: `Config`, `Game`, `Loader`,
+  `ParamsProcessor` and `Plugin`.
 - `src/web` is the static site. `index.html` and `popup/index.html` are LiquidJS templates
   that apply `_layout.html` with the `{% layout %}` tag, which is why none of the templates
   needs Jekyll front matter; the values that used to be in Jekyll's `_config.yml` are in
   `src/web/site.json`. `help.md` is Markdown, and `service-worker.js` caches the site.
-- `src/data` is data that ends up in the bundle: the translations of `src/data/i18n`,
-  which are imported as modules instead of being fetched from the site's `json` directory.
+- `src/data` is data that ends up in the build: the translations of `src/data/i18n`, which
+  are imported as modules instead of being fetched from the site's `json` directory, and
+  `src/data/build-info.json`, which the build replaces with the commit and the cache
+  buster of the build (see `scripts/bundle.mjs`).
 - `scripts` is the build: `build.mjs` (the entry point), `build-web.mjs`, `build-lib.mjs`,
   `bundle.mjs` (esbuild and Babel), `optional-chunks.mjs` (the chunks of the site),
   `liquid.mjs` (the Liquid engine), `markdown.mjs` (marked and its extensions),
-  `table-of-contents.mjs` (the `[TOC]` marker), `site.mjs`, `serve.mjs` and `verify.mjs`.
+  `site.mjs` and `serve.mjs`.
 
 ### The web page
 
-`src/web/main.js` is the entry point of the JavaScript that runs in the page.
-It replaces the inline scripts that the static site generator used to put in the page's
-head: it loads the polyfills, wires up the `data-action` attributes of the page and runs
-`Sunniesnow.MiscDom.main()`, the main logic of the page. The main logic of the game itself
-is `Sunniesnow.Game.run()`.
+`src/web/main.js` is the entry point of the JavaScript that runs in the page. It replaces
+the inline scripts that the static site generator used to put in the page's head: it loads
+the polyfills and runs `Sunniesnow.MiscDom.main()`, the main logic of the page, which also
+wires up the `data-action` attributes of the page. The main logic of the game itself is
+`Sunniesnow.Game.run()`.
+
+The page's elements do not use inline event handlers, which would need a global
+`Sunniesnow`: they carry a `data-action` attribute, e.g. `data-action="Game.run"`, and
+`Sunniesnow.MiscDom.addActionListeners` resolves it on `Sunniesnow` when the page is set
+up. `src/web/resize-observer.js` is injected by the build into every module that uses
+`ResizeObserver` (the tables of the page and the resize plugin of PixiJS), so that the
+polyfill does not have to be put on the global object.
 
 Everything the page needs to render is bundled into the single file `dist/web/main.js`.
 The browser support of that file is Chromium 37: it is transpiled to ES5 and polyfilled,
@@ -130,8 +147,8 @@ delays the first rendering of the page. It is built into the chunks under
 
 Chromium 37 cannot parse `import()` and cannot load ES modules, so the chunks are classic
 scripts that register what they provide on the channel that `src/js/optional-chunks.js`
-sets up; `src/js/optional-chunks-import.js` is used instead by the library builds, which
-can use a real dynamic import because their consumer's bundler resolves it.
+sets up; `src/js/optional-chunks.js` is used instead by the library builds, which can use
+a real dynamic import because their consumer's bundler resolves it.
 
 The page never waits for the chunks to download. Right after it registers the service
 worker, it asks the worker to cache them (`Sunniesnow.CacheManager`), and the worker
@@ -155,7 +172,8 @@ and then by marked, which uses these extensions:
   `($\mu$)`, is rendered too),
 - [marked-smartypants](https://github.com/markedjs/marked-smartypants) converts the quotes
   of the prose, as Kramdown's smart quotes used to,
-- `scripts/table-of-contents.mjs` expands the `[TOC]` marker. The marked ecosystem has a
+- the `tableOfContents` extension of `scripts/markdown.mjs` expands the `[TOC]` marker.
+  The marked ecosystem has a
   table of contents extension, but it derives its links from the heading *text*, so it
   cannot link to the explicit heading IDs above; this extension reads the headings of the
   rendered page instead, and it does not list the headings that come before the marker
@@ -164,18 +182,26 @@ and then by marked, which uses these extensions:
 The page's Markdown therefore uses marked's conventions rather than Kramdown's: heading
 IDs are the extended syntax above, the table of contents is `[TOC]`, `target="_blank"`
 links are HTML, and the math is delimited by `$` instead of jekyll-katex's tags.
-`npm run verify` checks that every anchor link of the page resolves to an element of the
-page, which is what the table of contents and the cross-references of the settings need.
 
 The KaTeX stylesheet and fonts are copied from the `katex` package into `dist/web/katex`,
 so the page does not depend on a CDN.
 
-### Node.js
+### The library
 
-It is possible to run Sunniesnow in Node.js by importing `sunniesnow/node`, which uses
-`@pixi/node` as the PixiJS library. The library build keeps its dependencies external,
-so the consumer resolves them from its own `node_modules`; `@pixi/node` is an optional
-peer dependency, which means that it has to be installed explicitly.
+`npm run build -- --lib` writes `dist/lib/browser` and `dist/lib/node`: two builds of the
+whole of `src/js`, which keep its file structure, one file per module, so that the
+published library can be read and debugged like the sources. They differ only in the
+modules that provide the environment, and their roots are the entry points of the package:
+
+- `sunniesnow` is `dist/lib/browser/index.js`, which uses `pixi.js`, and
+- `sunniesnow/node` is `dist/lib/node/index.js`, which uses `@pixi/node`.
+
+The build keeps the relative imports between the modules and leaves the dependencies to
+whoever consumes the library, so they are resolved from the consumer's `node_modules`;
+`@pixi/node` is an optional peer dependency, which means that it has to be installed
+explicitly. The JSON that the sources import (`src/data/build-info.json` and the
+translations) is inlined into the built modules, so that the library does not depend on
+how the consumer imports JSON.
 
 ## License notice
 
@@ -212,8 +238,8 @@ The open-source projects used by Sunniesnow:
 - [Noto fonts](https://fonts.google.com/noto/use) (OFL-1.1).
 
 Sunniesnow's source codes do not contain any files from the above projects.
-The dependencies are installed with npm: some of them are bundled into `dist/web/main.js`
-and into `dist/lib`, and the license notices of the bundled files are kept at the end of
-the built files. The favicons are downloaded from the
+The dependencies are installed with npm: they are bundled into `dist/web/main.js` and into
+the optional chunks of the site, and the license notices of the bundled files are kept at
+the end of the built files; the library keeps them external instead. The favicons are downloaded from the
 [logo repository](https://github.com/sunniesnow/logo)'s releases while building the site,
 and the fonts are downloaded by the game itself from public CDN sources at runtime.

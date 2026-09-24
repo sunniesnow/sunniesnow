@@ -19,6 +19,14 @@ export const publicDirectory = path.join(rootDirectory, 'public');
 // The logo is published in the logo repository's releases, like the Jekyll site used to do.
 const logoUrl = 'https://github.com/sunniesnow/logo/releases/download/v1.1/logo';
 
+// Command line options of the build:
+//   --web / --lib       what to build (both, when neither is given),
+//   --dev               development build: unminified, with source maps, with a
+//                       timestamp as the cache buster instead of the commit hash,
+//   --minify / --no-minify      minification, whatever the environment says,
+//   --sourcemap / --no-sourcemap  source maps, whatever the environment says.
+// The two options above are undefined when they are not given, so that each build can
+// have its own default (see scripts/build-web.mjs and scripts/build-lib.mjs).
 export function parseArguments(argv) {
 	const web = argv.includes('--web');
 	const lib = argv.includes('--lib');
@@ -26,6 +34,8 @@ export function parseArguments(argv) {
 		web: web || !lib,
 		lib: lib || !web,
 		development: argv.includes('--dev') || process.env.SUNNIESNOW_ENVIRONMENT === 'development',
+		minify: argv.includes('--minify') ? true : argv.includes('--no-minify') ? false : undefined,
+		sourcemap: argv.includes('--sourcemap') ? true : argv.includes('--no-sourcemap') ? false : undefined,
 	};
 }
 

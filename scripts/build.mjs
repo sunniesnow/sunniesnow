@@ -13,6 +13,8 @@ if (options.web) {
 	await buildWeb(options);
 }
 if (options.lib) {
-	await buildLib(options);
+	// The library is not minified unless it is asked for: that is the job of the
+	// bundler of whoever consumes it.
+	await buildLib({minify: options.minify ?? false, sourcemap: options.sourcemap ?? options.development});
 }
 console.log(`Done in ${((Date.now() - started) / 1000).toFixed(1)}s.`);

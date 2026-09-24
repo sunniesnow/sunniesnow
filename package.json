@@ -17,13 +17,13 @@
 	"bugs": {
 		"url": "https://github.com/sunniesnow/sunniesnow/issues"
 	},
-	"main": "./dist/lib/index.js",
+	"main": "./dist/lib/browser/index.js",
 	"exports": {
 		".": {
-			"import": "./dist/lib/index.js"
+			"import": "./dist/lib/browser/index.js"
 		},
 		"./node": {
-			"import": "./dist/lib/node.js"
+			"import": "./dist/lib/node/index.js"
 		},
 		"./package.json": "./package.json"
 	},

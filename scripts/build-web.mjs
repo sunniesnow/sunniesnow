@@ -6,6 +6,7 @@ import {
 	checkLibraryOptionalModules,
 	createBabelPlugin,
 	createBuildInfoPlugin,
+	createOptionalChunksAliasPlugin,
 	createOptionalChunksPatch,
 	webBabelTargets,
 } from './bundle.mjs';
@@ -22,10 +23,14 @@ import {
 	webSourceDirectory,
 } from './site.mjs';
 
-const devOptions = development => ({
-	minify: !development,
+// The ResizeObserver polyfill is injected into every module that uses ResizeObserver
+// instead of being put on the global object (see src/web/resize-observer.js).
+const inject = [path.join(webSourceDirectory, 'resize-observer.js')];
+
+const scriptOptions = ({minify, sourcemap}) => ({
+	minify,
 	legalComments: 'eof',
-	sourcemap: false,
+	sourcemap: sourcemap ? 'linked' : false,
 	logLevel: 'warning',
 });
 
@@ -59,7 +64,7 @@ async function renderPages({engine, site, buildInfo}) {
 	})));
 }
 
-async function renderServiceWorker({buildInfo, development}) {
+async function renderServiceWorker({buildInfo, options}) {
 	await esbuild.build({
 		entryPoints: [path.join(webSourceDirectory, 'service-worker.js')],
 		outfile: path.join(webDistDirectory, 'service-worker.js'),
@@ -68,11 +73,11 @@ async function renderServiceWorker({buildInfo, development}) {
 		platform: 'browser',
 		target: 'es5',
 		plugins: [createBuildInfoPlugin(buildInfo), createBabelPlugin()],
-		...devOptions(development),
+		...scriptOptions(options),
 	});
 }
 
-async function buildScripts({buildInfo, development}) {
+async function buildScripts({buildInfo, options}) {  // options: {minify, sourcemap}
 	// The dynamic imports that main.js cannot contain (Chromium 37 cannot parse
 	// `import()`) are collected here, so that the build knows which optional chunks
 	// to generate.
@@ -93,12 +98,15 @@ async function buildScripts({buildInfo, development}) {
 					specifiers: optionalSpecifiers,
 					ownSpecifiers: ownOptionalSpecifiers,
 				}),
+				sourcemap: options.sourcemap,
 			}),
+			createOptionalChunksAliasPlugin(),
 		],
-		...devOptions(development),
+		inject,
+		...scriptOptions(options),
 	});
 	await checkLibraryOptionalModules(ownOptionalSpecifiers);
-	await buildOptionalChunks({specifiers: optionalSpecifiers, development});
+	await buildOptionalChunks({specifiers: optionalSpecifiers, ...options});
 	// The audio worklet and the worker that report the audio time cannot be part of
 	// the main bundle, because they are loaded as separate scripts by the browser.
 	for (const name of ['FrameReporter', 'TimeReporter']) {
@@ -109,8 +117,9 @@ async function buildScripts({buildInfo, development}) {
 			format: 'iife',
 			platform: 'browser',
 			target: 'es5',
-			plugins: [createBabelPlugin()],
-			...devOptions(development),
+			plugins: [createBabelPlugin({sourcemap: options.sourcemap})],
+			inject,
+			...scriptOptions(options),
 		});
 	}
 }
@@ -134,15 +143,21 @@ async function copyStaticFiles() {
 	await downloadFavicons(webDistDirectory);
 }
 
-export async function buildWeb({development}) {
+export async function buildWeb(options) {
+	const {development} = options;
+	// The web build is minified in production and keeps its source maps in development,
+	// unless the command line says otherwise.
+	const minify = options.minify ?? !development;
+	const sourcemap = options.sourcemap ?? development;
+	const scripts = {minify, sourcemap};
 	const buildInfo = collectBuildInfo({development});
 	const site = readSiteConfig();
 	const engine = createLiquidEngine({webSourceDirectory, site, buildInfo});
-	console.log(`Building the web page in ${path.relative(rootDirectory, webDistDirectory)} (${buildInfo.environment})`);
+	console.log(`Building the web page in ${path.relative(rootDirectory, webDistDirectory)} (${buildInfo.environment}, ${minify ? 'minified' : 'not minified'}, ${sourcemap ? 'with source maps' : 'without source maps'})`);
 	await fs.rm(webDistDirectory, {recursive: true, force: true});
 	await fs.mkdir(webDistDirectory, {recursive: true});
 	await renderPages({engine, site, buildInfo});
-	await renderServiceWorker({buildInfo, development});
-	await buildScripts({buildInfo, development});
+	await renderServiceWorker({buildInfo, options: scripts});
+	await buildScripts({buildInfo, options: scripts});
 	await copyStaticFiles();
 }
