@@ -1,0 +1,477 @@
+import Sunniesnow from './Sunniesnow.js';
+
+Sunniesnow.Config = {
+
+	async load() {
+		this.loadLengthDimensions();
+		this.loadJudgementWindows();
+		this.loadNoteHitSizes();
+		this.loadAccuracies();
+	},
+
+	loadLengthDimensions() {
+		this.WIDTH = Sunniesnow.game.settings.width;
+		this.HEIGHT = Sunniesnow.game.settings.height;
+		this.SCALE = Math.min(
+			this.WIDTH / Sunniesnow.game.settings.playfieldWidth,
+			this.HEIGHT / Sunniesnow.game.settings.playfieldHeight
+		);
+		// unit: pixels
+		this.NOTE_RADIUS = this.RADIUS * this.SCALE;
+		this.SCROLL_END_Y = Sunniesnow.game.settings.scrollJudgementLine * this.HEIGHT;
+		this.SCROLL_START_Y = this.SCROLL_END_Y - Sunniesnow.game.settings.scrollDistance * this.HEIGHT;
+		this.SCROLL_SPEED = Sunniesnow.game.settings.speed * Sunniesnow.game.settings.scrollDistance * this.HEIGHT;
+	},
+
+	loadJudgementWindows() {
+		if (Sunniesnow.game.settings.judgementWindows !== 'custom') {
+			this.JUDGEMENT_WINDOWS = (Sunniesnow.game.settings.lyrica5 ? this.JUDGEMENT_WINDOWS_5 : this.JUDGEMENT_WINDOWS_4)[Sunniesnow.game.settings.judgementWindows];
+			return;
+		}
+		this.JUDGEMENT_WINDOWS = {};
+		for (const noteType of ['tap', 'drag', 'flick', 'hold', 'dragFlick', 'headOnlyHold']) {
+			this.JUDGEMENT_WINDOWS[noteType] = {};
+			let lastEarly = Infinity;
+			let lastLate = -Infinity;
+			for (const judgement of ['perfect', 'good', 'bad']) {
+				let early = Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(`judgement-windows-custom-${noteType}-early-${judgement}`)];
+				let late = Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(`judgement-windows-custom-${noteType}-late-${judgement}`)];
+				if (early >= late) {
+					Sunniesnow.Logs.warn(`Illegal custom judgement window: ${noteType} ${judgement} interval is empty`);
+					early = late = Sunniesnow.Utils.mean(early, late);
+				}
+				if (early > lastEarly) {
+					Sunniesnow.Logs.warn(`Illegal custom judgement window: ${noteType} early ${judgement} is narrower than the inner judgement window`);
+					early = lastEarly;
+				}
+				if (late < lastLate) {
+					Sunniesnow.Logs.warn(`Illegal custom judgement window: ${noteType} late ${judgement} is narrower than the inner judgement window`);
+					late = lastLate;
+				}
+				this.JUDGEMENT_WINDOWS[noteType][judgement] = [lastEarly = early, lastLate = late];
+			}
+		}
+		let perfect = Sunniesnow.game.settings.judgementWindowsCustomHoldEndEarlyPerfect
+		let good = Sunniesnow.game.settings.judgementWindowsCustomHoldEndEarlyGood;
+		if (perfect < good) {
+			Sunniesnow.Logs.warn(`Illegal custom judgement window: hold end early good interval is narrower than the inner interval`);
+			good = perfect;
+		}
+		this.JUDGEMENT_WINDOWS['holdEnd'] = {perfect, good, bad: -Infinity};
+	},
+
+	loadNoteHitSizes() {
+		this.NOTE_HIT_SIZES = {};
+		for (const noteType of ['tap', 'drag', 'flick', 'hold', 'dragFlick', 'headOnlyHold']) {
+			const prior = Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(`note-hit-size-${noteType}-prior`)];
+			let normal = Sunniesnow.game.settings[Sunniesnow.Utils.slugToCamel(`note-hit-size-${noteType}`)];
+			if (prior > normal) {
+				Sunniesnow.Logs.warn(`Illegal note hit size: ${noteType} prior hit size is larger than normal hit size`);
+				normal = prior;
+			}
+			this.NOTE_HIT_SIZES[noteType] = {prior, normal};
+		}
+	},
+
+	loadAccuracies() {
+		this.ACCURACIES = Sunniesnow.game.settings.lyrica5 ? this.ACCURACIES_5 : this.ACCURACIES_4;
+	},
+
+	// UI of chart events will be spawned
+	// this much time (in seconds) before it actually appears.
+	// Must be smaller than preparationTime.
+	UI_PREPARATION_TIME: 0.1,
+
+	// Note radius in chart coordinate length units.
+	// This is used for calculating judgement space window.
+	RADIUS: 12.5,
+
+	// 1e-12 is much larger than Number.EPSILON
+	// and much smaller than meaningful difference in numbers
+	// (an audio sample for 44.1 kHz is 2.3e-5 seconds).
+	// This is used for rounding when calculating chart hashes to
+	// avoid floating point errors affecting the hash.
+	ROUNDING_PLACES: 12,
+
+	// Get coordinates on canvas by providing the coordinates in charts.
+	chartMapping(chartX, chartY) {
+		if (Sunniesnow.game.settings.horizontalFlip) {
+			chartX = -chartX;
+		}
+		if (Sunniesnow.game.settings.verticalFlip) {
+			chartY = -chartY;
+		}
+		const x = chartX * this.SCALE + this.WIDTH / 2;
+		const y = -chartY * this.SCALE + this.HEIGHT / 2;
+		return [x, y];
+	},
+
+	// Get coordinates on chart and canvas by providing the page coordinates.
+	pageMapping(pageX, pageY) {
+		const [canvasX, canvasY] = Sunniesnow.Utils.pageToCanvasCoordinates(pageX, pageY, Sunniesnow.game.canvas);
+		let chartX = (canvasX - this.WIDTH / 2) / this.SCALE;
+		let chartY = -(canvasY - this.HEIGHT / 2) / this.SCALE;
+		if (Sunniesnow.game.settings.horizontalFlip) {
+			chartX = -chartX;
+		}
+		if (Sunniesnow.game.settings.verticalFlip) {
+			chartY = -chartY;
+		}
+		return [chartX, chartY, canvasX, canvasY];
+	},
+
+	chartMappingAngle(angle) {
+		if (!Sunniesnow.game.settings.verticalFlip) {
+			angle = -angle;
+		}
+		if (Sunniesnow.game.settings.horizontalFlip) {
+			angle = Math.PI - angle;
+		}
+		return angle;
+	},
+
+	chartMappingRotation(rotation) {
+		if (!Sunniesnow.game.settings.verticalFlip) {
+			rotation = -rotation;
+		}
+		if (Sunniesnow.game.settings.horizontalFlip) {
+			rotation = -rotation;
+		}
+		return rotation;
+	},
+
+	scrollY(progress) {
+		return this.SCROLL_START_Y + (this.SCROLL_END_Y - this.SCROLL_START_Y) * progress;
+	},
+
+	fadingAlpha(progress = 1, relativeTime = 0) {
+		let fadingProgress;
+		if (Sunniesnow.game.settings.speed === 0) {
+			fadingProgress = (relativeTime - Math.log(Sunniesnow.game.settings.fadingStart)) / Sunniesnow.game.settings.fadingDuration;
+		} else {
+			progress = Sunniesnow.Utils.clamp(progress, -Infinity, 1);
+			fadingProgress = (progress - Sunniesnow.game.settings.fadingStart) / Sunniesnow.game.settings.fadingDuration;
+		}
+		return Sunniesnow.Utils.clamp(1 - fadingProgress, 0, 1);
+	},
+
+	JUDGEMENT_WINDOWS_4: {
+		loose: {
+			tap: {
+				perfect: [-0.12, 0.12],
+				good: [-0.3, 0.3],
+				bad: [-0.4, 0.4]
+			},
+			drag: {
+				perfect: [-0.12, 0.12],
+				good: [-0.3, 0.3],
+				bad: [-0.4, 0.4]
+			},
+			flick: {
+				perfect: [-0.3, 0.12],
+				good: [-0.4, 0.3],
+				bad: [-0.4, 0.4],
+			},
+			hold: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
+			holdEnd: {
+				perfect: 0.7,
+				good: 0.4,
+				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.3, 0.12],
+				good: [-0.4, 0.3],
+				bad: [-0.4, 0.4],
+			},
+			headOnlyHold: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
+		},
+		medium: {
+			tap: {
+				perfect: [-0.08, 0.08],
+				good: [-0.16, 0.16],
+				bad: [-0.24, 0.24]
+			},
+			drag: {
+				perfect: [-0.12, 0.12],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+			flick: {
+				perfect: [-0.12, 0.12],
+				good: [-0.18, 0.18],
+				bad: [-0.24, 0.24]
+			},
+			hold: {
+				perfect: [-0.12, 0.12],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+			holdEnd: {
+				perfect: 0.7,
+				good: 0.7,
+				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.12, 0.12],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+			headOnlyHold: {
+				perfect: [-0.12, 0.12],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+		},
+		strict: {
+			tap: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+			drag: {
+				perfect: [-0.1, 0.1],
+				good: [-0.15, 0.15],
+				bad: [-0.15, 0.15]
+			},
+			flick: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+			hold: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+			holdEnd: {
+				perfect: 0.8,
+				good: 0.8,
+				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.1, 0.1],
+				good: [-0.15, 0.15],
+				bad: [-0.15, 0.15]
+			},
+			headOnlyHold: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+		},
+		rigorous: {
+			tap: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			drag: {
+				perfect: [-0.08, 0.08],
+				good: [-0.12, 0.12],
+				bad: [-0.12, 0.12]
+			},
+			flick: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			hold: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			holdEnd: {
+				perfect: 0.8,
+				good: 0.8,
+				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.08, 0.08],
+				good: [-0.12, 0.12],
+				bad: [-0.12, 0.12]
+			},
+			headOnlyHold: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+		}
+	},
+
+	JUDGEMENT_WINDOWS_5: {
+		loose: {
+			tap: {
+				perfect: [-0.12, 0.12],
+				good: [-0.3, 0.3],
+				bad: [-0.4, 0.4]
+			},
+			drag: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
+			flick: {
+				perfect: [-0.3, 0.12],
+				good: [-0.4, 0.3],
+				bad: [-0.4, 0.4],
+			},
+			hold: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
+			holdEnd: {
+				perfect: 0.7,
+				good: 0.4,
+				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
+			headOnlyHold: {
+				perfect: [-0.4, 0.4],
+				good: [-0.4, 0.4],
+				bad: [-0.4, 0.4]
+			},
+		},
+		medium: {
+			tap: {
+				perfect: [-0.08, 0.08],
+				good: [-0.16, 0.16],
+				bad: [-0.24, 0.24]
+			},
+			drag: {
+				perfect: [-0.24, 0.24],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+			flick: {
+				perfect: [-0.12, 0.12],
+				good: [-0.18, 0.18],
+				bad: [-0.24, 0.24]
+			},
+			hold: {
+				perfect: [-0.12, 0.12],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+			holdEnd: {
+				perfect: 0.7,
+				good: 0.7,
+				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.24, 0.24],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+			headOnlyHold: {
+				perfect: [-0.12, 0.12],
+				good: [-0.24, 0.24],
+				bad: [-0.24, 0.24]
+			},
+		},
+		strict: {
+			tap: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+			drag: {
+				perfect: [-0.15, 0.15],
+				good: [-0.15, 0.15],
+				bad: [-0.15, 0.15]
+			},
+			flick: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+			hold: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+			holdEnd: {
+				perfect: 0.8,
+				good: 0.8,
+				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.15, 0.15],
+				good: [-0.15, 0.15],
+				bad: [-0.15, 0.15]
+			},
+			headOnlyHold: {
+				perfect: [-0.05, 0.05],
+				good: [-0.1, 0.1],
+				bad: [-0.15, 0.15]
+			},
+		},
+		rigorous: {
+			tap: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			drag: {
+				perfect: [-0.12, 0.12],
+				good: [-0.12, 0.12],
+				bad: [-0.12, 0.12]
+			},
+			flick: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			hold: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+			holdEnd: {
+				perfect: 0.8,
+				good: 0.8,
+				bad: -Infinity
+			},
+			dragFlick: {
+				perfect: [-0.12, 0.12],
+				good: [-0.12, 0.12],
+				bad: [-0.12, 0.12]
+			},
+			headOnlyHold: {
+				perfect: [-0.03, 0.03],
+				good: [-0.06, 0.06],
+				bad: [-0.1, 0.1]
+			},
+		}
+	},
+
+	ACCURACIES_4: {
+		perfect: 1,
+		good: 0.5,
+		bad: 0.1,
+		miss: 0
+	},
+
+	ACCURACIES_5: {
+		perfect: 1,
+		good: 0.6,
+		bad: 0.2,
+		miss: 0
+	},
+
+	SERVER_BASE_URL: atob('aHR0cHM6Ly9zdW5uaWVzbm93LWNvbW11bml0eS43NTczNjgwOC54eXo='),
+
+	OBJECT_URL_TIMEOUT: 1,
+};

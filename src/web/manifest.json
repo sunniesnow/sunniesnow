@@ -1,0 +1,17 @@
+{
+	"name": "{{ site.title }}",
+	"description": "{{ site.description }}.",
+
+	"icons": [
+		{
+			"src": "favicon.svg",
+			"type": "image/svg+xml",
+			"sizes": "256x256"
+		}
+	],
+	"start_url": ".",
+	"display": "fullscreen",
+	"theme_color": "{{ site.theme_color }}",
+	"orientation": "landscape-primary",
+	"scope": "."
+}

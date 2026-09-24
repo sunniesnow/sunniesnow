@@ -1,0 +1,47 @@
+import Sunniesnow from '../../../Sunniesnow.js';
+import PIXI from '../../../pixi.js';
+
+Sunniesnow.UiDrag = class UiDrag extends Sunniesnow.UiNote {
+
+	static async load() {
+		this.radius = Sunniesnow.Config.NOTE_RADIUS * Sunniesnow.game.settings.noteSizeDrag;
+		this.geometry = this.createDragBodyGeometry(0xfcfc7c, 0xffffcc);
+		this.circleRadius = this.radius * 4;
+		this.circleGeometry = this.createCircleGeometry(0xccfcfc);
+	}
+
+	populate() {
+		super.populate();
+		this.label = `drag-${this.event.id}`;
+		this.note = new PIXI.Graphics(this.constructor.geometry);
+		this.note.label = 'note';
+		this.addChild(this.note);
+	}
+
+	populateCircle() {
+		super.populateCircle();
+		this.circleGraphics = new PIXI.Graphics(this.constructor.circleGeometry);
+		this.circleGraphics.label = 'circle-graphics';
+		this.circle.addChild(this.circleGraphics);
+	}
+
+	updateFadingIn(progress, relativeTime) {
+		super.updateFadingIn(progress, relativeTime);
+		this.note.scale.set(progress);
+		if (!this.circle) {
+			return;
+		}
+		this.circleGraphics.scale.set(1 - (progress-1)**2);
+		this.circleGraphics.alpha = progress / 3;
+	}
+
+	updateActive(progress, relativeTime) {
+		super.updateActive(progress, relativeTime);
+		this.note.scale.set(1);
+		this.updateCircle(progress);
+	}
+
+	static fadingOutDuration(event) {
+		return 0;
+	}
+};

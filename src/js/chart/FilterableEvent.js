@@ -1,0 +1,33 @@
+import Sunniesnow from '../Sunniesnow.js';
+
+Sunniesnow.FilterableEvent = class FilterableEvent extends Sunniesnow.Event {
+	assignFilters(filters, offset) {
+		filters ??= [];
+		this.filterEvents = filters.map((data, i) => {
+			const result = Sunniesnow.FilterEvent.from(data, offset);
+			if (result) {
+				result.id = i;
+				result.event = this;
+			}
+			return result;
+		});
+		Sunniesnow.Utils.compactify(this.filterEvents);
+		this.filterEvents.sort((a, b) => a.time - b.time);
+	}
+
+	filtersAt(time) {
+		if (Sunniesnow.game.settings.disableOrnament) {
+			return [];
+		}
+		const result = this.filterEvents.filter(e => e.time <= time && time < e.endTime()).map(e => {
+			e.update(time);
+			return e.actualFilter();
+		});
+		Sunniesnow.Utils.compactify(result);
+		return result;
+	}
+
+	filtersAtRelative(relativeTime) {
+		return this.filtersAt(this.time + relativeTime);
+	}
+};
