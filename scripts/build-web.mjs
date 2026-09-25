@@ -23,10 +23,6 @@ import {
 	webSourceDirectory,
 } from './site.mjs';
 
-// The ResizeObserver polyfill is injected into every module that uses ResizeObserver
-// instead of being put on the global object (see src/web/resize-observer.js).
-const inject = [path.join(webSourceDirectory, 'resize-observer.js')];
-
 const scriptOptions = ({minify, sourcemap}) => ({
 	minify,
 	legalComments: 'eof',
@@ -102,7 +98,6 @@ async function buildScripts({buildInfo, options}) {  // options: {minify, source
 			}),
 			createOptionalChunksAliasPlugin(),
 		],
-		inject,
 		...scriptOptions(options),
 	});
 	await checkLibraryOptionalModules(ownOptionalSpecifiers);
@@ -118,8 +113,7 @@ async function buildScripts({buildInfo, options}) {  // options: {minify, source
 			platform: 'browser',
 			target: 'es5',
 			plugins: [createBabelPlugin({sourcemap: options.sourcemap})],
-			inject,
-			...scriptOptions(options),
+				...scriptOptions(options),
 		});
 	}
 }

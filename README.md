@@ -113,16 +113,20 @@ The build accepts a few environment variables:
 
 `src/web/main.js` is the entry point of the JavaScript that runs in the page. It replaces
 the inline scripts that the static site generator used to put in the page's head: it loads
-the polyfills and runs `Sunniesnow.MiscDom.main()`, the main logic of the page, which also
-wires up the `data-action` attributes of the page. The main logic of the game itself is
-`Sunniesnow.Game.run()`.
+the polyfills, puts the namespace on the global object as `globalThis.Sunniesnow` and runs
+`Sunniesnow.MiscDom.main()`, the main logic of the page. The main logic of the game itself
+is `Sunniesnow.Game.run()`.
 
-The page's elements do not use inline event handlers, which would need a global
-`Sunniesnow`: they carry a `data-action` attribute, e.g. `data-action="Game.run"`, and
-`Sunniesnow.MiscDom.addActionListeners` resolves it on `Sunniesnow` when the page is set
-up. `src/web/resize-observer.js` is injected by the build into every module that uses
-`ResizeObserver` (the tables of the page and the resize plugin of PixiJS), so that the
-polyfill does not have to be put on the global object.
+The page's elements do not use inline event handlers, which would not be transpiled:
+they carry a `data-action` attribute, e.g. `data-action="Game.run"`, and
+`Sunniesnow.MiscDom.addActionListeners` resolves the path on Sunniesnow when the page is
+set up. The global object is set for the browser console and for other scripts of the
+page; the library itself does not touch it.
+
+`src/web/polyfills.js` is what makes the page work on Chromium 37: core-js, the
+regenerator runtime, a `fetch` implementation and a `ResizeObserver` implementation.
+They patch the global object, which is what they are for, and they are only part of the
+web bundle: the library builds contain none of them.
 
 Everything the page needs to render is bundled into the single file `dist/web/main.js`.
 The browser support of that file is Chromium 37: it is transpiled to ES5 and polyfilled,
