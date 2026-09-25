@@ -4,6 +4,10 @@
 import './polyfills.js';
 import Sunniesnow from '../js/index.js';
 
+// The namespace used to be a global variable: the page puts it back there, for the
+// browser console and for other scripts of the page. The library does not.
+globalThis.Sunniesnow = Sunniesnow;
+
 // The VS Code simple browser adds this URL parameter to bust its own cache.
 Sunniesnow.vscodeBrowserReqId = location.search.match(/^\?.*vscodeBrowserReqId=(\d+)/)?.[1];
 

@@ -29,14 +29,11 @@ Sunniesnow.MiscDom = {
 		}
 	},
 
-	// Declarative event listeners for the elements of the page.
-	//
-	// The page used to contain inline handlers such as `onclick="Sunniesnow.Game.run()"`,
-	// which required a global `Sunniesnow` variable. Instead, the elements carry a
-	// `data-action` attribute, e.g. `data-action="Game.run"`, and the path is resolved on
-	// Sunniesnow (or from the global object, for `data-action="globalThis.location.reload"`).
-	// Every step of the path is optional, so that `data-action="game.terminate"` does
-	// nothing when no game is running, like the `Sunniesnow.game?.terminate()` it replaces.
+	// The listeners of the elements of the page, which carry a `data-action` attribute
+	// such as `data-action="Game.run"`: the path is resolved on Sunniesnow, or from the
+	// global object for `data-action="globalThis.location.reload"`, and every step of it
+	// is optional, so that `data-action="game.terminate"` does nothing when no game is
+	// running, like the `Sunniesnow.game?.terminate()` it replaces.
 	addActionListeners(root = document) {
 		const actions = new Map();
 		for (const element of root.querySelectorAll('[data-action]')) {
