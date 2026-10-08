@@ -1,6 +1,3 @@
-// The module graph of the game, in the order the modules used to be loaded
-// (see the former json/scripts.json). Importing this module evaluates every
-// game module and therefore populates the Sunniesnow namespace.
 import './utils/Utils.js';
 import './utils/Mixin.js';
 import './utils/WeakMap.js';

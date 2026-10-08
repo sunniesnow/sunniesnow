@@ -1,23 +1,6 @@
 import Sunniesnow from './Sunniesnow.js';
 import {optionalChunkName} from './optional-chunk-names.js';
 
-/**
- * Loading the optional chunks of the built static site.
- *
- * Most of the code that the game only needs sometimes (the audio decoders and
- * vConsole) is not part of `dist/web/main.js`, but of the chunks under `optional/`.
- * They are loaded when they are first needed, so that they never delay the first
- * rendering of the page; the service worker caches them in the background (see
- * src/web/service-worker.js), so loading them is usually instant.
- *
- * The site's build replaces ./optional-chunks.js with this module; the library builds
- * use ./optional-chunks.js, which loads the modules with a real dynamic import.
- *
- * Chromium 37 cannot parse `import()` and the web build has to be a single classic
- * script, so a chunk cannot be an ES module and cannot hand over what it provides by
- * exporting it. It registers itself on the global channel below instead, and the
- * chunks rely on the polyfills and on the regenerator runtime of main.js.
- */
 const modules = new Map();
 const promises = new Map();
 
@@ -60,7 +43,7 @@ function optionalChunkUrl(specifier) {
 	return Sunniesnow.fuckCache ? `${path}?fuck-cache=${Sunniesnow.fuckCache}` : path;
 }
 
-globalThis.SunniesnowOptional = {
+Sunniesnow.Optional = {
 	load: loadOptionalChunk,
 	register: registerOptionalChunk,
 };

@@ -33,10 +33,7 @@ const ONLINE_STORAGE_NAME = 'online-v1';
 const EXTERNAL_STORAGE_NAME = 'external-v1';
 const STORAGE_NAMES = [SITE_STORAGE_NAME, ONLINE_STORAGE_NAME, EXTERNAL_STORAGE_NAME];
 
-// The optional chunks are not cached while installing, because the page should not
-// wait for them. They are cached in the background instead, as soon as the page asks
-// for it (see Sunniesnow.CacheManager.registerServiceWorker), so that they are ready
-// long before a level needs an audio decoder or the player turns on vConsole.
+// optional chunks are not cached while installing because the page should not wait for them
 const OPTIONAL_MANIFEST = `${BASE}/optional/manifest.json`;
 let optionalChunksCaching = null;
 

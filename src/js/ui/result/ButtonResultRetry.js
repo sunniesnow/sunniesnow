@@ -1,5 +1,5 @@
 import Sunniesnow from '../../Sunniesnow.js';
-import PIXI from '../../pixi.js';
+import {PIXI} from '../../platform.js';
 
 Sunniesnow.ButtonResultRetry = class ButtonResultRetry extends Sunniesnow.Button {
 	static async load() {
