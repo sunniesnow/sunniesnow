@@ -1,5 +1,5 @@
 import Sunniesnow from '../Sunniesnow.js';
-import PIXI from '../pixi.js';
+import {PIXI} from '../platform.js';
 
 // used to derive transformation matrices for shaders in filters.
 Sunniesnow.FilterSprite = class FilterSprite extends PIXI.Sprite {

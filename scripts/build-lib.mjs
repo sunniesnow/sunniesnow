@@ -1,16 +1,3 @@
-// Builds the importable library in dist/lib, which is what the npm package contains.
-//
-// The library is not one file: every module of src/js is built into its own file, so
-// that the published library keeps the file structure of the sources and can be read
-// and debugged like them. (The web bundle is one file; a library is not, and the
-// consumers' bundlers are the ones that decide what to do with it.)
-//
-// The two variants are two builds of the same tree and differ only in the modules that
-// provide the environment. Their roots are the entry points of the package:
-//
-//   sunniesnow       -> dist/lib/browser/index.js, which uses pixi.js
-//   sunniesnow/node  -> dist/lib/node/index.js,    which uses @pixi/node
-//
 import * as esbuild from 'esbuild';
 import path from 'node:path';
 import fs from 'node:fs/promises';
@@ -27,9 +14,6 @@ async function listModules(directory) {
 }
 
 async function buildTree({name, outdir, aliases, minify, sourcemap}) {
-	// Every module is an entry point, so that every module is emitted; the relative
-	// imports between them are kept by createLibTreePlugin, which is also what keeps
-	// the structure of the tree.
 	const entryPoints = await listModules(jsSourceDirectory);
 	await esbuild.build({
 		entryPoints,
@@ -39,8 +23,6 @@ async function buildTree({name, outdir, aliases, minify, sourcemap}) {
 		format: 'esm',
 		platform: 'neutral',
 		target: 'es2022',
-		// A library does not bundle its dependencies: they are resolved from the
-		// package.json of the consumer (see the `dependencies` of this package).
 		packages: 'external',
 		plugins: [createLibTreePlugin(aliases)],
 		minify,
@@ -62,10 +44,7 @@ export async function buildLib({minify, sourcemap}) {
 	await buildTree({
 		name: 'node',
 		outdir: path.join(libDistDirectory, 'node'),
-		aliases: new Map([
-			[path.join(jsSourceDirectory, 'pixi.js'), path.join(jsSourceDirectory, 'pixi-node.js')],
-			[path.join(jsSourceDirectory, 'node-require.js'), path.join(jsSourceDirectory, 'node-require-node.js')],
-		]),
+		aliases: new Map([[path.join(jsSourceDirectory, 'platform.js'), path.join(jsSourceDirectory, 'platform-node.js')]]),
 		minify,
 		sourcemap,
 	});

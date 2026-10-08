@@ -1,5 +1,5 @@
 import Sunniesnow from '../../Sunniesnow.js';
-import PIXI from '../../pixi.js';
+import {PIXI} from '../../platform.js';
 
 // The children referred to by this.front will be shown in front of all notes.
 Sunniesnow.FxNote = class FxNote extends PIXI.Container {

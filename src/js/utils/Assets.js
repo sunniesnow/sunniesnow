@@ -1,6 +1,5 @@
 import Sunniesnow from '../Sunniesnow.js';
-import PIXI from '../pixi.js';
-import requireNodeModule from '../node-require.js';
+import {PIXI, require} from '../platform.js';
 import audioDecode from 'audio-decode';
 
 Sunniesnow.Assets = {
@@ -68,8 +67,8 @@ Sunniesnow.Assets = {
 		let condition = !isObjectUrl;
 		let redownloadToFs = false;
 		if (downloadToFs) {
-			const path = requireNodeModule('path');
-			fs = requireNodeModule('fs');
+			const path = require('path');
+			fs = require('fs');
 			src = path.join(Sunniesnow.record.assetsDir, path.basename(url));
 			redownloadToFs = !fs.existsSync(src) || Sunniesnow.record.clean;
 			condition &&= redownloadToFs;

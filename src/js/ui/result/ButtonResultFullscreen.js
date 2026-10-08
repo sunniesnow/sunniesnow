@@ -1,5 +1,5 @@
 import Sunniesnow from '../../Sunniesnow.js';
-import PIXI from '../../pixi.js';
+import {PIXI} from '../../platform.js';
 
 Sunniesnow.ButtonResultFullscreen = class ButtonResultFullscreen extends Sunniesnow.Button {
 	static async load() {

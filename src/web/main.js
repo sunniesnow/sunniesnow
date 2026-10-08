@@ -1,11 +1,6 @@
-// The entry point of the JavaScript that runs on the game's web page.
-// It takes the place of the inline scripts that used to be put in the page's head
-// by the static site generator (see index.html).
 import './polyfills.js';
 import Sunniesnow from '../js/index.js';
 
-// The namespace used to be a global variable: the page puts it back there, for the
-// browser console and for other scripts of the page. The library does not.
 globalThis.Sunniesnow = Sunniesnow;
 
 // The VS Code simple browser adds this URL parameter to bust its own cache.

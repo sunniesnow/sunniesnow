@@ -1,5 +1,5 @@
 import Sunniesnow from '../../../Sunniesnow.js';
-import PIXI from '../../../pixi.js';
+import {PIXI} from '../../../platform.js';
 
 // Do not add this.circle as a child. See UiNotesBoard for how it is handled.
 Sunniesnow.UiNote = class UiNote extends Sunniesnow.UiNoteBase {

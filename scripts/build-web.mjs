@@ -145,7 +145,7 @@ export async function buildWeb(options) {
 	const sourcemap = options.sourcemap ?? development;
 	const scripts = {minify, sourcemap};
 	const buildInfo = collectBuildInfo({development});
-	const site = readSiteConfig();
+	const site = readSiteConfig({development});
 	const engine = createLiquidEngine({webSourceDirectory, site, buildInfo});
 	console.log(`Building the web page in ${path.relative(rootDirectory, webDistDirectory)} (${buildInfo.environment}, ${minify ? 'minified' : 'not minified'}, ${sourcemap ? 'with source maps' : 'without source maps'})`);
 	await fs.rm(webDistDirectory, {recursive: true, force: true});
