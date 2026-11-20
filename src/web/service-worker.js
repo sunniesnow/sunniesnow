@@ -33,43 +33,6 @@ const ONLINE_STORAGE_NAME = 'online-v1';
 const EXTERNAL_STORAGE_NAME = 'external-v1';
 const STORAGE_NAMES = [SITE_STORAGE_NAME, ONLINE_STORAGE_NAME, EXTERNAL_STORAGE_NAME];
 
-// optional chunks are not cached while installing because the page should not wait for them
-const OPTIONAL_MANIFEST = `${BASE}/optional/manifest.json`;
-let optionalChunksCaching = null;
-
-function cacheOptionalChunks() {
-	if (!optionalChunksCaching) {
-		optionalChunksCaching = doCacheOptionalChunks().catch(error => {
-			console.warn(`Failed to cache the optional chunks: ${error}`);
-			optionalChunksCaching = null; // try again the next time
-		});
-	}
-	return optionalChunksCaching;
-}
-
-async function doCacheOptionalChunks() {
-	const cache = await caches.open(SITE_STORAGE_NAME);
-	const response = await fetch(OPTIONAL_MANIFEST);
-	if (!response.ok) {
-		throw new Error(`${OPTIONAL_MANIFEST} responded with ${response.status}`);
-	}
-	const {chunks} = await response.json();
-	for (const chunk of chunks) {
-		// The loader requests the chunks with a `fuck-cache` parameter, which is
-		// removed from the cache keys, so the same URL is used here.
-		const url = `${BASE}/optional/${chunk}`;
-		if (await cache.match(url)) {
-			continue;
-		}
-		const fetched = await fetch(url);
-		if (fetched.ok) {
-			await cache.put(url, fetched);
-		} else {
-			console.warn(`Failed to cache ${url}: ${fetched.status}`);
-		}
-	}
-}
-
 function cacheSiteResources() {
 	return caches.open(SITE_STORAGE_NAME).then(cache => {
 		// Add the resources one by one so that a missing resource
@@ -104,12 +67,6 @@ self.addEventListener('activate', event => {
 	event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(
 		key => STORAGE_NAMES.includes(key) || caches.delete(key)
 	))));
-});
-
-self.addEventListener('message', event => {
-	if (event.data?.type === 'cache-optional-chunks') {
-		event.waitUntil(cacheOptionalChunks());
-	}
 });
 
 self.addEventListener('fetch', event => {

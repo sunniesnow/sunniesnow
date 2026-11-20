@@ -90,26 +90,9 @@ Sunniesnow.CacheManager = {
 				}
 				this.serviceWorkerRegistration = await sw.register(swUrl, {scope: `${base}/`});
 			}
-			this.cacheOptionalChunks();
 		} catch (error) {
 			Sunniesnow.Logs.warn(`Failed to register service worker: ${error}`, error);
 		}
-	},
-
-	// The optional chunks (the audio decoders and vConsole) are not needed to render
-	// the page, so they are not waited for: the service worker caches them in the
-	// background instead, which makes loading them later instant.
-	async cacheOptionalChunks() {
-		if (!Sunniesnow.Utils.isBrowser()) {
-			return;
-		}
-		const registration = await navigator.serviceWorker.ready;
-		const worker = registration.active ?? navigator.serviceWorker.controller;
-		if (!worker) {
-			Sunniesnow.Logs.warn('No service worker is available to cache the optional chunks');
-			return;
-		}
-		worker.postMessage({type: 'cache-optional-chunks'});
 	}
 
 };

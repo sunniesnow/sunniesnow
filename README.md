@@ -90,26 +90,16 @@ It loads the polyfills, puts the namespace on the global object as `globalThis.S
 and runs `Sunniesnow.MiscDom.main()`, the main logic of the page.
 The main logic of the game itself is `Sunniesnow.Game.run()`.
 
-Everything the page needs to render is bundled into the single file `dist/web/main.js`.
+All page and game dependencies, including the audio decoders and vConsole,
+are bundled into the single file `dist/web/main.js`.
 The browser support of that file is Chromium 37: it is transpiled to ES5 and polyfilled,
-including the dependencies.
+including the dependencies. A small ES5 script in `index.html` downloads the bundle with
+`XMLHttpRequest`, shows its download progress, then runs it. If JavaScript is disabled,
+the page asks the user to enable it.
 
 The exceptions to the single file are the two scripts that the browser loads by itself,
 `dist/web/audio/FrameReporter.js` (an audio worklet) and `dist/web/audio/TimeReporter.js` (a worker),
-`dist/web/service-worker.js`, and the optional chunks below.
-
-### The optional chunks
-
-The code that the game only needs sometimes is not part of `main.js`,
-so that it never delays the first rendering of the page.
-It is built into the chunks under `dist/web/optional`, which the page loads when they are first needed:
-
-- `audio-decoders.js` is loaded when a level's music is decoded.
-- `vconsole.js` is loaded when vConsole is turned on in the page's settings.
-
-The page never waits for the chunks to download.
-Right after it registers the service worker, it asks the worker to cache them (`Sunniesnow.CacheManager`),
-and the worker downloads them in the background from the list in `dist/web/optional/manifest.json`.
+`dist/web/service-worker.js`.
 
 ### The library
 
@@ -144,7 +134,7 @@ The open-source projects used by Sunniesnow:
 - [PixiJS](https://pixijs.com) (MIT),
 - [JSZip](https://stuk.github.io/jszip) (MIT or GPL-3.0),
 - [Mime](https://www.skypack.dev/view/mime) (MIT),
-- [audio-decode](https://github.com/audiojs/audio-decode) (MIT),
+- [@audio/decode](https://github.com/audiojs/decode) (MIT),
 - [marked](https://marked.js.org) (MIT),
 - [DOMPurify](https://github.com/cure53/DOMPurify) (Apache-2.0 or MPL-2.0),
 - [LiquidJS](https://liquidjs.com) (MIT),
@@ -164,8 +154,8 @@ The open-source projects used by Sunniesnow:
 - [Noto fonts](https://fonts.google.com/noto/use) (OFL-1.1).
 
 Sunniesnow's source codes do not contain any files from the above projects.
-The dependencies are installed with npm: they are bundled into `dist/web/main.js` and into
-the optional chunks of the site, and the license notices of the bundled files are kept at
+The dependencies are installed with npm: they are bundled into `dist/web/main.js`,
+and the license notices of the bundled files are kept at
 the end of the built files; the library keeps them external instead. The favicons are downloaded from the
 [logo repository](https://github.com/sunniesnow/logo)'s releases while building the site,
 and the fonts are downloaded by the game itself from public CDN sources at runtime.

@@ -1,6 +1,6 @@
 import Sunniesnow from '../Sunniesnow.js';
 import {PIXI, require} from '../platform.js';
-import audioDecode from 'audio-decode';
+import audioDecode from '@audio/decode';
 
 Sunniesnow.Assets = {
 	progresses: new Map(),

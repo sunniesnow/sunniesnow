@@ -2,15 +2,7 @@
 import * as esbuild from 'esbuild';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import {
-	checkLibraryOptionalModules,
-	createBabelPlugin,
-	createBuildInfoPlugin,
-	createOptionalChunksAliasPlugin,
-	createOptionalChunksPatch,
-	webBabelTargets,
-} from './bundle.mjs';
-import {buildOptionalChunks, createOptionalSpecifierCollector} from './optional-chunks.mjs';
+import {createBabelPlugin, createBuildInfoPlugin} from './bundle.mjs';
 import {createLiquidEngine} from './liquid.mjs';
 import {renderMarkdown, stripFrontMatter} from './markdown.mjs';
 import {
@@ -74,11 +66,7 @@ async function renderServiceWorker({buildInfo, options}) {
 }
 
 async function buildScripts({buildInfo, options}) {  // options: {minify, sourcemap}
-	// The dynamic imports that main.js cannot contain (Chromium 37 cannot parse
-	// `import()`) are collected here, so that the build knows which optional chunks
-	// to generate.
-	const optionalSpecifiers = createOptionalSpecifierCollector();
-	const ownOptionalSpecifiers = createOptionalSpecifierCollector();
+	// Without code splitting, esbuild includes dynamic imports in main.js too.
 	await esbuild.build({
 		entryPoints: [path.join(webSourceDirectory, 'main.js')],
 		outfile: path.join(webDistDirectory, 'main.js'),
@@ -88,20 +76,10 @@ async function buildScripts({buildInfo, options}) {  // options: {minify, source
 		target: 'es5',
 		plugins: [
 			createBuildInfoPlugin(buildInfo),
-			createBabelPlugin({
-				targets: webBabelTargets,
-				patchSource: createOptionalChunksPatch({
-					specifiers: optionalSpecifiers,
-					ownSpecifiers: ownOptionalSpecifiers,
-				}),
-				sourcemap: options.sourcemap,
-			}),
-			createOptionalChunksAliasPlugin(),
+			createBabelPlugin({sourcemap: options.sourcemap}),
 		],
 		...scriptOptions(options),
 	});
-	await checkLibraryOptionalModules(ownOptionalSpecifiers);
-	await buildOptionalChunks({specifiers: optionalSpecifiers, ...options});
 	// The audio worklet and the worker that report the audio time cannot be part of
 	// the main bundle, because they are loaded as separate scripts by the browser.
 	for (const name of ['FrameReporter', 'TimeReporter']) {

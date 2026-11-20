@@ -12,7 +12,7 @@ function main() {
 	});
 }
 
-// The script is loaded with `defer`, but be robust about the document's state anyway.
+// The inline downloader may finish before the document has finished parsing.
 if (document.readyState === 'loading') {
 	document.addEventListener('DOMContentLoaded', main);
 } else {

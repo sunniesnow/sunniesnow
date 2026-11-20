@@ -37,7 +37,7 @@
 		"serve": "node scripts/serve.mjs"
 	},
 	"dependencies": {
-		"audio-decode": "^3.12.0",
+		"@audio/decode": "^4.3.1",
 		"dompurify": "^3.4.14",
 		"jszip": "^3.10.1",
 		"liquidjs": "^10.29.0",

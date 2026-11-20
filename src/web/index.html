@@ -9,13 +9,50 @@
 <link rel="stylesheet" href="style.css?fuck-cache={{ fuck_cache }}">
 <link rel="icon" href="favicon.ico">
 
-<script src="main.js?fuck-cache={{ fuck_cache }}" defer></script>
 {% endblock %}
 
 {% block content %}
 
 <h1>Sunniesnow</h1>
-<div id="loading">Loading site resources...</div>
+<div id="loading">
+	<noscript>Please enable JavaScript to play Sunniesnow.</noscript>
+	<span id="script-loading-status" role="status"></span>
+	<progress id="script-loading-progress" aria-label="Downloading site resources" max="1" style="display: none;"></progress>
+</div>
+<script>
+(function () {
+	var status = document.getElementById('script-loading-status');
+	var progress = document.getElementById('script-loading-progress');
+	var request = new XMLHttpRequest();
+	status.textContent = 'Downloading site resources...';
+	progress.style.display = '';
+	function fail() {
+		status.textContent = 'Failed to load site resources. Please reload to try again.';
+		progress.style.display = 'none';
+	}
+	request.open('GET', 'main.js?fuck-cache={{ fuck_cache }}');
+	request.onprogress = function (event) {
+		if (event.lengthComputable) {
+			progress.value = event.loaded / event.total;
+		} else {
+			progress.removeAttribute('value');
+		}
+	};
+	request.onerror = request.onabort = request.ontimeout = fail;
+	request.onload = function () {
+		if (request.status < 200 || request.status >= 300) {
+			fail();
+			return;
+		}
+		progress.value = 1;
+		status.textContent = 'Initializing site resources...';
+		var script = document.createElement('script');
+		script.text = request.responseText;
+		document.head.appendChild(script);
+	};
+	request.send();
+}());
+</script>
 
 <div id="main-wrapper" style="display: none;" data-i18n="main">
 
