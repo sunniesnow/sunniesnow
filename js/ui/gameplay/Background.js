@@ -5,7 +5,7 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 	static DEFAULT_Y = 0.5;
 
 	static async load() {
-		this.texture = this.applyEffects(Sunniesnow.game.settings.background ?? PIXI.Texture.WHITE);
+		this.texture = this.applyEffects(Sunniesnow.game.settings.background ?? PIXI.Texture.EMPTY);
 	}
 
 	static applyEffects(texture) {
@@ -16,18 +16,17 @@ Sunniesnow.Background = class Background extends Sunniesnow.UiComponent {
 		tempSprite.scale.set(Math.max(width / texture.width, height / texture.height));
 		if (Sunniesnow.game.settings.renderer !== 'canvas') {
 			const filter1 = new PIXI.BlurFilter({strength: Sunniesnow.game.settings.backgroundBlur, quality: 4});
+			filter1.repeatEdgePixels = true;
 			const filter2 = new PIXI.ColorMatrixFilter();
 			filter2.brightness(Sunniesnow.game.settings.backgroundBrightness);
-			filter2.matrix[18] = 0;
-			filter2.matrix[19] = 1;
 			tempSprite.filters = [filter1, filter2];
 		}
 		const wrapper = new PIXI.Container();
 		wrapper.addChild(tempSprite);
-		const result = Sunniesnow.game.app.renderer.generateTexture(
-			wrapper,
-			{region: new PIXI.Rectangle(-width / 2, -height / 2, width, height)}
-		);
+		const result = Sunniesnow.game.app.renderer.generateTexture({
+			target: wrapper,
+			frame: new PIXI.Rectangle(-width / 2, -height / 2, width, height),
+		});
 		wrapper.destroy({children: true});
 		return result;
 	}

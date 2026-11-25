@@ -234,6 +234,7 @@
 		"background-upload": "アップロード: ",
 		"background-blur": "あいまいさ: ",
 		"background-brightness": "輝度: ",
+		"background-color": null,
 		"fx-default-radio": " デフォルト",
 		"fx-online-radio": "",
 		"fx-online": "オンライン: ",

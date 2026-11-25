@@ -40,7 +40,7 @@ Sunniesnow.Game = class Game {
 			hello: this.settings.debug,
 			width: this.settings.width,
 			height: this.settings.height,
-			backgroundColor: 'black',
+			backgroundColor: this.settings.backgroundColor,
 			eventMode: 'none', // use our own event system
 			eventFeatures: {click: false, globalMove: false, move: false, wheel: false},
 			preference: this.settings.renderer,

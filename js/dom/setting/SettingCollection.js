@@ -37,6 +37,7 @@ Sunniesnow.SettingCollection = class SettingCollection extends Sunniesnow.Settin
 					case 'email':
 					case 'url':
 					case 'tel':
+					case 'color':
 						settingClass = Sunniesnow.SettingText;
 						break;
 					case 'checkbox':
