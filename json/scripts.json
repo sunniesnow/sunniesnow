@@ -1,7 +1,7 @@
 {
 	"npmLock": {
 		"jszip": "3.10.1",
-		"pixijs": "8.20.1",
+		"pixijs": "8.21.0",
 		"mime": "4.1.0",
 		"marked": "18.0.11",
 		"dompurify": "3.4.14",
