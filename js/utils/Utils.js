@@ -869,11 +869,19 @@ Sunniesnow.Utils = {
 
 	copyTextInput(element) {
 		if (navigator.clipboard?.writeText) {
-			return navigator.clipboard.writeText(element.value);
+			return navigator.clipboard.writeText(element.value).catch(reason => Sunniesnow.Logs.warn('Failed to copy text', reason));
 		}
 		element.select();
 		element.setSelectionRange(0, element.value.length);
 		document.execCommand('copy');
+	},
+
+	copyData(data) {
+		if (typeof ClipboardItem !== 'function') {
+			Sunniesnow.Logs.warn('ClipboardItem is not available');
+			return;
+		}
+		return navigator.clipboard.write([new ClipboardItem(data)]).catch(reason => Sunniesnow.Logs.warn('Failed to copy data', reason));
 	},
 
 	mean(...numbers) {

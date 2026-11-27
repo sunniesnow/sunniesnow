@@ -1,7 +1,7 @@
 Sunniesnow.ScreenshotManager = {
 	copyScreenshot() {
 		Sunniesnow.game?.canvas?.toBlob(
-			blob => navigator.clipboard.write([new ClipboardItem({'image/png': blob})])
+			blob => Sunniesnow.Utils.copyData({'image/png': blob})
 		);
 	},
 
