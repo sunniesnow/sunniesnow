@@ -84,12 +84,12 @@ Sunniesnow.TouchManager = {
 		return x < 0 || y < 0 || x >= Sunniesnow.Config.WIDTH || y >= Sunniesnow.Config.HEIGHT;
 	},
 
-	normalizeTimeStamp({timeStamp}) {
+	normalizeTimeStamp({timeStamp, type}) {
 		const now = performance.now();
 		const diff = Math.abs(timeStamp - now);
-		if (diff > 50 && !this.warnedAboutWrongEventTime) {
-			Sunniesnow.Logs.warn(`Event timestamp ${timeStamp} is very different from actual current time ${now} (by ${diff} ms). Further warnings of this type will be suppressed.`)
-			this.warnedAboutWrongEventTime = true;
+		// On some browsers, the event.timeStamp is less trustable than performance.now.
+		if (diff > 50) {
+			Sunniesnow.Logs.warn(`Event ${type} timestamp ${timeStamp} is very different from actual current time ${now} (by ${diff} ms).`)
 		}
 		return Sunniesnow.Music.convertTimeStamp(diff > 10 ? now : timeStamp);
 	},

@@ -61,6 +61,8 @@
 		"dom/ScreenshotManager",
 		"dom/SpinUp",
 
+		"audio/Audio",
+
 		"external/VConsole",
 		"external/Sscharter",
 		"external/DiscordRichPresence",
@@ -86,7 +88,6 @@
 	"customizableSiteScripts": [
 		"utils/StoryAssets",
 
-		"audio/Audio",
 		"audio/Music",
 		"audio/se/Se",
 		"audio/se/SeTap",
